@@ -102,6 +102,7 @@ function registerValidSW(swUrl: string, config?: Config) {
       };
     })
     .catch(error => {
+      // tslint:disable-next-line:no-console
       console.error('Error during service worker registration:', error);
     });
 }

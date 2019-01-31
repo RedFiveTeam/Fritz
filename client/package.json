@@ -3,31 +3,43 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "23.3.13",
-    "@types/node": "10.12.18",
-    "@types/react": "16.7.20",
-    "@types/react-dom": "16.0.11",
+    "babel-loader": "^8.0.5",
+    "babel-runtime": "^6.26.0",
     "bootstrap": "^4.2.1",
+    "core-js": "^2.6.3",
     "jquery": "^3.3.1",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
     "popper.js": "^1.14.6",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.3",
-    "typescript": "3.2.4"
+    "react-scripts-ts": "^3.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "react-scripts-ts build && rm -rf ../src/main/resources/static && cp -r build ../src/main/resources/static ",
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "start": "yarn lint --fix && HTTPS=true react-scripts-ts start",
+    "start-ci": "yarn lint --fix && react-scripts-ts start",
+    "test": "react-scripts-ts test --env=jsdom"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "devDependencies": {
+    "@types/jest": "^23.3.13",
+    "@types/node": "^10.12.21",
+    "@types/react": "^16.7.22",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-router": "^4.4.3",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/styled-components": "^4.1.6",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-core": "^6.26.3",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.8.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "typescript": "^3.3.1"
+  }
 }

@@ -30,6 +30,33 @@ node ('') {
         """
    }
 
+   stage ('SonarQube') {
+       def sonarXmx = '512m'
+       def sonarHost = 'https://sonar.geointservices.io'
+       def scannerHome = tool 'SonarQube Runner 2.8';
+       withSonarQubeEnv('DevOps Sonar') {
+           // update env var JOB_NAME to replace all non word chars to underscores
+           def jobname = JOB_NAME.replaceAll(/[^a-zA-Z0-9\_]/, "_")
+           def jobshortname = JOB_NAME.replaceAll(/^.*\//, "")
+           withCredentials([[$class: 'StringBinding', credentialsId: 'd5ddf49e-60e6-4816-b668-406eddd250af', variable: 'SONAR_LOGIN']]) {
+               sh "JOB_NAME=${jobname} && JOB_SHORT_NAME=${jobshortname} && set && ${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${sonarHost} -Dsonar.login=${SONAR_LOGIN} -Dsonar.projectName=fritz -Dsonar.projectKey=narwhal:fritz"
+           }
+       }
+   }
+       stage ('Fortify') {
+           sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -clean'
+           sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} "**/*" -exclude "client/node_modules/**/*" -exclude "client/build/**/*" -exclude "build/**/*" -exclude "acceptance/**/*" -exclude "client/src/stories/**/*" -exclude "src/main/resources/static/**/*" -exclude "client/public/**/*"'
+           sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -scan -f fortifyResults-${BUILD_NUMBER}.fpr'
+       }
+
+       stage ('ThreadFix') {
+           withCredentials([string(credentialsId: '0fddb863-d986-4794-8d14-2dbd87a3cc2f', variable: 'THREADFIX_VARIABLE')]) {
+               sh "/bin/curl -v --insecure -H 'Accept: application/json' -X POST --form file=@fortifyResults-${BUILD_NUMBER}.fpr\
+               https://threadfix.devops.geointservices.io/rest/applications/222/upload?apiKey=${THREADFIX_VARIABLE}"
+           }
+       }
+
+
     if(env.BRANCH_NAME == 'acceptance') {
         stage ('Deploy NGA Acceptance') {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '8e717287-708e-440f-8fa8-17497eac5efb', passwordVariable: 'PCFPass', usernameVariable: 'PCFUser']]) {

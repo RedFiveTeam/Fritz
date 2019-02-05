@@ -93,7 +93,3 @@ node ('') {
         }
     }
 }
-
-post {
-    deleteDir()
-}

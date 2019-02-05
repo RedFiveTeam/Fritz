@@ -4,6 +4,6 @@ applications:
   buildpack: https://github.com/cloudfoundry/java-buildpack.git
   memory: 1GB
   instances: 1
-  path: target/crackle-0.0.1-SNAPSHOT.jar
+  path: target/fritz-0.0.1-SNAPSHOT.jar
   services:
     - fritz-db

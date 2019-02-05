@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>mil.af.dgs1sdt</groupId>
-	<artifactId>crackle</artifactId>
+	<artifactId>fritz</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>crackle</name>
-	<description>Crackle Part</description>
+	<name>fritz</name>
+	<description>Fritz</description>
 
 	<properties>
 		<java.version>1.8</java.version>

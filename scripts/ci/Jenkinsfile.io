@@ -28,9 +28,9 @@ node ('') {
 
         docker exec Fritz /bin/bash -c "/app/scripts/tests.sh"
         """
-   }
+    }
 
-   stage ('SonarQube') {
+    stage ('SonarQube') {
        def sonarXmx = '512m'
        def sonarHost = 'https://sonar.geointservices.io'
        def scannerHome = tool 'SonarQube Runner 2.8';
@@ -42,11 +42,23 @@ node ('') {
                sh "JOB_NAME=${jobname} && JOB_SHORT_NAME=${jobshortname} && set && ${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${sonarHost} -Dsonar.login=${SONAR_LOGIN} -Dsonar.projectName=fritz -Dsonar.projectKey=narwhal:fritz"
            }
        }
-   }
+    }
 
+    stage ('Fortify') {
+       sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -clean'
+       sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} "**/*" -exclude "client/node_modules/**/*" -exclude "client/build/**/*" -exclude ".mvn/**/*" -exclude "target/**/*" -exclude "src/main/resources/static/**/*"'
+       sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -scan -f fortifyResults-${BUILD_NUMBER}.fpr'
+    }
+
+    stage ('ThreadFix') {
+       withCredentials([string(credentialsId: '0fddb863-d986-4794-8d14-2dbd87a3cc2f	', variable: 'THREADFIX_VARIABLE')]) {
+       sh "/bin/curl -v --insecure -H 'Accept: application/json' -X POST --form file=@fortifyResults-${BUILD_NUMBER}.fpr\
+           https://threadfix.devops.geointservices.io/rest/applications/175/upload?apiKey=${THREADFIX_VARIABLE}"
+       }
+    }
 
     if(env.BRANCH_NAME == 'acceptance') {
-        stage ('Deploy NGA Acceptance') {
+        stage ('Deploy NGA') {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '8e717287-708e-440f-8fa8-17497eac5efb', passwordVariable: 'PCFPass', usernameVariable: 'PCFUser']]) {
                 withEnv(["CF_HOME=${pwd()}"]) {
                     sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o USAF_Narwhal -s 'Fritz'"
@@ -54,7 +66,7 @@ node ('') {
                 }
             }
         }
-        stage ('Deploy VI2E Acceptance') {
+        stage ('Deploy VI2E') {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ff9fca26-b34c-42e2-bad9-c3cfa5722489', passwordVariable: 'pass', usernameVariable: 'user']]) {
             withEnv(["CF_HOME=${pwd()}"]) {
              sh "cf login -a api.system.vi2e.io -u $user -p $pass -o Lab-1 -s 'Fritz' --skip-ssl-validation"
@@ -63,7 +75,7 @@ node ('') {
           }
         }
     } else if(env.BRANCH_NAME == 'master') {
-        stage ('Deploy NGA Staging') {
+        stage ('Deploy NGA') {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '8e717287-708e-440f-8fa8-17497eac5efb', passwordVariable: 'PCFPass', usernameVariable: 'PCFUser']]) {
                 withEnv(["CF_HOME=${pwd()}"]) {
                     sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o USAF_Narwhal -s 'Fritz'"
@@ -71,7 +83,7 @@ node ('') {
                 }
             }
         }
-        stage ('Deploy VI2E Staging') {
+        stage ('Deploy VI2E') {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ff9fca26-b34c-42e2-bad9-c3cfa5722489', passwordVariable: 'pass', usernameVariable: 'user']]) {
                 withEnv(["CF_HOME=${pwd()}"]) {
                     sh "cf login -a api.system.vi2e.io -u $user -p $pass -o Lab-1 -s 'Fritz' --skip-ssl-validation"

@@ -70,7 +70,7 @@ trap cleanup EXIT
 
 function jarBuild {
     showBanner "Build JAR"
-    ${BASE_DIR}/scripts/build_jar.sh --no-replace
+    ${BASE_DIR}/scripts/build_jar.sh
 }
 
 function setup {

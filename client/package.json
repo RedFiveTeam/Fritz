@@ -17,7 +17,7 @@
     "react-scripts-ts": "^3.1.0"
   },
   "scripts": {
-    "build": "react-scripts-ts build && rm -rf ../src/main/resources/static && cp -r build ../src/main/resources/static ",
+    "build": "react-scripts-ts build && rm -rf ../src/main/resources/static && cp -r build ../src/main/resources/static",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "start": "yarn lint --fix && HTTPS=true react-scripts-ts start",
     "start-ci": "yarn lint --fix && react-scripts-ts start",

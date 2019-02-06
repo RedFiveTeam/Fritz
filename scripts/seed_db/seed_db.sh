@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-echo "not made yet"
+mysql -u root blackpearldev < $(dirname $0)/truncate_data.sql
+mysql -u root blackpearldev < $(dirname $0)/seed_data.sql

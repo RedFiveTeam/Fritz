@@ -23,3 +23,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+/acceptance/node_modules/
+/client/node_modules/

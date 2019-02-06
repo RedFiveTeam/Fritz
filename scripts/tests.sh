@@ -3,6 +3,8 @@
 function main {
     setup
     jarBuild
+    unitTests
+    acceptanceTests
 }
 
 # Tests
@@ -57,7 +59,7 @@ function unitTests {
 
 function cleanup {
     showBanner "Cleanup"
-    if [ -f ${BASE_DIR}/tmp/fritz.pid ]; then
+    if [[ -f ${BASE_DIR}/tmp/fritz.pid ]]; then
         cat ${BASE_DIR}/tmp/fritz.pid | xargs kill -9
         rm ${BASE_DIR}/tmp/fritz.pid
     fi

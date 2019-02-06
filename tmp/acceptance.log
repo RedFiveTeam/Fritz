@@ -1,0 +1,67 @@
+                              ``      `        `.```            
+                        .:+oys/:--:.-``       /+:..-/:`          
+      .--.          `+ys/- .yy`     `-y+:::-::s-.....-o.         
+   .+hhssos:     `/hmh:` sydm+:```-:/o:.....-oh:......o/````            
+  :hhyyyyssh+   -hNh:``sysmhsohhyhyyy-........-:.....:ys++++o-           
+ :dyysss::.:y+`+hhy` `yhmho+yhhyyyoyo.........-....../-......oo          
+ shsys-`   .smddy+` /ydyo/yhyyyyssssh/-......................-s.         
+`ddy/   .ohdhNdyh/:oNNh/shyyyssyys/--:/ossso-..........//..../s`           
+ hd.   /hyyyyhysymsdo+ymhyysyhh/-:::::-`ss:.............+ho/+/`         
+ oo   /dhyyyhyh`-h//:odyyyhy/--+--::::-:o-......+/.......oy`          
+ -y` .dhyysd+so-`-s+odyysd+-...s:--::::+o....../hy:......:d.         
+  +o /myyyyh:::+o+-+dysyy:....-y:::+s//.-/:--:+s/:/:.....+o         
+  `//+myyyhy:::/+/oddosy......:s--+o::::-.:/o+/:::os+sy+:-          
+    :hNhyshy::::os:/sds-.....:s::::::::::::::::::::osos             
+     `ohsyyh/::::oo:-+o...../s/::::::/+/::::::::::::os`             
+       .ossds::::/h/:/y-.:+so::::::s/.`/o:://`:::::o+`               
+       .+/.+d+:::://::hoo+/::::--:d/y/ oy+dy.`y+:+/`                 
+       +s:/+//s+/:/o::::::::///:::oyo/oy-dyyosmyy.                   
+       -y-.....:sdo::::::://///::::/+//:oyoo+///:+-               
+        -+......yo::::::::///+syh+/:::::/::::::/o+`       
+         -o/-..-ho:::::::::::o:+h:-::::://+++osoy:       
+           :o//:sh::::::::/:::::h+:::::::/+/://:/h.    
+             `.--+s/::::::::::::smy:-::::::/:::::h/   
+           `-.    `/o/::::::::::oNNNyo++++so::::/d.    
+          -h///:/:.`.+s/::::::::sNdNs::/::::::::y:       
+          :y`   `..-.:+hh+::::::/hds/::::::-:+o+.       
+          .y-    `.-.`  .yy/:::::::::://+oo++.         
+           -s-    ..:/-:-.dy+/++++o+/:::///:-.        
+            `/o.        /hh.    +d++/`      `--/+ys`  
+              `:+/:-...-/sd:   `ss             `/s.   
+                  .-::--.` `.++o/+o:.`      `./+:`   
+                                   `-++o::/+/-.  
+2019-02-06 14:18:25.712  INFO 59396 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : Starting FritzApplication v0.0.1-SNAPSHOT on Lucas.local with PID 59396 (/Users/engineer/workspace/fritz/target/fritz-0.0.1-SNAPSHOT.jar started by engineer in /Users/engineer/workspace/fritz/client)
+2019-02-06 14:18:25.715  INFO 59396 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : No active profile set, falling back to default profiles: default
+2019-02-06 14:18:26.254  INFO 59396 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-02-06 14:18:26.273  INFO 59396 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 12ms. Found 0 repository interfaces.
+2019-02-06 14:18:26.594  INFO 59396 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$44935212] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-06 14:18:26.921  INFO 59396 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2019-02-06 14:18:26.945  INFO 59396 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-02-06 14:18:26.945  INFO 59396 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
+2019-02-06 14:18:26.955  INFO 59396 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/Users/engineer/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+2019-02-06 14:18:27.016  INFO 59396 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-06 14:18:27.016  INFO 59396 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1256 ms
+2019-02-06 14:18:27.127  INFO 59396 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 5.2.4 by Boxfuse
+2019-02-06 14:18:27.135  INFO 59396 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-02-06 14:18:27.321  INFO 59396 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-02-06 14:18:27.325  INFO 59396 --- [           main] o.f.c.internal.database.DatabaseFactory  : Database: jdbc:h2:mem:testdb (H2 1.4)
+2019-02-06 14:18:27.393  INFO 59396 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 0 migrations (execution time 00:00.007s)
+2019-02-06 14:18:27.403  INFO 59396 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table: "PUBLIC"."flyway_schema_history"
+2019-02-06 14:18:27.423  INFO 59396 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "PUBLIC": << Empty Schema >>
+2019-02-06 14:18:27.423  INFO 59396 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "PUBLIC" is up to date. No migration necessary.
+2019-02-06 14:18:27.512  INFO 59396 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-02-06 14:18:27.564  INFO 59396 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
+2019-02-06 14:18:27.565  INFO 59396 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-02-06 14:18:27.672  INFO 59396 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-02-06 14:18:27.844  INFO 59396 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2019-02-06 14:18:27.991  INFO 59396 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-02-06 14:18:28.184  INFO 59396 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-02-06 14:18:28.242  WARN 59396 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-02-06 14:18:28.305  INFO 59396 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2019-02-06 14:18:28.437  INFO 59396 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2019-02-06 14:18:28.440  INFO 59396 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : Started FritzApplication in 3.085 seconds (JVM running for 3.451)
+2019-02-06 14:18:29.113  INFO 59396 --- [nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-02-06 14:18:29.113  INFO 59396 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-02-06 14:18:29.120  INFO 59396 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms

@@ -18,7 +18,7 @@ function acceptanceTests {
     fi
 
     pushd ${BASE_DIR}/scripts/seed_db
-        ./seed_db.sh
+        #./seed_db.sh
     popd
 
     java -jar ${BASE_DIR}/target/fritz-[0-9\.]*-SNAPSHOT.jar --server.port=9090 &> ${BASE_DIR}/tmp/acceptance.log &

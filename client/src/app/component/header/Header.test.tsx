@@ -11,11 +11,6 @@ describe('Header', () => {
     );
   });
 
-  it('should display the naming convention', () => {
-    expect(subject.find('.namingConvention').find('span')
-      .text()).toBe('DDTTTTZMONYY_TGT_NAME_ACTIVITY_ASSET_CLASSIFICATION');
-  });
-
   it('should contain a fritz header', () => {
     expect(subject.find('.logo').exists()).toBeTruthy();
   });

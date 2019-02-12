@@ -1,6 +1,6 @@
-import *as React from 'react';
+import * as React from 'react';
 import { observer } from 'mobx-react';
-const Logo = require('../../../icon/FritzLogo.png');
+const Logo = require('../../../icon/FritzLogo.svg');
 
 interface Props {
   className?: string;
@@ -22,9 +22,6 @@ export class Header extends React.Component<Props> {
             </div>
           </div>
         </nav>
-        <div className="namingConvention pt-5 pl-4">
-          <span className="text-white">DDTTTTZMONYY_TGT_NAME_ACTIVITY_ASSET_CLASSIFICATION</span>
-        </div>
       </div>
     );
   }

@@ -103,7 +103,7 @@ public class UploadController {
 
       File logFile = new File("/tmp/libreoffice.log");
 //      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--invisible", "--convert-to", "pdf", "/tmp/samplepptx.pptx", "--outdir", "/tmp");
-      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--extract-and-run", "-headless");
+      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--appimage-extract", "-headless");
       builder.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
       builder.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
       builder.start();
@@ -120,6 +120,7 @@ public class UploadController {
     for (String mystuff : file.list()) {
       list.add(mystuff);
     }
+    list.add("fucku");
 
     return list;
   }

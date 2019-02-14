@@ -29,7 +29,7 @@ export class UploadContainer extends React.Component<Props> {
       formData.append('file', e.dataTransfer.files[0]);
     }
     await this.props.uploadActions!.upload(formData);
-    let ele = document.querySelector('#uploadContainer') as HTMLElement;
+    let ele = document.querySelector('.uploadContainer') as HTMLElement;
     if (ele) {
       ele.style.border = 'none';
     }
@@ -52,8 +52,9 @@ export class UploadContainer extends React.Component<Props> {
         <p className="col-8 mx-auto mt-5">Drag and drop .ppt file</p>
         <p className="col-9 mx-auto ">or</p>
         <input
-          name="uploadbutton"
+          name="uploadButton"
           id="uploadButton"
+          className="uploadButton"
           type="file"
           onChange={this.doUpload}
         />
@@ -89,8 +90,7 @@ export class UploadContainer extends React.Component<Props> {
   render() {
     return (
       <div
-        className={this.props.className}
-        id="uploadContainer"
+        className={this.props.className + ' uploadContainer'}
       >
         <div
           className="container h-100 text-white"

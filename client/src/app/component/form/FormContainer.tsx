@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { InjectedUploadContainer } from './UploadContainer';
 
 interface Props {
   className?: string;
@@ -138,6 +139,7 @@ export class FormContainer extends React.Component<Props, State> {
             />
           </div>
           <p className="text-white-50">* = Required Field</p>
+          <InjectedUploadContainer/>
         </form>
       </div>
     );

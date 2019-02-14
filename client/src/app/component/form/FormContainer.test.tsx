@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { FormContainer } from './FormContainer';
+import { InjectedUploadContainer } from './UploadContainer';
 
 describe('FormContainer', () => {
   let subject: ShallowWrapper;
@@ -36,6 +37,10 @@ describe('FormContainer', () => {
   it('should display the naming convention', () => {
     expect(subject.find('.namingConvention').find('span')
       .text()).toBe('DDTTTTZMONYY_TGT_NAME_ACTIVITY_ASSET_CLASSIFICATION');
+  });
+
+  it('should contain an upload container', () => {
+    expect(subject.find(InjectedUploadContainer).exists()).toBeTruthy();
   });
 
 });

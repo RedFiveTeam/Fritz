@@ -17,27 +17,22 @@ code {
                     UPLOAD CONTAINER CSS
 */
 #uploadContainer {
-    border: 1px solid #D4D6DB;
-    box-sizing: border-box;
+    border: 1px dashed #D4D6DB;
     border-radius: 4px;
     width: 580px;
     height: 241px;
 }
-
-.uploadContainer {
-    border: 1px solid #D4D6DB;
-    box-sizing: border-box;
-    border-radius: 4px;
-    width: 580px;
-    height: 241px;
-}
-#uploadbutton {
+#uploadButton {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
     overflow: hidden;
     position: absolute;
     z-index: -1;
+}
+
+.clickable {
+    cursor: pointer;
 }
 /*
    ---------------------------------------------------------

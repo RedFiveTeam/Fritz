@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Component } from 'react';
 import { Header } from './component/header/Header';
 import { AppBody } from './component/body/AppBody';
+import { observer } from 'mobx-react';
 
-class App extends Component {
+@observer
+export class App extends React.Component {
 
   css = {
     background: 'linear-gradient(360deg, #1E222A 0%, #39414E 100%)'
@@ -19,4 +20,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export const InjectedApp = (App);

@@ -1,9 +1,17 @@
-import App from './App';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { shallow, ShallowWrapper } from 'enzyme';
+import { App } from './App';
+import { AppBody } from './component/body/AppBody';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+describe('App', () => {
+  let subject: ShallowWrapper;
+
+  beforeEach(() => {
+    subject = shallow(<App/>);
+  });
+
+  it('should have a body', () => {
+    expect(subject.find(AppBody).exists()).toBeTruthy();
+  });
+
 });

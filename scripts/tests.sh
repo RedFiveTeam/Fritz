@@ -2,9 +2,22 @@
 
 function main {
     setup
-    jarBuild
-    unitTests
-    acceptanceTests
+
+    case "${1}" in
+        acc|acceptance)
+            jarBuild
+            acceptanceTests ${@}
+        ;;
+        unit)
+            yarnBuild
+            unitTests
+        ;;
+        *)
+            jarBuild
+            unitTests
+            acceptanceTests
+        ;;
+    esac
 }
 
 # Tests
@@ -118,4 +131,4 @@ function testConnection {
     done
 }
 
-main
+main ${@}

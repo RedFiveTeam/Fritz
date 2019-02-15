@@ -24,7 +24,7 @@ node ('') {
 
         docker stop Fritz || true && docker rm Fritz || true
 
-        docker run --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz
+        docker run --privileged --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz
 
         docker exec Fritz /bin/bash -c "/app/scripts/tests.sh"
         """

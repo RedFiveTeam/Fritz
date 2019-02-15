@@ -4,20 +4,23 @@ import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.IOUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermission;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -58,18 +61,26 @@ public class UploadController {
 
   @ResponseBody
   @GetMapping(path = "/test")
-  public String[] test() throws IOException {
+  public List test() throws IOException {
     String os = System.getProperty("os.name").toLowerCase();
+    List<String> list = new ArrayList<>();
 
     if (os.contains("mac")) {
-      Runtime.getRuntime().exec(String.format("/Applications/LibreOffice.app/Contents/MacOS/soffice --invisible --convert-to pdf /tmp/working/samplepptx.pptx --outdir /tmp"));
+      File logFile = new File("/tmp/libreoffice.log");
+      ProcessBuilder builder = new ProcessBuilder("/Applications/LibreOffice.app/Contents/MacOS/soffice", "--invisible", "--convert-to", "pdf", "/tmp/working/samplepptx.pptx", "--outdir", "/tmp");
+      builder.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
+      builder.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
+      builder.start();
+
     } else {
+
       InputStream is = getClass().getClassLoader().getResourceAsStream("libreoffice.AppImage");
       String librePath = "/tmp/libreoffice.AppImage";
       if (is != null) {
         Path path = new File(librePath).toPath();
         Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
       }
+
       InputStream ppt = getClass().getClassLoader().getResourceAsStream("samplepptx.pptx");
       if (ppt != null) {
         String pptPath = "/tmp/samplepptx.pptx";
@@ -82,12 +93,34 @@ public class UploadController {
       perms.add(PosixFilePermission.OWNER_EXECUTE);
       perms.add(PosixFilePermission.GROUP_EXECUTE);
       perms.add(PosixFilePermission.OTHERS_EXECUTE);
+      perms.add(PosixFilePermission.OWNER_READ);
+      perms.add(PosixFilePermission.GROUP_READ);
+      perms.add(PosixFilePermission.OTHERS_READ);
+      perms.add(PosixFilePermission.OWNER_WRITE);
+      perms.add(PosixFilePermission.GROUP_WRITE);
+      perms.add(PosixFilePermission.OTHERS_WRITE);
       Files.setPosixFilePermissions(libre.toPath(), perms);
 
-      Runtime.getRuntime().exec(String.format("/tmp/libreoffice.AppImage --invisible --convert-to pdf /tmp/samplepptx.pptx --outdir /tmp"));
+      File logFile = new File("/tmp/libreoffice.log");
+//      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--invisible", "--convert-to", "pdf", "/tmp/samplepptx.pptx", "--outdir", "/tmp");
+      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--extract-and-run", "-headless");
+      builder.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
+      builder.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
+      builder.start();
+      ProcessBuilder builder2 = new ProcessBuilder("uname", "-a");
+      builder2.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
+      builder2.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
+      builder2.start();
     }
     String tmpDir = "/tmp";
     File file = new File(tmpDir);
-    return file.list();
+
+    list.add(new String(Files.readAllBytes(Paths.get("/tmp/libreoffice.log")), StandardCharsets.UTF_8));
+
+    for (String mystuff : file.list()) {
+      list.add(mystuff);
+    }
+
+    return list;
   }
 }

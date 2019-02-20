@@ -61,7 +61,7 @@ public class UploadController {
 
   @ResponseBody
   @GetMapping(path = "/test")
-  public List test() throws IOException {
+  public List test() throws Exception {
     String os = System.getProperty("os.name").toLowerCase();
     List<String> list = new ArrayList<>();
 
@@ -103,11 +103,12 @@ public class UploadController {
 
       File logFile = new File("/tmp/libreoffice.log");
 //      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--invisible", "--convert-to", "pdf", "/tmp/samplepptx.pptx", "--outdir", "/tmp");
-      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--appimage-extract", "-headless");
+      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--appimage-extract");
       builder.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
       builder.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
       builder.start();
-      ProcessBuilder builder2 = new ProcessBuilder("uname", "-a");
+      Thread.sleep(5000);
+      ProcessBuilder builder2 = new ProcessBuilder("/home/vcap/app/squashfs-root/AppRun", "--invisible", "--headless", "--convert-to", "pdf", "/tmp/samplepptx.pptx", "--outdir", "/tmp");
       builder2.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
       builder2.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
       builder2.start();
@@ -120,7 +121,7 @@ public class UploadController {
     for (String mystuff : file.list()) {
       list.add(mystuff);
     }
-    list.add("fucku");
+    list.add("fucku2");
 
     return list;
   }

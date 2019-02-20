@@ -10,6 +10,12 @@ properties(
 )
 
 node ('') {
+    stage ('Reset') {
+        if(env.BRANCH_NAME == 'acceptance') {
+            deleteDir()
+        }
+    }
+
     stage ('Checkout') {
         if(env.BRANCH_NAME == 'acceptance') {
             git url: 'git@gitlab.devops.geointservices.io:dgs1sdt/fritz.git', branch: 'acceptance', credentialsId: '0059b60b-fe05-4857-acda-41ada14d0c52', poll: true

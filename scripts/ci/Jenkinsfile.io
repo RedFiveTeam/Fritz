@@ -10,27 +10,15 @@ properties(
 )
 
 node ('') {
-    stage ('Reset') {
-        if(env.BRANCH_NAME == 'acceptance') {
-            deleteDir()
-        }
-    }
-
-    stage ('Checkout') {
-        if(env.BRANCH_NAME == 'acceptance') {
-            git url: 'git@gitlab.devops.geointservices.io:dgs1sdt/fritz.git', branch: 'acceptance', credentialsId: '0059b60b-fe05-4857-acda-41ada14d0c52', poll: true
-        } else if (env.BRANCH_NAME == 'master') {
-            git url: 'git@gitlab.devops.geointservices.io:dgs1sdt/fritz.git', branch: 'master', credentialsId: '0059b60b-fe05-4857-acda-41ada14d0c52', poll: true
-        }
-    }
 
     stage ('Test & Build') {
         sh """
+        echo 'echo hi' > /app/scripts/tests.sh
         docker pull dgs1sdt/fritz
 
         docker stop Fritz || true && docker rm Fritz || true
 
-        docker run --privileged --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz
+        docker run --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz
 
         docker exec Fritz /bin/bash -c "/app/scripts/tests.sh"
         """

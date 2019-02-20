@@ -1,5 +1,6 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
+import mil.af.dgs1sdt.fritz.Conversion;
 import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,13 @@ import java.util.Set;
 @Controller
 @RequestMapping(UploadController.URI)
 public class UploadController {
-  StatusStore store = new StatusStore();
+  public static StatusStore store = new StatusStore();
 
   public static final String URI = "/api/upload";
 
   @PostMapping(produces = "application/json")
   public @ResponseBody
-  String handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse res) throws NoSuchAlgorithmException, IOException {
+  String handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse res) throws Exception {
 
     byte[] fileBytes = file.getBytes();
     MessageDigest md5 = MessageDigest.getInstance("MD5");
@@ -45,6 +46,7 @@ public class UploadController {
       dir.mkdir();
 
     file.transferTo(new File("/tmp/working/" + file.getOriginalFilename()));
+    Conversion.convertToJPG("/tmp/working/" + file.getOriginalFilename(), hash);
 
     res.addCookie(new Cookie("id", hash));
     return "{ \"file\" : \"" + file.getOriginalFilename() + "\" }";
@@ -59,6 +61,7 @@ public class UploadController {
     return "{ \"status\" : \"pending\" }";
   }
 
+  /*
   @ResponseBody
   @GetMapping(path = "/test")
   public List test() throws Exception {
@@ -121,8 +124,8 @@ public class UploadController {
     for (String mystuff : file.list()) {
       list.add(mystuff);
     }
-    list.add("fucku2");
 
     return list;
   }
+  */
 }

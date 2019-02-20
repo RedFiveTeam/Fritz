@@ -8,8 +8,8 @@ properties(
         disableConcurrentBuilds()
     ]
 )
-
-node ('') {
+// change node back to node ('') for recent version, legacy for old
+node ('legacy') {
     stage ('Checkout') {
         if(env.BRANCH_NAME == 'acceptance') {
             git url: 'git@gitlab.devops.geointservices.io:dgs1sdt/fritz.git', branch: 'acceptance', credentialsId: '0059b60b-fe05-4857-acda-41ada14d0c52', poll: true
@@ -24,7 +24,7 @@ node ('') {
 
         docker stop Fritz || true && docker rm Fritz || true
 
-        docker run --privileged --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz
+        docker run --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz
 
         docker exec Fritz /bin/bash -c "/app/scripts/tests.sh"
         """
@@ -46,7 +46,7 @@ node ('') {
 
     stage ('Fortify') {
        sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -clean'
-       sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} "**/*" -exclude "client/node_modules/**/*" -exclude "client/build/**/*" -exclude ".mvn/**/*" -exclude "target/**/*" -exclude "src/main/resources/static/**/*" -exclude "acceptance/node_modules/**/*"'
+       sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} "**/*" -exclude "client/node_modules/**/*" -exclude "client/build/**/*" -exclude ".mvn/**/*" -exclude "target/**/*" -exclude "src/main/resources/static/**/*" -exclude "acceptance/node_modules/**/*" -exclude "**/squashfs-root/**/*"'
        sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -scan -f fortifyResults-${BUILD_NUMBER}.fpr'
     }
 

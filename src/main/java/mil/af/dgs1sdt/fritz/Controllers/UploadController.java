@@ -1,6 +1,7 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
 import mil.af.dgs1sdt.fritz.Conversion;
+import mil.af.dgs1sdt.fritz.Models.StatusModel;
 import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +20,11 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermission;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping(UploadController.URI)
 public class UploadController {
-  public static StatusStore store = new StatusStore();
 
   public static final String URI = "/api/upload";
 
@@ -46,7 +43,7 @@ public class UploadController {
       dir.mkdir();
 
     file.transferTo(new File("/tmp/working/" + file.getOriginalFilename()));
-    Conversion.convertToJPG("/tmp/working/" + file.getOriginalFilename(), hash);
+    Conversion.convertToPDF(file.getOriginalFilename(), hash);
 
     res.addCookie(new Cookie("id", hash));
     return "{ \"file\" : \"" + file.getOriginalFilename() + "\" }";
@@ -54,11 +51,17 @@ public class UploadController {
 
   @ResponseBody
   @GetMapping(produces = "application/json", path="/status")
-  public String status(@CookieValue("id") String id) {
-    if (id.length() > 0 && store.getList().contains(id)) {
-      return "{ \"status\" : \"complete\" }";
+  public StatusModel status(@CookieValue("id") String id) {
+    if (id.length() > 0 && StatusStore.getList().contains(id)) {
+      StatusModel status = new StatusModel();
+      status.files = Arrays.asList(new File("/tmp/complete/" + id + "/").listFiles());
+      status.status = "complete";
+      return status;
     }
-    return "{ \"status\" : \"pending\" }";
+    StatusModel status = new StatusModel();
+    status.files = new ArrayList<>();
+    status.status = "pending";
+    return status;
   }
 
   /*

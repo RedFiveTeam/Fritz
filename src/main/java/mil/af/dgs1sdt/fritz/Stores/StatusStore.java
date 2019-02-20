@@ -5,12 +5,12 @@ import java.util.List;
 
 public class StatusStore {
 
-  public List getList() {
-    return this.completed;
+  public static List getList() {
+    return completed;
   }
 
-  public void addToList(String hash) {
-    this.completed.add(hash);
+  public static void addToList(String hash) {
+    completed.add(hash);
   }
 
   private static List<String> completed = new ArrayList<>();

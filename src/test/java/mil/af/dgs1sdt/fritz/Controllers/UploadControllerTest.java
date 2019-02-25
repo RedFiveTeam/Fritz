@@ -16,6 +16,30 @@ public class UploadControllerTest extends BaseIntegrationTest {
   StatusStore store;
 
   @Test
+  public void getStatusTest() throws Exception {
+    given()
+      .port(port)
+      .header(new Header("Cookie", "id=1234"))
+      .when()
+      .get(UploadController.URI + "/status")
+      .then()
+      .statusCode(200)
+      .body("status", equalTo("pending"));
+
+
+    store.addToList("1234");
+
+    given()
+      .port(port)
+      .header(new Header("Cookie", "id=1234"))
+      .when()
+      .get(UploadController.URI + "/status")
+      .then()
+      .statusCode(200)
+      .body("status", equalTo("complete"));
+  }
+
+  @Test
   public void uploadFileTest() throws Exception {
     given()
       .port(port)
@@ -26,31 +50,6 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .statusCode(200)
       .body("file", equalTo("samplepptx.pptx"));
 
-    assertEquals(new File("/tmp/working/samplepptx.pptx").exists(), true);
+    assertEquals(new File("/tmp/working/72432c9fb76cf45094c29fc92c4b16f0/samplepptx.pptx").exists(), true);
   }
-
-  @Test
-  public void getStatusTest() throws Exception {
-    given()
-      .port(port)
-      .header(new Header("Cookie", "id=12345678"))
-      .when()
-      .get(UploadController.URI + "/status")
-      .then()
-      .statusCode(200)
-      .body("status", equalTo("pending"));
-
-
-    store.addToList("12345678");
-
-    given()
-      .port(port)
-      .header(new Header("Cookie", "id=12345678"))
-      .when()
-      .get(UploadController.URI + "/status")
-      .then()
-      .statusCode(200)
-      .body("status", equalTo("complete"));
-  }
-
 }

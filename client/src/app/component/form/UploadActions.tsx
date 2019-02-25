@@ -4,15 +4,18 @@ import { action } from 'mobx';
 import { UploadStore } from './UploadStore';
 import { Stores } from '../../../utils/Stores';
 import { StatusModel } from './StatusModel';
+import { SlidesStore } from '../slides/SlidesStore';
 
 export class UploadActions {
   private uploadRepository: UploadRepository;
   private uploadStore: UploadStore;
+  private slidesStore: SlidesStore;
   private poll: any;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.uploadRepository = repositories.uploadRepository!;
     this.uploadStore = stores.uploadStore!;
+    this.slidesStore = stores.slidesStore!;
   }
 
   @action.bound
@@ -26,12 +29,14 @@ export class UploadActions {
       1000);
   }
 
+  @action.bound
   async checkStatus() {
     console.log('checking status');
     this.uploadRepository.status()
       .then((status: StatusModel) => {
         if (status.status === 'complete') {
           this.uploadProcessingComplete();
+          this.slidesStore.setFiles(status.files);
         }
       });
     return;

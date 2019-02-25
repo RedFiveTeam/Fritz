@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { InjectedUploadContainer } from './UploadContainer';
+import styled from 'styled-components';
 
 interface Props {
   className?: string;
@@ -37,8 +38,8 @@ export class FormContainer extends React.Component<Props, State> {
       <div
         className={this.props.className}
       >
-        <div className="namingConvention mt-4 pt-5 pl-4">
-          <span className="text-white">
+        <div className="namingConvention">
+          <span>
             <h4>
             {
               (this.state.nameFormat.date || 'DDTTTTZMONYY') +
@@ -51,9 +52,9 @@ export class FormContainer extends React.Component<Props, State> {
             </h4>
           </span>
         </div>
-        <form className="w-50 pl-4 pt-3">
+        <form>
           <div className="form-group">
-            <label className="text-white">Date*</label>
+            <label>Date*</label>
             <br/>
             <input
               type="date"
@@ -72,14 +73,14 @@ export class FormContainer extends React.Component<Props, State> {
                   },
                 }));
               }}
-              className="form-control bg-dark d-inline-block w-75"
+              className="form-control bg-dark d-inline-block"
               id="dateInput"
               aria-describedby="emailHelp"
               placeholder="Select Date"
             />
           </div>
           <div className="form-group">
-            <label className="text-white">Operation Name*
+            <label>Operation Name*
             </label>
             <input
               data-name="opName"
@@ -99,7 +100,7 @@ export class FormContainer extends React.Component<Props, State> {
             />
           </div>
           <div className="form-group">
-            <label className="text-white">Asset*
+            <label>Asset*
             </label>
             <input
               data-name="asset"
@@ -119,7 +120,7 @@ export class FormContainer extends React.Component<Props, State> {
             />
           </div>
           <div className="form-group">
-            <label className="text-white">Classification*
+            <label>Classification*
             </label>
             <input
               data-name="classification"
@@ -138,10 +139,49 @@ export class FormContainer extends React.Component<Props, State> {
               placeholder="e.g. FVEY"
             />
           </div>
-          <p className="text-white-50">* = Required Field</p>
+          <p>* = Required Field</p>
           <InjectedUploadContainer/>
         </form>
       </div>
     );
   }
 }
+
+export const StyledFormContainer = (styled(FormContainer)`
+  color: #fff;
+  margin-top: 87px;
+  margin-left: 39px;
+  
+  input {
+    width: 580px;
+  }
+  
+  .namingConvention {
+    color: #fff;
+  }
+
+  label {
+    color: #fff;
+  }
+  
+  .uploadButton {
+    width: .1px;
+    height: .1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .uploadContainer {
+      box-sizing: border-box;
+      border: 1px dashed #d4d6db;
+      border-radius: 4px;
+      width: 580px;
+      height: 241px;
+  }
+  
+  .clickable {
+      cursor: pointer;
+  }
+`);

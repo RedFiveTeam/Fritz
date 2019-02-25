@@ -13,25 +13,11 @@ code {
 /* ---------------------------------------------------------
                     UPLOAD CONTAINER CSS
 */
-.uploadContainer {
-    box-sizing: border-box;
-    border: 1px dashed #d4d6db;
-    border-radius: 4px;
-    width: 580px;
-    height: 241px;
-}
 
-.uploadButton {
-    width: .1px;
-    height: .1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-}
 
-.clickable {
-    cursor: pointer;
+.spacer {
+    height: 635px;
+    border-left: 1px solid #6C7F9C;
 }
 /*
    ---------------------------------------------------------

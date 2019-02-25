@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { App } from './App';
-import { AppBody } from './component/body/AppBody';
+import { StyledAppBody } from './component/body/AppBody';
 
 describe('App', () => {
   let subject: ShallowWrapper;
@@ -11,7 +11,7 @@ describe('App', () => {
   });
 
   it('should have a body', () => {
-    expect(subject.find(AppBody).exists()).toBeTruthy();
+    expect(subject.find(StyledAppBody).exists()).toBeTruthy();
   });
 
 });

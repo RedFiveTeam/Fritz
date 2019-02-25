@@ -1,11 +1,28 @@
 package mil.af.dgs1sdt.fritz.Models;
 
-import java.io.File;
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class StatusModel {
 
-  public String status;
-  public List<File> files;
+  private String status;
+  private List<String> files;
 
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public List<String> getFiles() {
+    return files;
+  }
+
+  public void setFiles(List<String> files) {
+    this.files = files;
+  }
 }

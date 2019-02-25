@@ -44,9 +44,17 @@ public class UploadController {
 
     file.transferTo(new File("/tmp/working/" + hash + "/" + file.getOriginalFilename()));
 
-    Conversion convert = new Conversion();
-    convert.convertPPTX(file.getOriginalFilename(), hash);
-    // Conversion.convertToPDF(file.getOriginalFilename(), hash);
+    Thread th = new Thread() {
+      @Override
+      public void run() {
+        try {
+          Conversion convert = new Conversion();
+          convert.convertPPTX(file.getOriginalFilename(), hash);
+        } catch (Exception e) {
+        }
+      }
+    };
+    th.start();
 
     res.addCookie(new Cookie("id", hash));
     return "{ \"file\" : \"" + file.getOriginalFilename() + "\" }";
@@ -57,81 +65,25 @@ public class UploadController {
   public StatusModel status(@CookieValue("id") String id) {
     if (id.length() > 0 && StatusStore.getList().contains(id)) {
       StatusModel status = new StatusModel();
-      status.files = Arrays.asList(new File("/tmp/complete/" + id + "/").listFiles());
-      status.status = "complete";
+      List<String> fileNames = new ArrayList<>();
+      File[] files = new File("/tmp/complete/" + id + "/").listFiles(new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String name) {
+          return name.toLowerCase().endsWith(".png");
+        }
+      });
+      if (files != null) {
+        for (File file : files) {
+          fileNames.add(file.getName());
+        }
+        status.setFiles(fileNames);
+      }
+      status.setStatus("complete");
       return status;
     }
     StatusModel status = new StatusModel();
-    status.files = new ArrayList<>();
-    status.status = "pending";
+    status.setFiles(new ArrayList<>());
+    status.setStatus("pending");
     return status;
   }
-
-  /*
-  @ResponseBody
-  @GetMapping(path = "/test")
-  public List test() throws Exception {
-    String os = System.getProperty("os.name").toLowerCase();
-    List<String> list = new ArrayList<>();
-
-    if (os.contains("mac")) {
-      File logFile = new File("/tmp/libreoffice.log");
-      ProcessBuilder builder = new ProcessBuilder("/Applications/LibreOffice.app/Contents/MacOS/soffice", "--invisible", "--convert-to", "pdf", "/tmp/working/samplepptx.pptx", "--outdir", "/tmp");
-      builder.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
-      builder.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
-      builder.start();
-
-    } else {
-
-      InputStream is = getClass().getClassLoader().getResourceAsStream("libreoffice.AppImage");
-      String librePath = "/tmp/libreoffice.AppImage";
-      if (is != null) {
-        Path path = new File(librePath).toPath();
-        Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
-      }
-
-      InputStream ppt = getClass().getClassLoader().getResourceAsStream("samplepptx.pptx");
-      if (ppt != null) {
-        String pptPath = "/tmp/samplepptx.pptx";
-        Path path = new File(pptPath).toPath();
-        Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
-      }
-
-      File libre = new File(librePath);
-      Set<PosixFilePermission> perms = new HashSet<>();
-      perms.add(PosixFilePermission.OWNER_EXECUTE);
-      perms.add(PosixFilePermission.GROUP_EXECUTE);
-      perms.add(PosixFilePermission.OTHERS_EXECUTE);
-      perms.add(PosixFilePermission.OWNER_READ);
-      perms.add(PosixFilePermission.GROUP_READ);
-      perms.add(PosixFilePermission.OTHERS_READ);
-      perms.add(PosixFilePermission.OWNER_WRITE);
-      perms.add(PosixFilePermission.GROUP_WRITE);
-      perms.add(PosixFilePermission.OTHERS_WRITE);
-      Files.setPosixFilePermissions(libre.toPath(), perms);
-
-      File logFile = new File("/tmp/libreoffice.log");
-//      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--invisible", "--convert-to", "pdf", "/tmp/samplepptx.pptx", "--outdir", "/tmp");
-      ProcessBuilder builder = new ProcessBuilder("/tmp/libreoffice.AppImage", "--appimage-extract");
-      builder.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
-      builder.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
-      builder.start();
-      Thread.sleep(5000);
-      ProcessBuilder builder2 = new ProcessBuilder("/home/vcap/app/squashfs-root/AppRun", "--invisible", "--headless", "--convert-to", "pdf", "/tmp/samplepptx.pptx", "--outdir", "/tmp");
-      builder2.redirectOutput(ProcessBuilder.Redirect.appendTo(logFile));
-      builder2.redirectError(ProcessBuilder.Redirect.appendTo(logFile));
-      builder2.start();
-    }
-    String tmpDir = "/tmp";
-    File file = new File(tmpDir);
-
-    list.add(new String(Files.readAllBytes(Paths.get("/tmp/libreoffice.log")), StandardCharsets.UTF_8));
-
-    for (String mystuff : file.list()) {
-      list.add(mystuff);
-    }
-
-    return list;
-  }
-  */
 }

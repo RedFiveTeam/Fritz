@@ -37,13 +37,16 @@ public class UploadController {
     byte[] digest = md5.digest(fileBytes);
     String hash = new BigInteger(1, digest).toString(16);
 
-    String workingDir = "/tmp/working";
+    String workingDir = "/tmp/working/" + hash;
     File dir = new File(workingDir);
     if (!dir.exists())
-      dir.mkdir();
+      dir.mkdirs();
 
-    file.transferTo(new File("/tmp/working/" + file.getOriginalFilename()));
-    Conversion.convertToPDF(file.getOriginalFilename(), hash);
+    file.transferTo(new File("/tmp/working/" + hash + "/" + file.getOriginalFilename()));
+
+    Conversion convert = new Conversion();
+    convert.convertPPTX(file.getOriginalFilename(), hash);
+    // Conversion.convertToPDF(file.getOriginalFilename(), hash);
 
     res.addCookie(new Cookie("id", hash));
     return "{ \"file\" : \"" + file.getOriginalFilename() + "\" }";

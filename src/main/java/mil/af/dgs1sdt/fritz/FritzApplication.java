@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.io.File;
 import java.io.InputStream;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
+@EnableAsync
 public class FritzApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FritzApplication.class, args);

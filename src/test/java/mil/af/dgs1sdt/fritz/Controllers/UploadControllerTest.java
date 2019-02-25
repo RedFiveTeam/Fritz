@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class UploadControllerTest extends BaseIntegrationTest {
 
-  StatusStore store = new StatusStore();
+  StatusStore store;
 
   @Test
   public void uploadFileTest() throws Exception {
@@ -41,16 +41,16 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .body("status", equalTo("pending"));
 
 
-//    store.addToList.add("12345678");
-//
-//    given()
-//      .port(port)
-//      .header(new Header("Cookie", "id=12345678"))
-//      .when()
-//      .get(UploadController.URI + "/status")
-//      .then()
-//      .statusCode(200)
-//      .body("status", equalTo("complete"));
+    store.addToList("12345678");
+
+    given()
+      .port(port)
+      .header(new Header("Cookie", "id=12345678"))
+      .when()
+      .get(UploadController.URI + "/status")
+      .then()
+      .statusCode(200)
+      .body("status", equalTo("complete"));
   }
 
 }

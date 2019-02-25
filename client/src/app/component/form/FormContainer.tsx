@@ -66,12 +66,21 @@ export class FormContainer extends React.Component<Props, State> {
                 let year = e.target.value.substr(2, 2);
                 let day = e.target.value.substr(8, 2);
                 let newValue: any = day + 'TTTTZ' + month + year;
-                this.setState(prevState => ({
-                  nameFormat: {
-                    ...prevState.nameFormat,
-                    date: newValue
-                  },
-                }));
+                if (month === undefined || year === undefined || day === undefined) {
+                  this.setState(prevState => ({
+                    nameFormat: {
+                      ...prevState.nameFormat,
+                      date: null
+                    },
+                  }));
+                } else {
+                  this.setState(prevState => ({
+                    nameFormat: {
+                      ...prevState.nameFormat,
+                      date: newValue
+                    },
+                  }));
+                }
               }}
               className="form-control bg-dark d-inline-block"
               id="dateInput"

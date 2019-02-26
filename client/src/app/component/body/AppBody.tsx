@@ -28,14 +28,13 @@ export class AppBody extends React.Component<Props> {
 }
 
 export const StyledAppBody = (styled(AppBody)`
-
-  height: 80%;
-  position: relative;
   
   .spacer {
-    position: relative;
-    top: 20%;
+    position: absolute;
+    top: 17%;
     display: inline-block;
+    height: 625px;
+    border-left: 1px solid #6C7F9C;
   }
   
   .left {

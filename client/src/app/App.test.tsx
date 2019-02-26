@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { App } from './App';
-import { StyledAppBody } from './component/body/AppBody';
+import { App, WrappedRoutes } from './App';
 
 describe('App', () => {
   let subject: ShallowWrapper;
@@ -10,8 +9,7 @@ describe('App', () => {
     subject = shallow(<App/>);
   });
 
-  it('should have a body', () => {
-    expect(subject.find(StyledAppBody).exists()).toBeTruthy();
+  it('should render wrapped routes', () => {
+    expect(subject.find(WrappedRoutes).exists()).toBeTruthy();
   });
-
 });

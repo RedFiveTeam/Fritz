@@ -6,21 +6,15 @@ import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.IOUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.PosixFilePermission;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(UploadController.URI)
@@ -35,7 +29,7 @@ public class UploadController {
     byte[] fileBytes = file.getBytes();
     MessageDigest md5 = MessageDigest.getInstance("MD5");
     byte[] digest = md5.digest(fileBytes);
-    String hash = new BigInteger(1, digest).toString(16);
+    String hash = new BigInteger(1, digest).toString(16) + Math.random();
 
     String workingDir = "/tmp/working/" + hash;
     File dir = new File(workingDir);

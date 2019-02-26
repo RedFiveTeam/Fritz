@@ -1,3 +1,5 @@
+import * as FileSaver from 'file-saver';
+
 const urljoin = require('url-join');
 
 export class ErrorResponse {
@@ -35,6 +37,22 @@ export class HTTPClient {
     const json = await resp.json();
     this.handleErrors(resp.status, json);
     return json;
+  }
+
+  async postAndDownload(path: string, body: string, filename: string) {
+    await fetch(
+      urljoin(this.baseURL, path),
+      {
+        method: 'POST',
+        headers: [
+          ['Content-Type', 'application/json'],
+        ],
+        credentials: 'include',
+        body: body,
+      }
+    )
+      .then(response => response.blob())
+      .then(blob => FileSaver.saveAs(blob, filename + '.zip'));
   }
 
   async putJSON(path: string, body: string) {

@@ -42,5 +42,8 @@ describe('UploadActions', () => {
     await subject.checkStatus();
     expect(subject.uploadProcessingComplete).toHaveBeenCalled();
     expect(slidesStore.files).toEqual(['slide1.png', 'slide2.png', 'slide3.png']);
+    expect(slidesStore.slides[0].oldName).toBe('slide1.png');
+    expect(slidesStore.slides[1].oldName).toBe('slide2.png');
+    expect(slidesStore.slides[2].oldName).toBe('slide3.png');
   });
 });

@@ -5,8 +5,11 @@ import { UploadStore } from './UploadStore';
 import { Stores } from '../../../utils/Stores';
 import { StatusModel } from './StatusModel';
 import { SlidesStore } from '../slides/SlidesStore';
+import { SlideModel } from '../slides/SlideModel';
+import { SlidesActions } from '../slides/SlidesActions';
 
 export class UploadActions {
+  private slidesActions: SlidesActions;
   private uploadRepository: UploadRepository;
   private uploadStore: UploadStore;
   private slidesStore: SlidesStore;
@@ -16,6 +19,7 @@ export class UploadActions {
     this.uploadRepository = repositories.uploadRepository!;
     this.uploadStore = stores.uploadStore!;
     this.slidesStore = stores.slidesStore!;
+    this.slidesActions = new SlidesActions(repositories, stores);
   }
 
   @action.bound
@@ -37,9 +41,22 @@ export class UploadActions {
         if (status.status === 'complete') {
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
+          this.setSlides(status.files);
         }
       });
     return;
+  }
+
+  @action.bound
+  setSlides(names: string[]) {
+    let temp: SlideModel[] = [];
+    names.map((name) => {
+      let slide = new SlideModel();
+      slide.setOldName(name);
+      temp.push(slide);
+    });
+    this.slidesStore.setSlides(temp);
+    this.slidesActions.updateNewNames();
   }
 
   uploadProcessingComplete() {

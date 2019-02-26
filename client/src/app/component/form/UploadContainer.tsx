@@ -105,7 +105,6 @@ export class UploadContainer extends React.Component<Props> {
           }
         </div>
       </div>
-
     );
   }
 }

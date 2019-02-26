@@ -5,44 +5,44 @@ import { InjectedUploadContainer } from './UploadContainer';
 
 describe('FormContainer', () => {
   let subject: ShallowWrapper;
-  let slidesStore: any;
+  let slidesActions: any;
 
-  slidesStore = {
-    setDate: jest.fn(),
-    setOpName: jest.fn(),
-    setAsset: jest.fn(),
-    setClassification: jest.fn()
+  slidesActions = {
+    setAndUpdateDate: jest.fn(),
+    setAndUpdateOpName: jest.fn(),
+    setAndUpdateAsset: jest.fn(),
+    setAndUpdateClassification: jest.fn()
   };
 
   beforeEach(() => {
     subject = shallow(
       <FormContainer
-        slidesStore={slidesStore}
+        slidesActions={slidesActions}
       />);
   });
 
   it('should contain a date input that updates the header string when changed', () => {
     expect(subject.find('#dateInput').exists()).toBeTruthy();
     subject.find('#dateInput').simulate('change', { target : { value : '2018/05/12' }});
-    expect(slidesStore.setDate).toHaveBeenCalledWith('12TTTTZMAY18');
+    expect(slidesActions.setAndUpdateDate).toHaveBeenCalledWith('12TTTTZMAY18');
   });
 
   it('should contain an operation input that updates the header string when changed', () => {
     expect(subject.find('#opInput').exists()).toBeTruthy();
     subject.find('#opInput').simulate('change', { target : { value : 'op superman'}});
-    expect(slidesStore.setOpName).toHaveBeenCalledWith('op superman');
+    expect(slidesActions.setAndUpdateOpName).toHaveBeenCalledWith('op superman');
   });
 
   it('should contain an asset input that updates the header string when changed', () => {
     expect(subject.find('#assetInput').exists()).toBeTruthy();
     subject.find('#assetInput').simulate('change', { target : { value : 'flyguy'}});
-    expect(slidesStore.setAsset).toHaveBeenCalledWith('flyguy');
+    expect(slidesActions.setAndUpdateAsset).toHaveBeenCalledWith('flyguy');
   });
 
   it('should contain a classification input that updates the header string when changed', () => {
     expect(subject.find('#classificationInput').exists()).toBeTruthy();
     subject.find('#classificationInput').simulate('change', { target : { value : 'secret'}});
-    expect(slidesStore.setClassification).toHaveBeenCalledWith('secret');
+    expect(slidesActions.setAndUpdateClassification).toHaveBeenCalledWith('secret');
   });
 
   it('should contain an upload container', () => {

@@ -2,20 +2,17 @@ package mil.af.dgs1sdt.fritz.Controllers;
 
 import io.restassured.http.Header;
 import mil.af.dgs1sdt.fritz.BaseIntegrationTest;
-import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import org.junit.Test;
 
-import java.io.File;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class UploadControllerTest extends BaseIntegrationTest {
 
-  StatusStore store;
+public class RenameControllerTest extends BaseIntegrationTest {
 
   @Test
-  public void getStatusTest() throws Exception {
+  public void renameTest() throws Exception {
     given()
       .port(port)
       .header(new Header("Cookie", "id=1234"))
@@ -26,7 +23,6 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .body("status", equalTo("pending"));
 
 
-    store.addToList("1234");
 
     given()
       .port(port)
@@ -35,18 +31,6 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .get(UploadController.URI + "/status")
       .then()
       .statusCode(200)
-      .body("status", equalTo("complete"));
-  }
-
-  @Test
-  public void uploadFileTest() throws Exception {
-    given()
-      .port(port)
-      .multiPart(new File("./samplepptx.pptx"))
-      .when()
-      .post(UploadController.URI)
-      .then()
-      .statusCode(200)
-      .body("file", equalTo("samplepptx.pptx"));
+      .body("status", equalTo("pending"));
   }
 }

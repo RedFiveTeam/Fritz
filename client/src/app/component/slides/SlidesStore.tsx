@@ -1,4 +1,5 @@
 import { action, computed, observable } from 'mobx';
+import { SlideModel } from './SlideModel';
 
 export class SlidesStore {
   @observable private _files: string[] = [];
@@ -6,10 +7,16 @@ export class SlidesStore {
   @observable private _opName: string | null;
   @observable private _asset: string | null;
   @observable private _classification: string | null;
+  @observable private _slides: SlideModel[] = [];
 
   @computed
   get files(): string[] {
     return this._files;
+  }
+
+  @computed
+  get slides(): SlideModel[] {
+    return this._slides;
   }
 
   @action.bound
@@ -37,7 +44,13 @@ export class SlidesStore {
     this._classification = value;
   }
 
-  @computed get nameFormat(): string {
+  @action.bound
+  setSlides(value: SlideModel[]) {
+    this._slides = value;
+  }
+
+  @computed
+  get nameFormat(): string {
     return ((this._date || 'DDTTTTZMONYY') + '_' +
       (this._opName || 'TGT_NAME') + '_ACTIVITY_' +
       (this._asset || 'ASSET') + '_' +

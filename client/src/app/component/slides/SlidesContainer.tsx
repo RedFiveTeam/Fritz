@@ -16,10 +16,9 @@ export class SlidesContainer extends React.Component<Props> {
       <div
         className={this.props.className}
       >
-        { this.props.slidesStore!.files &&
-          this.props.slidesStore!.files.map((f, idx) => {
-            return <div key={idx} className="slide">{this.props.slidesStore!.nameFormat}</div>;
-          })
+        {this.props.slidesStore!.slides.map((s, idx) => {
+          return <div key={idx} className="slide">{s.newName}</div>;
+        })
         }
       </div>
     );

@@ -2,11 +2,11 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { InjectedUploadContainer } from './UploadContainer';
 import styled from 'styled-components';
-import { SlidesStore } from '../slides/SlidesStore';
+import { SlidesActions } from '../slides/SlidesActions';
 
 interface Props {
   className?: string;
-  slidesStore?: SlidesStore;
+  slidesActions?: SlidesActions;
 }
 
 interface State {
@@ -54,9 +54,9 @@ export class FormContainer extends React.Component<Props, State> {
                 let day = e.target.value.substr(8, 2);
                 let newValue: any = day + 'TTTTZ' + month + year;
                 if (month === undefined || year === undefined || day === undefined) {
-                  this.props.slidesStore!.setDate(null);
+                  this.props.slidesActions!.setAndUpdateDate(null);
                 } else {
-                  this.props.slidesStore!.setDate(newValue);
+                  this.props.slidesActions!.setAndUpdateDate(newValue);
                 }
               }}
               className="form-control"
@@ -70,7 +70,7 @@ export class FormContainer extends React.Component<Props, State> {
             <input
               data-name="opName"
               onChange={(e: any) => {
-                this.props.slidesStore!.setOpName(e.target.value);
+                this.props.slidesActions!.setAndUpdateOpName(e.target.value);
               }}
               type="text"
               className="form-control"
@@ -84,7 +84,7 @@ export class FormContainer extends React.Component<Props, State> {
             <input
               data-name="asset"
               onChange={(e: any) => {
-                this.props.slidesStore!.setAsset(e.target.value);
+                this.props.slidesActions!.setAndUpdateAsset(e.target.value);
               }}
               type="text"
               className="form-control"
@@ -98,7 +98,7 @@ export class FormContainer extends React.Component<Props, State> {
             <input
               data-name="classification"
               onChange={(e: any) => {
-                this.props.slidesStore!.setClassification(e.target.value);
+                this.props.slidesActions!.setAndUpdateClassification(e.target.value);
               }}
               type="text"
               className="form-control "
@@ -114,7 +114,7 @@ export class FormContainer extends React.Component<Props, State> {
   }
 }
 
-export const StyledFormContainer = inject('slidesStore')(styled(FormContainer)`
+export const StyledFormContainer = inject('slidesActions')(styled(FormContainer)`
   color: #fff;
   margin-top: 87px;
   margin-left: 39px;

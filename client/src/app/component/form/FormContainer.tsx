@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { InjectedUploadContainer } from './UploadContainer';
 import styled from 'styled-components';
+import { SlidesStore } from '../slides/SlidesStore';
 
 interface Props {
   className?: string;
+  slidesStore?: SlidesStore;
 }
 
 interface State {
@@ -38,20 +40,6 @@ export class FormContainer extends React.Component<Props, State> {
       <div
         className={this.props.className}
       >
-        <div className="namingConvention">
-          <span>
-            <h4>
-            {
-              (this.state.nameFormat.date || 'DDTTTTZMONYY') +
-              (this.state.nameFormat.time || '') + '_TGT_' +
-              (this.state.nameFormat.opName || 'NAME') +
-              '_ACTIVITY_' +
-              (this.state.nameFormat.asset || 'ASSET') + '_' +
-              (this.state.nameFormat.classification || 'CLASSIFICATION')
-            }
-            </h4>
-          </span>
-        </div>
         <form>
           <div className="form-group">
             <label>Date*</label>
@@ -60,31 +48,19 @@ export class FormContainer extends React.Component<Props, State> {
               type="date"
               data-name="date"
               onChange={(e: any) => {
-                // let value = e.target.value;
                 let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
                 let month = months[parseInt(e.target.value.substr(5, 2), 10) - 1];
                 let year = e.target.value.substr(2, 2);
                 let day = e.target.value.substr(8, 2);
                 let newValue: any = day + 'TTTTZ' + month + year;
                 if (month === undefined || year === undefined || day === undefined) {
-                  this.setState(prevState => ({
-                    nameFormat: {
-                      ...prevState.nameFormat,
-                      date: null
-                    },
-                  }));
+                  this.props.slidesStore!.setDate(null);
                 } else {
-                  this.setState(prevState => ({
-                    nameFormat: {
-                      ...prevState.nameFormat,
-                      date: newValue
-                    },
-                  }));
+                  this.props.slidesStore!.setDate(newValue);
                 }
               }}
-              className="form-control bg-dark d-inline-block"
+              className="form-control"
               id="dateInput"
-              aria-describedby="emailHelp"
               placeholder="Select Date"
             />
           </div>
@@ -94,16 +70,10 @@ export class FormContainer extends React.Component<Props, State> {
             <input
               data-name="opName"
               onChange={(e: any) => {
-                let value = e.target.value.split(' ').join('_').toUpperCase();
-                this.setState(prevState => ({
-                  nameFormat: {
-                    ...prevState.nameFormat,
-                    opName: value
-                  },
-                }));
+                this.props.slidesStore!.setOpName(e.target.value);
               }}
               type="text"
-              className="form-control bg-dark"
+              className="form-control"
               id="opInput"
               placeholder="e.g. Op Jumpshot"
             />
@@ -114,16 +84,10 @@ export class FormContainer extends React.Component<Props, State> {
             <input
               data-name="asset"
               onChange={(e: any) => {
-                let value = e.target.value.split(' ').join('_').toUpperCase();
-                this.setState(prevState => ({
-                  nameFormat: {
-                    ...prevState.nameFormat,
-                    asset: value
-                  },
-                }));
+                this.props.slidesStore!.setAsset(e.target.value);
               }}
               type="text"
-              className="form-control bg-dark"
+              className="form-control"
               id="assetInput"
               placeholder="Callsign"
             />
@@ -134,16 +98,10 @@ export class FormContainer extends React.Component<Props, State> {
             <input
               data-name="classification"
               onChange={(e: any) => {
-                let value = e.target.value.split(' ').join('_').toUpperCase();
-                this.setState(prevState => ({
-                  nameFormat: {
-                    ...prevState.nameFormat,
-                    classification: value
-                  },
-                }));
+                this.props.slidesStore!.setClassification(e.target.value);
               }}
               type="text"
-              className="form-control bg-dark"
+              className="form-control "
               id="classificationInput"
               placeholder="e.g. FVEY"
             />
@@ -156,17 +114,21 @@ export class FormContainer extends React.Component<Props, State> {
   }
 }
 
-export const StyledFormContainer = (styled(FormContainer)`
+export const StyledFormContainer = inject('slidesStore')(styled(FormContainer)`
   color: #fff;
   margin-top: 87px;
   margin-left: 39px;
   
   input {
     width: 580px;
+    color: #fff;
+    background-color:rgba(0, 0, 0, 0);
   }
   
-  .namingConvention {
+  input:focus {
+    background-color:rgba(0, 0, 0, 0);
     color: #fff;
+    border: #15deec solid 1px;
   }
 
   label {

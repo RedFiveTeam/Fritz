@@ -10,6 +10,7 @@ interface Props {
 
 @observer
 export class SlidesContainer extends React.Component<Props> {
+
   render() {
     return (
       <div
@@ -17,7 +18,7 @@ export class SlidesContainer extends React.Component<Props> {
       >
         { this.props.slidesStore!.files &&
           this.props.slidesStore!.files.map((f, idx) => {
-            return <div key={idx} className="slide">{f}</div>;
+            return <div key={idx} className="slide">{this.props.slidesStore!.nameFormat}</div>;
           })
         }
       </div>
@@ -28,4 +29,6 @@ export class SlidesContainer extends React.Component<Props> {
 export const StyledSlidesContainer = inject('slidesStore')(styled(SlidesContainer)`
 color: white;
 margin-left: 47px;
+max-height: 560px;
+overflow-y: scroll;
 `);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Header } from './component/header/Header';
+import { StyledHeader } from './component/header/Header';
 import { StyledAppBody } from './component/body/AppBody';
 import { observer } from 'mobx-react';
 
@@ -13,7 +13,7 @@ export class App extends React.Component {
   render() {
     return (
         <div className="w-100 h-100 m-0 p-0" style={this.css}>
-          <Header/>
+          <StyledHeader/>
           <StyledAppBody/>
         </div>
     );

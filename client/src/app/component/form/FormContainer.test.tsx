@@ -5,38 +5,44 @@ import { InjectedUploadContainer } from './UploadContainer';
 
 describe('FormContainer', () => {
   let subject: ShallowWrapper;
+  let slidesStore: any;
+
+  slidesStore = {
+    setDate: jest.fn(),
+    setOpName: jest.fn(),
+    setAsset: jest.fn(),
+    setClassification: jest.fn()
+  };
 
   beforeEach(() => {
-    subject = shallow(<FormContainer/>);
+    subject = shallow(
+      <FormContainer
+        slidesStore={slidesStore}
+      />);
   });
 
   it('should contain a date input that updates the header string when changed', () => {
     expect(subject.find('#dateInput').exists()).toBeTruthy();
     subject.find('#dateInput').simulate('change', { target : { value : '2018/05/12' }});
-    expect(subject.find('h4').text()).toContain('12TTTTZMAY18_');
+    expect(slidesStore.setDate).toHaveBeenCalledWith('12TTTTZMAY18');
   });
 
   it('should contain an operation input that updates the header string when changed', () => {
     expect(subject.find('#opInput').exists()).toBeTruthy();
     subject.find('#opInput').simulate('change', { target : { value : 'op superman'}});
-    expect(subject.find('h4').text()).toContain('_OP_SUPERMAN_');
+    expect(slidesStore.setOpName).toHaveBeenCalledWith('op superman');
   });
 
   it('should contain an asset input that updates the header string when changed', () => {
     expect(subject.find('#assetInput').exists()).toBeTruthy();
     subject.find('#assetInput').simulate('change', { target : { value : 'flyguy'}});
-    expect(subject.find('h4').text()).toContain('_FLYGUY_');
+    expect(slidesStore.setAsset).toHaveBeenCalledWith('flyguy');
   });
 
   it('should contain a classification input that updates the header string when changed', () => {
     expect(subject.find('#classificationInput').exists()).toBeTruthy();
     subject.find('#classificationInput').simulate('change', { target : { value : 'secret'}});
-    expect(subject.find('h4').text()).toContain('_SECRET');
-  });
-
-  it('should display the naming convention', () => {
-    expect(subject.find('.namingConvention').find('span')
-      .text()).toBe('DDTTTTZMONYY_TGT_NAME_ACTIVITY_ASSET_CLASSIFICATION');
+    expect(slidesStore.setClassification).toHaveBeenCalledWith('secret');
   });
 
   it('should contain an upload container', () => {

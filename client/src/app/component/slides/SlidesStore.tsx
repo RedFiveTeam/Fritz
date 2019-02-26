@@ -38,8 +38,8 @@ export class SlidesStore {
   }
 
   @computed get nameFormat(): string {
-    return ((this._date || 'DDTTTTZMONYY') + '_TGT_' +
-      (this._opName || 'NAME') + '_ACTIVITY_' +
+    return ((this._date || 'DDTTTTZMONYY') + '_' +
+      (this._opName || 'TGT_NAME') + '_ACTIVITY_' +
       (this._asset || 'ASSET') + '_' +
       (this._classification || 'CLASSIFICATION'))
         .split(' ').join('_')

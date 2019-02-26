@@ -26,7 +26,7 @@ describe('SlidesContainer', () => {
   });
 
   it('should render a list of files in the correct format', () => {
-    expect(subject.find('.slide').at(0).text()).toBe('14TTTTZFEB19_TGT_OP_HELLO_ACTIVITY_NONE_SECRET');
+    expect(subject.find('.slide').at(0).text()).toBe('14TTTTZFEB19_OP_HELLO_ACTIVITY_NONE_SECRET');
   });
 
 });

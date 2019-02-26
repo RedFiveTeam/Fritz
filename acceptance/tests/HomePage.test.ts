@@ -9,5 +9,5 @@ Scenario('should allow you to upload a file and display the pngs', (I) => {
   I.fillField('#assetInput', 'ASS');
   I.attachFile('#uploadButton', 'data/samplepptx.pptx');
   I.waitForText('SAMPLEPPTX.PPTX', 10);
-  I.waitForText('DDTTTTZMONYY_TGT_OP_TEST_ACTIVITY_ASS_SECRET', 10);
+  I.waitForText('DDTTTTZMONYY_OP_TEST_ACTIVITY_ASS_SECRET', 10);
 });

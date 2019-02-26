@@ -30,5 +30,5 @@ export const StyledSlidesContainer = inject('slidesStore')(styled(SlidesContaine
 color: white;
 margin-left: 47px;
 max-height: 560px;
-overflow-y: scroll;
+overflow-y: auto;
 `);

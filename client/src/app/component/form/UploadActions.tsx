@@ -35,7 +35,6 @@ export class UploadActions {
 
   @action.bound
   async checkStatus() {
-    console.log('checking status');
     this.uploadRepository.status()
       .then((status: StatusModel) => {
         if (status.status === 'complete') {

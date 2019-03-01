@@ -1,2 +1,2 @@
-INSERT INTO metric (id, action, context) VALUES
-        (1, "Visit", "Home Page");
+INSERT INTO metric (id, uid, action, time) VALUES
+        (1, "e23523sdfsdfsdfs", "Upload", 1551711588);

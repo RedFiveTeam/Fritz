@@ -27,17 +27,19 @@ public class RenameController {
   public void renameAndZip(@CookieValue("id") String id, @RequestBody List<RenameModel> json, HttpServletResponse res) throws IOException {
 
     for (RenameModel model : json) {
-      File originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName());
+      File originalFile;
+      if (model.getOldName().endsWith(".png"))
+        originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName());
+      else
+        originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName() + ".png");
       File newFile = new File("/tmp/complete/" + id + "/" + model.getNewName() + ".png");
       boolean status = originalFile.renameTo(newFile);
       if (!status) {
-        return;
+        System.out.println("error renaming " + model.getOldName());
       }
     }
 
-
     res.setStatus(HttpServletResponse.SC_OK);
-    res.addHeader("Content-Disposition", "attachment; filename=\"test.zip\"");
 
     ZipOutputStream zos = new ZipOutputStream(res.getOutputStream());
 

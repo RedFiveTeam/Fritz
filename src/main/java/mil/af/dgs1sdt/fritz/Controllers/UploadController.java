@@ -1,8 +1,12 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
 import mil.af.dgs1sdt.fritz.Conversion;
+import mil.af.dgs1sdt.fritz.Metrics.Metric;
+import mil.af.dgs1sdt.fritz.Metrics.MetricRepository;
 import mil.af.dgs1sdt.fritz.Models.StatusModel;
 import mil.af.dgs1sdt.fritz.Stores.StatusStore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +17,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +27,9 @@ public class UploadController {
 
   public static final String URI = "/api/upload";
 
+  @Autowired
+  MetricRepository metricRepository;
+
   @PostMapping(produces = "application/json")
   public @ResponseBody
   String handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse res) throws Exception {
@@ -29,14 +37,28 @@ public class UploadController {
     byte[] fileBytes = file.getBytes();
     MessageDigest md5 = MessageDigest.getInstance("MD5");
     byte[] digest = md5.digest(fileBytes);
-    String hash = new BigInteger(1, digest).toString(16) + Math.random();
+    String hash = new BigInteger(1, digest).toString(16);
 
     String workingDir = "/tmp/working/" + hash;
+    String completedDir = "/tmp/complete/" + hash;
+    File workingDirToBeDeleted = new File(workingDir);
+    File completedDirToBeDeleted = new File(completedDir);
+
+    if (workingDirToBeDeleted.exists()) {
+      FileUtils.deleteDirectory(workingDirToBeDeleted);
+    }
+
+    if (completedDirToBeDeleted.exists()) {
+      FileUtils.deleteDirectory(completedDirToBeDeleted);
+    }
+
     File dir = new File(workingDir);
     if (!dir.exists())
       dir.mkdirs();
 
     file.transferTo(new File("/tmp/working/" + hash + "/" + file.getOriginalFilename()));
+
+    metricRepository.save(new Metric(hash, "Upload", Instant.now().getEpochSecond()));
 
     Thread th = new Thread() {
       @Override
@@ -55,7 +77,7 @@ public class UploadController {
   }
 
   @ResponseBody
-  @GetMapping(produces = "application/json", path="/status")
+  @GetMapping(produces = "application/json", path = "/status")
   public StatusModel status(@CookieValue("id") String id) {
     if (id.length() > 0 && StatusStore.getList().contains(id)) {
       StatusModel status = new StatusModel();

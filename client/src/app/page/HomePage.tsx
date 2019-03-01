@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledAppBody } from '../component/body/AppBody';
 import { StyledFooter } from '../component/footer/Footer';
-import { StyledHeader } from '../component/header/Header';
 
 interface Props {
   className?: string;
@@ -19,7 +18,6 @@ export class HomePage extends React.Component<Props> {
         <div
           className="mainBody"
         >
-          <StyledHeader/>
           <StyledAppBody/>
           <StyledFooter/>
         </div>

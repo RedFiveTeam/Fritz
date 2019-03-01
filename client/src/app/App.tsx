@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { withRouter } from 'react-router';
 import { Routes } from './Routes';
+import { StyledHeader } from './component/header/Header';
 
 export const WrappedRoutes = withRouter((Routes as any));
 
@@ -15,6 +16,7 @@ export class App extends React.Component {
   render() {
     return (
         <div className="w-100 h-100 mb-0 pb-0" style={this.css}>
+          <StyledHeader/>
           <WrappedRoutes/>
         </div>
     );

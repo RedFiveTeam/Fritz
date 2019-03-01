@@ -4,6 +4,7 @@ import { action } from 'mobx';
 import { Repositories } from '../../../utils/Repositories';
 import { RenameRepository } from '../form/repositories/RenameRepository';
 import { UploadStore } from '../form/UploadStore';
+import { SlideModel } from './SlideModel';
 
 export class SlidesActions {
 
@@ -50,8 +51,15 @@ export class SlidesActions {
     }
   }
 
+  updateOldNames() {
+    this.slidesStore.slides.map((s: SlideModel) => {
+      s.setOldName(s.newName);
+    });
+  }
+
   async renameAndDownload() {
     await this.renameRepository.rename(this.slidesStore.slides, this.uploadStore.fileName);
+    this.updateOldNames();
   }
 
 }

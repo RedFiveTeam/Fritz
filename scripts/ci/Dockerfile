@@ -3,7 +3,7 @@ FROM dgs1sdt/blackpearl
 USER root
 
 # setup_env
-ENV FRITZ_DB_URL=jdbc:mysql://localhost:3306/fritz?useSSL=false
+ENV FRITZ_DB_URL=jdbc:mysql://localhost:3306/fritzdev?useSSL=false
 ENV FRITZ_DB_USERNAME=fritz
 ENV FRITZ_CI=true
 

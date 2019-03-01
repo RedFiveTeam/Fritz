@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-echo "not done"
+mysql -u root fritzdev < $(dirname $0)/truncate_data.sql
+mysql -u root fritzdev < $(dirname $0)/seed_data.sql

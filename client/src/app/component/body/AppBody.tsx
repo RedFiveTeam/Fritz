@@ -47,7 +47,7 @@ export const StyledAppBody = (styled(AppBody)`
     width: 49%;
     display: inline-block;
     position: absolute;
-    top: 25%;
+    top: 20%;
   }
 
 `);

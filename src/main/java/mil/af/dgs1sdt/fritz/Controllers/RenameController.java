@@ -30,6 +30,9 @@ public class RenameController {
       File originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName());
       File newFile = new File("/tmp/complete/" + id + "/" + model.getNewName() + ".png");
       boolean status = originalFile.renameTo(newFile);
+      if (!status) {
+        return;
+      }
     }
 
 
@@ -45,16 +48,21 @@ public class RenameController {
       }
     });
 
-    for (File file : files) {
-      zos.putNextEntry(new ZipEntry(file.getName()));
-      FileInputStream fis = new FileInputStream(file);
+    try {
+      for (File file : files) {
+        zos.putNextEntry(new ZipEntry(file.getName()));
+        FileInputStream fis = new FileInputStream(file);
 
-      IOUtils.copy(fis, zos);
+        IOUtils.copy(fis, zos);
 
-      fis.close();
-      zos.closeEntry();
+        fis.close();
+        zos.closeEntry();
+      }
+    } finally {
+      zos.close();
     }
-    zos.close();
+
+
 
   }
 }

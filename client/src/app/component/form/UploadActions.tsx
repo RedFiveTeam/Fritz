@@ -7,16 +7,20 @@ import { StatusModel } from './StatusModel';
 import { SlidesStore } from '../slides/SlidesStore';
 import { SlideModel } from '../slides/SlideModel';
 import { SlidesActions } from '../slides/SlidesActions';
+import { MetricRepository } from '../metrics/MetricRepository';
+import { MetricModel } from '../metrics/MetricModel';
 
 export class UploadActions {
   private slidesActions: SlidesActions;
   private uploadRepository: UploadRepository;
+  private metricRepository: MetricRepository;
   private uploadStore: UploadStore;
   private slidesStore: SlidesStore;
   private poll: any;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.uploadRepository = repositories.uploadRepository!;
+    this.metricRepository = repositories.metricRepository!;
     this.uploadStore = stores.uploadStore!;
     this.slidesStore = stores.slidesStore!;
     this.slidesActions = new SlidesActions(repositories, stores);
@@ -24,7 +28,12 @@ export class UploadActions {
 
   @action.bound
   async upload(file: object) {
+    let metric = new MetricModel(null, '', 'Upload', Math.round((Date.now() / 1000)).toString(), null);
+    metric = await this.metricRepository.create(metric);
     const resp = await this.uploadRepository.upload(file);
+    metric.setEndTime(Math.round((Date.now() / 1000)).toString());
+    metric.setUid(resp.hash);
+    await this.metricRepository.update(metric);
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
     this.uploadStore.setProcessing(true);

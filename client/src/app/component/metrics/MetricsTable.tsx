@@ -24,9 +24,10 @@ export class MetricsTable extends React.Component<Props> {
         id="metricsTableRow"
         key={i}
       >
-        <td>{m.uid.substr(0, 6)}</td>
+        <td>{m.uid ? m.uid.substr(0, 6) : '000000'}</td>
         <td>{m.action}</td>
-        <td>{moment.unix(m.time).format('MMMM D, YYYY @HHmm') + 'L'}</td>
+        <td>{moment.unix(m.startTime).format('MMMM D, YYYY @HHmm') + 'L'}</td>
+        <td>{m.endTime ? parseInt(m.endTime, 10) - parseInt(m.startTime, 10) + 's' : 'n/a'}</td>
       </tr>
     );
   };
@@ -45,6 +46,7 @@ export class MetricsTable extends React.Component<Props> {
             <th scope="col"><h3>UID</h3></th>
             <th scope="col"><h3>Action</h3></th>
             <th scope="col"><h3>Time</h3></th>
+            <th scope="col"><h3>Time Taken</h3></th>
           </tr>
           </thead>
           <tbody className="text-white">

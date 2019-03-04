@@ -7,7 +7,8 @@ export class MetricSerializer implements Serializer<MetricModel> {
       id: item.id,
       uid: item.uid,
       action: item.action,
-      time: item.time
+      startTime: item.startTime,
+      endTime: item.endTime
     };
   }
 
@@ -16,7 +17,8 @@ export class MetricSerializer implements Serializer<MetricModel> {
       item.id,
       item.uid,
       item.action,
-      item.time
+      item.startTime,
+      item.endTime
     );
   }
 }

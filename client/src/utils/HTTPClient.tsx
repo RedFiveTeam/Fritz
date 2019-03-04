@@ -30,6 +30,23 @@ export class HTTPClient {
       urljoin(this.baseURL, path),
       {
         method: 'POST',
+        headers: [
+          ['Content-Type', 'application/json'],
+        ],
+        credentials: 'include',
+        body: body,
+      }
+    );
+    const json = await resp.json();
+    this.handleErrors(resp.status, json);
+    return json;
+  }
+
+  async postFile(path: string, body: string) {
+    const resp = await fetch(
+      urljoin(this.baseURL, path),
+      {
+        method: 'POST',
         credentials: 'include',
         body: body,
       }
@@ -60,6 +77,9 @@ export class HTTPClient {
       urljoin(this.baseURL, path),
       {
         method: 'PUT',
+        headers: [
+          ['Content-Type', 'application/json'],
+        ],
         body: body,
         credentials: 'include',
       }
@@ -121,18 +141,18 @@ export class HTTPClient {
     }
   }
 
-  async postFile(path: string, file: File, timezone: string) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('timezone', timezone);
-    return await fetch(
-      urljoin(this.baseURL, path),
-      {
-        method: 'POST',
-        body: formData,
-      }
-    );
-  }
+  // async postFile(path: string, file: File, timezone: string) {
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   formData.append('timezone', timezone);
+  //   return await fetch(
+  //     urljoin(this.baseURL, path),
+  //     {
+  //       method: 'POST',
+  //       body: formData,
+  //     }
+  //   );
+  // }
 
   private handleErrors(status: number, json: any) {
     if (status < 200 || status >= 300) {

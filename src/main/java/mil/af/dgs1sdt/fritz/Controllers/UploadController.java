@@ -58,8 +58,6 @@ public class UploadController {
 
     file.transferTo(new File("/tmp/working/" + hash + "/" + file.getOriginalFilename()));
 
-    metricRepository.save(new Metric(hash, "Upload", Instant.now().getEpochSecond()));
-
     Thread th = new Thread() {
       @Override
       public void run() {
@@ -73,7 +71,7 @@ public class UploadController {
     th.start();
 
     res.addCookie(new Cookie("id", hash));
-    return "{ \"file\" : \"" + file.getOriginalFilename() + "\" }";
+    return "{ \"file\" : \"" + file.getOriginalFilename() + "\", \"hash\" : \"" + hash + "\" }";
   }
 
   @ResponseBody

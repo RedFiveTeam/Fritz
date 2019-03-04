@@ -4,13 +4,15 @@ export class MetricModel {
   @observable private _id: any = null;
   @observable private _uid: string;
   @observable private _action: string;
-  @observable private _time: string;
+  @observable private _startTime: string;
+  @observable private _endTime: string | null;
 
-  constructor(id: any, uid: string, act: string, time: string) {
+  constructor(id: any, uid: string, act: string, startTime: string, endTime: string | null) {
     this._id = id;
     this._uid = uid;
     this._action = act;
-    this._time = time;
+    this._startTime = startTime;
+    this._endTime = endTime;
   }
 
   @computed
@@ -29,8 +31,13 @@ export class MetricModel {
   }
 
   @computed
-  get time(): string {
-    return this._time;
+  get startTime(): string {
+    return this._startTime;
+  }
+
+  @computed
+  get endTime(): string | null {
+    return this._endTime;
   }
 
   @action.bound
@@ -49,7 +56,12 @@ export class MetricModel {
   }
 
   @action.bound
-  setTime(value: string) {
-    this._time = value;
+  setStartTime(value: string) {
+    this._startTime = value;
+  }
+
+  @action.bound
+  setEndTime(value: string) {
+    this._endTime = value;
   }
 }

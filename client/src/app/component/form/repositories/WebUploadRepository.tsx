@@ -13,7 +13,7 @@ export class WebUploadRepository implements UploadRepository {
   }
 
   async upload(data: any): Promise<UploadModel> {
-    const json = await this.client.postJSON(
+    const json = await this.client.postFile(
       '/api/upload',
       data);
     return this.uploadSerializer.deserialize(json);

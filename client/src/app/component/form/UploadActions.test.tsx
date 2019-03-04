@@ -5,16 +5,20 @@ import { StubUploadRepository } from './repositories/StubUploadRepository';
 import { UploadModel } from './UploadModel';
 import { StatusModel } from './StatusModel';
 import { SlidesStore } from '../slides/SlidesStore';
+import { MetricRepository } from '../metrics/MetricRepository';
+import { StubMetricRepository } from '../metrics/StubMetricRepository';
 
 describe('UploadActions', () => {
   let subject: UploadActions;
   let uploadRepository: UploadRepository;
+  let metricRepository: MetricRepository;
   let uploadStore: UploadStore;
   let slidesStore: SlidesStore;
 
   beforeEach(() => {
 
     uploadRepository = new StubUploadRepository();
+    metricRepository = new StubMetricRepository();
 
     uploadRepository.upload = jest.fn(() => {
       return new UploadModel('chucknorris.ppt');
@@ -26,7 +30,7 @@ describe('UploadActions', () => {
 
     uploadStore = new UploadStore();
     slidesStore = new SlidesStore();
-    subject = new UploadActions({uploadRepository} as any, {uploadStore, slidesStore} as any);
+    subject = new UploadActions({uploadRepository, metricRepository} as any, {uploadStore, slidesStore} as any);
     subject.uploadProcessingComplete = jest.fn();
   });
 

@@ -15,4 +15,16 @@ export class WebMetricRepository implements MetricRepository {
       return this.metricsSerializer.deserialize(obj);
     });
   }
+
+  async create(metric: MetricModel): Promise<MetricModel> {
+    const body = JSON.stringify(this.metricsSerializer.serialize(metric));
+    const json = await this.client.postJSON('/api/metrics', body);
+    return this.metricsSerializer.deserialize(json);
+  }
+
+  async update(metric: MetricModel): Promise<MetricModel> {
+    const body = JSON.stringify(this.metricsSerializer.serialize(metric));
+    const json = await this.client.putJSON('/api/metrics', body);
+    return this.metricsSerializer.deserialize(json);
+  }
 }

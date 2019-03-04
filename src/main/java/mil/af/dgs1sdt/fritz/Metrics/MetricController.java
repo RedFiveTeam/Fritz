@@ -2,9 +2,9 @@ package mil.af.dgs1sdt.fritz.Metrics;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(MetricController.URI)
@@ -16,4 +16,15 @@ public class MetricController {
 
   @GetMapping
   public @ResponseBody Iterable<Metric> getAll() { return metricRepository.findAll(); }
+
+  @PostMapping
+  public @ResponseBody Metric create(@Valid @RequestBody MetricJSON metricJSON) {
+    Metric metric = new Metric(metricJSON.getUid(), metricJSON.getAction(), metricJSON.getStartTime(), null);
+    return this.metricRepository.save(metric);
+  }
+
+  @PutMapping
+  public @ResponseBody Metric update(@Valid @RequestBody MetricJSON metricJSON) {
+    return metricRepository.save(new Metric().update(metricJSON));
+  }
 }

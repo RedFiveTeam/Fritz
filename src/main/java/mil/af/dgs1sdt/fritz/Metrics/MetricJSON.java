@@ -12,11 +12,13 @@ public class MetricJSON {
   private Long id;
   private String uid;
   private String action;
-  private Long time;
+  private Long startTime;
+  private Long endTime;
 
-  public MetricJSON(String uid, String action, Long time) {
+  public MetricJSON(String uid, String action, Long startTime, Long endTime) {
     this.uid = uid;
-    this.time = time;
+    this.startTime = startTime;
+    this.endTime = endTime;
     this.action = action;
   }
 }

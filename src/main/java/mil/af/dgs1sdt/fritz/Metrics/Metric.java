@@ -21,11 +21,23 @@ public class Metric {
 
   private String action;
 
-  private Long time;
+  private Long startTime;
 
-  public Metric(String uid, String action, Long time) {
+  private Long endTime;
+
+  public Metric(String uid, String action, Long startTime, Long endTime) {
     this.uid = uid;
     this.action = action;
-    this.time = time;
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
+
+  public Metric update(MetricJSON json) {
+    this.setId(json.getId());
+    this.setUid(json.getUid());
+    this.setAction(json.getAction());
+    this.setStartTime(json.getStartTime());
+    this.setEndTime(json.getEndTime());
+    return this;
   }
 }

@@ -6,9 +6,19 @@ describe('DownloadButton', () => {
   let subject: ShallowWrapper;
   let slidesActions: any;
   let uploadStore: any;
+  let slidesStore: any;
 
   slidesActions = {
     renameAndDownload: jest.fn()
+  };
+
+  slidesStore = {
+    isValidName: () => {
+      return true;
+    },
+    setValidate: () => {
+      return;
+    }
   };
 
   uploadStore = {
@@ -20,6 +30,7 @@ describe('DownloadButton', () => {
       <DownloadButton
         slidesActions={slidesActions}
         uploadStore={uploadStore}
+        slidesStore={slidesStore}
       />
     );
   });

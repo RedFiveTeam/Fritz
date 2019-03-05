@@ -8,6 +8,7 @@ export class SlidesStore {
   @observable private _asset: string | null;
   @observable private _classification: string | null;
   @observable private _slides: SlideModel[] = [];
+  @observable private _validate: boolean = false;
 
   @computed
   get files(): string[] {
@@ -17,6 +18,31 @@ export class SlidesStore {
   @computed
   get slides(): SlideModel[] {
     return this._slides;
+  }
+
+  @computed
+  get date(): string | null {
+    return this._date;
+  }
+
+  @computed
+  get opName(): string | null {
+    return this._opName;
+  }
+
+  @computed
+  get asset(): string | null {
+    return this._asset;
+  }
+
+  @computed
+  get classification(): string | null {
+    return this._classification;
+  }
+
+  @computed
+  get validate(): boolean {
+    return this._validate;
   }
 
   @action.bound
@@ -47,6 +73,34 @@ export class SlidesStore {
   @action.bound
   setSlides(value: SlideModel[]) {
     this._slides = value;
+  }
+
+  @action.bound
+  setValidate(value: boolean) {
+    this._validate = value;
+  }
+
+  isValidName(): boolean {
+    return (this._date !== undefined && this._date!.length > 0) &&
+      (this._opName !== undefined && this._opName!.length > 0) &&
+      (this._asset !== undefined && this._asset!.length > 0) &&
+      (this._classification !== undefined && this._classification!.length > 0);
+  }
+
+  isValidDate(): boolean {
+    return (this._date !== undefined && this._date!.length > 0);
+  }
+
+  isValidOpName(): boolean {
+    return (this._opName !== undefined && this._opName!.length > 0);
+  }
+
+  isValidAsset(): boolean {
+    return (this._asset !== undefined && this._asset!.length > 0);
+  }
+
+  isValidClassification(): boolean {
+    return (this._classification !== undefined && this._classification!.length > 0);
   }
 
   @computed

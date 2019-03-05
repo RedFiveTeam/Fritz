@@ -6,6 +6,7 @@ Scenario('should allow you to upload a file, validate it, and display the pngs',
   I.amOnPage('/');
   I.click('#downloadbutton');
   I.waitForText('You must upload a Powerpoint', 10);
+  I.waitForText('Field cannot be empty', 10);
   I.fillField('#opInput', 'op test');
   I.fillField('#classificationInput', 'secret');
   I.fillField('#assetInput', 'ASSET');

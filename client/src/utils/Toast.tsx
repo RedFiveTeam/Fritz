@@ -63,7 +63,7 @@ export class Toast extends React.Component<Props> {
           1000);
       },
       4000);
-  }
+  };
 
   render() {
     return (

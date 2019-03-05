@@ -4,6 +4,7 @@ import { Footer } from './Footer';
 import { Provider } from 'mobx-react';
 import { SlidesActions } from '../slides/SlidesActions';
 import { UploadStore } from '../form/UploadStore';
+import { SlidesStore } from '../slides/SlidesStore';
 
 describe('Footer', () => {
   let subject: ReactWrapper;
@@ -13,6 +14,7 @@ describe('Footer', () => {
       <Provider
         slidesActions={SlidesActions}
         uploadStore={UploadStore}
+        slidesStore={SlidesStore}
       >
         <Footer/>
       </Provider>

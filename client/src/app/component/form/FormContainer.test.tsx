@@ -2,10 +2,12 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { FormContainer } from './FormContainer';
 import { InjectedUploadContainer } from './UploadContainer';
+import { SlidesStore } from '../slides/SlidesStore';
 
 describe('FormContainer', () => {
   let subject: ShallowWrapper;
   let slidesActions: any;
+  let slidesStore: SlidesStore;
 
   slidesActions = {
     setAndUpdateDate: jest.fn(),
@@ -14,10 +16,13 @@ describe('FormContainer', () => {
     setAndUpdateClassification: jest.fn()
   };
 
+  slidesStore = new SlidesStore();
+
   beforeEach(() => {
     subject = shallow(
       <FormContainer
         slidesActions={slidesActions}
+        slidesStore={slidesStore}
       />);
   });
 

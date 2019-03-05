@@ -3,37 +3,28 @@ import { inject, observer } from 'mobx-react';
 import { InjectedUploadContainer } from './UploadContainer';
 import styled from 'styled-components';
 import { SlidesActions } from '../slides/SlidesActions';
+import { SlidesStore } from '../slides/SlidesStore';
+import { CSSProperties } from 'react';
 
 interface Props {
   className?: string;
   slidesActions?: SlidesActions;
-}
-
-interface State {
-  nameFormat: {
-    date: null | string,
-    time: null | string,
-    opName: null | string,
-    asset: null | string,
-    classification: null | string
-  };
+  slidesStore?: SlidesStore;
 }
 
 @observer
-export class FormContainer extends React.Component<Props, State> {
+export class FormContainer extends React.Component<Props> {
 
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      nameFormat: {
-        date: null,
-        time: null,
-        opName: null,
-        asset: null,
-        classification: null
-      }
-    };
-  }
+  badInputCSS: CSSProperties = {
+    border: '1px solid #e46373'
+  };
+
+  badLabelCSS: CSSProperties = {
+    color: '#e46373'
+  };
+
+  goodCSS: CSSProperties = {
+  };
 
   render() {
     return (
@@ -42,7 +33,12 @@ export class FormContainer extends React.Component<Props, State> {
       >
         <form>
           <div className="form-group">
-            <label>Date*</label>
+            <label
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidDate()) ?
+                this.badLabelCSS : this.goodCSS}
+            >
+              Date*
+            </label>
             <br/>
             <input
               type="date"
@@ -62,24 +58,49 @@ export class FormContainer extends React.Component<Props, State> {
               className="form-control"
               id="dateInput"
               placeholder="Select Date"
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidDate()) ?
+                this.badInputCSS : this.goodCSS}
             />
+            {
+              this.props.slidesStore!.validate &&
+              !this.props.slidesStore!.isValidDate() &&
+              <div className="errorText">Field cannot be empty</div>
+            }
           </div>
           <div className="form-group">
-            <label>Operation Name*
+            <label
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidOpName()) ?
+                this.badLabelCSS : this.goodCSS}
+            >
+              Operation Name*
             </label>
             <input
               data-name="opName"
               onChange={(e: any) => {
+                // console.log(FormContainer.validate);
+                // console.log(this.props.slidesStore!.asset);
+                // console.log(this.props.slidesStore!.asset!.length);
                 this.props.slidesActions!.setAndUpdateOpName(e.target.value);
               }}
               type="text"
               className="form-control"
               id="opInput"
               placeholder="e.g. Op Jumpshot"
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidOpName()) ?
+                this.badInputCSS : this.goodCSS}
             />
+            {
+              this.props.slidesStore!.validate &&
+              !this.props.slidesStore!.isValidOpName() &&
+                <div className="errorText">Field cannot be empty</div>
+            }
           </div>
           <div className="form-group">
-            <label>Asset*
+            <label
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidAsset()) ?
+                this.badLabelCSS : this.goodCSS}
+            >
+              Asset*
             </label>
             <input
               data-name="asset"
@@ -90,10 +111,21 @@ export class FormContainer extends React.Component<Props, State> {
               className="form-control"
               id="assetInput"
               placeholder="Callsign"
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidAsset()) ?
+                this.badInputCSS : this.goodCSS}
             />
+            {
+              this.props.slidesStore!.validate &&
+              !this.props.slidesStore!.isValidAsset() &&
+              <div className="errorText">Field cannot be empty</div>
+            }
           </div>
           <div className="form-group">
-            <label>Classification*
+            <label
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
+                this.badLabelCSS : this.goodCSS}
+            >
+              Classification*
             </label>
             <input
               data-name="classification"
@@ -104,7 +136,14 @@ export class FormContainer extends React.Component<Props, State> {
               className="form-control "
               id="classificationInput"
               placeholder="e.g. FVEY"
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
+                this.badInputCSS : this.goodCSS}
             />
+            {
+              this.props.slidesStore!.validate &&
+              !this.props.slidesStore!.isValidClassification() &&
+              <div className="errorText">Field cannot be empty</div>
+            }
           </div>
           <p>* = Required Field</p>
           <InjectedUploadContainer/>
@@ -114,7 +153,7 @@ export class FormContainer extends React.Component<Props, State> {
   }
 }
 
-export const StyledFormContainer = inject('slidesActions')(styled(FormContainer)`
+export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled(FormContainer)`
   color: #fff;
   margin-top: 87px;
   margin-left: 39px;
@@ -154,5 +193,14 @@ export const StyledFormContainer = inject('slidesActions')(styled(FormContainer)
   
   .clickable {
       cursor: pointer;
+  }
+  
+  .form-group {
+    margin-bottom: 25px;
+  }
+  
+  .errorText {
+    position: absolute;
+    color: #e46373;
   }
 `);

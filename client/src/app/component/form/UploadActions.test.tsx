@@ -50,4 +50,11 @@ describe('UploadActions', () => {
     expect(slidesStore.slides[1].oldName).toBe('slide2.png');
     expect(slidesStore.slides[2].oldName).toBe('slide3.png');
   });
+
+  it('should validate the extension of the file being uploaded', () => {
+    expect(subject.validateFile('samplepptx.pptx')).toBeTruthy();
+    expect(subject.validateFile('samplepptx.PPTX')).toBeTruthy();
+    expect(subject.validateFile('samplepptx.exe')).toBeFalsy();
+    expect(subject.validateFile('samplepptx.ppt')).toBeTruthy();
+  });
 });

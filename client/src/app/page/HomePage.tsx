@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledAppBody } from '../component/body/AppBody';
 import { StyledFooter } from '../component/footer/Footer';
+import { StyledToast } from '../../utils/Toast';
 
 interface Props {
   className?: string;
@@ -15,6 +16,7 @@ export class HomePage extends React.Component<Props> {
       <div
         className={this.props.className}
       >
+        <StyledToast/>
         <div
           className="mainBody"
         >
@@ -26,5 +28,4 @@ export class HomePage extends React.Component<Props> {
   }
 }
 
-export const StyledHomePage = styled(HomePage)`
-`;
+export const StyledHomePage = styled(HomePage)``;

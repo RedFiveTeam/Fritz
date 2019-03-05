@@ -71,4 +71,9 @@ export class UploadActions {
     clearInterval(this.poll);
     this.uploadStore.setProcessing(false);
   }
+
+  @action.bound
+  validateFile(name: string) {
+    return name.toLowerCase().endsWith('.pptx') || name.toLowerCase().endsWith('.ppt');
+  }
 }

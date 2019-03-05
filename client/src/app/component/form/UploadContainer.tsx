@@ -2,6 +2,7 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { UploadActions } from './UploadActions';
 import { UploadStore } from './UploadStore';
+import { Toast } from '../../../utils/Toast';
 
 const uploadIcon = require('../../../icon/UploadIcon.svg');
 const pptIcon = require('../../../icon/PPTIcon.svg');
@@ -28,10 +29,19 @@ export class UploadContainer extends React.Component<Props> {
     } else {
       formData.append('file', e.dataTransfer.files[0]);
     }
-    await this.props.uploadActions!.upload(formData);
-    let ele = document.querySelector('.uploadContainer') as HTMLElement;
-    if (ele) {
-      ele.style.border = 'none';
+    let file: File = formData.get('file') as File;
+    if (file) {
+      let fileName = file.name;
+      if (this.props.uploadActions!.validateFile(fileName)) {
+        await this.props.uploadActions!.upload(formData);
+        let ele = document.querySelector('.uploadContainer') as HTMLElement;
+        if (ele) {
+          ele.style.border = 'none';
+        }
+      } else {
+        (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
+        Toast.showUploadError();
+      }
     }
   };
 

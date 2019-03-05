@@ -4,6 +4,8 @@ Feature('Home Page');
 
 Scenario('should allow you to upload a file, validate it, and display the pngs', (I) => {
   I.amOnPage('/');
+  I.click('#downloadbutton');
+  I.waitForText('You must upload a Powerpoint', 10);
   I.fillField('#opInput', 'op test');
   I.fillField('#classificationInput', 'secret');
   I.fillField('#assetInput', 'ASSET');

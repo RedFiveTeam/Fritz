@@ -2,10 +2,13 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { SlidesActions } from '../slides/SlidesActions';
+import { UploadStore } from '../form/UploadStore';
+import { Toast } from '../../../utils/Toast';
 
 interface Props {
   className?: string;
   slidesActions?: SlidesActions;
+  uploadStore?: UploadStore;
 }
 
 @observer
@@ -20,7 +23,11 @@ export class DownloadButton extends React.Component<Props> {
             type="button"
             className="btn rounded bg-info float-right"
             onClick={async () => {
-              await this.props.slidesActions!.renameAndDownload();
+              if (this.props.uploadStore!.uploaded) {
+                await this.props.slidesActions!.renameAndDownload();
+              } else {
+                Toast.showDownloadError();
+              }
             }}
           >
             Download JPEGs
@@ -30,7 +37,7 @@ export class DownloadButton extends React.Component<Props> {
   }
 }
 
-export const StyledDownloadButton = inject('slidesActions')(styled(DownloadButton)`
+export const StyledDownloadButton = inject('slidesActions', 'uploadStore')(styled(DownloadButton)`
 
   #downloadbutton {
     color: #fff;

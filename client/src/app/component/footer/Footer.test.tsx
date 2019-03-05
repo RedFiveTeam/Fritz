@@ -3,6 +3,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import { Footer } from './Footer';
 import { Provider } from 'mobx-react';
 import { SlidesActions } from '../slides/SlidesActions';
+import { UploadStore } from '../form/UploadStore';
 
 describe('Footer', () => {
   let subject: ReactWrapper;
@@ -11,6 +12,7 @@ describe('Footer', () => {
     subject = mount(
       <Provider
         slidesActions={SlidesActions}
+        uploadStore={UploadStore}
       >
         <Footer/>
       </Provider>

@@ -38,6 +38,33 @@ export class Toast extends React.Component<Props> {
       4000);
   };
 
+  static showDownloadError = () => {
+    let ele = document.querySelector('.customToast') as HTMLElement;
+    let count = Toast.count;
+    Toast.count++;
+    ele.insertAdjacentHTML('beforeend', '' +
+      '<div class="alert alert-danger errorToast errorToast' + count + '" role="alert">' +
+      '<b>Error:</b> You must upload a Powerpoint file before you can download JPEGS' +
+      '</div>' +
+      '');
+    setTimeout(
+      () => {
+        (document.querySelector('.errorToast' + count) as HTMLElement).style.opacity = '1';
+      },
+      1);
+    setTimeout(
+      () => {
+        (document.querySelector('.customToast > .errorToast' + count) as HTMLElement).style.opacity = '0';
+        setTimeout(
+          () => {
+            let toast = document.querySelector('.customToast > .errorToast' + count) as HTMLElement;
+            ele.removeChild(toast);
+          },
+          1000);
+      },
+      4000);
+  }
+
   render() {
     return (
       <div

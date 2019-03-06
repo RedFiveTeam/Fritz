@@ -4,6 +4,7 @@ export class UploadStore {
   @observable private _uploaded: boolean = false;
   @observable private _fileName: string = '';
   @observable private _processing: boolean = false;
+  @observable private _hash: string = '';
 
   @action.bound
   setUploaded(uploaded: boolean) {
@@ -20,6 +21,11 @@ export class UploadStore {
     this._processing = value;
   }
 
+  @action.bound
+  setHash(value: string) {
+    this._hash = value;
+  }
+
   @computed
   get uploaded() {
     return this._uploaded;
@@ -33,5 +39,10 @@ export class UploadStore {
   @computed
   get processing() {
     return this._processing;
+  }
+
+  @computed
+  get hash() {
+    return this._hash;
   }
 }

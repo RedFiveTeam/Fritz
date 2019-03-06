@@ -34,6 +34,7 @@ export class UploadActions {
     metric.setEndTime(Math.round((Date.now() / 1000)).toString());
     metric.setUid(resp.hash);
     await this.metricRepository.update(metric);
+    this.uploadStore.setHash(resp.hash);
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
     this.uploadStore.setProcessing(true);

@@ -2,13 +2,29 @@ import { SlidesActions } from './SlidesActions';
 import { SlidesStore } from './SlidesStore';
 import { SlideModel } from './SlideModel';
 import { RenameRepository } from '../form/repositories/RenameRepository';
+import { MetricModel } from '../metrics/MetricModel';
 
 describe('SlidesActions', () => {
   let subject: SlidesActions;
   let slidesStore: SlidesStore;
   let renameRepository: RenameRepository;
+  let metricRepository: any;
+  let uploadStore: any;
 
   slidesStore = new SlidesStore();
+
+  uploadStore = {
+    hash: 'ewerwerw'
+  };
+
+  metricRepository = {
+    create: jest.fn(() => {
+      return Promise.resolve(new MetricModel(1, 'test', 'download', '23512512', '235123512512'));
+    }),
+    update: () => {
+      return Promise.resolve();
+    }
+  };
 
   beforeEach(() => {
     slidesStore.setSlides([
@@ -16,7 +32,7 @@ describe('SlidesActions', () => {
       new SlideModel('test2', 'test2')
     ]);
 
-    subject = new SlidesActions({renameRepository} as any, {slidesStore} as any);
+    subject = new SlidesActions({renameRepository, metricRepository} as any, {slidesStore, uploadStore} as any);
   });
 
   it('update the slide model name when called', () => {
@@ -38,5 +54,10 @@ describe('SlidesActions', () => {
     for (let i = 0; i < slidesStore.slides.length; i++) {
       expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_OP_HELLO_ACTIVITY_ASS_SECRET' + (i + 1));
     }
+  });
+
+  it('should log metrics on download', async () => {
+    await subject.renameAndDownload();
+    expect(metricRepository.create).toHaveBeenCalled();
   });
 });

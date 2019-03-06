@@ -3,10 +3,7 @@ package mil.af.dgs1sdt.fritz.Controllers;
 import mil.af.dgs1sdt.fritz.Models.RenameModel;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -18,6 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @Controller
+@CrossOrigin(exposedHeaders = "Content-Length")
 @RequestMapping(RenameController.URI)
 public class RenameController {
 

@@ -2,20 +2,25 @@ import { Stores } from '../../../utils/Stores';
 import { SlidesStore } from './SlidesStore';
 import { action } from 'mobx';
 import { Repositories } from '../../../utils/Repositories';
-import { RenameRepository } from '../form/repositories/RenameRepository';
+// import { RenameRepository } from '../form/repositories/RenameRepository';
 import { UploadStore } from '../form/UploadStore';
 import { SlideModel } from './SlideModel';
+import * as FileSaver from 'file-saver';
+import { MetricRepository } from '../metrics/MetricRepository';
+import { MetricModel } from '../metrics/MetricModel';
 
 export class SlidesActions {
 
   private slidesStore: SlidesStore;
   private uploadStore: UploadStore;
-  private renameRepository: RenameRepository;
+  private metricRepository: MetricRepository;
+  // private renameRepository: RenameRepository;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.slidesStore = stores.slidesStore!;
     this.uploadStore = stores.uploadStore!;
-    this.renameRepository = repositories.renameRepository!;
+    this.metricRepository = repositories.metricRepository!;
+    // this.renameRepository = repositories.renameRepository!;
   }
 
   @action.bound
@@ -58,8 +63,37 @@ export class SlidesActions {
   }
 
   async renameAndDownload() {
-    await this.renameRepository.rename(this.slidesStore.slides, this.uploadStore.fileName);
+    this.trackRenameAndDownload();
+    // await this.renameRepository.rename(this.slidesStore.slides, this.uploadStore.fileName);
     this.updateOldNames();
+  }
+
+  async trackRenameAndDownload() {
+    let metric = new MetricModel(
+      null,
+      this.uploadStore.hash,
+      'Download',
+      Math.round((Date.now() / 1000)).toString(),
+      null);
+    metric = await this.metricRepository.create(metric);
+    let request = new XMLHttpRequest();
+    request.onreadystatechange = async () => {
+      if (request.readyState === 4) {
+        this.updateOldNames();
+        metric.setEndTime(Math.round((Date.now() / 1000)).toString());
+        await this.metricRepository.update(metric);
+      }
+    };
+    request.withCredentials = true;
+    request.open('POST', 'api/rename', true);
+    request.withCredentials = true;
+    request.responseType = 'blob';
+    request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    request.onload = () => {
+      let blob = request.response;
+      FileSaver.saveAs(blob, this.uploadStore.fileName + '.zip');
+    };
+    request.send(JSON.stringify(this.slidesStore.slides));
   }
 
 }

@@ -13,5 +13,7 @@ public class StatusStore {
     completed.add(hash);
   }
 
+  public static void removeFromList(String hash) { completed.remove(hash); }
+
   private static List<String> completed = new ArrayList<>();
 }

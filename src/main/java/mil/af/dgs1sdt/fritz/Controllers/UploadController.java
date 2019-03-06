@@ -93,6 +93,7 @@ public class UploadController {
         status.setFiles(fileNames);
       }
       status.setStatus("complete");
+      StatusStore.removeFromList(id);
       return status;
     }
     StatusModel status = new StatusModel();

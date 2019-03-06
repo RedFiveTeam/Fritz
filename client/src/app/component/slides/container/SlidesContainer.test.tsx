@@ -3,6 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { SlidesContainer } from './SlidesContainer';
 import { SlidesStore } from '../SlidesStore';
 import { SlideModel } from '../SlideModel';
+import { StyledSlideCard } from '../slideCard/SlideCard';
 
 describe('SlidesContainer', () => {
   let subject: ShallowWrapper;
@@ -26,11 +27,10 @@ describe('SlidesContainer', () => {
   });
 
   it('should render a list of image files', async () => {
-    await expect(subject.find('.slide').length).toBe(3);
+    await expect(subject.find(StyledSlideCard).length).toBe(3);
   });
 
   it('should render a list of files in the correct format', async () => {
-    await expect(subject.find('.slide').at(0).text()).toBe('14TTTTZFEB19_OP_HELLO_ACTY_NONE_SECRET');
+    expect(subject.find(StyledSlideCard).at(0).prop('slideName').props.children[2]).toContain('ZFEB19_OP_HELLO_');
   });
-
 });

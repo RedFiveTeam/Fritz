@@ -2,8 +2,8 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledAppBody } from '../component/body/AppBody';
-import { StyledFooter } from '../component/footer/Footer';
 import { StyledToast } from '../../utils/Toast';
+import { StyledFooter } from '../component/footer/Footer';
 
 interface Props {
   className?: string;
@@ -28,4 +28,8 @@ export class HomePage extends React.Component<Props> {
   }
 }
 
-export const StyledHomePage = styled(HomePage)``;
+export const StyledHomePage = styled(HomePage)`
+height: auto;
+min-height: 1060px;
+overflow-y: hidden;
+`;

@@ -88,7 +88,7 @@ export class SlidesStore {
   }
 
   isValidDate(): boolean {
-    return (this._date !== undefined && this._date!.length > 0);
+    return (this._date !== null && this._date !== undefined && this._date!.length > 0);
   }
 
   isValidOpName(): boolean {

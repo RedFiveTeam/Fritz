@@ -27,8 +27,8 @@ export class Footer extends React.Component<Props> {
 }
 
 export const StyledFooter = styled(Footer)`
+position: fixed;
 background: #1E232B;
-position: absolute;
 bottom: 0;
 right: 0;
 box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.5);

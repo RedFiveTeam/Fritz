@@ -28,8 +28,10 @@ export class AppBody extends React.Component<Props> {
 }
 
 export const StyledAppBody = (styled(AppBody)`
-  
+height: auto;
+min-height: 1000px;
   .spacer {
+    overflow: hidden;
     position: absolute;
     top: 17%;
     display: inline-block;

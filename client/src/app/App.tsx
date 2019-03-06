@@ -10,15 +10,19 @@ export const WrappedRoutes = withRouter((Routes as any));
 export class App extends React.Component {
 
   css = {
-    background: 'linear-gradient(360deg,#1E222A 0%,#39414E 100%)'
+    height: 'auto',
   };
 
   render() {
     return (
-        <div className="w-100 h-100 mb-0 pb-0" style={this.css}>
+      <div>
+        <div>
           <StyledHeader/>
+        </div>
+        <div style={this.css}>
           <WrappedRoutes/>
         </div>
+      </div>
     );
   }
 }

@@ -14,5 +14,5 @@ Scenario('should allow you to upload a file, validate it, and display the pngs',
   I.waitForText('File must be in Powerpoint format', 10);
   I.attachFile('#uploadButton', 'data/samplepptx.pptx');
   I.waitForText('SAMPLEPPTX.PPTX', 10);
-  I.waitForText('DDTTTTZMONYY_OP_TEST_ACTIVITY_ASSET_SECRET', 10);
+  I.waitForText('DDTTTTZMONYY_OP_TEST_ACTY_ASSET_SECRET', 10);
 });

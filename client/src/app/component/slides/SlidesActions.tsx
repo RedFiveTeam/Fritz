@@ -51,7 +51,7 @@ export class SlidesActions {
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
       let newName: string = '';
       let slide = this.slidesStore.slides[i];
-      newName = this.slidesStore.nameFormat.replace('TTTT', slide.time).replace('ACTIVITY', slide.activity) + (i + 1);
+      newName = this.slidesStore.nameFormat.replace('TTTT', slide.time).replace('ACTY', slide.activity) + (i + 1);
       this.slidesStore.slides[i].setNewName(newName);
     }
   }

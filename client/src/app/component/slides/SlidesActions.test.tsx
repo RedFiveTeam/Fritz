@@ -38,21 +38,21 @@ describe('SlidesActions', () => {
   it('update the slide model name when called', () => {
     subject.setAndUpdateDate('14TTTTZFEB19');
     for (let i = 0; i < slidesStore.slides.length; i++) {
-      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_TGT_NAME_ACTIVITY_ASSET_CLASSIFICATION' + (i + 1));
+      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_TGT_NAME_ACTY_ASSET_CLASSIFICATION' + (i + 1));
     }
     subject.setAndUpdateOpName('op hello');
     for (let i = 0; i < slidesStore.slides.length; i++) {
-      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_OP_HELLO_ACTIVITY_ASSET_CLASSIFICATION' + (i + 1));
+      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_OP_HELLO_ACTY_ASSET_CLASSIFICATION' + (i + 1));
     }
 
     subject.setAndUpdateAsset('ass');
     for (let i = 0; i < slidesStore.slides.length; i++) {
-      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_OP_HELLO_ACTIVITY_ASS_CLASSIFICATION' + (i + 1));
+      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_OP_HELLO_ACTY_ASS_CLASSIFICATION' + (i + 1));
     }
 
     subject.setAndUpdateClassification('secret');
     for (let i = 0; i < slidesStore.slides.length; i++) {
-      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_OP_HELLO_ACTIVITY_ASS_SECRET' + (i + 1));
+      expect(slidesStore.slides[i].newName).toBe('14TTTTZFEB19_OP_HELLO_ACTY_ASS_SECRET' + (i + 1));
     }
   });
 

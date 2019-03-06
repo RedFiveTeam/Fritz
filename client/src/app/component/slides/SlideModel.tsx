@@ -4,14 +4,14 @@ export class SlideModel {
 
   @observable private _oldName: string;
   @observable private _time: string = 'TTTT';
-  @observable private _activity: string = 'ACTIVITY';
+  @observable private _activity: string = 'ACTY';
   @observable private _newName: string = '';
 
   constructor(
     oldName: string = '',
     newName: string = '',
     time: string = 'TTTT',
-    activity: string = 'ACTIVITY'
+    activity: string = 'ACTY'
   ) {
     this._oldName = oldName;
     this._time = time;

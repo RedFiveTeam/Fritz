@@ -30,7 +30,7 @@ describe('SlidesContainer', () => {
   });
 
   it('should render a list of files in the correct format', async () => {
-    await expect(subject.find('.slide').at(0).text()).toBe('newName1');
+    await expect(subject.find('.slide').at(0).text()).toBe('14TTTTZFEB19_OP_HELLO_ACTY_NONE_SECRET');
   });
 
 });

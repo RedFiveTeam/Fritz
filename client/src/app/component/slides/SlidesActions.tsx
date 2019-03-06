@@ -63,9 +63,9 @@ export class SlidesActions {
   }
 
   async renameAndDownload() {
-    this.trackRenameAndDownload();
+    await this.trackRenameAndDownload();
     // await this.renameRepository.rename(this.slidesStore.slides, this.uploadStore.fileName);
-    this.updateOldNames();
+    // this.updateOldNames();
   }
 
   async trackRenameAndDownload() {

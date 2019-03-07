@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SlidesContainer } from './SlidesContainer';
-import { SlidesStore } from './SlidesStore';
-import { SlideModel } from './SlideModel';
+import { SlidesStore } from '../SlidesStore';
+import { SlideModel } from '../SlideModel';
 
 describe('SlidesContainer', () => {
   let subject: ShallowWrapper;

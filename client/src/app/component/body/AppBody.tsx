@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { StyledSlidesContainer } from '../slides/SlidesContainer';
+import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
 import styled from 'styled-components';
 import { StyledFormContainer } from '../form/FormContainer';
 

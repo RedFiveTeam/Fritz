@@ -1,13 +1,13 @@
-import { UploadRepository } from '../app/component/form/repositories/UploadRepository';
+import { UploadRepository } from '../app/component/form/upload/repository/UploadRepository';
 import { HTTPClient } from './HTTPClient';
-import { WebUploadRepository } from '../app/component/form/repositories/WebUploadRepository';
-import { StubUploadRepository } from '../app/component/form/repositories/StubUploadRepository';
-import { RenameRepository } from '../app/component/form/repositories/RenameRepository';
-import { WebRenameRepository } from '../app/component/form/repositories/WebRenameRepository';
-import { StubRenameRepository } from '../app/component/form/repositories/StubRenameRepository';
-import { MetricRepository } from '../app/component/metrics/MetricRepository';
-import { WebMetricRepository } from '../app/component/metrics/WebMetricRepository';
-import { StubMetricRepository } from '../app/component/metrics/StubMetricRepository';
+import { WebUploadRepository } from '../app/component/form/upload/repository/WebUploadRepository';
+import { StubUploadRepository } from '../app/component/form/upload/repository/StubUploadRepository';
+import { RenameRepository } from '../app/component/form/rename/RenameRepository';
+import { WebRenameRepository } from '../app/component/form/rename/WebRenameRepository';
+import { StubRenameRepository } from '../app/component/form/rename/StubRenameRepository';
+import { MetricRepository } from '../app/component/metrics/repository/MetricRepository';
+import { WebMetricRepository } from '../app/component/metrics/repository/WebMetricRepository';
+import { StubMetricRepository } from '../app/component/metrics/repository/StubMetricRepository';
 
 export interface Repositories {
   uploadRepository: UploadRepository;

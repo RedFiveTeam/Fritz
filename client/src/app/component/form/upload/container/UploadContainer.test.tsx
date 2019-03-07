@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { ReactWrapper, mount } from 'enzyme';
 import { UploadContainer } from './UploadContainer';
-import { UploadModel } from './UploadModel';
-import { UploadStore } from './UploadStore';
+import { UploadModel } from '../UploadModel';
+import { UploadStore } from '../UploadStore';
 
 describe('UploadContainer', () => {
   let subject: ReactWrapper;

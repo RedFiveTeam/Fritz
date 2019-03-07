@@ -1,26 +1,20 @@
-import { Stores } from '../../../utils/Stores';
-import { SlidesStore } from './SlidesStore';
-import { action } from 'mobx';
-import { Repositories } from '../../../utils/Repositories';
-// import { RenameRepository } from '../form/repositories/RenameRepository';
-import { UploadStore } from '../form/UploadStore';
-import { SlideModel } from './SlideModel';
+import { Stores } from '../../../../utils/Stores';
+import { SlidesStore } from '../SlidesStore';
+import { UploadStore } from '../../form/upload/UploadStore';
+import { SlideModel } from '../SlideModel';
 import * as FileSaver from 'file-saver';
-import { MetricRepository } from '../metrics/MetricRepository';
-import { MetricModel } from '../metrics/MetricModel';
+import { MetricActions } from '../../metrics/actions/MetricActions';
+import { action } from 'mobx';
 
 export class SlidesActions {
+  public metricActions: MetricActions;
 
   private slidesStore: SlidesStore;
   private uploadStore: UploadStore;
-  private metricRepository: MetricRepository;
-  // private renameRepository: RenameRepository;
 
-  constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
+  constructor(stores: Partial<Stores>) {
     this.slidesStore = stores.slidesStore!;
     this.uploadStore = stores.uploadStore!;
-    this.metricRepository = repositories.metricRepository!;
-    // this.renameRepository = repositories.renameRepository!;
   }
 
   @action.bound
@@ -62,26 +56,13 @@ export class SlidesActions {
     });
   }
 
-  async renameAndDownload() {
-    await this.trackRenameAndDownload();
-    // await this.renameRepository.rename(this.slidesStore.slides, this.uploadStore.fileName);
-    // this.updateOldNames();
-  }
-
   async trackRenameAndDownload() {
-    let metric = new MetricModel(
-      null,
-      this.uploadStore.hash,
-      'Download',
-      Math.round((Date.now() / 1000)).toString(),
-      null);
-    metric = await this.metricRepository.create(metric);
+    await this.metricActions.trackMetric('Download');
     let request = new XMLHttpRequest();
     request.onreadystatechange = async () => {
       if (request.readyState === 4) {
         this.updateOldNames();
-        metric.setEndTime(Math.round((Date.now() / 1000)).toString());
-        await this.metricRepository.update(metric);
+        await this.metricActions.updateMetric('Download');
       }
     };
     request.withCredentials = true;

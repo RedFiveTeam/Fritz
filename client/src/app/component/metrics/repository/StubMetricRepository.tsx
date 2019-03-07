@@ -1,5 +1,5 @@
 import { MetricRepository } from './MetricRepository';
-import { MetricModel } from './MetricModel';
+import { MetricModel } from '../MetricModel';
 
 export class StubMetricRepository implements MetricRepository {
 

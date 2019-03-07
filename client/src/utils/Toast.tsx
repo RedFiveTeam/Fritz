@@ -11,58 +11,32 @@ export class Toast extends React.Component<Props> {
 
   static count: number = 0;
 
-  static showUploadError = () => {
+  static create = (duration: number, className: string, content: string) => {
     let ele = document.querySelector('.customToast') as HTMLElement;
     let count = Toast.count;
     Toast.count++;
-    ele.insertAdjacentHTML('beforeend', '' +
-      '<div class="alert alert-danger errorToast errorToast' + count + '" role="alert">' +
-      '<b>Error:</b> File must be in Powerpoint format (<b>.ppt</b> or <b>.pptx</b>)' +
-      '</div>' +
-      '');
+    ele.insertAdjacentHTML(
+      'beforeend',
+      '<div class="alert alert-danger ' + className + ' ' + className + count + '" role="alert">' +
+      content +
+      '</div>'
+    );
     setTimeout(
       () => {
-        (document.querySelector('.errorToast' + count) as HTMLElement).style.opacity = '1';
+        (document.querySelector('.' + className + count) as HTMLElement).style.opacity = '1';
       },
       1);
     setTimeout(
       () => {
-        (document.querySelector('.customToast > .errorToast' + count) as HTMLElement).style.opacity = '0';
+        (document.querySelector('.customToast > ' + '.' + className + count) as HTMLElement).style.opacity = '0';
         setTimeout(
           () => {
-            let toast = document.querySelector('.customToast > .errorToast' + count) as HTMLElement;
+            let toast = document.querySelector('.customToast > ' + '.' + className + count) as HTMLElement;
             ele.removeChild(toast);
           },
           1000);
       },
-      4000);
-  };
-
-  static showDownloadError = () => {
-    let ele = document.querySelector('.customToast') as HTMLElement;
-    let count = Toast.count;
-    Toast.count++;
-    ele.insertAdjacentHTML('beforeend', '' +
-      '<div class="alert alert-danger errorToast errorToast' + count + '" role="alert">' +
-      '<b>Error:</b> You must upload a Powerpoint file before you can download JPEGS' +
-      '</div>' +
-      '');
-    setTimeout(
-      () => {
-        (document.querySelector('.errorToast' + count) as HTMLElement).style.opacity = '1';
-      },
-      1);
-    setTimeout(
-      () => {
-        (document.querySelector('.customToast > .errorToast' + count) as HTMLElement).style.opacity = '0';
-        setTimeout(
-          () => {
-            let toast = document.querySelector('.customToast > .errorToast' + count) as HTMLElement;
-            ele.removeChild(toast);
-          },
-          1000);
-      },
-      4000);
+      duration - 1000);
   };
 
   render() {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { StyledMetricsTable } from '../component/metrics/MetricsTable';
+import { StyledMetricsTable } from '../component/metrics/table/MetricsTable';
 
 interface Props {
   className?: string;

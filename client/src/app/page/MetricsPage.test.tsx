@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { MetricsPage } from './MetricsPage';
-import { StyledMetricsTable } from '../component/metrics/MetricsTable';
+import { StyledMetricsTable } from '../component/metrics/table/MetricsTable';
 
 describe('MetricsPage', () => {
   let subject: ShallowWrapper;

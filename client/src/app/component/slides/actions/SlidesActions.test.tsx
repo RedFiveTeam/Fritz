@@ -1,14 +1,11 @@
 import { SlidesActions } from './SlidesActions';
-import { SlidesStore } from './SlidesStore';
-import { SlideModel } from './SlideModel';
-import { RenameRepository } from '../form/repositories/RenameRepository';
-import { MetricModel } from '../metrics/MetricModel';
+import { SlidesStore } from '../SlidesStore';
+import { SlideModel } from '../SlideModel';
 
 describe('SlidesActions', () => {
   let subject: SlidesActions;
   let slidesStore: SlidesStore;
-  let renameRepository: RenameRepository;
-  let metricRepository: any;
+  let metricActions: any;
   let uploadStore: any;
 
   slidesStore = new SlidesStore();
@@ -17,13 +14,13 @@ describe('SlidesActions', () => {
     hash: 'ewerwerw'
   };
 
-  metricRepository = {
-    create: jest.fn(() => {
-      return Promise.resolve(new MetricModel(1, 'test', 'download', '23512512', '235123512512'));
-    }),
-    update: () => {
+  metricActions = {
+    trackMetric: jest.fn(() => {
       return Promise.resolve();
-    }
+    }),
+    updateMetric: jest.fn(() => {
+      return Promise.resolve();
+    })
   };
 
   beforeEach(() => {
@@ -32,7 +29,8 @@ describe('SlidesActions', () => {
       new SlideModel('test2', 'test2')
     ]);
 
-    subject = new SlidesActions({renameRepository, metricRepository} as any, {slidesStore, uploadStore} as any);
+    subject = new SlidesActions({slidesStore, uploadStore} as any);
+    subject.metricActions = metricActions;
   });
 
   it('update the slide model name when called', () => {
@@ -57,7 +55,7 @@ describe('SlidesActions', () => {
   });
 
   it('should log metrics on download', async () => {
-    await subject.renameAndDownload();
-    expect(metricRepository.create).toHaveBeenCalled();
+    await subject.trackRenameAndDownload();
+    expect(metricActions.trackMetric).toHaveBeenCalled();
   });
 });

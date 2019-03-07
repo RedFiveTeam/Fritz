@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { StyledMetricsTable } from './MetricsTable';
-import { StubMetricRepository } from './StubMetricRepository';
-import { MetricStore } from './MetricStore';
+import { StubMetricRepository } from '../repository/StubMetricRepository';
+import { MetricStore } from '../MetricStore';
 
 describe('MetricsTable', () => {
   let subject: ReactWrapper;

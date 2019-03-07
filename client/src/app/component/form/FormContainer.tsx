@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { InjectedUploadContainer } from './UploadContainer';
+import { InjectedUploadContainer } from './upload/container/UploadContainer';
 import styled from 'styled-components';
-import { SlidesActions } from '../slides/SlidesActions';
+import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/SlidesStore';
 import { CSSProperties } from 'react';
 

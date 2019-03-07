@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
-import { SlidesActions } from '../slides/SlidesActions';
-import { UploadStore } from '../form/UploadStore';
+import { SlidesActions } from '../slides/actions/SlidesActions';
+import { UploadStore } from '../form/upload/UploadStore';
 import { Toast } from '../../../utils/Toast';
 import { SlidesStore } from '../slides/SlidesStore';
 
@@ -27,13 +27,17 @@ export class DownloadButton extends React.Component<Props> {
             onClick={async () => {
               if (!this.props.uploadStore!.uploaded) {
                 this.props.slidesStore!.setValidate(true);
-                Toast.showDownloadError();
+                Toast.create(
+                  5000,
+                  'errorToast',
+                  '<b>Error:</b> You must upload a Powerpoint file before you can download JPEGS'
+                );
               } else if (!this.props.slidesStore!.isValidName()) {
                 this.props.slidesStore!.setValidate(true);
                 return Promise.resolve();
               } else {
                 this.props.slidesStore!.setValidate(false);
-                await this.props.slidesActions!.renameAndDownload();
+                await this.props.slidesActions!.trackRenameAndDownload();
               }
             }}
           >

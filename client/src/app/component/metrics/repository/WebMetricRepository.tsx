@@ -1,7 +1,7 @@
 import { MetricRepository } from './MetricRepository';
-import { MetricSerializer } from './MetricSerializer';
-import { HTTPClient } from '../../../utils/HTTPClient';
-import { MetricModel } from './MetricModel';
+import { MetricSerializer } from '../MetricSerializer';
+import { HTTPClient } from '../../../../utils/HTTPClient';
+import { MetricModel } from '../MetricModel';
 
 export class WebMetricRepository implements MetricRepository {
   private metricsSerializer = new MetricSerializer();

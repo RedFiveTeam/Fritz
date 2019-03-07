@@ -17,7 +17,7 @@ export class Header extends React.Component<Props> {
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand text-white" href="#">
+              <a className="navbar-brand" href="#">
                 <img className="logo" alt="FRiTZ" src={Logo} />
               </a>
             </div>
@@ -31,4 +31,8 @@ export class Header extends React.Component<Props> {
 export const StyledHeader = (styled(Header)`
   background: #2B303C;
   box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+  
+  a {
+  color: #FFF;
+  }
 `);

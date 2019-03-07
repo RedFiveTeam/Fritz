@@ -1,4 +1,4 @@
-import { UploadStore } from '../app/component/form/UploadStore';
+import { UploadStore } from '../app/component/form/upload/UploadStore';
 import { SlidesStore } from '../app/component/slides/SlidesStore';
 import { MetricStore } from '../app/component/metrics/MetricStore';
 

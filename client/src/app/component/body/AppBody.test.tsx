@@ -2,7 +2,7 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { AppBody } from './AppBody';
 import { FormContainer } from '../form/FormContainer';
-import { SlidesContainer } from '../slides/SlidesContainer';
+import { SlidesContainer } from '../slides/container/SlidesContainer';
 
 describe('Header', () => {
   let subject: ShallowWrapper;

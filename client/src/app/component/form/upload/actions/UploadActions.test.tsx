@@ -1,12 +1,12 @@
 import { UploadActions } from './UploadActions';
-import { UploadRepository } from './repositories/UploadRepository';
-import { UploadStore } from './UploadStore';
-import { StubUploadRepository } from './repositories/StubUploadRepository';
-import { UploadModel } from './UploadModel';
-import { StatusModel } from './StatusModel';
-import { SlidesStore } from '../slides/SlidesStore';
-import { MetricRepository } from '../metrics/MetricRepository';
-import { StubMetricRepository } from '../metrics/StubMetricRepository';
+import { UploadRepository } from '../repository/UploadRepository';
+import { UploadStore } from '../UploadStore';
+import { StubUploadRepository } from '../repository/StubUploadRepository';
+import { UploadModel } from '../UploadModel';
+import { StatusModel } from '../../status/StatusModel';
+import { SlidesStore } from '../../../slides/SlidesStore';
+import { MetricRepository } from '../../../metrics/repository/MetricRepository';
+import { StubMetricRepository } from '../../../metrics/repository/StubMetricRepository';
 
 describe('UploadActions', () => {
   let subject: UploadActions;
@@ -14,11 +14,21 @@ describe('UploadActions', () => {
   let metricRepository: MetricRepository;
   let uploadStore: UploadStore;
   let slidesStore: SlidesStore;
+  let metricActions: any;
 
   beforeEach(() => {
 
     uploadRepository = new StubUploadRepository();
     metricRepository = new StubMetricRepository();
+
+    metricActions = {
+      trackMetric: jest.fn(async () => {
+        await Promise.resolve();
+      }),
+      updateMetric: jest.fn(async () => {
+        await Promise.resolve();
+      })
+    };
 
     uploadRepository.upload = jest.fn(() => {
       return new UploadModel('chucknorris.ppt');
@@ -32,6 +42,7 @@ describe('UploadActions', () => {
     slidesStore = new SlidesStore();
     subject = new UploadActions({uploadRepository, metricRepository} as any, {uploadStore, slidesStore} as any);
     subject.uploadProcessingComplete = jest.fn();
+    subject.metricActions = metricActions;
   });
 
   it('should pass the file to the backend', async () => {

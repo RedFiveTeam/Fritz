@@ -1,5 +1,5 @@
 import { UploadModel } from './UploadModel';
-import { Serializer } from '../../../utils/Serializer';
+import { Serializer } from '../../../../utils/Serializer';
 
 export class UploadSerializer implements Serializer<UploadModel> {
   serialize(item: UploadModel): any {

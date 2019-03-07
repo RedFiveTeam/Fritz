@@ -1,9 +1,9 @@
-import { HTTPClient } from '../../../../utils/HTTPClient';
+import { HTTPClient } from '../../../../../utils/HTTPClient';
 import { UploadRepository } from './UploadRepository';
 import { UploadSerializer } from '../UploadSerializer';
 import { UploadModel } from '../UploadModel';
-import { StatusModel } from '../StatusModel';
-import { StatusSerializer } from '../StatusSerializer';
+import { StatusModel } from '../../status/StatusModel';
+import { StatusSerializer } from '../../status/StatusSerializer';
 
 export class WebUploadRepository implements UploadRepository {
   private uploadSerializer = new UploadSerializer();

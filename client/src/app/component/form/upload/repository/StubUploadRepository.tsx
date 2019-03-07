@@ -1,6 +1,6 @@
 import { UploadRepository } from './UploadRepository';
 import { UploadModel } from '../UploadModel';
-import { StatusModel } from '../StatusModel';
+import { StatusModel } from '../../status/StatusModel';
 
 export class StubUploadRepository implements UploadRepository {
   upload(data: any): Promise<UploadModel> {

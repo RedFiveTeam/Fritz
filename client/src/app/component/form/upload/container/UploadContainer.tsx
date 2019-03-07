@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { UploadActions } from './UploadActions';
-import { UploadStore } from './UploadStore';
-import { Toast } from '../../../utils/Toast';
+import { UploadActions } from '../actions/UploadActions';
+import { UploadStore } from '../UploadStore';
+import { Toast } from '../../../../../utils/Toast';
 
-const uploadIcon = require('../../../icon/UploadIcon.svg');
-const pptIcon = require('../../../icon/PPTIcon.svg');
-const paperclipIcon = require('../../../icon/PaperclipIcon.svg');
-const resetUploadIcon = require('../../../icon/ResetUploadIcon.svg');
+const uploadIcon = require('../../../../../icon/UploadIcon.svg');
+const pptIcon = require('../../../../../icon/PPTIcon.svg');
+const paperclipIcon = require('../../../../../icon/PaperclipIcon.svg');
+const resetUploadIcon = require('../../../../../icon/ResetUploadIcon.svg');
 
 interface Props {
   className?: string;
@@ -40,7 +40,11 @@ export class UploadContainer extends React.Component<Props> {
         }
       } else {
         (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
-        Toast.showUploadError();
+        Toast.create(
+          5000,
+          'errorToast',
+          '<b>Error:</b> File must be in Powerpoint format (<b>.ppt</b> or <b>.pptx</b>)'
+        );
       }
     }
   };

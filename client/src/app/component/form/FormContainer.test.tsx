@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { FormContainer } from './FormContainer';
-import { InjectedUploadContainer } from './UploadContainer';
+import { InjectedUploadContainer } from './upload/container/UploadContainer';
 import { SlidesStore } from '../slides/SlidesStore';
 
 describe('FormContainer', () => {

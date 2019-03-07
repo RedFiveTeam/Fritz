@@ -9,7 +9,7 @@ describe('DownloadButton', () => {
   let slidesStore: any;
 
   slidesActions = {
-    renameAndDownload: jest.fn()
+    trackRenameAndDownload: jest.fn()
   };
 
   slidesStore = {
@@ -39,6 +39,6 @@ describe('DownloadButton', () => {
     uploadStore.uploaded = true;
     expect(subject.find('#downloadbutton').exists()).toBeTruthy();
     expect(subject.find('#downloadbutton').simulate('click'));
-    expect(slidesActions.renameAndDownload).toHaveBeenCalled();
+    expect(slidesActions.trackRenameAndDownload).toHaveBeenCalled();
   });
 });

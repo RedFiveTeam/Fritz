@@ -39,4 +39,13 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+<script>
+    window.onbeforeunload = cleanOnExit;
+    function cleanOnExit() {
+        var request = new XMLHttpRequest();
+        request.open('POST', window.location.href + 'api/roomba', true);
+        request.send(document.cookie);
+        return undefined;
+    }
+</script>
 </html>

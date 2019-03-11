@@ -35,7 +35,7 @@ describe('UploadActions', () => {
     });
 
     uploadRepository.status = jest.fn(() => {
-      return Promise.resolve(new StatusModel('complete', ['slide1.png', 'slide2.png', 'slide3.png']));
+      return Promise.resolve(new StatusModel('complete', ['slide1.png', 'slide2.png', 'slide3.png'], 0, 3));
     });
 
     uploadStore = new UploadStore();

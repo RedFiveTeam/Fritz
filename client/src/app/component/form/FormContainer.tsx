@@ -77,9 +77,6 @@ export class FormContainer extends React.Component<Props> {
             <input
               data-name="opName"
               onChange={(e: any) => {
-                // console.log(FormContainer.validate);
-                // console.log(this.props.slidesStore!.asset);
-                // console.log(this.props.slidesStore!.asset!.length);
                 this.props.slidesActions!.setAndUpdateOpName(e.target.value);
               }}
               type="text"

@@ -1,12 +1,11 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
 import mil.af.dgs1sdt.fritz.Conversion;
-import mil.af.dgs1sdt.fritz.Metrics.Metric;
 import mil.af.dgs1sdt.fritz.Metrics.MetricRepository;
 import mil.af.dgs1sdt.fritz.Models.StatusModel;
 import mil.af.dgs1sdt.fritz.Stores.StatusStore;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,13 +16,13 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping(UploadController.URI)
 public class UploadController {
+  private Conversion convert = new Conversion();
 
   public static final String URI = "/api/upload";
 
@@ -62,7 +61,6 @@ public class UploadController {
       @Override
       public void run() {
         try {
-          Conversion convert = new Conversion();
           convert.convertPPTX(file.getOriginalFilename(), hash);
         } catch (Exception e) {
         }
@@ -98,7 +96,29 @@ public class UploadController {
     }
     StatusModel status = new StatusModel();
     status.setFiles(new ArrayList<>());
+    status.setProgress(getFileCount("/tmp/complete/" + id + "/"));
+    status.setTotal(convert.getSlides());
     status.setStatus("pending");
     return status;
   }
+
+  private int getFileCount(String dirPath) {
+    File f = new File(dirPath);
+    File[] files = f.listFiles();
+    int count = 0;
+
+    if (files != null) {
+      for (int i = 0; i < files.length; i++) {
+        count++;
+        File file = files[i];
+
+        if (file.isDirectory()) {
+          getFileCount(file.getAbsolutePath());
+        }
+      }
+      return count;
+    }
+    return count;
+  }
+
 }

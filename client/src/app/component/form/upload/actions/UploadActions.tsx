@@ -35,6 +35,7 @@ export class UploadActions {
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
     this.uploadStore.setProcessing(true);
+    this.uploadStore.setConversionStatus(true);
     this.poll = setInterval(
       async () => { await this.checkStatus(); },
       1000);
@@ -44,6 +45,10 @@ export class UploadActions {
   async checkStatus() {
     this.uploadRepository.status()
       .then((status: StatusModel) => {
+        if (status.status === 'pending') {
+          this.uploadStore.setTotal(status.total);
+          this.uploadStore.setProgress(status.progress);
+        }
         if (status.status === 'complete') {
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
@@ -68,6 +73,7 @@ export class UploadActions {
   uploadProcessingComplete() {
     clearInterval(this.poll);
     this.uploadStore.setProcessing(false);
+    this.uploadStore.setConversionStatus(false);
   }
 
   @action.bound

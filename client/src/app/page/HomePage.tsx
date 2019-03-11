@@ -28,8 +28,8 @@ export class HomePage extends React.Component<Props> {
   }
 }
 
-export const StyledHomePage = styled(HomePage)`
+export const StyledHomePage = (styled(HomePage)`
 height: auto;
 min-height: 1060px;
 overflow-y: hidden;
-`;
+`);

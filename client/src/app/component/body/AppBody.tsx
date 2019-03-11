@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
-import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
+import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledFormContainer } from '../form/FormContainer';
+import { StyledProgressBar } from '../progressBar/ProgressBar';
+import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
+import { UploadStore } from '../form/upload/UploadStore';
 
 interface Props {
   className?: string;
+  uploadStore?: UploadStore;
 }
 
 @observer
@@ -21,13 +24,17 @@ export class AppBody extends React.Component<Props> {
         <div className="spacer" />
         <div className="right">
           <StyledSlidesContainer/>
+          {
+            this.props.uploadStore!.processing &&
+            <StyledProgressBar/>
+          }
         </div>
       </div>
     );
   }
 }
 
-export const StyledAppBody = (styled(AppBody)`
+export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
 height: auto;
 min-height: 1000px;
   .spacer {

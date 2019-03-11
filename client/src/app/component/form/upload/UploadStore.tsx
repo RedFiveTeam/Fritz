@@ -5,6 +5,10 @@ export class UploadStore {
   @observable private _fileName: string = '';
   @observable private _processing: boolean = false;
   @observable private _hash: string = '';
+  @observable private _conversionStatus: boolean = false;
+  @observable private _progress: number;
+  @observable private _total: number;
+  @observable private _percentConverted: number;
 
   @action.bound
   setUploaded(uploaded: boolean) {
@@ -26,6 +30,32 @@ export class UploadStore {
     this._hash = value;
   }
 
+  @action.bound
+  setConversionStatus(value: boolean) {
+    this._conversionStatus = value;
+  }
+
+  @action.bound
+  setProgress(value: number) {
+    this._progress = value;
+  }
+
+  @action.bound
+  setTotal(value: number) {
+    this._total = value;
+  }
+
+  @computed
+  get PercentConverted() {
+    this._percentConverted = Math.ceil((this.progress / this.total) * 100);
+    return this._percentConverted;
+  }
+
+  @computed
+  get ConversionStatus() {
+    return this._conversionStatus !== null;
+  }
+
   @computed
   get uploaded() {
     return this._uploaded;
@@ -45,4 +75,15 @@ export class UploadStore {
   get hash() {
     return this._hash;
   }
+
+  @computed
+  get progress() {
+    return this._progress;
+  }
+
+  @computed
+  get total() {
+    return this._total;
+  }
+
 }

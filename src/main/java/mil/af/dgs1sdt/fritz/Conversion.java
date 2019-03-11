@@ -19,6 +19,12 @@ import java.util.TreeSet;
 
 public class Conversion {
 
+  private int numberOfSlides;
+
+  public int getSlides() {
+    return numberOfSlides;
+  }
+
   @Async
   public void convertPPTX(String filename, String hash) throws IOException {
 
@@ -32,7 +38,7 @@ public class Conversion {
       List<? extends Slide<?, ?>> slides = ss.getSlides();
 
       Set<Integer> slidenum = slideIndexes(slides.size(), slidenumStr);
-
+      this.numberOfSlides = slidenum.size();
 
       Dimension pgsize = ss.getPageSize();
       int width = (int) (pgsize.width * scale);

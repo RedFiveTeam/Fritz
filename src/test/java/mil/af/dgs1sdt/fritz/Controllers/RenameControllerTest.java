@@ -38,9 +38,7 @@ public class RenameControllerTest extends BaseIntegrationTest {
     File dir = new File("/tmp/complete/72432c9fb76cf45094c29fc92c4b16f0/");
     dir.mkdir();
 
-    while (new File("/tmp/complete/72432c9fb76cf45094c29fc92c4b16f0/").listFiles().length != 2) {
-      Thread.sleep(100);
-    }
+    Thread.sleep(5000);
 
     given()
       .port(port)

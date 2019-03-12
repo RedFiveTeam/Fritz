@@ -8,7 +8,7 @@ ENV FRITZ_DB_USERNAME=fritz
 ENV FRITZ_CI=true
 
 ENTRYPOINT service mysql start &&\
-    mysql -u root -e "create database fritz;" || true &&\
+    mysql -u root -e "create database fritzdev;" || true &&\
     mysql -u root -e "create user 'fritz'@'localhost';" || true &&\
-    mysql -u root -e "GRANT ALL PRIVILEGES ON fritz.* TO 'fritz'@'localhost';" || true &&\
+    mysql -u root -e "GRANT ALL PRIVILEGES ON fritzdev.* TO 'fritz'@'localhost';" || true &&\
     /bin/bash

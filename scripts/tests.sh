@@ -41,11 +41,8 @@ function acceptanceTests {
 
     pushd ${BASE_DIR}/acceptance
         yarn install
-        if [[ "${FRITZ_CI}" && "$(lsb_release -crid | grep -i 'Ubuntu')" ]]; then
-            xvfb-run yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
-        else
-            yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
-        fi
+
+        yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
 
         if [[ "${?}" == "1" ]]; then
             echo "Acceptance Tests Failed... Exiting"

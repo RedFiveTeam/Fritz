@@ -22,8 +22,6 @@ export class MetricActions {
     await this.metricStore.hydrate(this.metricRepository);
   }
 
-  // to do: create methods for tracking the different actions
-
   @action.bound
   async trackMetric(act: string) {
     let metric = new MetricModel(null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null);

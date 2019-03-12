@@ -29,7 +29,7 @@ describe('SlidesActions', () => {
       new SlideModel('test2', 'test2')
     ]);
 
-    subject = new SlidesActions({slidesStore, uploadStore} as any);
+    subject = new SlidesActions({} as any, {slidesStore, uploadStore} as any);
     subject.metricActions = metricActions;
   });
 

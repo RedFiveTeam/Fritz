@@ -5,6 +5,7 @@ import { SlideModel } from '../SlideModel';
 import * as FileSaver from 'file-saver';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { action } from 'mobx';
+import { Repositories } from '../../../../utils/Repositories';
 
 export class SlidesActions {
   public metricActions: MetricActions;
@@ -12,9 +13,10 @@ export class SlidesActions {
   private slidesStore: SlidesStore;
   private uploadStore: UploadStore;
 
-  constructor(stores: Partial<Stores>) {
+  constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.slidesStore = stores.slidesStore!;
     this.uploadStore = stores.uploadStore!;
+    this.metricActions = new MetricActions(repositories, stores);
   }
 
   @action.bound

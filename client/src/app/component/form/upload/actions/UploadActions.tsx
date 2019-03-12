@@ -22,7 +22,7 @@ export class UploadActions {
     this.uploadRepository = repositories.uploadRepository!;
     this.uploadStore = stores.uploadStore!;
     this.slidesStore = stores.slidesStore!;
-    this.slidesActions = new SlidesActions(stores);
+    this.slidesActions = new SlidesActions(repositories, stores);
     this.metricActions = new MetricActions(repositories, stores);
   }
 

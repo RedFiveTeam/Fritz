@@ -20,11 +20,11 @@ node ('legacy') {
 
     stage ('Test & Build') {
         sh """
-        docker pull dgs1sdt/fritz
+        docker pull dgs1sdt/fritz:test
 
         docker stop Fritz || true && docker rm Fritz || true
 
-        docker run --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz
+        docker run --name Fritz -v `pwd`:/app -itd dgs1sdt/fritz:test
 
         docker exec Fritz /bin/bash -c "/app/scripts/tests.sh"
         """
@@ -61,7 +61,7 @@ node ('legacy') {
         stage ('Deploy NGA') {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '8e717287-708e-440f-8fa8-17497eac5efb', passwordVariable: 'PCFPass', usernameVariable: 'PCFUser']]) {
                 withEnv(["CF_HOME=${pwd()}"]) {
-                    sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o USAF_Narwhal -s 'Fritz'"
+                    sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o DGS1SDT -s 'Fritz'"
                     sh "cf push -f ./manifest-acceptance.yml"
                 }
             }
@@ -78,7 +78,7 @@ node ('legacy') {
         stage ('Deploy NGA') {
             withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '8e717287-708e-440f-8fa8-17497eac5efb', passwordVariable: 'PCFPass', usernameVariable: 'PCFUser']]) {
                 withEnv(["CF_HOME=${pwd()}"]) {
-                    sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o USAF_Narwhal -s 'Fritz'"
+                    sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o DGS1SDT -s 'Fritz'"
                     sh "cf push -f ./manifest.yml"
                 }
             }

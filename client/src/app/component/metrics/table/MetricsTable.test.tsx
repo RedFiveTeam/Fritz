@@ -3,6 +3,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import { StyledMetricsTable } from './MetricsTable';
 import { StubMetricRepository } from '../repository/StubMetricRepository';
 import { MetricStore } from '../MetricStore';
+import moment = require('moment');
 
 describe('MetricsTable', () => {
   let subject: ReactWrapper;
@@ -38,9 +39,11 @@ describe('MetricsTable', () => {
   });
 
   it('should display some metrics', () => {
+    let m = moment().unix();
+
     expect(subject.find('#metricsTableRow').exists()).toBeTruthy();
     expect(subject.find('td').at(0).text()).toBe('e223sd');
     expect(subject.find('td').at(1).text()).toBe('Upload');
-    expect(subject.find('td').at(2).text()).toBe('March 4, 2019 @0959L');
+    expect(subject.find('td').at(2).text()).toBe(moment.unix(m).format('MMMM D, YYYY @HHmm') + 'L');
   });
 });

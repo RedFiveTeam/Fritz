@@ -58,8 +58,7 @@ export class SlidesContainer extends React.Component<Props> {
 }
 
 export const StyledSlidesContainer = inject('slidesStore')(styled(SlidesContainer)`
+max-width: 755px;
 color: white;
 margin-left: 47px;
-max-height: 560px;
-overflow-y: auto;
 `);

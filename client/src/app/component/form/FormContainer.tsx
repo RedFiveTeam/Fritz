@@ -152,7 +152,7 @@ export class FormContainer extends React.Component<Props> {
 
 export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled(FormContainer)`
   color: #fff;
-  margin-top: 87px;
+  margin-top: 16px;
   margin-left: 39px;
   
   input {

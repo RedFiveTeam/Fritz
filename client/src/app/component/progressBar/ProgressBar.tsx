@@ -61,10 +61,10 @@ export class ProgressBar extends React.Component<Props> {
 }
 
 export const StyledProgressBar = inject('uploadStore')(styled(ProgressBar)`
-left: 100px;
-position: absolute;
-top: 277px;
 width: 600px;
+position: relative;
+left: 100px;
+top: 325px;
 
  #status {
   color: #FFF;

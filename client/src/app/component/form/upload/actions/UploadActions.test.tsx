@@ -45,6 +45,15 @@ describe('UploadActions', () => {
     subject.metricActions = metricActions;
   });
 
+  it('should set uploaded, processing and conversionStatus to true, and placeholder to false when upload is called',
+     async () => {
+      await subject.upload({});
+      expect(uploadStore.uploaded).toBeTruthy();
+      expect(uploadStore.processing).toBeTruthy();
+      expect(uploadStore.ConversionStatus).toBeTruthy();
+      expect(uploadStore.placeholder).toBeFalsy();
+    });
+
   it('should pass the file to the backend', async () => {
     const file = new File(['(⌐□_□)'], 'chucknorris.ppt', {type: 'application/vnd.ms-powerpoint'});
     await subject.upload({file: file});

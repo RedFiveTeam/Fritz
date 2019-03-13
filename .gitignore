@@ -1,5 +1,8 @@
 /target/
-/tmp/acceptance.log
+/tmp/
+/acceptance/output/
+/client/build/
+/src/main/resources/static/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

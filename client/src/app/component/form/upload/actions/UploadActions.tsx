@@ -35,6 +35,7 @@ export class UploadActions {
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
     this.uploadStore.setProcessing(true);
+    this.uploadStore.setPlaceholder(false);
     this.uploadStore.setConversionStatus(true);
     this.poll = setInterval(
       async () => { await this.checkStatus(); },

@@ -5,6 +5,7 @@ import { StyledFormContainer } from '../form/FormContainer';
 import { StyledProgressBar } from '../progressBar/ProgressBar';
 import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
 import { UploadStore } from '../form/upload/UploadStore';
+import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
 
 interface Props {
   className?: string;
@@ -28,6 +29,10 @@ export class AppBody extends React.Component<Props> {
             this.props.uploadStore!.processing &&
             <StyledProgressBar/>
           }
+          {
+            this.props.uploadStore!.placeholder &&
+            <StyledSlidesContainerPlaceholder/>
+          }
         </div>
       </div>
     );
@@ -38,7 +43,7 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   .spacer {
     overflow: hidden;
     position: absolute;
-    top: 12%;
+    top: 17%;
     display: inline-block;
     height: 625px;
     border-left: 1px solid #6C7F9C;

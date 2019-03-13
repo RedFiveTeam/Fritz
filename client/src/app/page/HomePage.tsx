@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { StyledAppBody } from '../component/body/AppBody';
 import { StyledToast } from '../../utils/Toast';
 import { StyledFooter } from '../component/footer/Footer';
+import { StyledHomePageHeader } from '../component/header/HomePageHeader';
 
 interface Props {
   className?: string;
@@ -17,6 +18,7 @@ export class HomePage extends React.Component<Props> {
         className={this.props.className}
       >
         <StyledToast/>
+        <StyledHomePageHeader/>
         <div
           className="mainBody"
         >

@@ -141,19 +141,6 @@ export class HTTPClient {
     }
   }
 
-  // async postFile(path: string, file: File, timezone: string) {
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-  //   formData.append('timezone', timezone);
-  //   return await fetch(
-  //     urljoin(this.baseURL, path),
-  //     {
-  //       method: 'POST',
-  //       body: formData,
-  //     }
-  //   );
-  // }
-
   private handleErrors(status: number, json: any) {
     if (status < 200 || status >= 300) {
       throw json.errors.reduce(

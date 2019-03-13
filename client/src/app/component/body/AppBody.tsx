@@ -51,9 +51,9 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   }
   
   .right {
-    min-height: 500px;
     width: 51%;
     max-height: 750px;
+    min-height: 500px;
     display: inline-block;
     position: absolute;
     padding-top: 16px;

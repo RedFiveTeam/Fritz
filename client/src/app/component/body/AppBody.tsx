@@ -21,7 +21,7 @@ export class AppBody extends React.Component<Props> {
         <div className="left">
           <StyledFormContainer/>
         </div>
-        <div className="spacer" />
+        <div className="spacer"/>
         <div className="right">
           <StyledSlidesContainer/>
           {
@@ -35,12 +35,10 @@ export class AppBody extends React.Component<Props> {
 }
 
 export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
-height: auto;
-min-height: 1000px;
   .spacer {
     overflow: hidden;
     position: absolute;
-    top: 17%;
+    top: 12%;
     display: inline-block;
     height: 625px;
     border-left: 1px solid #6C7F9C;
@@ -53,10 +51,32 @@ min-height: 1000px;
   }
   
   .right {
-    width: 49%;
+    min-height: 500px;
+    width: 51%;
+    max-height: 750px;
     display: inline-block;
     position: absolute;
-    top: 20%;
+    padding-top: 16px;
+    overflow-y: auto;
+    /* width */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    /* Track */
+    ::-webkit-scrollbar-track {
+      display: none; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #5C667D; 
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #5C667D; 
+    }
   }
 
 `);

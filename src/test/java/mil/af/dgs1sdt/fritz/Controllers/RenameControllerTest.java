@@ -50,6 +50,6 @@ public class RenameControllerTest extends BaseIntegrationTest {
       .then()
       .statusCode(200);
 
-    assert(new File("/tmp/complete/72432c9fb76cf45094c29fc92c4b16f0/").listFiles()[0].toString().indexOf("14TTTTZMAR19_TEST_ACTY_TEST_TEST") > -1);
+    assert(new File("/tmp/complete/72432c9fb76cf45094c29fc92c4b16f0/").listFiles()[0].toString().contains("14TTTTZMAR19_TEST_ACTY_TEST_TEST"));
   }
 }

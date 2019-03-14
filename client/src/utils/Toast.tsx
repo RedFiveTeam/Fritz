@@ -15,12 +15,14 @@ export class Toast extends React.Component<Props> {
     let ele = document.querySelector('.customToast') as HTMLElement;
     let count = Toast.count;
     Toast.count++;
-    ele.insertAdjacentHTML(
-      'beforeend',
-      '<div class="alert alert-danger ' + className + ' ' + className + count + '" role="alert">' +
-      content +
-      '</div>'
-    );
+    if (ele) {
+      ele.insertAdjacentHTML(
+        'beforeend',
+        '<div class="alert alert-danger ' + className + ' ' + className + count + '" role="alert">' +
+        content +
+        '</div>'
+      );
+    }
     setTimeout(
       () => {
         (document.querySelector('.' + className + count) as HTMLElement).style.opacity = '1';
@@ -68,6 +70,18 @@ export const StyledToast = styled(Toast)`
     color: #d4d6db;
     background-color: #ae4754;
     width: 95%;
+    margin-bottom: 10px;
+    box-shadow: 4px 4px 6px rgba(0,0,0,0.5);
+    transition: opacity 1s;
+  }
+  .deleteToast{
+    margin: auto;
+    opacity: 0;
+    text-align: center;
+    border: none;
+    color: #FFF;
+    background-color: #1F1F2C;
+    width: 70%;
     margin-bottom: 10px;
     box-shadow: 4px 4px 6px rgba(0,0,0,0.5);
     transition: opacity 1s;

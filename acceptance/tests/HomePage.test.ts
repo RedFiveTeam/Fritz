@@ -15,4 +15,9 @@ Scenario('should allow you to upload a file, validate it, and display the pngs',
   I.attachFile('#uploadButton', 'data/samplepptx.pptx');
   I.waitForText('SAMPLEPPTX.PPTX', 10);
   I.waitForText('DDTTTTZMONYY_OP_TEST_ACTY_ASSET_SECRET', 10);
+  I.click('#deletePP');
+  I.waitForText('Are you sure you want to delete the powerpoint', 10);
+  I.click('.btn-primary');
+  I.waitForText('Powerpoint File Removed', 10);
+  I.waitForText('Drag and drop', 10);
 });

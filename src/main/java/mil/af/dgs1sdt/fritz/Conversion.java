@@ -1,6 +1,8 @@
 package mil.af.dgs1sdt.fritz;
 
+import mil.af.dgs1sdt.fritz.Models.TrackingModel;
 import mil.af.dgs1sdt.fritz.Stores.StatusStore;
+import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.poi.sl.draw.DrawFactory;
 import org.apache.poi.sl.usermodel.Slide;
 import org.apache.poi.sl.usermodel.SlideShow;
@@ -19,14 +21,13 @@ import java.util.TreeSet;
 
 public class Conversion {
 
-  private int numberOfSlides;
-
-  public int getSlides() {
-    return numberOfSlides;
-  }
-
   @Async
   public void convertPPTX(String filename, String hash) throws IOException {
+
+    TrackingModel tracking = TrackingStore.getTrackingList().stream()
+      .filter(tm -> hash.equals(tm.getHash()))
+      .findAny()
+      .orElse(new TrackingModel());
 
     File file = new File("/tmp/working/" + hash + "/" + filename);
     float scale = 1;
@@ -38,7 +39,7 @@ public class Conversion {
       List<? extends Slide<?, ?>> slides = ss.getSlides();
 
       Set<Integer> slidenum = slideIndexes(slides.size(), slidenumStr);
-      this.numberOfSlides = slidenum.size();
+      tracking.setTotalSlides(slidenum.size());
 
       Dimension pgsize = ss.getPageSize();
       int width = (int) (pgsize.width * scale);
@@ -72,8 +73,7 @@ public class Conversion {
 
         graphics.dispose();
         img.flush();
-        if ((slideNo + 1) == slidenum.size())
-          StatusStore.addToList(hash);
+        tracking.setCompletedSlides(tracking.getCompletedSlides() + 1);
       }
     }
   }

@@ -3,7 +3,9 @@ package mil.af.dgs1sdt.fritz.Controllers;
 import mil.af.dgs1sdt.fritz.Conversion;
 import mil.af.dgs1sdt.fritz.Metrics.MetricRepository;
 import mil.af.dgs1sdt.fritz.Models.StatusModel;
+import mil.af.dgs1sdt.fritz.Models.TrackingModel;
 import mil.af.dgs1sdt.fritz.Stores.StatusStore;
+import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,11 @@ public class UploadController {
     byte[] digest = md5.digest(fileBytes);
     String hash = new BigInteger(1, digest).toString(16);
 
+    TrackingModel tracking = TrackingStore.getTrackingList().stream()
+      .filter(tm -> hash.equals(tm.getHash()))
+      .findAny()
+      .orElse(new TrackingModel());
+
     String workingDir = "/tmp/working/" + hash;
     String completedDir = "/tmp/complete/" + hash;
     File workingDirToBeDeleted = new File(workingDir);
@@ -54,10 +61,11 @@ public class UploadController {
     File dir = new File(workingDir);
     if (!dir.exists())
       dir.mkdirs();
-
     file.transferTo(new File("/tmp/working/" + hash + "/" + file.getOriginalFilename()));
 
-    Thread th = new Thread() {
+    if (tracking.getTh() != null && tracking.getTh().isAlive())
+      tracking.getTh().interrupt();
+    tracking.setTh(new Thread() {
       @Override
       public void run() {
         try {
@@ -65,8 +73,10 @@ public class UploadController {
         } catch (Exception e) {
         }
       }
-    };
-    th.start();
+    });
+    tracking.getTh().start();
+    tracking.setHash(hash);
+    TrackingStore.addToList(tracking);
 
     res.addCookie(new Cookie("id", hash));
     return "{ \"file\" : \"" + file.getOriginalFilename() + "\", \"hash\" : \"" + hash + "\" }";
@@ -75,50 +85,40 @@ public class UploadController {
   @ResponseBody
   @GetMapping(produces = "application/json", path = "/status")
   public StatusModel status(@CookieValue("id") String id) {
-    if (id.length() > 0 && StatusStore.getList().contains(id)) {
-      StatusModel status = new StatusModel();
-      List<String> fileNames = new ArrayList<>();
-      File[] files = new File("/tmp/complete/" + id + "/").listFiles(new FilenameFilter() {
-        @Override
-        public boolean accept(File dir, String name) {
-          return name.toLowerCase().endsWith(".png");
+
+    TrackingModel tracking = TrackingStore.getTrackingList().stream()
+      .filter(tm -> id.equals(tm.getHash()))
+      .findAny()
+      .orElse(null);
+    if (tracking != null) {
+      if (id.length() > 0 && tracking.getCompletedSlides() == tracking.getTotalSlides()) {
+        StatusModel status = new StatusModel();
+        List<String> fileNames = new ArrayList<>();
+        File[] files = new File("/tmp/complete/" + id + "/").listFiles(new FilenameFilter() {
+          @Override
+          public boolean accept(File dir, String name) {
+            return name.toLowerCase().endsWith(".png");
+          }
+        });
+        if (files != null) {
+          for (File file : files) {
+            fileNames.add(file.getName());
+          }
+          status.setFiles(fileNames);
         }
-      });
-      if (files != null) {
-        for (File file : files) {
-          fileNames.add(file.getName());
-        }
-        status.setFiles(fileNames);
+        status.setStatus("complete");
+        TrackingStore.removeFromList(tracking);
+        // StatusStore.removeFromList(id);
+        return status;
       }
-      status.setStatus("complete");
-      StatusStore.removeFromList(id);
+      StatusModel status = new StatusModel();
+
+      status.setFiles(new ArrayList<>());
+      status.setProgress(tracking.getCompletedSlides());
+      status.setTotal(tracking.getTotalSlides());
+      status.setStatus("pending");
       return status;
     }
-    StatusModel status = new StatusModel();
-    status.setFiles(new ArrayList<>());
-    status.setProgress(getFileCount("/tmp/complete/" + id + "/"));
-    status.setTotal(convert.getSlides());
-    status.setStatus("pending");
-    return status;
+    return new StatusModel();
   }
-
-  private int getFileCount(String dirPath) {
-    File f = new File(dirPath);
-    File[] files = f.listFiles();
-    int count = 0;
-
-    if (files != null) {
-      for (int i = 0; i < files.length; i++) {
-        count++;
-        File file = files[i];
-
-        if (file.isDirectory()) {
-          getFileCount(file.getAbsolutePath());
-        }
-      }
-      return count;
-    }
-    return count;
-  }
-
 }

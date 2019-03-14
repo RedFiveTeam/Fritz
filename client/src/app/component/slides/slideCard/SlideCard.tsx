@@ -20,7 +20,7 @@ export class SlideCard extends React.Component<Props> {
         <div className="card mb-3">
           <div className="row no-gutters">
             <div className="col-md-4">
-              <img src={'api/image/' + this.props.slideNumber} className="card-img" alt="..." />
+              <img src={'api/image/' + this.props.slideNumber + '?' + Date.now()} className="card-img" alt="..." />
             </div>
             <div className="col-md-8">
               <div className="card-body">

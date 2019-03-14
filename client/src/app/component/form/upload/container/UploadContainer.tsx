@@ -95,7 +95,13 @@ export class UploadContainer extends React.Component<Props> {
           <div className="float-left pl-2">
             {this.props.uploadStore!.fileName}
           </div>
-          <img className="float-right pt-1 clickable" src={resetUploadIcon}/>
+          <img
+            id="deletePP"
+            className="float-right pt-1 clickable"
+            data-toggle="modal"
+            data-target="#deleteModal"
+            src={resetUploadIcon}
+          />
         </div>
       </div>
     );

@@ -11,6 +11,7 @@ public class StatusModel {
   private List<String> files;
   private int progress;
   private int total;
+  private Thread thread;
 
   public String getStatus() {
     return status;

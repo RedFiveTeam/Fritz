@@ -1,11 +1,13 @@
 package mil.af.dgs1sdt.fritz.Stores;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StatusStore {
 
-  public static List getList() {
+  public static Set getList() {
     return completed;
   }
 
@@ -15,5 +17,5 @@ public class StatusStore {
 
   public static void removeFromList(String hash) { completed.remove(hash); }
 
-  private static List<String> completed = new ArrayList<>();
+  private static Set<String> completed = new HashSet<>();
 }

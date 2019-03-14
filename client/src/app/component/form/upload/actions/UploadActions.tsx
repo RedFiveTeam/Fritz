@@ -60,6 +60,11 @@ export class UploadActions {
   }
 
   @action.bound
+  clearPoll() {
+    clearInterval(this.poll);
+  }
+
+  @action.bound
   setSlides(names: string[]) {
     let temp: SlideModel[] = [];
     names.map((name) => {

@@ -43,9 +43,9 @@
     window.onbeforeunload = cleanOnExit;
     function cleanOnExit() {
         var request = new XMLHttpRequest();
-        request.open('POST', window.location.href + 'api/roomba', true);
+        request.open('POST', '/api/roomba', true);
         request.send(document.cookie);
-        return undefined;
+        // return undefined;
     }
 </script>
 </html>

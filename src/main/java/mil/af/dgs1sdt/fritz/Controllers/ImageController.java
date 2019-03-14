@@ -22,7 +22,6 @@ public class ImageController {
         return name.toLowerCase().endsWith(".png");
       }
     });
-
     Arrays.sort(images);
 
     File img = images[imageId];

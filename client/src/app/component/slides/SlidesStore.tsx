@@ -9,6 +9,12 @@ export class SlidesStore {
   @observable private _classification: string | null;
   @observable private _slides: SlideModel[] = [];
   @observable private _validate: boolean = false;
+  @observable private _activity: string | null;
+
+  @computed
+  get activity(): string | null {
+    return this._activity;
+  }
 
   @computed
   get files(): string[] {
@@ -43,6 +49,12 @@ export class SlidesStore {
   @computed
   get validate(): boolean {
     return this._validate;
+  }
+
+  @action.bound
+  setActivity(slide: SlideModel, value: string) {
+    this._activity = value;
+    slide.setActivity(value);
   }
 
   @action.bound
@@ -106,10 +118,11 @@ export class SlidesStore {
   @computed
   get nameFormat(): string {
     return ((this._date || 'DDTTTTZMONYY') + '_' +
-      (this._opName || 'TGT_NAME') + '_ACTY_' +
+      (this._opName || 'TGT_NAME') + '_' +
+      (this._activity || '_ACTY_') + '_' +
       (this._asset || 'ASSET') + '_' +
       (this._classification || 'CLASSIFICATION'))
-        .split(' ').join('_')
-        .toUpperCase();
+      .split(' ').join('_')
+      .toUpperCase();
   }
 }

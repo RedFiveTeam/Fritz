@@ -63,7 +63,7 @@ export class DeleteModal extends React.Component<Props> {
             </div>
             <div className="modal-body">
               Are you sure you want to delete the powerpoint file? All changes will be lost and this action cannot
-              be done and no one is going to read this shit.
+              be undone.
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary text-white" data-dismiss="modal">Cancel</button>

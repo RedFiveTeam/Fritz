@@ -4,7 +4,6 @@ import mil.af.dgs1sdt.fritz.Conversion;
 import mil.af.dgs1sdt.fritz.Metrics.MetricRepository;
 import mil.af.dgs1sdt.fritz.Models.StatusModel;
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
-import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import java.io.FilenameFilter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -101,6 +101,7 @@ public class UploadController {
           }
         });
         if (files != null) {
+          Arrays.sort(files);
           for (File file : files) {
             fileNames.add(file.getName());
           }
@@ -108,7 +109,6 @@ public class UploadController {
         }
         status.setStatus("complete");
         TrackingStore.removeFromList(tracking);
-        // StatusStore.removeFromList(id);
         return status;
       }
       StatusModel status = new StatusModel();

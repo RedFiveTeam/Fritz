@@ -12,10 +12,6 @@ describe('SlidesContainer', () => {
   let slideModel2 = new SlideModel('oldName2', 'newName2');
   let slideModel3 = new SlideModel('oldName3', 'newName3');
 
-  slidesStore.setAsset('nOne');
-  slidesStore.setDate('14TTTTZFEB19');
-  slidesStore.setClassification('secret');
-  slidesStore.setOpName('op HELLO');
   slidesStore.setSlides([slideModel1, slideModel2, slideModel3]);
 
   beforeEach(() => {
@@ -28,9 +24,5 @@ describe('SlidesContainer', () => {
 
   it('should render a list of image files', async () => {
     await expect(subject.find(StyledSlideCard).length).toBe(3);
-  });
-
-  it('should render a list of files in the correct format', async () => {
-    expect(subject.find(StyledSlideCard).at(0).prop('slideName').props.children[2]).toContain('ZFEB19_OP_HELLO_');
   });
 });

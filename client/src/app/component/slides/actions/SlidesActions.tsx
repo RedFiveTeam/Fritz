@@ -20,6 +20,15 @@ export class SlidesActions {
   }
 
   @action.bound
+  setAndUpdateActivity(slide: SlideModel, activity: string) {
+    if (activity === '') {
+      activity = 'ACTY';
+    }
+    this.slidesStore.setActivity(slide, activity);
+    this.updateNewNames();
+  }
+
+  @action.bound
   setAndUpdateDate(date: string | null) {
     this.slidesStore.setDate(date);
     this.updateNewNames();
@@ -47,7 +56,8 @@ export class SlidesActions {
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
       let newName: string = '';
       let slide = this.slidesStore.slides[i];
-      newName = this.slidesStore.nameFormat.replace('TTTT', slide.time).replace('ACTY', slide.activity) + (i + 1);
+      this.slidesStore.setActivity(this.slidesStore.slides[i], slide.activity);
+      newName = this.slidesStore.nameFormat + (i + 1);
       this.slidesStore.slides[i].setNewName(newName);
     }
   }

@@ -2,6 +2,15 @@
 
 Feature('Home Page');
 
+Scenario('should allow you to edit the activity of a image', (I) => {
+  I.amOnPage('/');
+  I.attachFile('#uploadButton', 'data/samplepptx.pptx');
+  I.wait(5);
+  I.waitForText('DDTTTTZMONYY_TGT_NAME_ACTY_ASSET_CLASSIFICATION', 10);
+  I.fillField('e.g. OV', 'activity test');
+  I.waitForText('DDTTTTZMONYY_TGT_NAME_ACTIVITY_TEST_ASSET_CLASSIFICATION', 10, '.card-body:first-of-type');
+});
+
 Scenario('should allow you to upload a file, validate it, and display the pngs', (I) => {
   I.amOnPage('/');
   I.click('#downloadbutton');

@@ -30,13 +30,14 @@ export class UploadActions {
   async upload(file: object) {
     await this.metricActions.trackMetric('Upload');
     const resp = await this.uploadRepository.upload(file);
-    await this.metricActions.updateMetric('Upload');
     this.uploadStore.setHash(resp.hash);
+    await this.metricActions.updateMetric('Upload');
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
     this.uploadStore.setProcessing(true);
     this.uploadStore.setPlaceholder(false);
     this.uploadStore.setConversionStatus(true);
+    await this.metricActions.trackMetric('Conversion');
     this.poll = setInterval(
       async () => { await this.checkStatus(); },
       1000);
@@ -51,6 +52,7 @@ export class UploadActions {
           this.uploadStore.setProgress(status.progress);
         }
         if (status.status === 'complete') {
+          this.metricActions.updateMetric('Conversion');
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files);

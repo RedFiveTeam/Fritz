@@ -29,7 +29,7 @@ export class DeleteModal extends React.Component<Props> {
       ele.style.border = '1px dashed #d4d6db';
     }
     Toast.create(
-      30000,
+      5000,
       'deleteToast',
       '<b>Powerpoint File Removed</b>'
     );

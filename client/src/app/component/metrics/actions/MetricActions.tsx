@@ -30,6 +30,9 @@ export class MetricActions {
 
   @action.bound
   async updateMetric(act: string) {
+    if (act === 'Upload') {
+      this.metricStore['pending' + act + 'Metric'].setUid(this.uploadStore.hash);
+    }
     this.metricStore['pending' + act + 'Metric'].setEndTime(Math.round((Date.now() / 1000)).toString());
     await this.metricRepository.update(this.metricStore['pending' + act + 'Metric']);
   }

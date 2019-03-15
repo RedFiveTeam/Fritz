@@ -7,6 +7,7 @@ export class MetricStore {
   @observable private _pendingUploadMetric: MetricModel;
   @observable private _endTime: String;
   @observable private _pendingDownloadMetric: MetricModel;
+  @observable private _pendingConversionMetric: MetricModel;
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
@@ -25,6 +26,11 @@ export class MetricStore {
   @computed
   get pendingDownloadMetric(): MetricModel {
     return this._pendingDownloadMetric;
+  }
+
+  @computed
+  get pendingConversionMetric(): MetricModel {
+    return this._pendingConversionMetric;
   }
 
   @computed
@@ -56,4 +62,10 @@ export class MetricStore {
   setPendingDownloadEndTime(value: string) {
     this._pendingDownloadMetric.setEndTime(value);
   }
+
+  @action.bound
+  setPendingConversionMetric(value: MetricModel) {
+    this._pendingConversionMetric = value;
+  }
+
 }

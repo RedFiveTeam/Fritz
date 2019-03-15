@@ -1,7 +1,12 @@
 {
-  "main.css": "static/css/main.e3d4b966.css",
-  "main.css.map": "static/css/main.e3d4b966.css.map",
-  "main.js": "static/js/main.d99a06b0.js",
-  "main.js.map": "static/js/main.d99a06b0.js.map",
-  "static/media/under-construction_animated.gif": "static/media/under-construction_animated.4ccb46a4.gif"
+  "main.css": "static/css/main.88bd9f4c.css",
+  "main.css.map": "static/css/main.88bd9f4c.css.map",
+  "main.js": "static/js/main.bd795560.js",
+  "main.js.map": "static/js/main.bd795560.js.map",
+  "static/media/FritzLogo.svg": "static/media/FritzLogo.ed74b358.svg",
+  "static/media/PPTIcon.svg": "static/media/PPTIcon.3760d8ff.svg",
+  "static/media/PaperclipIcon.svg": "static/media/PaperclipIcon.7a827f87.svg",
+  "static/media/ResetUploadIcon.svg": "static/media/ResetUploadIcon.b0eb21bc.svg",
+  "static/media/UploadIcon.svg": "static/media/UploadIcon.e4b73563.svg",
+  "static/media/slidesContainerPlaceholder.svg": "static/media/slidesContainerPlaceholder.7fc41007.svg"
 }

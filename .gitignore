@@ -1,4 +1,8 @@
 /target/
+/tmp/
+/acceptance/output/
+/client/build/
+/src/main/resources/static/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -23,3 +27,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+/acceptance/node_modules/
+/client/node_modules/

@@ -1,17 +1,30 @@
 import * as React from 'react';
-import underConstruction from '../resources/under-construction_animated.gif';
-import { Component } from 'react';
+import { observer } from 'mobx-react';
+import { withRouter } from 'react-router';
+import { Routes } from './Routes';
+import { StyledHeader } from './component/header/Header';
 
-class App extends Component {
+export const WrappedRoutes = withRouter((Routes as any));
+
+@observer
+export class App extends React.Component {
+
+  css = {
+    height: 'auto',
+  };
+
   render() {
     return (
-      <div className="App">
-        This is the Walking Skeleton for the Fritz application by Lab-1.<br/><br/>
-        This page is under construction...<br/>
-        <img src={underConstruction}/>
+      <div>
+        <div>
+          <StyledHeader/>
+        </div>
+        <div style={this.css}>
+          <WrappedRoutes/>
+        </div>
       </div>
     );
   }
 }
 
-export default App;
+export const InjectedApp = (App);

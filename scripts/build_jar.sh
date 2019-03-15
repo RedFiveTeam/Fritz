@@ -10,5 +10,5 @@ pushd ${BASE_DIR}/client
 popd
 
 pushd ${BASE_DIR}
-    mvn package -DskipTests
+    mvn -Dflyway.user=${FRITZ_DB_USERNAME} -Dflyway.password= -Dflyway.url=${FRITZ_DB_URL} clean flyway:migrate package -DskipTests
 popd

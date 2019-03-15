@@ -5,8 +5,8 @@ import { ClassificationModel } from '../ClassificationModel';
 export class ClassificationStore {
   @observable private _classification: string;
 
-  async hydrate(assificationRepository: ClassificationRepository) {
-    let classModel: ClassificationModel = await assificationRepository.get();
+  async hydrate(classificationRepository: ClassificationRepository) {
+    let classModel: ClassificationModel = await classificationRepository.get();
     this._classification = classModel.classification;
   }
 

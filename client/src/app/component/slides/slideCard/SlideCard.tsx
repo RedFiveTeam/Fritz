@@ -47,7 +47,12 @@ export class SlideCard extends React.Component<Props> {
         <div className="card mb-3">
           <div className="row no-gutters">
             <div className="col-md-4">
-              <img src={'api/image/' + this.props.slideNumber} className="card-img" alt="..."/>
+              <img src={'api/image/' + this.props.slideNumber + '?' + Date.now()} className="card-img" alt="..."/>
+              <span
+                className="slideCounter"
+              >
+                {(this.props.slideNumber + 1) + ' of ' + this.props.slidesStore!.slides.length}
+              </span>
             </div>
             <div className="col-md-8">
               <div className="card-body">
@@ -101,6 +106,20 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
   
   .card-title {
     font-size: 14px;
+  }
+  
+  .slideCounter {
+    position: absolute;
+    text-align: center;
+    width: 54px;
+    height: 23px;
+    left: 0px;
+    background: rgba(43, 48, 60, 0.557886);
+    color: white;
+    font-family: Helvetica Neue;
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 500;
   }
   
   .card-body {

@@ -11,8 +11,10 @@ describe('SlideCard', () => {
   let slidesStore: any;
 
   beforeEach(() => {
+    slideNumber = 2;
+
     slidesStore = {
-      slides: jest.fn()
+      slides: [0, 0, 0, 0, 0]
     };
 
     slidesActions = {
@@ -44,5 +46,9 @@ describe('SlideCard', () => {
 
   it('should render the correct title', async () => {
     expect(subject.find('.card-title').text()).toContain('NewActivity');
+  });
+
+  it('should render a counter for each thumbnail', () => {
+    expect(subject.find('.slideCounter').text()).toBe('3 of 5');
   });
 });

@@ -29,7 +29,7 @@ describe('FormContainer', () => {
   it('should contain a date input that updates the header string when changed', () => {
     expect(subject.find('#dateInput').exists()).toBeTruthy();
     subject.find('#dateInput').simulate('change', { target : { value : '2018/05/12' }});
-    expect(slidesActions.setAndUpdateDate).toHaveBeenCalledWith('12TTTTZMAY18');
+    expect(slidesActions.setAndUpdateDate).toHaveBeenCalledWith('MAY', '18', '12');
   });
 
   it('should contain an operation input that updates the header string when changed', () => {

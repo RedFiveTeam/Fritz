@@ -19,13 +19,20 @@ export class SlideCard extends React.Component<Props> {
     return (
       <div key={idx} className="slide">
         {
-          ((this.props.slidesStore!.date && this.props.slidesStore!.date!.substr(0, 2)) || 'DD')
+          this.props.slidesStore!.day
         }
-        {s.time.indexOf('TTTT') > -1 ? <span className="text-info font-italic">TTTT</span> : s.time}
         {
-          (((this.props.slidesStore!.date && this.props.slidesStore!.date!.substr(6, 6)) || 'ZMONYY') + '_' +
-            (this.props.slidesStore!.opName || 'TGT_NAME') + '_')
-            .split(' ').join('_').toUpperCase()
+          s.time === 'TTTT' ? <span className="text-info font-italic">TTTTZ</span> : <span>
+            {s.time}Z
+          </span>}
+        {
+          this.props.slidesStore!.month
+        }
+        {
+          this.props.slidesStore!.year
+        }
+        {
+          ('_' + (this.props.slidesStore!.opName || 'TGT_NAME') + '_').toUpperCase().split(' ').join('_')
         }
         {
           s.activity === 'ACTY' ? <span className="text-info font-italic">ACTY</span> : <span>
@@ -59,19 +66,39 @@ export class SlideCard extends React.Component<Props> {
                 <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
               </div>
               <div className="slidesInputs">
-                <label>
-                  Activity
-                </label>
-                <input
-                  maxLength={64}
-                  onChange={(e: any) => {
-                    this.props.slidesActions!.setAndUpdateActivity(this.props.slideModel, e.target.value.toUpperCase());
-                  }}
-                  type="text"
-                  className="form-control"
-                  id="activityInput"
-                  placeholder="e.g. OV"
-                />
+                <div className="timeInputField">
+                  <label>
+                    Time
+                  </label>
+                  <input
+                    maxLength={4}
+                    onChange={(e: any) => {
+                      this.props.slidesActions!.setAndUpdateTime(this.props.slideModel, e.target.value.toUpperCase());
+                    }}
+                    type="text"
+                    className="form-control"
+                    id="timeInput"
+                    placeholder="e.g. 0830"
+                  />
+                </div>
+                <div className="activityInputField">
+                  <label>
+                    Activity
+                  </label>
+                  <input
+                    maxLength={64}
+                    onChange={(e: any) => {
+                      this.props.slidesActions!.setAndUpdateActivity(
+                        this.props.slideModel,
+                        e.target.value.toUpperCase()
+                      );
+                    }}
+                    type="text"
+                    className="form-control"
+                    id="activityInput"
+                    placeholder="e.g. OV"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -132,13 +159,26 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
   .slidesInputs {
     position: relative;
     display: block;
-    margin-left: 36%;
     bottom: 10px;
+    margin-left: -8%;
   }
   
   img {
     object-fit: cover;
     width: 70%;
     height: 167px;
+  }
+  
+  .timeInputField {
+    position: relative;
+    display: block;
+    float: left;
+    margin-right: 6%;
+    z-index: 1;
+  }
+  
+  .activityInputField {
+    position: relative;
+    display: block;
   }
 `);

@@ -6,7 +6,7 @@ import { SlideModel } from '../SlideModel';
 describe('SlideCard', () => {
   let subject: ReactWrapper;
   let slideNumber: any;
-  let slideModel = new SlideModel('', 'NewTestName', 'NewTime', 'NewActivity');
+  let slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
   let slidesActions: any;
   let slidesStore: any;
 
@@ -14,11 +14,15 @@ describe('SlideCard', () => {
     slideNumber = 2;
 
     slidesStore = {
+      day: 'DD',
+      month: 'MON',
+      year: 'YY',
       slides: [0, 0, 0, 0, 0]
     };
 
     slidesActions = {
-      setAndUpdateActivity: jest.fn()
+      setAndUpdateActivity: jest.fn(),
+      setAndUpdateTime: jest.fn()
     };
 
     subject = mount(
@@ -36,12 +40,17 @@ describe('SlideCard', () => {
   });
 
   it('should render a title for each slide', () => {
-    expect(subject.find('h5').text()).toBe('DDNewTimeZMONYY_TGT_NAME_NewActivity_ASSET_CLASSIFICATION');
+    expect(subject.find('h5').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_CLASSIFICATION');
   });
 
   it('should have an activity input', () => {
     subject.find('#activityInput').at(0).simulate('change', {target: {value: 'test Activity'}});
     expect(slidesActions.setAndUpdateActivity).toHaveBeenCalled();
+  });
+
+  it('should render an input for the time', () => {
+    subject.find('#timeInput').at(0).simulate('change', {target: {value: '1425'}});
+    expect(slidesActions.setAndUpdateTime).toHaveBeenCalled();
   });
 
   it('should render the correct title', async () => {

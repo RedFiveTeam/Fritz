@@ -48,11 +48,10 @@ export class FormContainer extends React.Component<Props> {
                 let month = months[parseInt(e.target.value.substr(5, 2), 10) - 1];
                 let year = e.target.value.substr(2, 2);
                 let day = e.target.value.substr(8, 2);
-                let newValue: any = day + 'TTTTZ' + month + year;
                 if (month === undefined || year === undefined || day === undefined) {
-                  this.props.slidesActions!.setAndUpdateDate(null);
+                  this.props.slidesActions!.setAndUpdateDate(null, null, null);
                 } else {
-                  this.props.slidesActions!.setAndUpdateDate(newValue);
+                  this.props.slidesActions!.setAndUpdateDate(month, year, day);
                 }
               }}
               className="form-control"

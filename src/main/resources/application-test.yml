@@ -7,3 +7,5 @@ spring:
     platform: h2
   flyway:
     enabled: false
+
+classified.classification: UNCLASSIFIED

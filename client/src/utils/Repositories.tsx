@@ -8,11 +8,17 @@ import { StubRenameRepository } from '../app/component/form/rename/StubRenameRep
 import { MetricRepository } from '../app/component/metrics/repository/MetricRepository';
 import { WebMetricRepository } from '../app/component/metrics/repository/WebMetricRepository';
 import { StubMetricRepository } from '../app/component/metrics/repository/StubMetricRepository';
+import { ClassificationRepository } from '../app/component/classification/repositories/ClassificationRepository';
+import { WebClassificationRepository } from
+    '../app/component/classification/repositories/WebClassificationRepository';
+import { StubClassificationRepository } from
+    '../app/component/classification/repositories/StubClassificationRepository';
 
 export interface Repositories {
   uploadRepository: UploadRepository;
   renameRepository: RenameRepository;
   metricRepository: MetricRepository;
+  classificationRepository: ClassificationRepository;
 }
 
 const client = new HTTPClient();
@@ -20,11 +26,13 @@ const client = new HTTPClient();
 export const WebRepositories: Repositories = Object.freeze({
   uploadRepository: new WebUploadRepository(client),
   renameRepository: new WebRenameRepository(client),
-  metricRepository: new WebMetricRepository(client)
+  metricRepository: new WebMetricRepository(client),
+  classificationRepository: new WebClassificationRepository(client)
 });
 
 export const StubRepositories: Repositories = {
   uploadRepository: new StubUploadRepository(),
   renameRepository: new StubRenameRepository(),
-  metricRepository: new StubMetricRepository()
+  metricRepository: new StubMetricRepository(),
+  classificationRepository: new StubClassificationRepository()
 };

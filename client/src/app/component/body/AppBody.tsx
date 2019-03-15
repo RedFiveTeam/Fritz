@@ -41,6 +41,7 @@ export class AppBody extends React.Component<Props> {
 
 export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   .spacer {
+    width: 5px;
     overflow: hidden;
     position: absolute;
     top: 17%;

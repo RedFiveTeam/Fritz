@@ -2,7 +2,22 @@
 
 function main {
     setup
-    jarBuild
+
+    case "${1}" in
+        acc|acceptance)
+            jarBuild
+            acceptanceTests ${@}
+        ;;
+        unit)
+            yarnBuild
+            unitTests
+        ;;
+        *)
+            jarBuild
+            unitTests
+            acceptanceTests
+        ;;
+    esac
 }
 
 # Tests
@@ -19,13 +34,14 @@ function acceptanceTests {
         ./seed_db.sh
     popd
 
-    java -jar ${BASE_DIR}/target/crackle-[0-9\.]*-SNAPSHOT.jar --server.port=9090 &> ${BASE_DIR}/tmp/acceptance.log &
-    echo $! > ${BASE_DIR}/tmp/crackle.pid
+    java -jar ${BASE_DIR}/target/fritz-[0-9\.]*-SNAPSHOT.jar --server.port=9090 &> ${BASE_DIR}/tmp/acceptance.log &
+    echo $! > ${BASE_DIR}/tmp/fritz.pid
 
-    testConnection ${REACT_APP_HOST} $(cat ${BASE_DIR}/tmp/crackle.pid)
+    testConnection ${REACT_APP_HOST} $(cat ${BASE_DIR}/tmp/fritz.pid)
 
     pushd ${BASE_DIR}/acceptance
         yarn install
+
         if [[ "${FRITZ_CI}" && "$(lsb_release -crid | grep -i 'Ubuntu')" ]]; then
             xvfb-run yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
         else
@@ -57,20 +73,20 @@ function unitTests {
 
 function cleanup {
     showBanner "Cleanup"
-    if [ -f ${BASE_DIR}/tmp/crackle.pid ]; then
-        cat ${BASE_DIR}/tmp/crackle.pid | xargs kill -9
-        rm ${BASE_DIR}/tmp/crackle.pid
+    if [[ -f ${BASE_DIR}/tmp/fritz.pid ]]; then
+        cat ${BASE_DIR}/tmp/fritz.pid | xargs kill -9
+        rm ${BASE_DIR}/tmp/fritz.pid
     fi
 
-    //pushd ${BASE_DIR}/scripts/seed_db
-      //  ./seed_db.sh
-   // popd
+    pushd ${BASE_DIR}/scripts/seed_db
+        ./seed_db.sh
+    popd
 }
 trap cleanup EXIT
 
 function jarBuild {
     showBanner "Build JAR"
-    ${BASE_DIR}/scripts/build_jar.sh --no-replace
+    ${BASE_DIR}/scripts/build_jar.sh
 }
 
 function setup {
@@ -116,4 +132,4 @@ function testConnection {
     done
 }
 
-main
+main ${@}

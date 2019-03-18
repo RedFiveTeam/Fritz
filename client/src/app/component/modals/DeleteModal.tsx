@@ -40,7 +40,6 @@ export class DeleteModal extends React.Component<Props> {
     let request = new XMLHttpRequest();
     request.open('POST', '/api/roomba', true);
     request.send(document.cookie);
-    // return undefined;
   }
 
   render() {

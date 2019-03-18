@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlideModel } from '../SlideModel';
 import { SlidesActions } from '../actions/SlidesActions';
 import { SlidesStore } from '../SlidesStore';
+import styled from 'styled-components';
+
+const expandIcon = require('../../../../icon/expandIcon.svg');
 
 interface Props {
   className?: string;
@@ -49,16 +51,30 @@ export class SlideCard extends React.Component<Props> {
   render() {
     return (
       <div
-        className={this.props.className}
+        className={this.props.className + ' slideCard'}
       >
         <div className="card mb-3">
           <div className="row no-gutters">
             <div className="col-md-4">
-              <img src={'api/image/' + this.props.slideNumber + '?' + Date.now()} className="card-img" alt="..."/>
+              <img
+                src={'api/image/' + this.props.slideNumber + '?' + Date.now()}
+                className="card-img"
+                alt="..."
+                onClick={() => {
+                  (document.querySelector('.expandedView') as HTMLElement).style.display = 'block';
+                  (document.querySelector(
+                    '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')'
+                  ) as HTMLElement)
+                    .classList.add('active');
+                }}
+              />
               <span
                 className="slideCounter"
               >
                 {(this.props.slideNumber + 1) + ' of ' + this.props.slidesStore!.slides.length}
+              </span>
+              <span className="expandBackground">
+                <img className="expandImg" src={expandIcon}/>
               </span>
             </div>
             <div className="col-md-8">
@@ -115,6 +131,18 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
     background-color:rgba(0, 0, 0, 0);
   }
   
+  .expandBackground {
+    height: 34px;
+    width: 33px;
+    background: rgba(43, 48, 60, 0.557886);
+    position: absolute;
+    right: 74px;
+    text-align: center;
+    line-height: 29px;
+    vertical-align: middle;
+    pointer-events: none;
+  }
+  
   label {
   font-size: 16px;
   }
@@ -133,6 +161,11 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
   
   .card-title {
     font-size: 14px;
+  }
+  
+  .expandImg {
+    width: 20px;
+    height: 20px;
   }
   
   .slideCounter {

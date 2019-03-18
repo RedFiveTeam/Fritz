@@ -9,6 +9,7 @@ import { StyledHomePageHeader } from '../component/header/HomePageHeader';
 import { StyledClassificationBanner } from '../component/classification/ClassificationBanner';
 import { ClassificationStore } from '../component/classification/store/ClassificationStore';
 import { ClassificationActions } from '../component/classification/ClassificationActions';
+import { StyledExpandedView } from '../component/modals/ExpandedView';
 
 interface Props {
   className?: string;
@@ -30,6 +31,7 @@ export class HomePage extends React.Component<Props> {
       >
         <StyledToast/>
         <StyledDeleteModal/>
+        <StyledExpandedView/>
         <StyledClassificationBanner
           classification={this.props.classificationStore!.classification}
         />

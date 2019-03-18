@@ -2,7 +2,7 @@
 
 Feature('Home Page');
 
-Scenario('should allow you to edit the activity and time of a image', (I) => {
+Scenario('should allow you to edit the activity and time of a image and view image in expanded view', (I) => {
   I.amOnPage('/');
   I.attachFile('#uploadButton', 'data/samplepptx.pptx');
   I.wait(5);
@@ -10,6 +10,8 @@ Scenario('should allow you to edit the activity and time of a image', (I) => {
   I.fillField('e.g. OV', 'activity test');
   I.fillField('e.g. 0830', '1234');
   I.waitForText('DD1234ZMONYY_TGT_NAME_ACTIVITY_TEST_ASSET_CLASSIFICATION', 10, '.card-body:first-of-type');
+  I.click('.slideCard:first-of-type > .card > .row > .col-md-4 > img');
+  I.waitForText('DD1234ZMONYY_TGT_NAME_ACTIVITY_TEST_ASSET_CLASSIFICATION', 10);
 });
 
 Scenario('should allow you to upload a file, validate it, and display the pngs', (I) => {

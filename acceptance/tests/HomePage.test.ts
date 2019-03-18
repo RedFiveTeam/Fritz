@@ -7,11 +7,16 @@ Scenario('should allow you to edit the activity and time of a image and view ima
   I.attachFile('#uploadButton', 'data/samplepptx.pptx');
   I.wait(5);
   I.waitForText('DDTTTTZMONYY_TGT_NAME_ACTY_ASSET_CLASSIFICATION', 10);
-  I.fillField('e.g. OV', 'activity test');
-  I.fillField('e.g. 0830', '1234');
+  I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > .row > .col-md-8 > .slidesInputs > .activityInputField > input', 'activity test');
+  I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > .row > .col-md-8 > .slidesInputs > .timeInputField > input', '1234');
   I.waitForText('DD1234ZMONYY_TGT_NAME_ACTIVITY_TEST_ASSET_CLASSIFICATION', 10, '.card-body:first-of-type');
   I.click('.slideCard:first-of-type > .card > .row > .col-md-4 > img');
   I.waitForText('DD1234ZMONYY_TGT_NAME_ACTIVITY_TEST_ASSET_CLASSIFICATION', 10);
+  I.fillField('.carousel-item:first-of-type > .slidesInputs > .activityInputField > input', 'new activity test');
+  I.fillField('.carousel-item:first-of-type > .slidesInputs > .timeInputField > input', '5678');
+  I.waitForText('DD5678ZMONYY_TGT_NAME_NEW_ACTIVITY_TEST_ASSET_CLASSIFICATION', 10);
+  I.click('.exitExpand');
+  I.waitForText('JPEG Renamer - Details', 10);
 });
 
 Scenario('should allow you to upload a file, validate it, and display the pngs', (I) => {

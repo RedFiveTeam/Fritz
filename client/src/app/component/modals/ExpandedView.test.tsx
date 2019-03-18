@@ -28,6 +28,10 @@ describe('ExpandedView', () => {
   });
 
   it('should render the correct image', () => {
-    expect(subject.find('img').getDOMNode().getAttribute('src')).toBe('/api/image/0');
+    expect(subject.find('img[src="/api/image/0"]').exists()).toBeTruthy();
+  });
+
+  it('should render the exit icon', () => {
+    expect(subject.find('.exitExpand').exists()).toBeTruthy();
   });
 });

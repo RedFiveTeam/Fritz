@@ -19,7 +19,7 @@ export class SlidesContainer extends React.Component<Props> {
         {
           this.props.slidesStore!.slides.map((s, idx) => {
             return (
-              <div key={idx}>
+              <div className="slideCardContainer" key={idx}>
                 <StyledSlideCard
                   slideModel={s}
                   slideNumber={idx}

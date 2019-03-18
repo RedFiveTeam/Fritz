@@ -59,9 +59,11 @@ export class SlideCard extends React.Component<Props> {
               <img
                 src={'api/image/' + this.props.slideNumber + '?' + Date.now()}
                 className="card-img"
-                alt="..."
                 onClick={() => {
-                  (document.querySelector('.expandedView') as HTMLElement).style.display = 'block';
+                  let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);
+                  if (expandDisplay !== null) {
+                    expandDisplay.style.display = 'block';
+                  }
                   (document.querySelector(
                     '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')'
                   ) as HTMLElement)
@@ -89,6 +91,14 @@ export class SlideCard extends React.Component<Props> {
                   <input
                     maxLength={4}
                     onChange={(e: any) => {
+                      let carouselItem = document.querySelector(
+                        '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
+                      if (carouselItem) {
+                        let input = carouselItem.querySelector('#timeInput') as HTMLInputElement;
+                        if (input) {
+                          input.value = e.target.value;
+                        }
+                      }
                       this.props.slidesActions!.setAndUpdateTime(this.props.slideModel, e.target.value.toUpperCase());
                     }}
                     type="text"
@@ -104,6 +114,14 @@ export class SlideCard extends React.Component<Props> {
                   <input
                     maxLength={64}
                     onChange={(e: any) => {
+                      let carouselItem = document.querySelector(
+                        '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
+                      if (carouselItem) {
+                        let input = carouselItem.querySelector('#activityInput') as HTMLInputElement;
+                        if (input) {
+                          input.value = e.target.value;
+                        }
+                      }
                       this.props.slidesActions!.setAndUpdateActivity(
                         this.props.slideModel,
                         e.target.value.toUpperCase()
@@ -144,7 +162,7 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
   }
   
   label {
-  font-size: 16px;
+    font-size: 16px;
   }
   
   input:focus {
@@ -173,7 +191,7 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
     text-align: center;
     width: 54px;
     height: 23px;
-    left: 0px;
+    left: 0;
     background: rgba(43, 48, 60, 0.557886);
     color: white;
     font-family: Helvetica Neue;
@@ -200,6 +218,7 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
     object-fit: cover;
     width: 70%;
     height: 167px;
+    cursor: pointer;
   }
   
   .timeInputField {

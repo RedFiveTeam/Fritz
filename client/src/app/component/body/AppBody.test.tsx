@@ -5,6 +5,7 @@ import { UploadStore } from '../form/upload/UploadStore';
 import { StyledFormContainer } from '../form/FormContainer';
 import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
 import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
+import { StyledProgressBar } from '../progressBar/ProgressBar';
 
 describe('Header', () => {
   let subject: ShallowWrapper;
@@ -33,4 +34,11 @@ describe('Header', () => {
     uploadStore.setPlaceholder(false);
     expect(subject.find(StyledSlidesContainerPlaceholder).exists()).toBeFalsy();
   });
+
+  it('should render a progress bar on upload, default: not-rendered', () => {
+    expect(subject.find(StyledProgressBar).exists()).toBeFalsy();
+    uploadStore.setProcessing(true);
+    expect(subject.find(StyledProgressBar).exists()).toBeTruthy();
+  });
+
 });

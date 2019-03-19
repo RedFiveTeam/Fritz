@@ -30,7 +30,7 @@ export class DownloadButton extends React.Component<Props> {
               Toast.create(
                 5000,
                 'errorToast',
-                '<b>Error:</b> You must upload a folder of JPGs before you can download JPEGS'
+                '<b>Error:</b> You must upload a PDF file before you can download JPEGS'
               );
             } else if (!this.props.slidesStore!.isValidName()) {
               this.props.slidesStore!.setValidate(true);

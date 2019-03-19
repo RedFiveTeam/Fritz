@@ -1,5 +1,6 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
+import mil.af.dgs1sdt.fritz.Conversion;
 import mil.af.dgs1sdt.fritz.Metrics.MetricRepository;
 import mil.af.dgs1sdt.fritz.Models.StatusModel;
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
@@ -22,6 +23,7 @@ import java.util.*;
 @Controller
 @RequestMapping(UploadController.URI)
 public class UploadController {
+  private Conversion convert = new Conversion();
 
   public static final String URI = "/api/upload";
 
@@ -33,9 +35,9 @@ public class UploadController {
 
   @PostMapping(produces = "application/json")
   public @ResponseBody
-  String handleFileUpload(@RequestParam("file[]") MultipartFile[] file, HttpServletResponse res) throws Exception {
+  String handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletResponse res) throws Exception {
 
-    byte[] fileBytes = file[0].getBytes();
+    byte[] fileBytes = file.getBytes();
     MessageDigest md5 = MessageDigest.getInstance("MD5");
     byte[] digest = md5.digest(fileBytes);
     String hash = new BigInteger(1, digest).toString(16);
@@ -45,28 +47,41 @@ public class UploadController {
       .findAny()
       .orElse(new TrackingModel());
 
-    tracking.setStatus("pending");
-    tracking.setHash(hash);
-
     String workingDir = "/tmp/working/" + hash;
+    String completedDir = "/tmp/complete/" + hash;
     File workingDirToBeDeleted = new File(workingDir);
+    File completedDirToBeDeleted = new File(completedDir);
 
     if (workingDirToBeDeleted.exists()) {
       FileUtils.deleteDirectory(workingDirToBeDeleted);
     }
 
-
-    for (MultipartFile image : file) {
-      File dir = new File(workingDir);
-      if (!dir.exists())
-        dir.mkdirs();
-      image.transferTo(new File("/tmp/working/" + hash + "/" + image.getOriginalFilename()));
-
-      res.addCookie(new Cookie("id", hash));
+    if (completedDirToBeDeleted.exists()) {
+      FileUtils.deleteDirectory(completedDirToBeDeleted);
     }
-    tracking.setStatus("complete");
-    TrackingStore.getTrackingList().add(tracking);
-    return "{ \"file\" : \"" + file[0].getOriginalFilename() + "\", \"hash\" : \"" + hash + "\" }";
+
+    File dir = new File(workingDir);
+    if (!dir.exists())
+      dir.mkdirs();
+    file.transferTo(new File("/tmp/working/" + hash + "/" + file.getOriginalFilename()));
+
+    if (tracking.getTh() != null && tracking.getTh().isAlive())
+      tracking.getTh().interrupt();
+    tracking.setTh(new Thread() {
+      @Override
+      public void run() {
+        try {
+          convert.convertPDF(file.getOriginalFilename(), hash);
+        } catch (Exception e) {
+        }
+      }
+    });
+    tracking.getTh().start();
+    tracking.setHash(hash);
+    TrackingStore.addToList(tracking);
+
+    res.addCookie(new Cookie("id", hash));
+    return "{ \"file\" : \"" + file.getOriginalFilename() + "\", \"hash\" : \"" + hash + "\" }";
   }
 
   @ResponseBody
@@ -78,33 +93,48 @@ public class UploadController {
       .findAny()
       .orElse(null);
 
-    StatusModel status = new StatusModel();
-    List<String> fileNames = new ArrayList<>();
-    File[] files = new File("/tmp/working/" + id + "/").listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.toLowerCase().endsWith(".jpg");
-      }
-    });
-    if (files != null) {
-      for (File file : files) {
-        fileNames.add(file.getName());
-      }
-      Collections.sort(fileNames, new Comparator<String>() {
-        public int compare(String o1, String o2) {
-          return Long.valueOf(extractInt(o1)).compareTo(Long.valueOf(extractInt(o2)));
-        }
-        Long extractInt(String s) {
-          String num = s.replaceAll("\\D", "");
-          // return 0 if no digits found
-          return num.isEmpty() ? 0 : Long.parseLong(num);
-        }
-      });
-    }
-    status.setFiles(fileNames);
     if (tracking != null) {
-      status.setStatus(tracking.getStatus());
+      if (id.length() > 0 && tracking.getCompletedSlides() == tracking.getTotalSlides()) {
+        StatusModel status = new StatusModel();
+        List<String> fileNames = new ArrayList<>();
+        File[] files = new File("/tmp/complete/" + id + "/").listFiles(new FilenameFilter() {
+          @Override
+          public boolean accept(File dir, String name) {
+            return name.toLowerCase().endsWith(".jpg");
+          }
+        });
+        if (files != null) {
+          for (File file : files) {
+            fileNames.add(file.getName());
+          }
+          Collections.sort(fileNames, new Comparator<String>() {
+            public int compare(String o1, String o2) {
+              return Long.valueOf(extractInt(o1)).compareTo(Long.valueOf(extractInt(o2)));
+            }
+
+            Long extractInt(String s) {
+              String num = s.replaceAll("\\D", "");
+              // return 0 if no digits found
+              return num.isEmpty() ? 0 : Long.parseLong(num);
+            }
+          });
+        }
+        status.setFiles(fileNames);
+        status.setTimes(tracking.getTimes());
+        status.setStatus("complete");
+        tracking.setCompletedSlides(0);
+        statisticRepository.increase(Long.valueOf(tracking.getTotalSlides()));
+        return status;
+      }
+      StatusModel status = new StatusModel();
+
+      status.setFiles(new ArrayList<>());
+      status.setProgress(tracking.getCompletedSlides());
+      status.setTotal(tracking.getTotalSlides());
+      status.setStatus("pending");
+      return status;
     }
-    return status;
+    return new
+      StatusModel();
   }
 }

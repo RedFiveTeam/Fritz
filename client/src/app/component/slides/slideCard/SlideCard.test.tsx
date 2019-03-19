@@ -17,7 +17,13 @@ describe('SlideCard', () => {
       day: 'DD',
       month: 'MON',
       year: 'YY',
-      slides: [0, 0, 0, 0, 0]
+      slides: [
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false)
+      ]
     };
 
     slidesActions = {
@@ -59,5 +65,14 @@ describe('SlideCard', () => {
 
   it('should render a counter for each thumbnail', () => {
     expect(subject.find('.slideCounter').text()).toBe('3 of 5');
+  });
+
+  it('should render a delete icon', () => {
+    expect(subject.find('.deleteIcon').exists()).toBeTruthy();
+  });
+
+  it('should flag slide as deleted when the delete icon is clicked', () => {
+    expect(subject.find('.deleteIcon').simulate('click'));
+    expect(slideModel.deleted).toBeTruthy();
   });
 });

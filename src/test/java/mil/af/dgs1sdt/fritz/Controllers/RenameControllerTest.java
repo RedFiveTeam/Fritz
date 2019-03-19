@@ -16,8 +16,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class RenameControllerTest extends BaseIntegrationTest {
 
-  RenameModel rn1 = new RenameModel("sampl.pptx-0001.png", "14TTTTZMAR19_TEST_ACTY_TEST_TEST1");
-  RenameModel rn2 = new RenameModel("sampl.pptx-0000.png", "14TTTTZMAR19_TEST_ACTY_TEST_TEST2");
+  RenameModel rn1 = new RenameModel("sampl.pptx-0001.png", "14TTTTZMAR19_TEST_ACTY_TEST_TEST1", false);
+  RenameModel rn2 = new RenameModel("sampl.pptx-0000.png", "14TTTTZMAR19_TEST_ACTY_TEST_TEST2", false);
 
   List<RenameModel> renameList = new ArrayList<>();
 

@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -25,7 +26,11 @@ public class RenameController {
   @PostMapping(produces="application/zip")
   public void renameAndZip(@CookieValue("id") String id, @RequestBody List<RenameModel> json, HttpServletResponse res) throws IOException {
 
+    List<File> files = new ArrayList<>();
+
     for (RenameModel model : json) {
+      if (model.getDeleted())
+        continue;
       File originalFile;
       if (model.getOldName().endsWith(".png"))
         originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName());
@@ -33,21 +38,14 @@ public class RenameController {
         originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName() + ".png");
       File newFile = new File("/tmp/complete/" + id + "/" + model.getNewName() + ".png");
       boolean status = originalFile.renameTo(newFile);
-      if (!status) {
-        System.out.println("error renaming " + model.getOldName());
+      if (status) {
+        files.add(newFile);
       }
     }
 
     res.setStatus(HttpServletResponse.SC_OK);
 
     ZipOutputStream zos = new ZipOutputStream(res.getOutputStream());
-
-    File[] files = new File("/tmp/complete/" + id + "/").listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.toLowerCase().endsWith(".png");
-      }
-    });
 
     try {
       for (File file : files) {

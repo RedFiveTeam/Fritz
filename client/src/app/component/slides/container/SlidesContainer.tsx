@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { SlidesStore } from '../SlidesStore';
 import styled from 'styled-components';
 import { StyledSlideCard } from '../slideCard/SlideCard';
+import { SlideModel } from '../SlideModel';
 
 interface Props {
   className?: string;
@@ -17,7 +18,10 @@ export class SlidesContainer extends React.Component<Props> {
         className={this.props.className}
       >
         {
-          this.props.slidesStore!.slides.map((s, idx) => {
+          this.props.slidesStore!.slides.filter((s: SlideModel) => {
+            return (s.deleted === false);
+          })
+            .map((s, idx) => {
             return (
               <div className="slideCardContainer" key={idx}>
                 <StyledSlideCard

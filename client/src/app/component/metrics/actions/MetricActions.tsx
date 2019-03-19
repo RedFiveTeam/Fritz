@@ -36,4 +36,10 @@ export class MetricActions {
     this.metricStore['pending' + act + 'Metric'].setEndTime(Math.round((Date.now() / 1000)).toString());
     await this.metricRepository.update(this.metricStore['pending' + act + 'Metric']);
   }
+
+  @action.bound
+  async createMetric(act: string) {
+    let metric = new MetricModel(null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null);
+    await this.metricRepository.create(metric);
+  }
 }

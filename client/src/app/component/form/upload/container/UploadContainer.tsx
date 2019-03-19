@@ -32,25 +32,33 @@ export class UploadContainer extends React.Component<Props> {
     let file: File = formData.get('file') as File;
     if (file) {
       let fileName = file.name;
-      if (this.props.uploadActions!.validateFile(fileName)) {
+      if (fileName.toLowerCase().endsWith('ppt')) {
+        (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
+        Toast.create(
+          5000,
+          'errorToast',
+          'The file format .ppt is not compatible with Fritz. File must be saved as .pptx.'
+        );
+      }
+      if (fileName.toLowerCase().endsWith('pptx')) {
         await this.props.uploadActions!.upload(formData);
         let ele = document.querySelector('.uploadContainer') as HTMLElement;
         if (ele) {
           ele.style.border = 'none';
         }
-      } else {
+      } else if (!fileName.toLowerCase().endsWith('ppt')) {
         (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
         Toast.create(
           5000,
           'errorToast',
-          '<b>Error:</b> File must be in Powerpoint format (<b>.ppt</b> or <b>.pptx</b>)'
+          '<b>Error:</b> File must be in Powerpoint format (<b>.pptx</b>)'
         );
       }
     }
   };
 
   displayUploadRequest() {
-    return(
+    return (
       <div
         onDragEnter={(e: any) => {
           let evt = e as Event;
@@ -117,11 +125,11 @@ export class UploadContainer extends React.Component<Props> {
         >
           {
             !this.props.uploadStore!.uploaded &&
-              this.displayUploadRequest()
+            this.displayUploadRequest()
           }
           {
             this.props.uploadStore!.uploaded &&
-              this.displayUploadedInfo()
+            this.displayUploadedInfo()
           }
         </div>
       </div>

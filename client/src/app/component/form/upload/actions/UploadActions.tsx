@@ -83,9 +83,4 @@ export class UploadActions {
     this.uploadStore.setProcessing(false);
     this.uploadStore.setConversionStatus(false);
   }
-
-  @action.bound
-  validateFile(name: string) {
-    return name.toLowerCase().endsWith('.pptx') || name.toLowerCase().endsWith('.ppt');
-  }
 }

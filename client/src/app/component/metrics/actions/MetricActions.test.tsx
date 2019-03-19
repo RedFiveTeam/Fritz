@@ -41,5 +41,4 @@ describe('MetricActions', () => {
     await subject.updateMetric('Download');
     expect(metricStore.pendingDownloadMetric.endTime).toBeTruthy();
   });
-
 });

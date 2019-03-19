@@ -107,7 +107,7 @@ export class SlidesActions {
     request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     request.onload = () => {
       let blob = request.response;
-      FileSaver.saveAs(blob, this.uploadStore.folderName + '.zip');
+      FileSaver.saveAs(blob, this.uploadStore.fileName.toUpperCase().replace('.PDF', '.zip'));
     };
     request.send(JSON.stringify(this.slidesStore.slides));
   }

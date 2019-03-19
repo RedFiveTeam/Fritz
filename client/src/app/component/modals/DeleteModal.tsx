@@ -17,18 +17,23 @@ interface Props {
 export class DeleteModal extends React.Component<Props> {
 
   deleteSlides = () => {
+    this.props.uploadStore!.setProcessing(false);
     this.props.uploadStore!.setUploaded(false);
     this.props.uploadStore!.setPlaceholder(true);
     this.props.slidesStore!.setSlides([]);
     this.props.uploadActions!.clearPoll();
-    let ele = document.querySelector('.uploadContainer') as HTMLElement;
-    if (ele) {
-      ele.style.border = '1px dashed #d4d6db';
+    this.props.uploadStore!.setTotal(0);
+    this.props.uploadStore!.setProgress(0);
+    let ele1 = document.querySelector('.uploadContainer') as HTMLElement;
+    let ele2 = document.querySelector('.helpMessage') as HTMLElement;
+    if (ele1 && ele2) {
+      ele1.style.border = '1px dashed #d4d6db';
+      ele2.style.display = 'inline-block';
     }
     Toast.create(
       5000,
       'deleteToast',
-      '<b>JPGs Removed</b>'
+      '<b>PDF File Removed</b>'
     );
     this.cleanOnExit();
   };
@@ -52,13 +57,13 @@ export class DeleteModal extends React.Component<Props> {
         <div className="modal-dialog" role="document">
           <div className="modal-content bg-dark text-white">
             <div className="modal-header">
-              <h5 className="modal-title" id="deleteModalLabel">Delete JPGs</h5>
+              <h5 className="modal-title" id="deleteModalLabel">Delete PDF</h5>
               <button type="button" className="close text-white" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">x</span>
               </button>
             </div>
             <div className="modal-body">
-              Are you sure you want to delete these JPGs? All changes will be lost and this action cannot
+              Are you sure you want to delete the PDF file? All changes will be lost and this action cannot
               be undone.
             </div>
             <div className="modal-footer">
@@ -69,7 +74,7 @@ export class DeleteModal extends React.Component<Props> {
                 onClick={this.deleteSlides}
                 data-dismiss="modal"
               >
-                Delete JPGs
+                Delete PDF
               </button>
             </div>
           </div>
@@ -83,7 +88,7 @@ export class DeleteModal extends React.Component<Props> {
 export const StyledDeleteModal = inject('uploadStore', 'slidesStore', 'uploadActions')(styled(DeleteModal)`
 position: absolute;
 left: 50%;
-top: 42%;
+top: 55%;
 width: 600px;
 height: 400px;
 transform: translate(-50%, -50%);

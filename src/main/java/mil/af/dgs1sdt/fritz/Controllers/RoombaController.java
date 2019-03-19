@@ -30,8 +30,15 @@ public class RoombaController {
     String workingDir = "/tmp/working/" + hash;
     File workingDirToBeRoombaed = new File(workingDir);
 
+    String completeDir = "/tmp/complete/" + hash;
+    File completedDirToBeDeleted = new File(completeDir);
+
     if (workingDirToBeRoombaed.exists()) {
       FileUtils.deleteDirectory(workingDirToBeRoombaed);
+    }
+
+    if (completedDirToBeDeleted.exists()) {
+      FileUtils.deleteDirectory(completedDirToBeDeleted);
     }
   }
 }

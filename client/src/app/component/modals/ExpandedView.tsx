@@ -33,6 +33,23 @@ export class ExpandedView extends React.Component<Props> {
     }
   }
 
+  componentDidUpdate() {
+    let slides = this.props.slidesStore!.slides.filter((s) => { return s.deleted === false; });
+    slides.map((s: SlideModel, idx: number) => {
+      let ele = document.querySelector('.carousel-item:nth-of-type(' + (idx + 1) + ')');
+      if (ele) {
+        let activityInput = ele.querySelector('#activityInput') as HTMLInputElement;
+        let timeInput = ele.querySelector('#timeInput') as HTMLInputElement;
+        if (activityInput) {
+          activityInput.value = s.activity === 'ACTY' ? '' : s.activity;
+        }
+        if (timeInput) {
+          timeInput.value = s.time === 'TTTT' ? '' : s.time;
+        }
+      }
+    });
+  }
+
   getSlideName = (s: SlideModel, idx: number) => {
     return (
       <div key={idx} className="slide">
@@ -77,20 +94,31 @@ export class ExpandedView extends React.Component<Props> {
         >
           <div className="carousel-inner">
             {
-              this.props.slidesStore!.slides.map((s, idx) => {
+              this.props.slidesStore!.slides.filter((s: SlideModel) => {
+                return s.deleted === false;
+              }).
+              map((s, idx) => {
                 return (
                   <div
                     key={idx}
                     className="carousel-item"
                   >
-                    <img src={'/api/image/' + idx + '?' + Date.now()} className="d-block" alt="..."/>
+                    <img
+                      src={'/api/image/' + this.props.slidesStore!.slides.indexOf(s) + '?' + Date.now()}
+                      className="d-block"
+                      alt="..."
+                    />
                     <div
                       className="numberAndTitle"
                     >
                       <div
                         className="slideNumber"
                       >
-                        {idx + 1} of {this.props.slidesStore!.slides.length}
+                        {
+                          idx + 1} of {this.props.slidesStore!.slides.filter(
+                          (sl) => { return sl.deleted === false; }
+                          ).length
+                        }
                       </div>
                       <div>{this.getSlideName(s, idx)}</div>
                     </div>

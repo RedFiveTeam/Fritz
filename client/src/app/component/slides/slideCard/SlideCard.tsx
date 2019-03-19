@@ -4,8 +4,10 @@ import { SlideModel } from '../SlideModel';
 import { SlidesActions } from '../actions/SlidesActions';
 import { SlidesStore } from '../SlidesStore';
 import styled from 'styled-components';
+import * as ReactDOM from 'react-dom';
 
 const expandIcon = require('../../../../icon/expandIcon.svg');
+const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
 
 interface Props {
   className?: string;
@@ -17,6 +19,18 @@ interface Props {
 
 @observer
 export class SlideCard extends React.Component<Props> {
+
+  componentDidUpdate() {
+    let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
+    let timeInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#timeInput') as HTMLInputElement;
+    if (activityInput) {
+      activityInput.value = this.props.slideModel.activity === 'ACTY' ? '' : this.props.slideModel.activity;
+    }
+    if (timeInput) {
+      timeInput.value = this.props.slideModel.time === 'TTTT' ? '' : this.props.slideModel.time;
+    }
+  }
+
   getSlideName = (s: SlideModel, idx: number) => {
     return (
       <div key={idx} className="slide">
@@ -48,7 +62,15 @@ export class SlideCard extends React.Component<Props> {
     );
   };
 
+  deleteSlide = () => {
+    this.props.slideModel.setDeleted(true);
+  };
+
   render() {
+    let nonDeletedSlideCount: number = this.props.slidesStore!.slides.filter((s: SlideModel) => {
+      return s.deleted === false;
+    }).length;
+
     return (
       <div
         className={this.props.className + ' slideCard'}
@@ -57,7 +79,7 @@ export class SlideCard extends React.Component<Props> {
           <div className="row no-gutters">
             <div className="col-md-4">
               <img
-                src={'api/image/' + this.props.slideNumber + '?' + Date.now()}
+                src={'api/image/' + this.props.slidesStore!.slides.indexOf(this.props.slideModel) + '?' + Date.now()}
                 className="card-img"
                 onClick={() => {
                   let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);
@@ -73,13 +95,14 @@ export class SlideCard extends React.Component<Props> {
               <span
                 className="slideCounter"
               >
-                {(this.props.slideNumber + 1) + ' of ' + this.props.slidesStore!.slides.length}
+                {(this.props.slideNumber + 1) + ' of ' + nonDeletedSlideCount}
               </span>
               <span className="expandBackground">
                 <img className="expandImg" src={expandIcon}/>
               </span>
             </div>
             <div className="col-md-8">
+              <img className="deleteIcon" onClick={this.deleteSlide} src={DeleteIcon}/>
               <div className="card-body">
                 <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
               </div>
@@ -232,5 +255,14 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(Sli
   .activityInputField {
     position: relative;
     display: block;
+  }
+  
+  .deleteIcon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 0;
+    top: 8px;
+    cursor: pointer;
   }
 `);

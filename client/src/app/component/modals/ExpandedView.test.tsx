@@ -28,7 +28,7 @@ describe('ExpandedView', () => {
   });
 
   it('should render the correct image', () => {
-    expect(subject.find('img[src="/api/image/0"]').exists()).toBeTruthy();
+    expect(subject.find('img[src^="/api/image/0"]').exists()).toBeTruthy();
   });
 
   it('should render the exit icon', () => {

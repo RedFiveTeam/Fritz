@@ -83,7 +83,7 @@ export class ExpandedView extends React.Component<Props> {
                     key={idx}
                     className="carousel-item"
                   >
-                    <img src={'/api/image/' + idx} className="d-block" alt="..."/>
+                    <img src={'/api/image/' + idx + '?' + Date.now()} className="d-block" alt="..."/>
                     <div
                       className="numberAndTitle"
                     >

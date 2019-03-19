@@ -9,6 +9,7 @@ describe('SlideCard', () => {
   let slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
   let slidesActions: any;
   let slidesStore: any;
+  let metricActions: any;
 
   beforeEach(() => {
     slideNumber = 2;
@@ -31,12 +32,17 @@ describe('SlideCard', () => {
       setAndUpdateTime: jest.fn()
     };
 
+    metricActions = {
+      createMetric: jest.fn()
+    };
+
     subject = mount(
       <SlideCard
         slideNumber={slideNumber}
         slideModel={slideModel}
         slidesActions={slidesActions}
         slidesStore={slidesStore}
+        metricActions={metricActions}
       />
     );
   });
@@ -74,5 +80,6 @@ describe('SlideCard', () => {
   it('should flag slide as deleted when the delete icon is clicked', () => {
     expect(subject.find('.deleteIcon').simulate('click'));
     expect(slideModel.deleted).toBeTruthy();
+    expect(metricActions.createMetric).toHaveBeenCalled();
   });
 });

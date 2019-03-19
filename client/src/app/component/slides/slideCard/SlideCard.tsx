@@ -5,6 +5,7 @@ import { SlidesActions } from '../actions/SlidesActions';
 import { SlidesStore } from '../SlidesStore';
 import styled from 'styled-components';
 import * as ReactDOM from 'react-dom';
+import { MetricActions } from '../../metrics/actions/MetricActions';
 
 const expandIcon = require('../../../../icon/expandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
@@ -15,6 +16,7 @@ interface Props {
   slideModel: SlideModel;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
+  metricActions?: MetricActions;
 }
 
 @observer
@@ -62,8 +64,9 @@ export class SlideCard extends React.Component<Props> {
     );
   };
 
-  deleteSlide = () => {
+  deleteSlide = async () => {
     this.props.slideModel.setDeleted(true);
+    await this.props.metricActions!.createMetric('Delete PNG');
   };
 
   render() {
@@ -165,7 +168,7 @@ export class SlideCard extends React.Component<Props> {
   }
 }
 
-export const StyledSlideCard = inject('slidesActions', 'slidesStore')(styled(SlideCard)`
+export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions')(styled(SlideCard)`
   input {
     width: 166px;
     color: #fff;

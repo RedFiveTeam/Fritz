@@ -1,9 +1,7 @@
 package mil.af.dgs1sdt.fritz;
 
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
-import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
-import org.apache.poi.sl.draw.DrawFactory;
 import org.apache.poi.sl.usermodel.Slide;
 import org.apache.poi.sl.usermodel.SlideShow;
 import org.apache.poi.sl.usermodel.SlideShowFactory;
@@ -27,10 +25,10 @@ public class Conversion {
     TrackingModel tracking = TrackingStore.getTrackingList().stream()
       .filter(tm -> hash.equals(tm.getHash()))
       .findAny()
-      .orElse(new TrackingModel());
+      .orElse(new TrackingModel()); 
 
     File file = new File("/tmp/working/" + hash + "/" + filename);
-    float scale = 1;
+    float scale = 2;
     String slidenumStr = "-1";
     String outdir = "/tmp/complete/" + hash + "/";
     String format = "png";
@@ -50,12 +48,12 @@ public class Conversion {
 
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = img.createGraphics();
-        DrawFactory.getInstance(graphics).fixFonts(graphics);
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
 
         graphics.scale(scale, scale);
 
@@ -70,7 +68,6 @@ public class Conversion {
           File outfile = new File(outdir, outname);
           ImageIO.write(img, format, outfile);
         }
-
         graphics.dispose();
         img.flush();
         tracking.setCompletedSlides(tracking.getCompletedSlides() + 1);

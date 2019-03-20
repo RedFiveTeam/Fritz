@@ -91,6 +91,7 @@ export class SlidesActions {
   }
 
   async trackRenameAndDownload() {
+    await this.metricActions.updateMetric('Renaming');
     await this.metricActions.trackMetric('Download');
     let request = new XMLHttpRequest();
     request.onreadystatechange = async () => {

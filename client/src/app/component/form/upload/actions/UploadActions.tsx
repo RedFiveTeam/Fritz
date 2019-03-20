@@ -29,11 +29,13 @@ export class UploadActions {
   @action.bound
   async upload(file: object) {
     await this.metricActions.trackMetric('Upload');
+    this.uploadStore.setUploading(true);
     const resp = await this.uploadRepository.upload(file);
     this.uploadStore.setHash(resp.hash);
     await this.metricActions.updateMetric('Upload');
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
+    this.uploadStore.setUploading(false);
     this.uploadStore.setProcessing(true);
     this.uploadStore.setPlaceholder(false);
     this.uploadStore.setConversionStatus(true);

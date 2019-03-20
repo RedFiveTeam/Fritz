@@ -10,6 +10,7 @@ export class UploadStore {
   @observable private _total: number;
   @observable private _percentConverted: number;
   @observable private _placeholder: boolean = true;
+  @observable private _uploading: boolean = false;
 
   @action.bound
   setUploaded(uploaded: boolean) {
@@ -49,6 +50,11 @@ export class UploadStore {
   @action.bound
   setPlaceholder(value: boolean) {
     this._placeholder = value;
+  }
+
+  @action.bound
+  setUploading(value: boolean) {
+    this._uploading = value;
   }
 
   @computed
@@ -95,5 +101,10 @@ export class UploadStore {
   @computed
   get placeholder(): boolean {
     return this._placeholder;
+  }
+
+  @computed
+  get uploading(): boolean {
+    return this._uploading;
   }
 }

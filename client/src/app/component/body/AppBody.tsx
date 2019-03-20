@@ -6,6 +6,7 @@ import { StyledProgressBar } from '../progressBar/ProgressBar';
 import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
 import { UploadStore } from '../form/upload/UploadStore';
 import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
+import { StyledUploadProgressContainer } from '../slides/container/UploadProgressContainer';
 
 interface Props {
   className?: string;
@@ -26,11 +27,15 @@ export class AppBody extends React.Component<Props> {
         <div className="right">
           <StyledSlidesContainer/>
           {
+            this.props.uploadStore!.uploading &&
+              <StyledUploadProgressContainer/>
+          }
+          {
             this.props.uploadStore!.processing &&
             <StyledProgressBar/>
           }
           {
-            this.props.uploadStore!.placeholder &&
+            this.props.uploadStore!.placeholder && !this.props.uploadStore!.uploading &&
             <StyledSlidesContainerPlaceholder/>
           }
         </div>

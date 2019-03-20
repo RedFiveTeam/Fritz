@@ -55,6 +55,7 @@ export class UploadActions {
         }
         if (status.status === 'complete') {
           this.metricActions.updateMetric('Conversion');
+          this.metricActions.trackMetric('Renaming');
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files);

@@ -8,9 +8,15 @@ export class MetricStore {
   @observable private _endTime: String;
   @observable private _pendingDownloadMetric: MetricModel;
   @observable private _pendingConversionMetric: MetricModel;
+  @observable private _pendingRenamingMetric: MetricModel;
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
+  }
+
+  @computed
+  get pendingRenamingMetric(): MetricModel {
+    return this._pendingRenamingMetric;
   }
 
   @computed
@@ -36,6 +42,10 @@ export class MetricStore {
   @computed
   get endTime(): String {
     return this._endTime;
+  }
+  @action.bound
+  setPendingRenamingMetric(value: MetricModel) {
+    this._pendingRenamingMetric = value;
   }
 
   @action.bound

@@ -4,6 +4,7 @@ import mil.af.dgs1sdt.fritz.Conversion;
 import mil.af.dgs1sdt.fritz.Metrics.MetricRepository;
 import mil.af.dgs1sdt.fritz.Models.StatusModel;
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
+import mil.af.dgs1sdt.fritz.Statistics.StatisticRepository;
 import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class UploadController {
 
   @Autowired
   MetricRepository metricRepository;
+
+  @Autowired
+  StatisticRepository statisticRepository;
 
   @PostMapping(produces = "application/json")
   public @ResponseBody
@@ -109,6 +113,7 @@ public class UploadController {
         }
         status.setStatus("complete");
         TrackingStore.removeFromList(tracking);
+        statisticRepository.increase(Long.valueOf(tracking.getTotalSlides()));
         return status;
       }
       StatusModel status = new StatusModel();

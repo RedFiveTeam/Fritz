@@ -15,7 +15,7 @@ import javax.persistence.Id;
 public class Metric {
   @Id
   @GeneratedValue
-  private long id;
+  private Long id;
 
   private String uid;
 

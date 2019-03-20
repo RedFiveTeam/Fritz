@@ -1,21 +1,24 @@
 package mil.af.dgs1sdt.fritz;
 
+import mil.af.dgs1sdt.fritz.Controllers.UploadController;
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
+import mil.af.dgs1sdt.fritz.Statistics.Statistic;
+import mil.af.dgs1sdt.fritz.Statistics.StatisticRepository;
 import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.poi.sl.usermodel.Slide;
 import org.apache.poi.sl.usermodel.SlideShow;
 import org.apache.poi.sl.usermodel.SlideShowFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Controller;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class Conversion {
 

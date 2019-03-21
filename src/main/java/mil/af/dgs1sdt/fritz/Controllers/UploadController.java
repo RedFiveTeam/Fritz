@@ -112,7 +112,7 @@ public class UploadController {
           status.setFiles(fileNames);
         }
         status.setStatus("complete");
-        TrackingStore.removeFromList(tracking);
+        tracking.setCompletedSlides(0);
         statisticRepository.increase(Long.valueOf(tracking.getTotalSlides()));
         return status;
       }

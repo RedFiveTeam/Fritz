@@ -111,5 +111,4 @@ export class SlidesActions {
     };
     request.send(JSON.stringify(this.slidesStore.slides));
   }
-
 }

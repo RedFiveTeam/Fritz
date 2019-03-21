@@ -77,7 +77,7 @@ describe('SlideCard', () => {
     expect(subject.find('.deleteIcon').exists()).toBeTruthy();
   });
 
-  it('should flag slide as deleted when the delete icon is clicked', () => {
+  it('should flag slide as deleted when the delete icon is clicked and have an undo button', () => {
     expect(subject.find('.deleteIcon').simulate('click'));
     expect(slideModel.deleted).toBeTruthy();
     expect(metricActions.createMetric).toHaveBeenCalled();

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { SlidesStore } from '../SlidesStore';
 import styled from 'styled-components';
 import { StyledSlideCard } from '../slideCard/SlideCard';
-import { SlideModel } from '../SlideModel';
+import { StyledUndoDeleteContainer } from '../../UndoDelete/UndoDeleteContainer';
 
 interface Props {
   className?: string;
@@ -12,25 +12,42 @@ interface Props {
 
 @observer
 export class SlidesContainer extends React.Component<Props> {
+  count: number = 0;
+
+  componentWillUpdate() {
+    this.count = 0;
+  }
+
   render() {
     return (
       <div
         className={this.props.className}
       >
         {
-          this.props.slidesStore!.slides.filter((s: SlideModel) => {
-            return (s.deleted === false);
-          })
+          this.props.slidesStore!.slides
             .map((s, idx) => {
-            return (
-              <div className="slideCardContainer" key={idx}>
-                <StyledSlideCard
-                  slideModel={s}
-                  slideNumber={idx}
-                />
-              </div>
-            );
-          })
+              if (s.deleted) {
+                this.count++;
+              }
+              return (
+                <div className="slideCardContainer" key={idx}>
+                  {
+                    !s.deleted &&
+                    <StyledSlideCard
+                        slideModel={s}
+                        slideNumber={idx}
+                        deletedCount={this.count}
+                    />
+                  }
+                  {
+                    s.deleted &&
+                    <StyledUndoDeleteContainer
+                        slideModel={s}
+                    />
+                  }
+                </div>
+              );
+            })
         }
       </div>
     );

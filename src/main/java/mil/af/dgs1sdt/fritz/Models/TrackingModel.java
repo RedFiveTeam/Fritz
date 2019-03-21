@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class TrackingModel {
@@ -16,7 +18,10 @@ public class TrackingModel {
 
   @NonNull
   private int totalSlides = 1;
+
   private Thread th;
+
+  private List<String> fileList = new ArrayList<>();
 
   public String getHash() {
     return hash;
@@ -58,5 +63,9 @@ public class TrackingModel {
 
   public void setTh(Thread th) {
     this.th = th;
+  }
+
+  public void updateFileList(String oldName, String newName) {
+    fileList.set(fileList.indexOf(oldName), newName);
   }
 }

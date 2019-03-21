@@ -3,10 +3,13 @@ package mil.af.dgs1sdt.fritz.Controllers;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Arrays;
 
 @Controller
 @RequestMapping(ImageController.URI)
@@ -15,16 +18,10 @@ public class ImageController {
   public static final String URI = "/api/image";
 
   @GetMapping(path = "/{imageId}", produces = MediaType.IMAGE_PNG_VALUE)
-  public void getImage(@CookieValue("id") String id, @PathVariable int imageId, HttpServletResponse response) throws FileNotFoundException, IOException {
-    File[] images = new File("/tmp/complete/" + id + "/").listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.toLowerCase().endsWith(".png");
-      }
-    });
-    Arrays.sort(images);
+  public void getImage(@CookieValue("id") String id, @PathVariable String imageId, HttpServletResponse response) throws FileNotFoundException, IOException {
 
-    File img = images[imageId];
+    File img = new File("/tmp/complete/" + id + "/" + imageId.replace(".png", "") + ".png");
+
     InputStream is = new FileInputStream(img);
     response.setContentType(MediaType.IMAGE_PNG_VALUE);
     StreamUtils.copy(is, response.getOutputStream());

@@ -1,6 +1,8 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
 import mil.af.dgs1sdt.fritz.Models.RenameModel;
+import mil.af.dgs1sdt.fritz.Models.TrackingModel;
+import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,22 +25,25 @@ public class RenameController {
 
   public static final String URI = "/api/rename";
 
-  @PostMapping(produces="application/zip")
-  public void renameAndZip(@CookieValue("id") String id, @RequestBody List<RenameModel> json, HttpServletResponse res) throws IOException {
+  @PostMapping(produces = "application/zip")
+  public void renameAndZip(@CookieValue("id") String id, @RequestBody List<RenameModel> json,
+                           HttpServletResponse res) throws IOException {
 
     List<File> files = new ArrayList<>();
 
     for (RenameModel model : json) {
-      if (model.getDeleted())
-        continue;
       File originalFile;
-      if (model.getOldName().endsWith(".png"))
+      if (model.getOldName().endsWith(".png")) {
         originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName());
-      else
+      }
+      else {
         originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName() + ".png");
+      }
       File newFile = new File("/tmp/complete/" + id + "/" + model.getNewName() + ".png");
       boolean status = originalFile.renameTo(newFile);
       if (status) {
+        if (model.getDeleted())
+          continue;
         files.add(newFile);
       }
     }
@@ -60,7 +65,6 @@ public class RenameController {
     } finally {
       zos.close();
     }
-
 
 
   }

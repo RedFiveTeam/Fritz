@@ -22,7 +22,7 @@ public class ImageControllerTest extends BaseIntegrationTest {
       .port(port)
       .header(new Header("Cookie", "id=test"))
       .when()
-      .get(ImageController.URI + "/0")
+      .get(ImageController.URI + "/test")
       .then()
       .statusCode(200)
       .contentType(MediaType.IMAGE_PNG_VALUE);

@@ -17,12 +17,24 @@ interface Props {
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
   metricActions?: MetricActions;
+  deletedCount?: number;
 }
 
 @observer
 export class SlideCard extends React.Component<Props> {
 
   componentDidUpdate() {
+    let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
+    let timeInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#timeInput') as HTMLInputElement;
+    if (activityInput) {
+      activityInput.value = this.props.slideModel.activity === 'ACTY' ? '' : this.props.slideModel.activity;
+    }
+    if (timeInput) {
+      timeInput.value = this.props.slideModel.time === 'TTTT' ? '' : this.props.slideModel.time;
+    }
+  }
+
+  componentDidMount() {
     let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
     let timeInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#timeInput') as HTMLInputElement;
     if (activityInput) {
@@ -70,10 +82,6 @@ export class SlideCard extends React.Component<Props> {
   };
 
   render() {
-    let nonDeletedSlideCount: number = this.props.slidesStore!.slides.filter((s: SlideModel) => {
-      return s.deleted === false;
-    }).length;
-
     return (
       <div
         className={this.props.className + ' slideCard'}
@@ -82,7 +90,7 @@ export class SlideCard extends React.Component<Props> {
           <div className="row no-gutters">
             <div className="col-md-4">
               <img
-                src={'api/image/' + this.props.slidesStore!.slides.indexOf(this.props.slideModel) + '?' + Date.now()}
+                src={'api/image/' + this.props.slideModel.oldName}
                 className="card-img"
                 onClick={() => {
                   let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);
@@ -90,15 +98,15 @@ export class SlideCard extends React.Component<Props> {
                     expandDisplay.style.display = 'block';
                   }
                   (document.querySelector(
-                    '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')'
-                  ) as HTMLElement)
+                    '.carousel-item:nth-of-type(' +
+                    (this.props.slideNumber - this.props.deletedCount! + 1) + ')') as HTMLElement)
                     .classList.add('active');
                 }}
               />
               <span
                 className="slideCounter"
               >
-                {(this.props.slideNumber + 1) + ' of ' + nonDeletedSlideCount}
+                {(this.props.slideNumber + 1) + ' of ' + this.props.slidesStore!.slides.length}
               </span>
               <span className="expandBackground">
                 <img className="expandImg" src={expandIcon}/>
@@ -140,18 +148,18 @@ export class SlideCard extends React.Component<Props> {
                   <input
                     maxLength={64}
                     onChange={(e: any) => {
+                      this.props.slidesActions!.setAndUpdateActivity(
+                        this.props.slideModel,
+                        e.target.value.toUpperCase()
+                      );
                       let carouselItem = document.querySelector(
                         '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
                       if (carouselItem) {
                         let input = carouselItem.querySelector('#activityInput') as HTMLInputElement;
                         if (input) {
-                          input.value = e.target.value;
+                          input.value = this.props.slideModel.activity!;
                         }
                       }
-                      this.props.slidesActions!.setAndUpdateActivity(
-                        this.props.slideModel,
-                        e.target.value.toUpperCase()
-                      );
                     }}
                     type="text"
                     className="form-control"

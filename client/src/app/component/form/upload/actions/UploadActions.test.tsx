@@ -35,7 +35,9 @@ describe('UploadActions', () => {
     });
 
     uploadRepository.status = jest.fn(() => {
-      return Promise.resolve(new StatusModel('complete', ['slide1.png', 'slide2.png', 'slide3.png'], 0, 3));
+      return Promise.resolve(new StatusModel(
+        'complete', ['slide1.png', 'slide2.png', 'slide3.png'], ['1525', '', ''], 0, 3
+      ));
     });
 
     uploadStore = new UploadStore();
@@ -62,12 +64,13 @@ describe('UploadActions', () => {
     expect(uploadStore.fileName).toBe('chucknorris.ppt');
   });
 
-  it('should populate the files in the model when checking status', async () => {
+  it('should populate the files and times in the model when checking status', async () => {
     await subject.checkStatus();
     expect(subject.uploadProcessingComplete).toHaveBeenCalled();
     expect(slidesStore.files).toEqual(['slide1.png', 'slide2.png', 'slide3.png']);
     expect(slidesStore.slides[0].oldName).toBe('slide1.png');
     expect(slidesStore.slides[1].oldName).toBe('slide2.png');
     expect(slidesStore.slides[2].oldName).toBe('slide3.png');
+    expect(slidesStore.slides[0].time).toBe('1525');
   });
 });

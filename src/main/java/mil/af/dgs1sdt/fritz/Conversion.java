@@ -8,6 +8,13 @@ import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.poi.sl.usermodel.Slide;
 import org.apache.poi.sl.usermodel.SlideShow;
 import org.apache.poi.sl.usermodel.SlideShowFactory;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFShape;
+import org.apache.poi.xslf.usermodel.XSLFSlide;
+import org.apache.poi.xslf.usermodel.XSLFTextBox;
+import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlString;
+import org.openxmlformats.schemas.presentationml.x2006.main.CTSlide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
@@ -16,9 +23,12 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Conversion {
 
@@ -39,6 +49,10 @@ public class Conversion {
     try (SlideShow<?, ?> ss = SlideShowFactory.create(file, null, true)) {
       List<? extends Slide<?, ?>> slides = ss.getSlides();
 
+      XMLSlideShow slideShow = new XMLSlideShow(new FileInputStream(file));
+
+      tracking.setTimes(new String[slides.size()]);
+
       Set<Integer> slidenum = slideIndexes(slides.size(), slidenumStr);
       tracking.setTotalSlides(slidenum.size());
 
@@ -46,8 +60,25 @@ public class Conversion {
       int width = (int) (pgsize.width * scale);
       int height = (int) (pgsize.height * scale);
 
+      String pattern = "[0-9]{4}Z?";
+
       for (Integer slideNo : slidenum) {
         Slide<?, ?> slide = slides.get(slideNo);
+
+        XSLFSlide xmlSlide = slideShow.getSlides().get(slideNo);
+        List<XSLFShape> shapes = xmlSlide.getShapes();
+        for (XSLFShape shape : shapes) {
+          if (shape instanceof XSLFTextBox) {
+            XSLFTextBox textBox = (XSLFTextBox) shape;
+            String text = textBox.getText();
+            Matcher m = Pattern.compile(pattern).matcher(text);
+            if (m.find()) {
+              String[] times = tracking.getTimes();
+              times[slideNo] = (m.group().replace("Z", ""));
+              tracking.setTimes(times);
+            }
+          }
+        }
 
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = img.createGraphics();
@@ -71,6 +102,7 @@ public class Conversion {
           File outfile = new File(outdir, outname);
           ImageIO.write(img, format, outfile);
         }
+
         graphics.dispose();
         img.flush();
         tracking.setCompletedSlides(tracking.getCompletedSlides() + 1);

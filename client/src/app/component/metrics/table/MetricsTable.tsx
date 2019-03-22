@@ -63,6 +63,6 @@ export class MetricsTable extends React.Component<Props> {
 export const StyledMetricsTable = inject('metricStore', 'metricActions')(styled(MetricsTable)`
 margin-left: 83px;
 margin-top: 52px;
-max-height: 1000px;
+height: 58%;
 overflow-y: auto;
 `);

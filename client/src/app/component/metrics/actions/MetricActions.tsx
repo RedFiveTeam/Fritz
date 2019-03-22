@@ -69,4 +69,35 @@ export class MetricActions {
       navigator.msSaveBlob(file, 'metrics.csv');
     }
   }
+
+  @action.bound
+  calculateAverage(met: MetricModel[]) {
+    let metrics = met;
+    let flowTimes: number[] = [];
+    let set = new Set<string>();
+    for (let i = 0; i < metrics.length; i++) {
+      set.add(metrics[i].uid);
+    }
+    for (let item of set) {
+      let startTime: string | null;
+      let endTime;
+      metrics.filter((m) => {
+        return m.uid === item;
+      })
+        .map((metric) => {
+          if (metric.action === 'Upload') {
+            startTime = metric.startTime;
+          }
+          if (metric.action === 'Download' && metric.endTime) {
+            endTime = metric.endTime;
+            if (startTime && endTime) {
+              flowTimes.push(parseInt(endTime, 10) - parseInt(startTime, 10));
+              startTime = null;
+              endTime = null;
+            }
+          }
+        });
+    }
+    return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
+  }
 }

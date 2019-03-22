@@ -6,6 +6,7 @@ import { MetricActions } from '../component/metrics/actions/MetricActions';
 import { StyledClassificationBanner } from '../component/classification/ClassificationBanner';
 import { ClassificationStore } from '../component/classification/store/ClassificationStore';
 import { ClassificationActions } from '../component/classification/ClassificationActions';
+import { StyledActionsTimeCard } from '../component/metrics/ActionsTimeCard';
 
 interface Props {
   className?: string;
@@ -45,6 +46,7 @@ export class MetricsPage extends React.Component<Props> {
             </button>
           </div>
         </nav>
+        <StyledActionsTimeCard/>
         <StyledMetricsTable/>
       </div>
     );
@@ -56,6 +58,8 @@ export const StyledMetricsPage = inject(
   'classificationStore',
   'classificationActions')
 (styled(MetricsPage)`
+
+height: 100vh;
   #bannerTitle {
     width: 200px;
     margin: 16px 16px 16px 33px;

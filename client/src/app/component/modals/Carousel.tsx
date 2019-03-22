@@ -95,6 +95,19 @@ export class Carousel extends React.Component<Props> {
             </label>
             <input
               maxLength={64}
+              onKeyDown={(e: any) => {
+                if (e.keyCode === 9) {
+                  e.preventDefault();
+                  (document.querySelector('.carousel-control-next') as HTMLElement).click();
+                  let nextCarousel = document.querySelector('.active')!.nextSibling as HTMLElement;
+                  if (nextCarousel && nextCarousel.classList.contains('carousel-item')) {
+                    (nextCarousel.querySelector('#timeInput') as HTMLElement).focus();
+                  } else {
+                    nextCarousel = document.querySelector('.carousel-item:first-of-type') as HTMLElement;
+                    (nextCarousel.querySelector('#timeInput') as HTMLElement).focus();
+                  }
+                }
+              }}
               onChange={(e: any) => {
                 let ele = document.querySelector(
                   '.slideCardContainer:nth-of-type(' + (this.props.slideNumber + 1) + ')')!

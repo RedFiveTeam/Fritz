@@ -23,6 +23,8 @@ public class TrackingModel {
 
   private List<String> fileList = new ArrayList<>();
 
+  private String[] times;
+
   public String getHash() {
     return hash;
   }
@@ -64,6 +66,8 @@ public class TrackingModel {
   public void setTh(Thread th) {
     this.th = th;
   }
+
+  public String[] getTimes() { return times; }
 
   public void updateFileList(String oldName, String newName) {
     fileList.set(fileList.indexOf(oldName), newName);

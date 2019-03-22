@@ -94,6 +94,7 @@ public class UploadController {
       .filter(tm -> id.equals(tm.getHash()))
       .findAny()
       .orElse(null);
+
     if (tracking != null) {
       if (id.length() > 0 && tracking.getCompletedSlides() == tracking.getTotalSlides()) {
         StatusModel status = new StatusModel();
@@ -111,6 +112,7 @@ public class UploadController {
           }
           status.setFiles(fileNames);
         }
+        status.setTimes(tracking.getTimes());
         status.setStatus("complete");
         tracking.setCompletedSlides(0);
         statisticRepository.increase(Long.valueOf(tracking.getTotalSlides()));

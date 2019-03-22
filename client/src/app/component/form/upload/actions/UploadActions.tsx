@@ -58,7 +58,7 @@ export class UploadActions {
           this.metricActions.trackMetric('Renaming');
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
-          this.setSlides(status.files);
+          this.setSlides(status.files, status.times);
         }
       });
     return;
@@ -70,10 +70,13 @@ export class UploadActions {
   }
 
   @action.bound
-  setSlides(names: string[]) {
+  setSlides(names: string[], times: string[]) {
     let temp: SlideModel[] = [];
-    names.map((name) => {
+    names.map((name, idx) => {
       let slide = new SlideModel();
+      if (times[idx]) {
+        slide.setTime(times[idx]);
+      }
       slide.setOldName(name);
       temp.push(slide);
     });

@@ -182,4 +182,8 @@ export const StyledCarousel = inject('slidesStore', 'slidesActions')(styled(Caro
       top: 15px;
       position: relative;
    }
+   
+   label {
+    font-size: 16px;
+   }
 `);

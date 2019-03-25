@@ -60,7 +60,7 @@ public class Conversion {
       int width = (int) (pgsize.width * scale);
       int height = (int) (pgsize.height * scale);
 
-      String pattern = "[0-9]{4}Z?";
+      String pattern = "[0-9]{4}Z";
 
       for (Integer slideNo : slidenum) {
         Slide<?, ?> slide = slides.get(slideNo);

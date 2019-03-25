@@ -49,7 +49,7 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
     width: 5px;
     overflow: hidden;
     position: absolute;
-    top: 17%;
+    top: 72px;
     display: inline-block;
     height: 625px;
     border-left: 1px solid #6C7F9C;
@@ -62,8 +62,9 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   }
   
   .right {
+    scroll-behavior: smooth;
     width: 51%;
-    max-height: 750px;
+    max-height: 708px;
     min-height: 500px;
     display: inline-block;
     position: absolute;

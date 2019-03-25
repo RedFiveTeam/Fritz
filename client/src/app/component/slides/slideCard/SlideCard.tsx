@@ -97,10 +97,11 @@ export class SlideCard extends React.Component<Props> {
                   if (expandDisplay !== null) {
                     expandDisplay.style.display = 'block';
                   }
-                  (document.querySelector(
+                  let carouselItem = (document.querySelector(
                     '.carousel-item:nth-of-type(' +
-                    (this.props.slideNumber - this.props.deletedCount! + 1) + ')') as HTMLElement)
-                    .classList.add('active');
+                    (this.props.slideNumber - this.props.deletedCount! + 1) + ')') as HTMLElement);
+                  carouselItem.classList.add('active');
+                  (carouselItem.querySelector('#timeInput') as HTMLInputElement).focus();
                 }}
               />
               <span

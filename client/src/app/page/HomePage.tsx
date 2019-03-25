@@ -5,7 +5,6 @@ import { StyledAppBody } from '../component/body/AppBody';
 import { StyledToast } from '../../utils/Toast';
 import { StyledFooter } from '../component/footer/Footer';
 import { StyledDeleteModal } from '../component/modals/DeleteModal';
-import { StyledHomePageHeader } from '../component/header/HomePageHeader';
 import { StyledClassificationBanner } from '../component/classification/ClassificationBanner';
 import { ClassificationStore } from '../component/classification/store/ClassificationStore';
 import { ClassificationActions } from '../component/classification/ClassificationActions';
@@ -35,7 +34,6 @@ export class HomePage extends React.Component<Props> {
         <StyledClassificationBanner
           classification={this.props.classificationStore!.classification}
         />
-        <StyledHomePageHeader/>
         <div
           className="mainBody"
         >

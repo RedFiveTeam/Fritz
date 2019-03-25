@@ -32,7 +32,7 @@ export const StyledHeader = (styled(Header)`
   position: relative;
   top: 26px;
   background: #2B303C;
-  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.5);
   
   a {
   color: #FFF;

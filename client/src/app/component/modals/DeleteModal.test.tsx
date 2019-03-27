@@ -35,20 +35,17 @@ describe('DeleteModal', () => {
   });
 
   it('should render confirmation dialog, cancel button and delete button', () => {
-    expect(subject.find('.modal-body').text()).toContain('Are you sure you want to delete the powerpoint file');
+    expect(subject.find('.modal-body').text()).toContain('Are you sure you want to delete these JPGs?');
     expect(subject.find('.btn-primary').exists()).toBeTruthy();
     expect(subject.find('.btn-secondary').exists()).toBeTruthy();
   });
 
   it('should reset the uploadstore when the delete is confirmed', () => {
     subject.find('.btn-primary').simulate('click');
-    expect(uploadStore.setProcessing).toHaveBeenCalledWith(false);
     expect(uploadStore.setUploaded).toHaveBeenCalledWith(false);
     expect(uploadStore.setPlaceholder).toHaveBeenCalledWith(true);
     expect(slidesStore.setSlides).toHaveBeenCalledWith([]);
     expect(uploadActions.clearPoll).toHaveBeenCalled();
-    expect(uploadStore.setTotal).toHaveBeenCalledWith(0);
-    expect(uploadStore.setProgress).toHaveBeenCalledWith(0);
   });
 
 });

@@ -31,12 +31,12 @@ describe('UploadActions', () => {
     };
 
     uploadRepository.upload = jest.fn(() => {
-      return new UploadModel('chucknorris.ppt');
+      return new UploadModel('chucknorris.jpg');
     });
 
     uploadRepository.status = jest.fn(() => {
       return Promise.resolve(new StatusModel(
-        'complete', ['slide1.png', 'slide2.png', 'slide3.png'], ['1525', '', ''], 0, 3
+        'complete', ['slide1.jpg', 'slide2.jpg', 'slide3.jpg'], ['1525', '', ''], 0, 3
       ));
     });
 
@@ -51,26 +51,24 @@ describe('UploadActions', () => {
      async () => {
       await subject.upload({});
       expect(uploadStore.uploaded).toBeTruthy();
-      expect(uploadStore.processing).toBeTruthy();
       expect(uploadStore.ConversionStatus).toBeTruthy();
       expect(uploadStore.placeholder).toBeFalsy();
     });
 
   it('should pass the file to the backend', async () => {
-    const file = new File(['(⌐□_□)'], 'chucknorris.ppt', {type: 'application/vnd.ms-powerpoint'});
+    const file = new File(['(⌐□_□)'], 'chucknorris.jpg', {type: 'application/vnd.ms-powerpoint'});
     await subject.upload({file: file});
     expect(uploadRepository.upload).toHaveBeenCalledWith({file: file});
     expect(uploadStore.uploaded).toBeTruthy();
-    expect(uploadStore.fileName).toBe('chucknorris.ppt');
+    expect(uploadStore.fileName).toBe('chucknorris.jpg');
   });
 
-  it('should populate the files and times in the model when checking status', async () => {
+  it('should populate the files in the model when checking status', async () => {
     await subject.checkStatus();
     expect(subject.uploadProcessingComplete).toHaveBeenCalled();
-    expect(slidesStore.files).toEqual(['slide1.png', 'slide2.png', 'slide3.png']);
-    expect(slidesStore.slides[0].oldName).toBe('slide1.png');
-    expect(slidesStore.slides[1].oldName).toBe('slide2.png');
-    expect(slidesStore.slides[2].oldName).toBe('slide3.png');
-    expect(slidesStore.slides[0].time).toBe('1525');
+    expect(slidesStore.files).toEqual(['slide1.jpg', 'slide2.jpg', 'slide3.jpg']);
+    expect(slidesStore.slides[0].oldName).toBe('slide1.jpg');
+    expect(slidesStore.slides[1].oldName).toBe('slide2.jpg');
+    expect(slidesStore.slides[2].oldName).toBe('slide3.jpg');
   });
 });

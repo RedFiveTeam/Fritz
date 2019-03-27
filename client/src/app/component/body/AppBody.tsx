@@ -2,7 +2,6 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledFormContainer } from '../form/FormContainer';
-import { StyledProgressBar } from '../progressBar/ProgressBar';
 import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
 import { UploadStore } from '../form/upload/UploadStore';
 import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
@@ -29,10 +28,6 @@ export class AppBody extends React.Component<Props> {
           {
             this.props.uploadStore!.uploading &&
               <StyledUploadProgressContainer/>
-          }
-          {
-            this.props.uploadStore!.processing &&
-            <StyledProgressBar/>
           }
           {
             this.props.uploadStore!.placeholder && !this.props.uploadStore!.uploading &&
@@ -64,12 +59,13 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   .right {
     scroll-behavior: smooth;
     width: 51%;
-    max-height: 708px;
+    max-height: 745px;
     min-height: 500px;
     display: inline-block;
     position: absolute;
     padding-top: 16px;
     overflow-y: auto;
+    margin-top: 3px;
     /* width */
     ::-webkit-scrollbar {
       width: 10px;

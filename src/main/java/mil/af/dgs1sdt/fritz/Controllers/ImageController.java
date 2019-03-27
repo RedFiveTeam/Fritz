@@ -17,13 +17,13 @@ public class ImageController {
 
   public static final String URI = "/api/image";
 
-  @GetMapping(path = "/{imageId}", produces = MediaType.IMAGE_PNG_VALUE)
+  @GetMapping(path = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
   public void getImage(@CookieValue("id") String id, @PathVariable String imageId, HttpServletResponse response) throws FileNotFoundException, IOException {
 
-    File img = new File("/tmp/complete/" + id + "/" + imageId.replace(".png", "") + ".png");
+    File img = new File("/tmp/working/" + id + "/" + imageId.replace(".jpg", "") + ".jpg");
 
     InputStream is = new FileInputStream(img);
-    response.setContentType(MediaType.IMAGE_PNG_VALUE);
+    response.setContentType(MediaType.IMAGE_JPEG_VALUE);
     StreamUtils.copy(is, response.getOutputStream());
   }
 }

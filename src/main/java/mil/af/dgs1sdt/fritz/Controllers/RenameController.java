@@ -1,8 +1,6 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
 import mil.af.dgs1sdt.fritz.Models.RenameModel;
-import mil.af.dgs1sdt.fritz.Models.TrackingModel;
-import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -33,13 +29,13 @@ public class RenameController {
 
     for (RenameModel model : json) {
       File originalFile;
-      if (model.getOldName().endsWith(".png")) {
-        originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName());
+      if (model.getOldName().endsWith(".jpg")) {
+        originalFile = new File("/tmp/working/" + id + "/" + model.getOldName());
       }
       else {
-        originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName() + ".png");
+        originalFile = new File("/tmp/working/" + id + "/" + model.getOldName() + ".jpg");
       }
-      File newFile = new File("/tmp/complete/" + id + "/" + model.getNewName() + ".png");
+      File newFile = new File("/tmp/working/" + id + "/" + model.getNewName() + ".jpg");
       boolean status = originalFile.renameTo(newFile);
       if (status) {
         if (model.getDeleted())

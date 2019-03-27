@@ -23,8 +23,7 @@ export class FormContainer extends React.Component<Props> {
     color: '#e46373'
   };
 
-  goodCSS: CSSProperties = {
-  };
+  goodCSS: CSSProperties = {};
 
   render() {
     return (
@@ -92,7 +91,7 @@ export class FormContainer extends React.Component<Props> {
             {
               this.props.slidesStore!.validate &&
               !this.props.slidesStore!.isValidOpName() &&
-                <div className="errorText">Field cannot be empty</div>
+              <div className="errorText">Field cannot be empty</div>
             }
           </div>
           <div className="form-group">
@@ -157,6 +156,10 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   color: #fff;
   margin-top: 45px;
   margin-left: 50px;
+  
+  #folderIcon {
+    margin-bottom: 25px;
+  }
   
   span {
     font-size: 16px;

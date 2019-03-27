@@ -21,8 +21,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   @Test
   public void getStatusTest() throws Exception {
     tm.setHash("1234");
-    tm.setCompletedSlides(0);
-    tm.setTotalSlides(10);
+    tm.setStatus("pending");
     trackingStore.addToList(tm);
 
     given()
@@ -41,6 +40,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .orElse(new TrackingModel());
 
     tracking.setCompletedSlides(10);
+    tracking.setStatus("complete");
 
     given()
       .port(port)
@@ -56,11 +56,11 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void uploadFileTest() throws Exception {
     given()
       .port(port)
-      .multiPart(new File("./samplepptx.pptx"))
+      .multiPart("file[]", new File("./samplepptx.jpg"))
       .when()
       .post(UploadController.URI)
       .then()
       .statusCode(200)
-      .body("file", equalTo("samplepptx.pptx"));
+      .body("file", equalTo("samplepptx.jpg"));
   }
 }

@@ -24,20 +24,11 @@ public class RoombaController {
       .findAny()
       .orElse(null);
 
-    if (tracking != null && tracking.getTh().isAlive())
-      tracking.getTh().interrupt();
-
     if (tracking != null)
       TrackingStore.removeFromList(tracking);
 
-    String completedDir = "/tmp/complete/" + hash;
     String workingDir = "/tmp/working/" + hash;
-    File completedDirToBeRoombaed = new File(completedDir);
     File workingDirToBeRoombaed = new File(workingDir);
-
-    if (completedDirToBeRoombaed.exists()) {
-      FileUtils.deleteDirectory(completedDirToBeRoombaed);
-    }
 
     if (workingDirToBeRoombaed.exists()) {
       FileUtils.deleteDirectory(workingDirToBeRoombaed);

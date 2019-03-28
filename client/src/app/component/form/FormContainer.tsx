@@ -66,7 +66,7 @@ export class FormContainer extends React.Component<Props> {
             {
               this.props.slidesStore!.validate &&
               !this.props.slidesStore!.isValidDate() &&
-              <div className="errorText">Field cannot be empty</div>
+              <div className="errorText">Field must be in the correct format</div>
             }
           </div>
           <div className="form-group">

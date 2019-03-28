@@ -36,6 +36,7 @@ export class UploadContainer extends React.Component<Props> {
     e.persist();
     if (e.type === 'change') {
       const element = document.querySelector('#uploadButton')! as HTMLInputElement;
+      console.log(element.files);
       if (element != null && element.files) {
         let files = element.files as FileList;
         for (let i = 0; i < files.length; i++) {

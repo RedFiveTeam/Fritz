@@ -112,4 +112,16 @@ export class MetricActions {
     });
     return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
   }
+
+  @action.bound
+  calculateRenameAverage(met: MetricModel[]) {
+    let metrics = met;
+    let flowTimes: number[] = [];
+    metrics.map((m: MetricModel) => {
+      if (m.action === 'Renaming' && m.startTime && m.endTime) {
+        flowTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+      }
+    });
+    return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
+  }
 }

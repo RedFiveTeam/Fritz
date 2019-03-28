@@ -22,7 +22,10 @@ describe('MetricActions', () => {
         new MetricModel(2, 'test3', 'Upload', '1551711512', '1551711535'),
         new MetricModel(3, 'test1', 'Download', '', '1551711518'),
         new MetricModel(4, 'test2', 'Download', '', '1551711600'),
-        new MetricModel(5, 'test3', 'Download', '', '1551711572')
+        new MetricModel(5, 'test3', 'Download', '', '1551711572'),
+        new MetricModel(6, 'test1', 'Renaming', '1551711488', '1551711498'),
+        new MetricModel(7, 'test2', 'Renaming', '1551711565', '1551711580'),
+        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535')
       ]
     };
 
@@ -56,5 +59,9 @@ describe('MetricActions', () => {
 
   it('should be able to calculate the correct average upload time', () => {
     expect(subject.calculateUploadAverage(metricStore.metrics)).toBe(16);
+  });
+
+  it('should be able to calculate the correct rename time', () => {
+    expect(subject.calculateRenameAverage(metricStore.metrics)).toBe(16);
   });
 });

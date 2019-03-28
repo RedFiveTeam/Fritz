@@ -90,7 +90,7 @@ export class SlideCard extends React.Component<Props> {
           <div className="row no-gutters">
             <div className="col-md-4">
               <img
-                src={'api/image/' + this.props.slideModel.oldName}
+                src={'api/image/' + this.props.slideModel.oldName.replace('.JPG', '.jpg')}
                 className="card-img"
                 onClick={() => {
                   let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);

@@ -27,9 +27,14 @@ export class ActionsTimeCard extends React.Component<Props> {
         </div>
         <div className="cardContent">
           <div className="averageTime">
-            <div>{this.props.metricActions!.calculateAverage(this.props.metricStore!.metrics) + 's'}</div>
+            <div>{this.props.metricActions!.calculateWorkflowAverage(this.props.metricStore!.metrics) + 's'}</div>
             <div>Avg Workflow Time</div>
           </div>
+          <div className="averageUpload">
+            <div>{this.props.metricActions!.calculateUploadAverage(this.props.metricStore!.metrics) + 's'}</div>
+            <div>Avg Upload Time</div>
+          </div>
+
         </div>
       </div>
     );
@@ -74,10 +79,11 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   width: 100px;
 }
 
-.averageTime {
+.averageTime, .averageUpload {
   position: relative;
   margin-left: 66px;
   text-align: center;
+  display: inline-block;
   
   div:first-of-type {
     font-size: 60px;

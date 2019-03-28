@@ -17,6 +17,9 @@ describe('DownloadButton', () => {
     isValidName: () => {
       return true;
     },
+    isValidDate: () => {
+      return true;
+    },
     setValidate: () => {
       return;
     }

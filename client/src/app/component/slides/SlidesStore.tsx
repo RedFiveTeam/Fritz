@@ -137,6 +137,11 @@ export class SlidesStore {
   isValidDate(): boolean {
     return (
       (
+        (
+          this._day !== 'DD' &&
+          this._month !== 'MON' &&
+          this._year !== 'YY'
+        ) &&
         this._day !== null &&
         this._day !== undefined &&
         this._day.length > 0 &&

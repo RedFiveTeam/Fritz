@@ -100,4 +100,12 @@ export class MetricActions {
     }
     return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
   }
+
+  @action.bound
+  filterMetrics(option: number) {
+    this.metricStore.setFilteredMetrics(
+      this.metricStore.metrics.filter((m: MetricModel) => {
+        return moment().unix() - parseInt(m.startTime, 10) < option;
+      }));
+  }
 }

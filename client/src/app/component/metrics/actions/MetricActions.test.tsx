@@ -16,6 +16,7 @@ describe('MetricActions', () => {
       setEndTime: jest.fn(),
       pendingUploadMetric: new MetricModel(null, 'hi', 'Upload', '1', null),
       pendingDownloadMetric: new MetricModel(null, 'hi', 'Download', '1', null),
+      setFilteredMetrics: jest.fn(),
       metrics: [
         new MetricModel(0, 'test1', 'Upload', '1551711488', null),
         new MetricModel(1, 'test2', 'Upload', '1551711565', null),
@@ -52,5 +53,10 @@ describe('MetricActions', () => {
 
   it('should be able to calculate the correct average workflow', () => {
     expect(subject.calculateAverage(metricStore.metrics)).toBe(42);
+  });
+
+  it('should filter the metrics based on the option', () => {
+    subject.filterMetrics(60 * 60 * 24);
+    expect(metricStore.setFilteredMetrics).toHaveBeenCalled();
   });
 });

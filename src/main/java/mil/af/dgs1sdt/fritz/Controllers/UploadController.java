@@ -17,9 +17,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(UploadController.URI)
@@ -89,10 +87,19 @@ public class UploadController {
       }
     });
     if (files != null) {
-      Arrays.sort(files);
       for (File file : files) {
         fileNames.add(file.getName());
       }
+      Collections.sort(fileNames, new Comparator<String>() {
+        public int compare(String o1, String o2) {
+          return extractInt(o1) - extractInt(o2);
+        }
+        int extractInt(String s) {
+          String num = s.replaceAll("\\D", "");
+          // return 0 if no digits found
+          return num.isEmpty() ? 0 : Integer.parseInt(num);
+        }
+      });
     }
     status.setFiles(fileNames);
     if (tracking != null) {

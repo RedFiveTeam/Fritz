@@ -71,7 +71,7 @@ export class MetricActions {
   }
 
   @action.bound
-  calculateAverage(met: MetricModel[]) {
+  calculateWorkflowAverage(met: MetricModel[]) {
     let metrics = met;
     let flowTimes: number[] = [];
     let set = new Set<string>();
@@ -98,6 +98,18 @@ export class MetricActions {
           }
         });
     }
+    return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
+  }
+
+  @action.bound
+  calculateUploadAverage(met: MetricModel[]) {
+    let metrics = met;
+    let flowTimes: number[] = [];
+    metrics.map((m: MetricModel) => {
+      if (m.action === 'Upload' && m.startTime && m.endTime) {
+        flowTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+      }
+    });
     return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
   }
 }

@@ -9,9 +9,16 @@ export class MetricStore {
   @observable private _pendingDownloadMetric: MetricModel;
   @observable private _pendingConversionMetric: MetricModel;
   @observable private _pendingRenamingMetric: MetricModel;
+  @observable private _filteredMetrics: MetricModel[] = [];
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
+    this._filteredMetrics = this._metrics;
+  }
+
+  @computed
+  get filteredMetrics(): MetricModel[] {
+    return this._filteredMetrics;
   }
 
   @computed
@@ -78,4 +85,8 @@ export class MetricStore {
     this._pendingConversionMetric = value;
   }
 
+  @action.bound
+  setFilteredMetrics(value: MetricModel[]) {
+    this._filteredMetrics = value;
+  }
 }

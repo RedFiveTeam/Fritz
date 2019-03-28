@@ -40,7 +40,7 @@ export class UploadContainer extends React.Component<Props> {
         let files = element.files as FileList;
         for (let i = 0; i < files.length; i++) {
           if (files[i].name.toLowerCase().endsWith('.jpg')) {
-            formData.append('file[]', files[i], files[i].name);
+            formData.append('file[]', files[i], files[i].name.replace('.JPG', '.jpg'));
           }
         }
       }

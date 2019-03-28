@@ -16,6 +16,10 @@ describe('ActionsTimeCard', () => {
       },
       calculateUploadAverage: () => {
         return 16;
+      },
+
+      calculateRenameAverage: () => {
+        return 16;
       }
     };
 
@@ -48,5 +52,9 @@ describe('ActionsTimeCard', () => {
 
   it('should display the average time taken for upload', () => {
     expect(subject.find('.averageUpload > div').at(0).text()).toBe('16s');
+  });
+
+  it('should display the average time taken for upload', () => {
+    expect(subject.find('.averageRename > div').at(0).text()).toBe('16s');
   });
 });

@@ -28,13 +28,16 @@ export class ActionsTimeCard extends React.Component<Props> {
         <div className="cardContent">
           <div className="averageTime">
             <div>{this.props.metricActions!.calculateWorkflowAverage(this.props.metricStore!.metrics) + 's'}</div>
-            <div>Avg Workflow Time</div>
+            <div>Avg. Workflow Time</div>
           </div>
           <div className="averageUpload">
             <div>{this.props.metricActions!.calculateUploadAverage(this.props.metricStore!.metrics) + 's'}</div>
-            <div>Avg Upload Time</div>
+            <div>Avg. Upload Time</div>
           </div>
-
+          <div className="averageRename">
+            <div>{this.props.metricActions!.calculateRenameAverage(this.props.metricStore!.metrics) + 's'}</div>
+            <div>Avg. Rename Time</div>
+          </div>
         </div>
       </div>
     );
@@ -79,7 +82,7 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   width: 100px;
 }
 
-.averageTime, .averageUpload {
+.averageTime, .averageUpload, .averageRename {
   position: relative;
   margin-left: 66px;
   text-align: center;

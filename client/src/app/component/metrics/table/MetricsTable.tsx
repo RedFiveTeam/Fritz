@@ -50,7 +50,7 @@ export class MetricsTable extends React.Component<Props> {
           </tr>
           </thead>
           <tbody className="text-white">
-          {this.props.metricStore!.metrics.map((m, i) => {
+          {this.props.metricStore!.metrics.reverse().map((m, i) => {
             return this.generateRows(m, i);
           })}
           </tbody>

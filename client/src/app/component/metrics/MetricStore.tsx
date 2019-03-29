@@ -12,9 +12,16 @@ export class MetricStore {
   @observable private _uploadAverage: number;
   @observable private _renameAverage: number;
   @observable private _downloadAverage: number;
+  @observable private _filteredMetrics: MetricModel[] = [];
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
+    this._filteredMetrics = this._metrics;
+  }
+
+  @computed
+  get filteredMetrics(): MetricModel[] {
+    return this._filteredMetrics;
   }
 
   @computed
@@ -112,4 +119,8 @@ export class MetricStore {
     this._pendingConversionMetric = value;
   }
 
+  @action.bound
+  setFilteredMetrics(value: MetricModel[]) {
+    this._filteredMetrics = value;
+  }
 }

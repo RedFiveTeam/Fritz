@@ -1,22 +1,18 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { StyledMetricsTable } from './MetricsTable';
-import { StubMetricRepository } from '../repository/StubMetricRepository';
 import { MetricStore } from '../MetricStore';
-import moment = require('moment');
 import { MetricModel } from '../MetricModel';
+import moment = require('moment');
 
 describe('MetricsTable', () => {
   let subject: ReactWrapper;
   let metricStore: MetricStore;
   let metricActions: any;
-
-  let metricRepository: StubMetricRepository;
-  metricRepository = new StubMetricRepository();
-
+  
   metricStore = new MetricStore();
 
-  metricStore.setMetrics([
+  metricStore.setFilteredMetrics([
     new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498'),
     new MetricModel(1, 'test2', 'Upload', '1551711565', '1551711580'),
     new MetricModel(2, 'test3', 'Upload', '1551711512', '1551711535'),
@@ -29,7 +25,7 @@ describe('MetricsTable', () => {
   ]);
 
   metricActions = {
-    initializeStores: () => { return Promise.resolve(metricStore.hydrate(metricRepository)); }
+    initializeStores: () => { return Promise.resolve(); }
   };
 
   beforeEach(() => {

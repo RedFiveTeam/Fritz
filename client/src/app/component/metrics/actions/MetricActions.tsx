@@ -128,4 +128,12 @@ export class MetricActions {
       flowTimes.renameTimes.reduce((a: number, b: number) => a + b, 0) / flowTimes.renameTimes.length)
     );
   }
+
+  @action.bound
+  filterMetrics(option: number) {
+    this.metricStore.setFilteredMetrics(
+      this.metricStore.metrics.filter((m: MetricModel) => {
+        return moment().unix() - parseInt(m.startTime, 10) < option;
+      }));
+  }
 }

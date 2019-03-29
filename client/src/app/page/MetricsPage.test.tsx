@@ -20,7 +20,8 @@ describe('MetricsPage', () => {
     };
 
     metricActions = {
-      exportMetrics: jest.fn()
+      exportMetrics: jest.fn(),
+      filterMetrics: jest.fn()
     };
 
     subject = shallow(
@@ -47,5 +48,10 @@ describe('MetricsPage', () => {
 
   it('should contain an actions time card', () => {
     expect(subject.find(StyledActionsTimeCard).exists()).toBeTruthy();
+  });
+
+  it('should display a select menu with options for filtering metrics', () => {
+    expect(subject.find('.sortSelector').simulate('change', {target: {value: 60 * 60 * 24}}));
+    expect(metricActions.filterMetrics).toHaveBeenCalledWith(60 * 60 * 24);
   });
 });

@@ -13,6 +13,10 @@ interface Props {
 
 @observer
 export class MetricsTable extends React.Component<Props> {
+  async componentDidMount() {
+    await this.props.metricActions!.initializeStores();
+  }
+
   generateRows = (m: any, i: number) => {
     return (
       <tr
@@ -45,7 +49,7 @@ export class MetricsTable extends React.Component<Props> {
           </tr>
           </thead>
           <tbody className="text-white">
-          {this.props.metricStore!.metrics.reverse().map((m, i) => {
+          {this.props.metricStore!.filteredMetrics.reverse().map((m, i) => {
             return this.generateRows(m, i);
           })}
           </tbody>

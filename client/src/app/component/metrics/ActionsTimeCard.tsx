@@ -14,6 +14,10 @@ interface Props {
 
 @observer
 export class ActionsTimeCard extends React.Component<Props> {
+  async componentWillMount() {
+    await this.props.metricActions!.calculateAverages();
+  }
+
   render() {
     return (
       <div
@@ -31,12 +35,16 @@ export class ActionsTimeCard extends React.Component<Props> {
             <div>Avg. Workflow Time</div>
           </div>
           <div className="averageUpload">
-            <div>{this.props.metricActions!.calculateUploadAverage(this.props.metricStore!.metrics) + 's'}</div>
+            <div>{this.props.metricStore!.uploadAverage + 's'}</div>
             <div>Avg. Upload Time</div>
           </div>
           <div className="averageRename">
-            <div>{this.props.metricActions!.calculateRenameAverage(this.props.metricStore!.metrics) + 's'}</div>
+            <div>{this.props.metricStore!.renameAverage + 's'}</div>
             <div>Avg. Rename Time</div>
+          </div>
+          <div className="averageDownload">
+            <div>{this.props.metricStore!.downloadAverage + 's'}</div>
+            <div>Avg. Download Time</div>
           </div>
         </div>
       </div>
@@ -45,7 +53,6 @@ export class ActionsTimeCard extends React.Component<Props> {
 }
 
 export const StyledActionsTimeCard = inject('metricActions', 'metricStore')(styled(ActionsTimeCard)`
-
 position: relative;
 margin: auto;
 width: 1286px;
@@ -82,7 +89,7 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   width: 100px;
 }
 
-.averageTime, .averageUpload, .averageRename {
+.averageTime, .averageUpload, .averageRename, .averageDownload {
   position: relative;
   margin-left: 66px;
   text-align: center;

@@ -9,9 +9,27 @@ export class MetricStore {
   @observable private _pendingDownloadMetric: MetricModel;
   @observable private _pendingConversionMetric: MetricModel;
   @observable private _pendingRenamingMetric: MetricModel;
+  @observable private _uploadAverage: number;
+  @observable private _renameAverage: number;
+  @observable private _downloadAverage: number;
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
+  }
+
+  @computed
+  get uploadAverage(): number {
+    return this._uploadAverage;
+  }
+
+  @computed
+  get renameAverage(): number {
+    return this._renameAverage;
+  }
+
+  @computed
+  get downloadAverage(): number {
+    return this._downloadAverage;
   }
 
   @computed
@@ -43,6 +61,22 @@ export class MetricStore {
   get endTime(): String {
     return this._endTime;
   }
+
+  @action.bound
+  setUploadAverage(value: number) {
+    this._uploadAverage = value;
+  }
+
+  @action.bound
+  setRenameAverage(value: number) {
+    this._renameAverage = value;
+  }
+
+  @action.bound
+  setDownloadAverage(value: number) {
+    this._downloadAverage = value;
+  }
+
   @action.bound
   setPendingRenamingMetric(value: MetricModel) {
     this._pendingRenamingMetric = value;

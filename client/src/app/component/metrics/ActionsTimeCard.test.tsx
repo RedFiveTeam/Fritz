@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { ActionsTimeCard } from './ActionsTimeCard';
-import { MetricModel } from './MetricModel';
+import { MetricStore } from './MetricStore';
 
 describe('ActionsTimeCard', () => {
   let subject: ShallowWrapper;
-  let metricStore: any;
+  let metricStore: MetricStore;
   let metricActions: any;
 
   beforeEach(() => {
@@ -14,25 +14,15 @@ describe('ActionsTimeCard', () => {
       calculateWorkflowAverage: () => {
         return 42;
       },
-      calculateUploadAverage: () => {
-        return 16;
-      },
 
-      calculateRenameAverage: () => {
-        return 16;
+      calculateAverages: () => {
+        metricStore.setDownloadAverage(16);
+        metricStore.setRenameAverage(20);
+        metricStore.setUploadAverage(25);
       }
     };
 
-    metricStore = {
-      metrics: [
-        new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498'),
-        new MetricModel(1, 'test2', 'Upload', '1551711565', '1551711580'),
-        new MetricModel(2, 'test3', 'Upload', '1551711512', '1551711535'),
-        new MetricModel(3, 'test1', 'Download', '', '1551711518'),
-        new MetricModel(4, 'test2', 'Download', '', '1551711600'),
-        new MetricModel(5, 'test3', 'Download', '', '1551711572')
-      ]
-    };
+    metricStore = new MetricStore();
 
     subject = shallow(
       <ActionsTimeCard
@@ -51,10 +41,14 @@ describe('ActionsTimeCard', () => {
   });
 
   it('should display the average time taken for upload', () => {
-    expect(subject.find('.averageUpload > div').at(0).text()).toBe('16s');
+    expect(subject.find('.averageUpload > div').at(0).text()).toBe('25s');
   });
 
-  it('should display the average time taken for upload', () => {
-    expect(subject.find('.averageRename > div').at(0).text()).toBe('16s');
+  it('should display the average time taken for rename', () => {
+    expect(subject.find('.averageRename > div').at(0).text()).toBe('20s');
+  });
+
+  it('should display the average time taken for download', () => {
+    expect(subject.find('.averageDownload > div').at(0).text()).toBe('16s');
   });
 });

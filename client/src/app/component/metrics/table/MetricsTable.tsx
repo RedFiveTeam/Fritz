@@ -13,11 +13,6 @@ interface Props {
 
 @observer
 export class MetricsTable extends React.Component<Props> {
-
-  async componentDidMount() {
-    await this.props.metricActions!.initializeStores();
-  }
-
   generateRows = (m: any, i: number) => {
     return (
       <tr

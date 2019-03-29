@@ -22,6 +22,7 @@ describe('MetricActions', () => {
       uploadAverage: jest.fn(),
       renameAverage: jest.fn(),
       downloadAverage: jest.fn(),
+      setFilteredMetrics: jest.fn(),
       metrics: [
         new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498'),
         new MetricModel(1, 'test2', 'Upload', '1551711565', '1551711580'),
@@ -61,6 +62,11 @@ describe('MetricActions', () => {
 
   it('should be able to calculate the correct average workflow', () => {
     expect(subject.calculateWorkflowAverage(metricStore.metrics)).toBe(42);
+  });
+
+  it('should filter the metrics based on the option', () => {
+    subject.filterMetrics(60 * 60 * 24);
+    expect(metricStore.setFilteredMetrics).toHaveBeenCalled();
   });
 
   it('should be able to calculate the correct averages for upload, rename and download', async () => {

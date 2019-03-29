@@ -102,26 +102,30 @@ export class MetricActions {
   }
 
   @action.bound
-  calculateUploadAverage(met: MetricModel[]) {
-    let metrics = met;
-    let flowTimes: number[] = [];
-    metrics.map((m: MetricModel) => {
-      if (m.action === 'Upload' && m.startTime && m.endTime) {
-        flowTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
-      }
-    });
-    return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
-  }
-
-  @action.bound
-  calculateRenameAverage(met: MetricModel[]) {
-    let metrics = met;
-    let flowTimes: number[] = [];
-    metrics.map((m: MetricModel) => {
+  async calculateAverages() {
+    let flowTimes: any = {
+      downloadTimes: [],
+      renameTimes: [],
+      uploadTimes: []
+    };
+    await this.initializeStores();
+    this.metricStore.metrics.map((m: MetricModel) => {
       if (m.action === 'Renaming' && m.startTime && m.endTime) {
-        flowTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+        flowTimes.renameTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+      } else if (m.action === 'Upload' && m.startTime && m.endTime) {
+        flowTimes.uploadTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+      } else if (m.action === 'Download' && m.startTime && m.endTime) {
+        flowTimes.downloadTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
       }
     });
-    return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
+    this.metricStore.setDownloadAverage(Math.round(
+      flowTimes.downloadTimes.reduce((a: number, b: number) => a + b, 0) / flowTimes.downloadTimes.length)
+    );
+    this.metricStore.setUploadAverage(Math.round(
+      flowTimes.uploadTimes.reduce((a: number, b: number) => a + b, 0) / flowTimes.uploadTimes.length)
+    );
+    this.metricStore.setRenameAverage(Math.round(
+      flowTimes.renameTimes.reduce((a: number, b: number) => a + b, 0) / flowTimes.renameTimes.length)
+    );
   }
 }

@@ -1,6 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { MetricModel } from './MetricModel';
 import { MetricRepository } from './repository/MetricRepository';
+import { AverageModel } from '../average/AverageModel';
 
 export class MetricStore {
   @observable private _metrics: MetricModel[] = [];
@@ -9,34 +10,30 @@ export class MetricStore {
   @observable private _pendingDownloadMetric: MetricModel;
   @observable private _pendingConversionMetric: MetricModel;
   @observable private _pendingRenamingMetric: MetricModel;
-  @observable private _uploadAverage: number;
-  @observable private _renameAverage: number;
-  @observable private _downloadAverage: number;
   @observable private _filteredMetrics: MetricModel[] = [];
+  @observable private _filterValue: number = 9007199254740991;
+  @observable private _averages: AverageModel = new AverageModel();
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
-    this._filteredMetrics = this._metrics;
+    if (this._filteredMetrics.length === 0) {
+      this._filteredMetrics = this._metrics;
+    }
+  }
+
+  @computed
+  get averages(): AverageModel {
+    return this._averages;
+  }
+
+  @computed
+  get filterValue(): number {
+    return this._filterValue;
   }
 
   @computed
   get filteredMetrics(): MetricModel[] {
     return this._filteredMetrics;
-  }
-
-  @computed
-  get uploadAverage(): number {
-    return this._uploadAverage;
-  }
-
-  @computed
-  get renameAverage(): number {
-    return this._renameAverage;
-  }
-
-  @computed
-  get downloadAverage(): number {
-    return this._downloadAverage;
   }
 
   @computed
@@ -70,18 +67,13 @@ export class MetricStore {
   }
 
   @action.bound
-  setUploadAverage(value: number) {
-    this._uploadAverage = value;
+  setAverage(value: AverageModel) {
+    this._averages = value;
   }
 
   @action.bound
-  setRenameAverage(value: number) {
-    this._renameAverage = value;
-  }
-
-  @action.bound
-  setDownloadAverage(value: number) {
-    this._downloadAverage = value;
+  setFilterValue(value: number) {
+    this._filterValue = value;
   }
 
   @action.bound

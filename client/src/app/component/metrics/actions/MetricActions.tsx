@@ -6,6 +6,7 @@ import { action } from 'mobx';
 import { MetricModel } from '../MetricModel';
 import { UploadStore } from '../../form/upload/UploadStore';
 import moment = require('moment');
+import { AverageSubsetModel } from '../../average/AverageSubsetModel';
 
 export class MetricActions {
   private metricStore: MetricStore;
@@ -21,6 +22,8 @@ export class MetricActions {
   @action.bound
   async initializeStores() {
     await this.metricStore.hydrate(this.metricRepository);
+    await this.setWorkflowAverage();
+    await this.setAverages();
   }
 
   @action.bound
@@ -71,9 +74,8 @@ export class MetricActions {
   }
 
   @action.bound
-  calculateWorkflowAverage(met: MetricModel[]) {
-    let metrics = met;
-    let flowTimes: number[] = [];
+  async setWorkflowAverage() {
+    let metrics = this.metricStore.filteredMetrics;
     let set = new Set<string>();
     for (let i = 0; i < metrics.length; i++) {
       set.add(metrics[i].uid);
@@ -84,56 +86,90 @@ export class MetricActions {
       metrics.filter((m) => {
         return m.uid === item;
       })
-        .map((metric) => {
-          if (metric.action === 'Upload') {
-            startTime = metric.startTime;
+        .map((m) => {
+          if (m.action === 'Upload') {
+            startTime = m.startTime;
           }
-          if (metric.action === 'Download' && metric.endTime) {
-            endTime = metric.endTime;
+          if (m.action === 'Download' && m.endTime) {
+            endTime = m.endTime;
             if (startTime && endTime) {
-              flowTimes.push(parseInt(endTime, 10) - parseInt(startTime, 10));
+              this.metricStore.averages.workflow.push(
+                new AverageSubsetModel(parseInt(startTime, 10), (parseInt(endTime, 10) - parseInt(startTime, 10)))
+              );
               startTime = null;
               endTime = null;
             }
           }
         });
     }
-    return Math.round(flowTimes.reduce((a, b) => a + b, 0) / flowTimes.length);
   }
 
   @action.bound
-  async calculateAverages() {
-    let flowTimes: any = {
-      downloadTimes: [],
-      renameTimes: [],
-      uploadTimes: []
-    };
-    await this.initializeStores();
-    this.metricStore.metrics.map((m: MetricModel) => {
+  async setAverages() {
+    this.metricStore.filteredMetrics.map((m: MetricModel) => {
       if (m.action === 'Renaming' && m.startTime && m.endTime) {
-        flowTimes.renameTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+        this.metricStore.averages.rename.push(
+          new AverageSubsetModel(parseInt(m.startTime, 10), (parseInt(m.endTime, 10) - parseInt(m.startTime, 10)))
+        );
       } else if (m.action === 'Upload' && m.startTime && m.endTime) {
-        flowTimes.uploadTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+        this.metricStore.averages.upload.push(
+          new AverageSubsetModel(parseInt(m.startTime, 10), (parseInt(m.endTime, 10) - parseInt(m.startTime, 10)))
+        );
       } else if (m.action === 'Download' && m.startTime && m.endTime) {
-        flowTimes.downloadTimes.push(parseInt(m.endTime, 10) - parseInt(m.startTime, 10));
+        this.metricStore.averages.download.push(
+          new AverageSubsetModel(parseInt(m.startTime, 10), (parseInt(m.endTime, 10) - parseInt(m.startTime, 10)))
+        );
       }
     });
-    this.metricStore.setDownloadAverage(Math.round(
-      flowTimes.downloadTimes.reduce((a: number, b: number) => a + b, 0) / flowTimes.downloadTimes.length)
-    );
-    this.metricStore.setUploadAverage(Math.round(
-      flowTimes.uploadTimes.reduce((a: number, b: number) => a + b, 0) / flowTimes.uploadTimes.length)
-    );
-    this.metricStore.setRenameAverage(Math.round(
-      flowTimes.renameTimes.reduce((a: number, b: number) => a + b, 0) / flowTimes.renameTimes.length)
-    );
   }
 
   @action.bound
-  filterMetrics(option: number) {
+  async filterMetrics(option: number) {
+    this.metricStore.setFilterValue(option);
     this.metricStore.setFilteredMetrics(
       this.metricStore.metrics.filter((m: MetricModel) => {
         return moment().unix() - parseInt(m.startTime, 10) < option;
-      }));
+      })
+    );
+    await this.setAverages();
+    await this.setWorkflowAverage();
+  }
+
+  @action.bound
+  calculateAverage(average: string, filter: number) {
+    let averages = (this.metricStore.averages[average] as AverageSubsetModel[])
+      .filter((asm: AverageSubsetModel) => {
+        return moment().unix() - asm.startTime < filter;
+      });
+    let time: number = 0;
+    for (let i = 0; i < averages.length; i++) {
+      time = time + averages[i].timeTaken;
+    }
+    return Math.round(time / averages.length);
+  }
+
+  @action.bound
+  calculateAverageDifference(average: string) {
+    let filter = this.metricStore.filterValue;
+    let oldAverages = (this.metricStore.averages[average] as AverageSubsetModel[])
+      .filter((asm: AverageSubsetModel) => {
+        return moment().unix() - asm.startTime < filter;
+      });
+    let oldTime: number = 0;
+    for (let i = 0; i < oldAverages.length; i++) {
+      oldTime = oldTime + oldAverages[i].timeTaken;
+    }
+    let oldAverage = Math.round(oldTime / oldAverages.length);
+
+    let newTime: number = 0;
+    let time = moment().unix();
+    let newAverages = (this.metricStore.averages[average] as AverageSubsetModel[]).filter((asm: AverageSubsetModel) => {
+      return time - asm.startTime > filter && time - asm.startTime < filter * 2;
+    });
+    for (let i = 0; i < newAverages.length; i++) {
+      newTime = newTime + newAverages[i].timeTaken;
+    }
+    let newAverage = Math.round(newTime / newAverages.length);
+    return (oldAverage - newAverage) * -1;
   }
 }

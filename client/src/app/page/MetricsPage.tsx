@@ -26,7 +26,8 @@ export class MetricsPage extends React.Component<Props> {
   }
 
   async sortSelected(e: any) {
-    this.props.metricActions!.filterMetrics(e.target.value);
+    await this.props.metricActions!.filterMetrics(e.target.value);
+
   }
 
   render() {

@@ -15,7 +15,18 @@ interface Props {
 @observer
 export class ActionsTimeCard extends React.Component<Props> {
   async componentWillMount() {
-    await this.props.metricActions!.calculateAverages();
+    await this.props.metricActions!.initializeStores();
+  }
+
+  calculateAverage(flow: string) {
+    let value: number = this.props.metricActions!.calculateAverageDifference(flow);
+    return (
+      <span className={value > -1 ? 'green' : 'red'}>
+        {
+        '(' +  (value === 0 || Number.isNaN(value) ? '' : (value > -1 ? '-' : '+')) + value + ' Seconds)'
+        }
+      </span>
+    );
   }
 
   render() {
@@ -31,20 +42,74 @@ export class ActionsTimeCard extends React.Component<Props> {
         </div>
         <div className="cardContent">
           <div className="averageTime">
-            <div>{this.props.metricActions!.calculateWorkflowAverage(this.props.metricStore!.metrics) + 's'}</div>
+            <div>
+              {
+                this.props.metricStore!.averages.workflow.length > 0 &&
+                this.props.metricActions!.calculateAverage(
+                  'workflow',
+                  this.props.metricStore!.filterValue
+                ) + 's'
+              }
+            </div>
             <div>Avg. Workflow Time</div>
+            <div className="difference">
+              {
+                this.props.metricStore!.averages.workflow.length > 0 &&
+                this.calculateAverage('workflow')
+              }
+            </div>
           </div>
           <div className="averageUpload">
-            <div>{this.props.metricStore!.uploadAverage + 's'}</div>
+            <div>
+              {
+                this.props.metricStore!.averages.upload.length > 0 &&
+                this.props.metricActions!.calculateAverage(
+                  'upload',
+                  this.props.metricStore!.filterValue
+                ) + 's'
+              }
+            </div>
             <div>Avg. Upload Time</div>
+            <div className="difference">
+              {
+                this.props.metricStore!.averages.upload.length > 0 &&
+                this.calculateAverage('upload')
+              }
+            </div>
           </div>
           <div className="averageRename">
-            <div>{this.props.metricStore!.renameAverage + 's'}</div>
+            <div>
+              {
+                this.props.metricStore!.averages.rename.length > 0 &&
+                this.props.metricActions!.calculateAverage(
+                  'rename',
+                  this.props.metricStore!.filterValue
+                ) + 's'}
+            </div>
             <div>Avg. Rename Time</div>
+            <div className="difference">
+              {
+                this.props.metricStore!.averages.rename.length > 0 &&
+                this.calculateAverage('rename')
+              }
+            </div>
           </div>
           <div className="averageDownload">
-            <div>{this.props.metricStore!.downloadAverage + 's'}</div>
+            <div>
+              {
+                this.props.metricStore!.averages.download.length > 0 &&
+                this.props.metricActions!.calculateAverage(
+                  'download',
+                  this.props.metricStore!.filterValue
+                ) + 's'}
+            </div>
             <div>Avg. Download Time</div>
+            <div className="difference">
+              {
+                this.props.metricStore!.averages.download.length > 0 &&
+                this.calculateAverage('download')
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -82,6 +147,14 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   bottom: 20px;
 }
 
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
 .actionTimesIcon > div > div {
   margin-top: 16px;
   color: #D4D6DB;
@@ -100,11 +173,14 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
     color: #fff;
   }
   
-  div:last-of-type {
+  div:nth-of-type(2) {
     font-size: 24px;
     color: #D4D6DB;
     width: 161px;
   }
 }
 
+.difference {
+  font-size: 14px;
+}
 `);

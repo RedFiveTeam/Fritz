@@ -1,30 +1,49 @@
 import * as React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import { ActionsTimeCard } from './ActionsTimeCard';
 import { MetricStore } from './MetricStore';
+import { AverageSubsetModel } from '../average/AverageSubsetModel';
 
 describe('ActionsTimeCard', () => {
-  let subject: ShallowWrapper;
+  let subject: ReactWrapper;
   let metricStore: MetricStore;
   let metricActions: any;
 
   beforeEach(() => {
+    metricStore = new MetricStore();
+
+    metricStore.averages.setWorkflow([new AverageSubsetModel(123523521, 42)]);
+    metricStore.averages.setDownload([new AverageSubsetModel(123523521, 42)]);
+    metricStore.averages.setRename([new AverageSubsetModel(123523521, 42)]);
+    metricStore.averages.setUpload([new AverageSubsetModel(123523521, 42)]);
 
     metricActions = {
       calculateWorkflowAverage: () => {
         return 42;
       },
 
-      calculateAverages: () => {
-        metricStore.setDownloadAverage(16);
-        metricStore.setRenameAverage(20);
-        metricStore.setUploadAverage(25);
-      }
+      calculateAverageDifference: () => {
+        return 1;
+      },
+      initializeStores: jest.fn(),
+
+      calculateAverage: (average: string) => {
+        if (average === 'workflow') {
+          return '42';
+        } else if (average === 'upload') {
+          return '25';
+        } else if (average === 'rename') {
+          return '20';
+        } else if (average === 'download') {
+          return '16';
+        }
+        return null;
+      },
+
+      calculateAverages: jest.fn()
     };
 
-    metricStore = new MetricStore();
-
-    subject = shallow(
+    subject = mount(
       <ActionsTimeCard
         metricActions={metricActions}
         metricStore={metricStore}
@@ -50,5 +69,9 @@ describe('ActionsTimeCard', () => {
 
   it('should display the average time taken for download', () => {
     expect(subject.find('.averageDownload > div').at(0).text()).toBe('16s');
+  });
+
+  it('should display the difference in time for the averages', () => {
+    expect(subject.find('.difference > span').at(0).text()).toBe('(-1 Seconds)');
   });
 });

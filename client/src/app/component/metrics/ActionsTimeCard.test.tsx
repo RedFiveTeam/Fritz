@@ -72,6 +72,6 @@ describe('ActionsTimeCard', () => {
   });
 
   it('should display the difference in time for the averages', () => {
-    expect(subject.find('.difference > span').at(0).text()).toBe('(-1 Seconds)');
+    expect(subject.find('.difference > span').at(0).text()).toBe('(+1 Seconds)');
   });
 });

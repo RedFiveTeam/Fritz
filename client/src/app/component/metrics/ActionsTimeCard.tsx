@@ -21,9 +21,9 @@ export class ActionsTimeCard extends React.Component<Props> {
   calculateAverage(flow: string) {
     let value: number = this.props.metricActions!.calculateAverageDifference(flow);
     return (
-      <span className={value > -1 ? 'green' : 'red'}>
+      <span className={value > 0 ? 'red' : 'green'}>
         {
-        '(' +  (value === 0 || Number.isNaN(value) ? '' : (value > -1 ? '-' : '+')) + value + ' Seconds)'
+        '(' +  (value === 0 || Number.isNaN(value) ? '' : (value > -1 ? '+' : '')) + value + ' Seconds)'
         }
       </span>
     );

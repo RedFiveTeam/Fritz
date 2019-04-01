@@ -170,6 +170,6 @@ export class MetricActions {
       newTime = newTime + newAverages[i].timeTaken;
     }
     let newAverage = Math.round(newTime / newAverages.length);
-    return (oldAverage - newAverage) * -1;
+    return oldAverage - newAverage;
   }
 }

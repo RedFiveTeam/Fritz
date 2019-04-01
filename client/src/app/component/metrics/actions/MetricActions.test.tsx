@@ -99,6 +99,6 @@ describe('MetricActions', () => {
 
   it('should calculate the average difference for the filtered metrics', async () => {
     await subject.setAverages();
-    expect(subject.calculateAverageDifference('download')).toBe(10);
+    expect(subject.calculateAverageDifference('download')).toBe(-10);
   });
 });

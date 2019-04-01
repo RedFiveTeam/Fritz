@@ -30,6 +30,17 @@ export class MetricsPage extends React.Component<Props> {
 
   }
 
+  handleToggle(active: string, inactive: string, activeButton: string, inactiveButton: string) {
+    let activeTab = document.getElementById(active);
+    let inactiveTab = document.getElementById(inactive);
+    let aButton = document.getElementById(activeButton);
+    let iButton = document.getElementById(inactiveButton);
+    activeTab!.style.display = 'block';
+    inactiveTab!.style.display = 'none';
+    aButton!.style.backgroundColor = '#0E5F66';
+    iButton!.style.backgroundColor = '#00818C';
+  }
+
   render() {
     return (
       <div
@@ -45,6 +56,33 @@ export class MetricsPage extends React.Component<Props> {
             id="bannerTitle"
           >
             Metrics
+          </div>
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="..."
+          >
+            <div
+              id="buttons"
+              className="shadow"
+            >
+          <button
+            id="dashBoardButton"
+            type="button"
+            className="btn btn-default text-white"
+            onClick={() => this.handleToggle('tab1', 'tab2', 'dashBoardButton', 'activityLogButton')}
+          >
+            Dashboard
+          </button>
+          <button
+            id="activityLogButton"
+            type="button"
+            className="btn text-white"
+            onClick={() => this.handleToggle('tab2', 'tab1', 'activityLogButton', 'dashBoardButton')}
+          >
+           Activity Log
+          </button>
+            </div>
           </div>
           <div className="secondary-text">
             <div className="sortSection">
@@ -74,8 +112,12 @@ export class MetricsPage extends React.Component<Props> {
         >
           Export as .CSV
         </button>
-        <StyledActionsTimeCard/>
-        <StyledMetricsTable/>
+        <div id="tab1">
+          <StyledActionsTimeCard/>
+        </div>
+        <div id="tab2">
+          <StyledMetricsTable/>
+          </div>
       </div>
     );
   }
@@ -133,5 +175,46 @@ height: 100vh;
   
   .sortSelector {
     margin-left: 10px;
+  }
+  
+  .btn:focus {
+    outline: none !important;
+    box-shadow: none;
+  }
+  
+  .btn-group {
+    width: 228px;
+    bottom: 8px;
+    display: inline-block;
+    position: absolute;
+    top: 13px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    text-align: center;
+    right: 0;
+  }
+
+  #dashBoardButton {
+  background: #0E5F66;
+  }
+  
+  #activityLogButton {
+  background: #00818C;
+  }
+ 
+  #tab2 {
+  display: none;
+  }
+  
+  #buttons {
+  width: max-content;
+  }
+  
+  #activityLogButton {
+  border-radius: 0 4px 4px 0;
+  }
+  
+  #dashBoardButton {
+  border-radius: 4px 0 0 4px;
   }
 `);

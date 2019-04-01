@@ -86,5 +86,4 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
       background: #5C667D; 
     }
   }
-
 `);

@@ -5,7 +5,7 @@ Feature('Home Page');
 Scenario('should allow you to edit the activity and time of a image and view image in expanded view', (I) => {
   I.amOnPage('/');
   I.attachFile('#uploadButton', 'data/');
-  I.wait(5);
+  I.wait(10);
   I.waitForText('DDTTTTZMONYY_TGT_NAME_ACTY_ASSET_CLASSIFICATION', 10);
   I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > .row > .col-md-8 > .slidesInputs > .activityInputField > input', 'activity test');
   I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > .row > .col-md-8 > .slidesInputs > .timeInputField > input', '1234');
@@ -19,7 +19,7 @@ Scenario('should allow you to edit the activity and time of a image and view ima
   I.waitForText('JPEG Renamer - Details', 10);
 });
 
-Scenario('should allow you to upload a file, validate it, and display the pngs', (I) => {
+Scenario('should allow you to upload a file, validate it, and display the jpgs', (I) => {
   I.amOnPage('/');
   I.click('#downloadbutton');
   I.waitForText('You must upload a folder', 10);
@@ -34,7 +34,7 @@ Scenario('should allow you to upload a file, validate it, and display the pngs',
   I.waitForText('Are you sure you want to delete these JPGs', 10);
   I.click('.btn-primary');
   I.waitForText('JPGs Removed', 10);
-  I.waitForText('Drag and drop', 10);
+  I.waitForText('Upload', 10);
 });
 
 Scenario('should display a classification banner on the homepage', (I) => {

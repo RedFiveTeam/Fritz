@@ -7,17 +7,8 @@ import { StyledActionsTimeCard } from '../component/metrics/ActionsTimeCard';
 describe('MetricsPage', () => {
   let subject: ShallowWrapper;
   let metricActions: any;
-  let classificationStore: any;
-  let classificationActions: any;
 
   beforeEach(() => {
-    classificationStore = {
-      classification: 'UNCLASS'
-    };
-
-    classificationActions = {
-      initializeStore: jest.fn()
-    };
 
     metricActions = {
       exportMetrics: jest.fn(),
@@ -27,13 +18,12 @@ describe('MetricsPage', () => {
     subject = shallow(
       <MetricsPage
         metricActions={metricActions}
-        classificationStore={classificationStore}
-        classificationActions={classificationActions}
       />
     );
   });
 
-  it('should render the metrics table', () => {
+  it('should render the dashboard', () => {
+    expect(subject.find(StyledActionsTimeCard).exists()).toBeTruthy();
     expect(subject.find(StyledMetricsTable).exists()).toBeTruthy();
   });
 
@@ -53,5 +43,10 @@ describe('MetricsPage', () => {
   it('should display a select menu with options for filtering metrics', () => {
     expect(subject.find('.sortSelector').simulate('change', {target: {value: 60 * 60 * 24}}));
     expect(metricActions.filterMetrics).toHaveBeenCalledWith(60 * 60 * 24);
+  });
+
+  it('should render two different tabs', () => {
+    expect(subject.find('#tab1').exists()).toBeTruthy();
+    expect(subject.find('#tab2').exists()).toBeTruthy();
   });
 });

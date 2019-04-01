@@ -67,7 +67,7 @@ export class UploadActions {
   @action.bound
   setSlides(names: string[]) {
     let temp: SlideModel[] = [];
-    names.map((name, idx) => {
+    names.map((name) => {
       let slide = new SlideModel();
       slide.setOldName(name);
       temp.push(slide);

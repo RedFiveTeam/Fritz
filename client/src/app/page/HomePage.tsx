@@ -5,23 +5,14 @@ import { StyledAppBody } from '../component/body/AppBody';
 import { StyledToast } from '../../utils/Toast';
 import { StyledFooter } from '../component/footer/Footer';
 import { StyledDeleteModal } from '../component/modals/DeleteModal';
-import { StyledClassificationBanner } from '../component/classification/ClassificationBanner';
-import { ClassificationStore } from '../component/classification/store/ClassificationStore';
-import { ClassificationActions } from '../component/classification/ClassificationActions';
 import { StyledExpandedView } from '../component/modals/ExpandedView';
 
 interface Props {
   className?: string;
-  classificationStore?: ClassificationStore;
-  classificationActions?: ClassificationActions;
 }
 
 @observer
 export class HomePage extends React.Component<Props> {
-
-  async componentDidMount() {
-    await this.props.classificationActions!.initializeStore();
-  }
 
   render() {
     return (
@@ -31,9 +22,6 @@ export class HomePage extends React.Component<Props> {
         <StyledToast/>
         <StyledDeleteModal/>
         <StyledExpandedView/>
-        <StyledClassificationBanner
-          classification={this.props.classificationStore!.classification}
-        />
         <div
           className="mainBody"
         >
@@ -50,5 +38,4 @@ height: auto;
 min-height: 1060px;
 overflow-y: hidden;
 position: relative;
-top: 24px;
 `);

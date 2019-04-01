@@ -15,11 +15,11 @@ export class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <div>
+      <div className="ParentAppBody">
+        <div className="ParentHeader" style={{height: 91}}>
           <StyledHeader/>
         </div>
-        <div style={this.css}>
+        <div className="ParentWrappedRoutes" style={this.css}>
           <WrappedRoutes/>
         </div>
       </div>

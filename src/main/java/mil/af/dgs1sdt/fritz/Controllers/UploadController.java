@@ -92,12 +92,12 @@ public class UploadController {
       }
       Collections.sort(fileNames, new Comparator<String>() {
         public int compare(String o1, String o2) {
-          return extractInt(o1) - extractInt(o2);
+          return Long.valueOf(extractInt(o1)).compareTo(Long.valueOf(extractInt(o2)));
         }
-        int extractInt(String s) {
+        Long extractInt(String s) {
           String num = s.replaceAll("\\D", "");
           // return 0 if no digits found
-          return num.isEmpty() ? 0 : Integer.parseInt(num);
+          return num.isEmpty() ? 0 : Long.parseLong(num);
         }
       });
     }

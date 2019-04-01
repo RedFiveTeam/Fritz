@@ -16,5 +16,4 @@ describe('UploadProgressContainer', () => {
   it('should render placeholder text', () => {
     expect(subject.find('.uploadingText').text()).toContain('Please give us a moment');
   });
-
 });

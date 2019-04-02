@@ -54,12 +54,5 @@ export class ClassificationBanner extends React.Component<Props> {
 }
 
 export const StyledClassificationBanner = styled(ClassificationBanner)`
-  text-align: center;
-  width: 101%;
-  top: 0;
-  z-index: 1000;
-  position: fixed;
-  height: 27px;
-  font-weight: bold;
-  font-size: 20px;
+
 `;

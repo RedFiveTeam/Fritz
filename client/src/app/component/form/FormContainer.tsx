@@ -23,14 +23,17 @@ export class FormContainer extends React.Component<Props> {
     color: '#e46373'
   };
 
-  goodCSS: CSSProperties = {
-  };
+  goodCSS: CSSProperties = {};
 
   render() {
     return (
       <div
         className={this.props.className}
       >
+        <div className="leftText">
+          <h2>JPEG Renamer - Details</h2>
+          <span>Complete the fields below to view and download JPEGs</span>
+        </div>
         <form>
           <div className="form-group">
             <label
@@ -48,11 +51,10 @@ export class FormContainer extends React.Component<Props> {
                 let month = months[parseInt(e.target.value.substr(5, 2), 10) - 1];
                 let year = e.target.value.substr(2, 2);
                 let day = e.target.value.substr(8, 2);
-                let newValue: any = day + 'TTTTZ' + month + year;
                 if (month === undefined || year === undefined || day === undefined) {
-                  this.props.slidesActions!.setAndUpdateDate(null);
+                  this.props.slidesActions!.setAndUpdateDate(null, null, null);
                 } else {
-                  this.props.slidesActions!.setAndUpdateDate(newValue);
+                  this.props.slidesActions!.setAndUpdateDate(month, year, day);
                 }
               }}
               className="form-control"
@@ -64,7 +66,7 @@ export class FormContainer extends React.Component<Props> {
             {
               this.props.slidesStore!.validate &&
               !this.props.slidesStore!.isValidDate() &&
-              <div className="errorText">Field cannot be empty</div>
+              <div className="errorText">Field must be in the correct format</div>
             }
           </div>
           <div className="form-group">
@@ -89,7 +91,7 @@ export class FormContainer extends React.Component<Props> {
             {
               this.props.slidesStore!.validate &&
               !this.props.slidesStore!.isValidOpName() &&
-                <div className="errorText">Field cannot be empty</div>
+              <div className="errorText">Field cannot be empty</div>
             }
           </div>
           <div className="form-group">
@@ -152,8 +154,33 @@ export class FormContainer extends React.Component<Props> {
 
 export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled(FormContainer)`
   color: #fff;
-  margin-top: 16px;
-  margin-left: 39px;
+  margin-top: 45px;
+  margin-left: 50px;
+  
+  #folderIcon {
+    margin-bottom: 25px;
+  }
+  
+  span {
+    font-size: 16px;
+    color: #D8E5FF;
+  }
+  
+  form {
+    position: relative;
+    bottom: 2px;
+  }
+  
+  .leftText {
+    position: relative;
+    display: block;
+    transform: translate(0%, -50%);
+    line-height: 12px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
   
   input {
     width: 580px;
@@ -165,6 +192,13 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
     background-color:rgba(0, 0, 0, 0);
     color: #fff;
     border: #15deec solid 1px;
+  }
+  
+  .filename {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 390px;
+    overflow: hidden;
   }
 
   label {

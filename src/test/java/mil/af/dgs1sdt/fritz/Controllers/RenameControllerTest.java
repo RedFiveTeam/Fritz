@@ -16,29 +16,24 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class RenameControllerTest extends BaseIntegrationTest {
 
-  RenameModel rn1 = new RenameModel("sampl.pptx-0001.png", "14TTTTZMAR19_TEST_ACTY_TEST_TEST1");
-  RenameModel rn2 = new RenameModel("sampl.pptx-0000.png", "14TTTTZMAR19_TEST_ACTY_TEST_TEST2");
+  RenameModel rn1 = new RenameModel("samplepptx.jpg", "14TTTTZMAR19_TEST_ACTY_TEST_TEST1", false);
 
   List<RenameModel> renameList = new ArrayList<>();
 
   @Test
   public void renameTest() throws Exception {
     renameList.add(rn1);
-    renameList.add(rn2);
-
     given()
       .port(port)
-      .multiPart(new File("./samplepptx.pptx"))
+      .multiPart("file[]", new File("./samplepptx.jpg"))
       .when()
       .post(UploadController.URI)
       .then()
       .statusCode(200)
-      .body("file", equalTo("samplepptx.pptx"));
+      .body("file", equalTo("samplepptx.jpg"));
 
     File dir = new File("/tmp/complete/72432c9fb76cf45094c29fc92c4b16f0/");
     dir.mkdir();
-
-    Thread.sleep(5000);
 
     given()
       .port(port)
@@ -50,6 +45,6 @@ public class RenameControllerTest extends BaseIntegrationTest {
       .then()
       .statusCode(200);
 
-    assert(new File("/tmp/complete/72432c9fb76cf45094c29fc92c4b16f0/").listFiles()[0].toString().contains("14TTTTZMAR19_TEST_ACTY_TEST_TEST"));
+    assert(new File("/tmp/working/72432c9fb76cf45094c29fc92c4b16f0/").listFiles()[0].toString().contains("14TTTTZMAR19_TEST_ACTY_TEST_TEST"));
   }
 }

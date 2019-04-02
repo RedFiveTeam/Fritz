@@ -3,13 +3,27 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { HomePage } from './HomePage';
 import { StyledFooter } from '../component/footer/Footer';
 import { StyledAppBody } from '../component/body/AppBody';
-import { StyledHomePageHeader } from '../component/header/HomePageHeader';
+import { StyledClassificationBanner } from '../component/classification/ClassificationBanner';
 
 describe('HomePage', () => {
   let subject: ShallowWrapper;
+  let classificationStore: any;
+  let classificationActions: any;
 
   beforeEach(() => {
-    subject = shallow(<HomePage/>);
+    classificationStore = {
+      classification: 'UNCLASS'
+    };
+
+    classificationActions = {
+      initializeStore: jest.fn()
+    };
+
+    subject = shallow(
+      <HomePage
+        classificationStore={classificationStore}
+        classificationActions={classificationActions}
+      />);
   });
 
   it('should have a body', () => {
@@ -20,8 +34,8 @@ describe('HomePage', () => {
     expect(subject.find(StyledFooter).exists()).toBeTruthy();
   });
 
-  it('should have the hope page header', () => {
-    expect(subject.find(StyledHomePageHeader).exists()).toBeTruthy();
+  it('should contain a classification banner', () => {
+    expect(subject.find(StyledClassificationBanner).exists()).toBeTruthy();
   });
 
 });

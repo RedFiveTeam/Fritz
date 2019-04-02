@@ -18,3 +18,5 @@ spring:
       max-file-size: 100MB
 
 server.compression.enabled: false
+
+classified: {$CLASSIFIED}

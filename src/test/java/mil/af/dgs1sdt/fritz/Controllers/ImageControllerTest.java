@@ -13,8 +13,8 @@ public class ImageControllerTest extends BaseIntegrationTest {
 
   @Test
   public void imageTest() throws Exception {
-    File file = new File("/tmp/complete/test");
-    File newImage = new File("/tmp/complete/test/test.png");
+    File file = new File("/tmp/working/test");
+    File newImage = new File("/tmp/working/test/test.jpg");
     file.mkdirs();
     newImage.createNewFile();
 
@@ -22,10 +22,10 @@ public class ImageControllerTest extends BaseIntegrationTest {
       .port(port)
       .header(new Header("Cookie", "id=test"))
       .when()
-      .get(ImageController.URI + "/0")
+      .get(ImageController.URI + "/test")
       .then()
       .statusCode(200)
-      .contentType(MediaType.IMAGE_PNG_VALUE);
+      .contentType(MediaType.IMAGE_JPEG_VALUE);
 
     newImage.delete();
     file.delete();

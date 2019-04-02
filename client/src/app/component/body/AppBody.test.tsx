@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { AppBody } from './AppBody';
-import { StyledProgressBar } from '../progressBar/ProgressBar';
 import { UploadStore } from '../form/upload/UploadStore';
 import { StyledFormContainer } from '../form/FormContainer';
 import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
@@ -34,11 +33,4 @@ describe('Header', () => {
     uploadStore.setPlaceholder(false);
     expect(subject.find(StyledSlidesContainerPlaceholder).exists()).toBeFalsy();
   });
-
-  it('should render a progress bar on upload, default: not-rendered', () => {
-    expect(subject.find(StyledProgressBar).exists()).toBeFalsy();
-    uploadStore.setProcessing(true);
-    expect(subject.find(StyledProgressBar).exists()).toBeTruthy();
-  });
-
 });

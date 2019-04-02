@@ -7,17 +7,8 @@ import { StyledActionsTimeCard } from '../component/metrics/ActionsTimeCard';
 describe('MetricsPage', () => {
   let subject: ShallowWrapper;
   let metricActions: any;
-  let classificationStore: any;
-  let classificationActions: any;
 
   beforeEach(() => {
-    classificationStore = {
-      classification: 'UNCLASS'
-    };
-
-    classificationActions = {
-      initializeStore: jest.fn()
-    };
 
     metricActions = {
       exportMetrics: jest.fn(),
@@ -27,8 +18,6 @@ describe('MetricsPage', () => {
     subject = shallow(
       <MetricsPage
         metricActions={metricActions}
-        classificationStore={classificationStore}
-        classificationActions={classificationActions}
       />
     );
   });

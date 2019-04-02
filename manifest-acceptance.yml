@@ -4,6 +4,7 @@ applications:
   buildpacks:
     - https://github.com/cloudfoundry/java-buildpack.git
   memory: 1GB
+  stack: cflinuxfs3
   instances: 1
   path: target/fritz-0.0.1-SNAPSHOT.jar
   environment:

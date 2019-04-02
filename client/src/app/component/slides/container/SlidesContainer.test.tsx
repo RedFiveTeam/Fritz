@@ -4,6 +4,7 @@ import { SlidesContainer } from './SlidesContainer';
 import { SlidesStore } from '../SlidesStore';
 import { SlideModel } from '../SlideModel';
 import { StyledSlideCard } from '../slideCard/SlideCard';
+import { StyledUndoDeleteContainer } from '../../UndoDelete/UndoDeleteContainer';
 
 describe('SlidesContainer', () => {
   let subject: ShallowWrapper;
@@ -24,5 +25,11 @@ describe('SlidesContainer', () => {
 
   it('should render a list of image files', async () => {
     await expect(subject.find(StyledSlideCard).length).toBe(3);
+  });
+
+  it('should render the undo container when a slide is deleted', () => {
+    expect(subject.find(StyledUndoDeleteContainer).length).toBe(0);
+    slideModel1.setDeleted(true);
+    expect(subject.find(StyledUndoDeleteContainer).length).toBe(1);
   });
 });

@@ -12,6 +12,7 @@ public class StatusModel {
   private int progress;
   private int total;
   private Thread thread;
+  private String[] times;
 
   public String getStatus() {
     return status;

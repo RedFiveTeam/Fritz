@@ -1,6 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { MetricModel } from './MetricModel';
 import { MetricRepository } from './repository/MetricRepository';
+import { AverageModel } from '../average/AverageModel';
 
 export class MetricStore {
   @observable private _metrics: MetricModel[] = [];
@@ -8,9 +9,36 @@ export class MetricStore {
   @observable private _endTime: String;
   @observable private _pendingDownloadMetric: MetricModel;
   @observable private _pendingConversionMetric: MetricModel;
+  @observable private _pendingRenamingMetric: MetricModel;
+  @observable private _filteredMetrics: MetricModel[] = [];
+  @observable private _filterValue: number = 9007199254740991;
+  @observable private _averages: AverageModel = new AverageModel();
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
+    if (this._filteredMetrics.length === 0) {
+      this._filteredMetrics = this._metrics;
+    }
+  }
+
+  @computed
+  get averages(): AverageModel {
+    return this._averages;
+  }
+
+  @computed
+  get filterValue(): number {
+    return this._filterValue;
+  }
+
+  @computed
+  get filteredMetrics(): MetricModel[] {
+    return this._filteredMetrics;
+  }
+
+  @computed
+  get pendingRenamingMetric(): MetricModel {
+    return this._pendingRenamingMetric;
   }
 
   @computed
@@ -36,6 +64,21 @@ export class MetricStore {
   @computed
   get endTime(): String {
     return this._endTime;
+  }
+
+  @action.bound
+  setAverage(value: AverageModel) {
+    this._averages = value;
+  }
+
+  @action.bound
+  setFilterValue(value: number) {
+    this._filterValue = value;
+  }
+
+  @action.bound
+  setPendingRenamingMetric(value: MetricModel) {
+    this._pendingRenamingMetric = value;
   }
 
   @action.bound
@@ -68,4 +111,8 @@ export class MetricStore {
     this._pendingConversionMetric = value;
   }
 
+  @action.bound
+  setFilteredMetrics(value: MetricModel[]) {
+    this._filteredMetrics = value;
+  }
 }

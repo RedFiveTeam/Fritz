@@ -3,13 +3,36 @@ import { SlideModel } from './SlideModel';
 
 export class SlidesStore {
   @observable private _files: string[] = [];
-  @observable private _date: string | null;
   @observable private _opName: string | null;
   @observable private _asset: string | null;
   @observable private _classification: string | null;
   @observable private _slides: SlideModel[] = [];
   @observable private _validate: boolean = false;
   @observable private _activity: string | null;
+  @observable private _time: string | null;
+  @observable private _month: string | null = 'MON';
+  @observable private _year: string | null = 'YY';
+  @observable private _day: string | null = 'DD';
+
+  @computed
+  get month(): string | null {
+    return this._month;
+  }
+
+  @computed
+  get year(): string | null {
+    return this._year;
+  }
+
+  @computed
+  get day(): string | null {
+    return this._day;
+  }
+
+  @computed
+  get time(): string | null {
+    return this._time;
+  }
 
   @computed
   get activity(): string | null {
@@ -24,11 +47,6 @@ export class SlidesStore {
   @computed
   get slides(): SlideModel[] {
     return this._slides;
-  }
-
-  @computed
-  get date(): string | null {
-    return this._date;
   }
 
   @computed
@@ -52,6 +70,12 @@ export class SlidesStore {
   }
 
   @action.bound
+  setTime(slide: SlideModel, value: string) {
+    this._time = value;
+    slide.setTime(value);
+  }
+
+  @action.bound
   setActivity(slide: SlideModel, value: string) {
     this._activity = value;
     slide.setActivity(value);
@@ -60,11 +84,6 @@ export class SlidesStore {
   @action.bound
   setFiles(value: string[]) {
     this._files = value;
-  }
-
-  @action.bound
-  setDate(value: string | null) {
-    this._date = value;
   }
 
   @action.bound
@@ -92,15 +111,48 @@ export class SlidesStore {
     this._validate = value;
   }
 
+  @action.bound
+  setMonth(value: string | null) {
+    this._month = value;
+  }
+
+  @action.bound
+  setYear(value: string | null) {
+    this._year = value;
+  }
+
+  @action.bound
+  setDay(value: string | null) {
+    this._day = value;
+  }
+
   isValidName(): boolean {
-    return (this._date !== undefined && this._date!.length > 0) &&
+    return (
       (this._opName !== undefined && this._opName!.length > 0) &&
       (this._asset !== undefined && this._asset!.length > 0) &&
-      (this._classification !== undefined && this._classification!.length > 0);
+      (this._classification !== undefined && this._classification!.length > 0)
+    );
   }
 
   isValidDate(): boolean {
-    return (this._date !== null && this._date !== undefined && this._date!.length > 0);
+    return (
+      (
+        (
+          this._day !== 'DD' &&
+          this._month !== 'MON' &&
+          this._year !== 'YY'
+        ) &&
+        this._day !== null &&
+        this._day !== undefined &&
+        this._day.length > 0 &&
+        this._month !== null &&
+        this._month !== undefined &&
+        this._month.length > 0 &&
+        this._year !== null &&
+        this._year !== undefined &&
+        this._year.length > 0
+      )
+    );
   }
 
   isValidOpName(): boolean {
@@ -117,12 +169,16 @@ export class SlidesStore {
 
   @computed
   get nameFormat(): string {
-    return ((this._date || 'DDTTTTZMONYY') + '_' +
+    return ((
+      (this._day || 'DD') +
+      (this._time || 'TTTT') + 'Z' +
+      (this._month || 'MON') +
+      (this._year || 'YY') + '_' +
       (this._opName || 'TGT_NAME') + '_' +
       (this._activity || '_ACTY_') + '_' +
       (this._asset || 'ASSET') + '_' +
       (this._classification || 'CLASSIFICATION'))
       .split(' ').join('_')
-      .toUpperCase();
+      .toUpperCase());
   }
 }

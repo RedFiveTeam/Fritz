@@ -2,10 +2,10 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledFormContainer } from '../form/FormContainer';
-import { StyledProgressBar } from '../progressBar/ProgressBar';
 import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
 import { UploadStore } from '../form/upload/UploadStore';
 import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
+import { StyledUploadProgressContainer } from '../slides/container/UploadProgressContainer';
 
 interface Props {
   className?: string;
@@ -26,11 +26,11 @@ export class AppBody extends React.Component<Props> {
         <div className="right">
           <StyledSlidesContainer/>
           {
-            this.props.uploadStore!.processing &&
-            <StyledProgressBar/>
+            this.props.uploadStore!.uploading &&
+              <StyledUploadProgressContainer/>
           }
           {
-            this.props.uploadStore!.placeholder &&
+            this.props.uploadStore!.placeholder && !this.props.uploadStore!.uploading &&
             <StyledSlidesContainerPlaceholder/>
           }
         </div>
@@ -41,9 +41,10 @@ export class AppBody extends React.Component<Props> {
 
 export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   .spacer {
+    width: 5px;
     overflow: hidden;
     position: absolute;
-    top: 17%;
+    top: 72px;
     display: inline-block;
     height: 625px;
     border-left: 1px solid #6C7F9C;
@@ -56,13 +57,15 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   }
   
   .right {
+    scroll-behavior: smooth;
     width: 51%;
-    max-height: 750px;
+    max-height: 745px;
     min-height: 500px;
     display: inline-block;
     position: absolute;
     padding-top: 16px;
     overflow-y: auto;
+    margin-top: 3px;
     /* width */
     ::-webkit-scrollbar {
       width: 10px;

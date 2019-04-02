@@ -52,7 +52,7 @@ export class Toast extends React.Component<Props> {
 
 export const StyledToast = styled(Toast)`
   position: absolute;
-  top: 52px;
+  top: 8px;
   left: 50%;
   transform: translate(-50%, 0%);
   display: block;

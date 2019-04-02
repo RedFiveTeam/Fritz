@@ -22,8 +22,8 @@ export class SlidesContainerPlaceholder extends React.Component<Props> {
         />
         <p>
           Fill out the form on the left and
-          upload a powerpoint to view
-          previews of converted JPEGs
+          upload a folder of JPGs to view
+          previews of renamed JPEGs
         </p>
       </div>
     );

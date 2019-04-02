@@ -34,7 +34,7 @@ function acceptanceTests {
         ./seed_db.sh
     popd
 
-    java -jar ${BASE_DIR}/target/fritz-[0-9\.]*-SNAPSHOT.jar --server.port=9090 &> ${BASE_DIR}/tmp/acceptance.log &
+    java -DCLASSIFIED=UNCLASSIFIED -jar ${BASE_DIR}/target/fritz-[0-9\.]*-SNAPSHOT.jar --server.port=9090 &> ${BASE_DIR}/tmp/acceptance.log &
     echo $! > ${BASE_DIR}/tmp/fritz.pid
 
     testConnection ${REACT_APP_HOST} $(cat ${BASE_DIR}/tmp/fritz.pid)
@@ -59,7 +59,7 @@ function unitTests {
     showBanner "Unit Tests"
 
     pushd ${BASE_DIR}
-        result=$(mvn test | grep -E "\[INFO\]|\[ERROR\]|Expected")
+        result=$(mvn -DCLASSIFIED=UNCLASSIFIED test | grep -E "\[INFO\]|\[ERROR\]|Expected")
         echo "${result}"
         if [[ $(echo ${result} | grep "\[ERROR\]" | wc -l) -gt 0 ]]; then
             exit 1

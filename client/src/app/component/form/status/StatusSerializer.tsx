@@ -6,6 +6,7 @@ export class StatusSerializer implements Serializer<StatusModel> {
     return {
       status: item.status,
       files: item.files,
+      times: item.times,
       progress: item.progress,
       total: item.total
     };
@@ -15,6 +16,7 @@ export class StatusSerializer implements Serializer<StatusModel> {
     return new StatusModel(
       item.status,
       item.files,
+      item.times,
       item.progress,
       item.total
     );

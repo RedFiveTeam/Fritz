@@ -40,36 +40,4 @@ public class TrackingModel {
   public void setStatus(String status) {
     this.status = status;
   }
-
-  @NonNull
-  public int getCompletedSlides() {
-    return completedSlides;
-  }
-
-  @NonNull
-  public void setCompletedSlides(int completedSlides) {
-    this.completedSlides = completedSlides;
-  }
-
-  public int getTotalSlides() {
-    return totalSlides;
-  }
-
-  public void setTotalSlides(int totalSlides) {
-    this.totalSlides = totalSlides;
-  }
-
-  public Thread getTh() {
-    return th;
-  }
-
-  public void setTh(Thread th) {
-    this.th = th;
-  }
-
-  public String[] getTimes() { return times; }
-
-  public void updateFileList(String oldName, String newName) {
-    fileList.set(fileList.indexOf(oldName), newName);
-  }
 }

@@ -5,7 +5,7 @@ Feature('Home Page');
 Scenario('should allow you to edit the activity and time of a image and view image in expanded view', (I) => {
   I.amOnPage('/');
   I.attachFile('#uploadButton', 'data/');
-  I.wait(5);
+  I.wait(10);
   I.waitForText('DDTTTTZMONYY_TGT_NAME_ACTY_ASSET_CLASSIFICATION', 10);
   I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > .row > .col-md-8 > .slidesInputs > .activityInputField > input', 'activity test');
   I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > .row > .col-md-8 > .slidesInputs > .timeInputField > input', '1234');

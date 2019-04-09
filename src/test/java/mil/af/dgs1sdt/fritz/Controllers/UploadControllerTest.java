@@ -3,7 +3,6 @@ package mil.af.dgs1sdt.fritz.Controllers;
 import io.restassured.http.Header;
 import mil.af.dgs1sdt.fritz.BaseIntegrationTest;
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
-import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.junit.Test;
 
@@ -14,7 +13,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class UploadControllerTest extends BaseIntegrationTest {
 
-  StatusStore store;
   TrackingStore trackingStore;
   TrackingModel tm = new TrackingModel();
 

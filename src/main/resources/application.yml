@@ -15,7 +15,8 @@ spring:
       use-new-id-generator-mappings: false
   servlet:
     multipart:
-      max-file-size: 100MB
+      max-file-size: 500MB
+      max-request-size: 500MB
 
 server.compression.enabled: false
 

@@ -45,7 +45,7 @@ export class UploadContainer extends React.Component<Props> {
         }
       }
     } else {
-      formData.append('file[]', e.dataTransfer.files[0]);
+      formData.append('file[]', e.dataTransfer.files);
     }
     let file: File = formData.get('file[]') as File;
     if (file) {
@@ -60,19 +60,9 @@ export class UploadContainer extends React.Component<Props> {
   displayUploadRequest() {
     return (
       <div
-        onDragEnter={(e: any) => {
-          let evt = e as Event;
-          evt.preventDefault();
-        }}
-        onDragOver={(e: any) => {
-          let evt = e as Event;
-          evt.preventDefault();
-        }}
-        onDrop={this.doUpload}
         className="row align-items-center h-100 text-center"
       >
-        <p className="col-8 mx-auto mt-5">Drag and drop Folder</p>
-        <p className="col-9 mx-auto ">or</p>
+        <p className="col-8 mx-auto mt-5">Upload .jpg files</p>
         <input
           name="uploadButton"
           id="uploadButton"
@@ -85,7 +75,7 @@ export class UploadContainer extends React.Component<Props> {
           htmlFor="uploadButton"
           className="btn btn-outline-info form-control-file col-5 mx-auto mb-5 w-25 text-white"
         >
-          <img draggable={true} src={uploadIcon}/>
+          <img src={uploadIcon}/>
           <span className="ml-2 font-weight-bold">Upload Folder</span>
         </label>
       </div>

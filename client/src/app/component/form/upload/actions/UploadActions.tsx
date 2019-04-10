@@ -27,7 +27,7 @@ export class UploadActions {
   }
 
   @action.bound
-  async upload(file: object) {
+  async upload(file: object, folder: string) {
     await this.metricActions.trackMetric('Upload');
     this.uploadStore.setUploading(true);
     const resp = await this.uploadRepository.upload(file);
@@ -80,4 +80,9 @@ export class UploadActions {
     clearInterval(this.poll);
     this.uploadStore.setConversionStatus(false);
   }
+
+  setFolderName(Folder: string) {
+    this.uploadStore!.setFolderName(Folder);
+  }
+
 }

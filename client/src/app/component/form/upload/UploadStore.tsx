@@ -3,6 +3,7 @@ import { action, computed, observable } from 'mobx';
 export class UploadStore {
   @observable private _uploaded: boolean = false;
   @observable private _fileName: string = '';
+  @observable private _folderName: string = '';
   @observable private _hash: string = '';
   @observable private _conversionStatus: boolean = false;
   @observable private _placeholder: boolean = true;
@@ -16,6 +17,11 @@ export class UploadStore {
   @action.bound
   setFileName(fileName: string) {
     this._fileName = fileName;
+  }
+
+  @action.bound
+  setFolderName(FolderName: string) {
+    this._folderName = FolderName;
   }
 
   @action.bound
@@ -51,6 +57,11 @@ export class UploadStore {
   @computed
   get fileName() {
     return this._fileName;
+  }
+
+  @computed
+  get folderName() {
+    return this._folderName;
   }
 
   @computed

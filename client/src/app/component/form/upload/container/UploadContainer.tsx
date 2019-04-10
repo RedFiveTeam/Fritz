@@ -48,8 +48,10 @@ export class UploadContainer extends React.Component<Props> {
       formData.append('file[]', e.dataTransfer.files);
     }
     let file: File = formData.get('file[]') as File;
+    let folder = e.target.files[0].webkitRelativePath.split('/')[0];
+    await this.props.uploadActions!.setFolderName(folder);
     if (file) {
-      await this.props.uploadActions!.upload(formData);
+      await this.props.uploadActions!.upload(formData, folder);
       let ele = document.querySelector('.uploadContainer') as HTMLElement;
       if (ele) {
         ele.style.border = 'none';
@@ -91,7 +93,7 @@ export class UploadContainer extends React.Component<Props> {
         <div className="p-2 text-uppercase w-100 col-9 mx-auto border-top border-bottom" id="folderName">
           <img className="float-left" src={paperclipIcon}/>
           <div className="float-left pl-2 filename">
-            {this.props.uploadStore!.fileName}
+            {this.props.uploadStore!.folderName}
           </div>
           <img
             id="deleteFolder"

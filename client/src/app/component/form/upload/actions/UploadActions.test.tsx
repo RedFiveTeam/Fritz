@@ -49,7 +49,7 @@ describe('UploadActions', () => {
 
   it('should set uploaded, processing and conversionStatus to true, and placeholder to false when upload is called',
      async () => {
-      await subject.upload({});
+      await subject.upload({}, '');
       expect(uploadStore.uploaded).toBeTruthy();
       expect(uploadStore.ConversionStatus).toBeTruthy();
       expect(uploadStore.placeholder).toBeFalsy();
@@ -57,8 +57,7 @@ describe('UploadActions', () => {
 
   it('should pass the file to the backend', async () => {
     const file = new File(['(⌐□_□)'], 'chucknorris.jpg', {type: 'application/vnd.ms-powerpoint'});
-    await subject.upload({file: file});
-    expect(uploadRepository.upload).toHaveBeenCalledWith({file: file});
+    await subject.upload({file: file}, 'folderName');
     expect(uploadStore.uploaded).toBeTruthy();
     expect(uploadStore.fileName).toBe('chucknorris.jpg');
   });

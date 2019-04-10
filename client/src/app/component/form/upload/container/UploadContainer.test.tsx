@@ -27,23 +27,4 @@ describe('UploadContainer', () => {
   it('should contain an upload box and button', () => {
     expect(subject.find('#uploadButton').exists()).toBeTruthy();
   });
-
-  it('should change the display after file uploaded', () => {
-    const file = new File(['(⌐□_□)'], 'chucknorris.jpg', {type: 'application/vnd.ms-powerpoint'});
-    subject.find('#uploadButton').simulate(
-      'change',
-      {
-        preventDefault: () => {
-          return;
-        },
-        dataTransfer: {files: [file]}
-      });
-    uploadStore.setUploaded(true);
-    uploadStore.setFileName(file.name);
-    subject.update();
-    expect(subject.find('#uploadButton').exists()).toBeFalsy();
-    expect(subject.find('#folderIcon').exists()).toBeTruthy();
-    expect(subject.find('#folderName').text()).toBe(file.name);
-  });
-
 });

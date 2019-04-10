@@ -28,7 +28,7 @@ Scenario('should allow you to upload a file, validate it, and display the jpgs',
   I.fillField('#classificationInput', 'secret');
   I.fillField('#assetInput', 'ASSET');
   I.attachFile('#uploadButton', 'data/');
-  I.waitForText('SAMPLEPPTX.JPG', 10);
+  I.waitForText('DATA', 10);
   I.waitForText('DDTTTTZMONYY_OP_TEST_ACTY_ASSET_SECRET', 10);
   I.click('#deleteFolder');
   I.waitForText('Are you sure you want to delete these JPGs', 10);

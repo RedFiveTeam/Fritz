@@ -153,7 +153,7 @@ height: 90vh;
     right: 0;
     color: #93A7C3;
     margin-right: 20px;
-    width: 293px;
+    width: 300px;
     margin: 17px;
     float: right;
   }
@@ -178,7 +178,8 @@ height: 90vh;
     display: inline-block;
     height: 50px;
     vertical-align: top;
-    left: 634px;
+    left: 50%;
+    position: absolute;
     transform: translate(-50%, 0);
   }
 

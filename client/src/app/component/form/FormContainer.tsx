@@ -30,17 +30,17 @@ export class FormContainer extends React.Component<Props> {
       <div
         className={this.props.className}
       >
-        <div className="leftText">
-          <h2>JPEG Renamer - Details</h2>
-          <span>Complete the fields below to view and download JPEGs</span>
-        </div>
         <form>
           <div className="form-group">
+            <div className="header">
+              <h2>JPEG Renamer - Details</h2>
+              <span>Upload a powerpoint .pdf file to view and download converted JPEGs</span>
+            </div>
             <label
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidDate()) ?
                 this.badLabelCSS : this.goodCSS}
             >
-              Date*
+              Date
             </label>
             <br/>
             <input
@@ -74,7 +74,7 @@ export class FormContainer extends React.Component<Props> {
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidOpName()) ?
                 this.badLabelCSS : this.goodCSS}
             >
-              Operation Name*
+              Operation Name
             </label>
             <input
               data-name="opName"
@@ -124,7 +124,7 @@ export class FormContainer extends React.Component<Props> {
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
                 this.badLabelCSS : this.goodCSS}
             >
-              Classification*
+              Classification
             </label>
             <input
               data-name="classification"
@@ -144,7 +144,9 @@ export class FormContainer extends React.Component<Props> {
               <div className="errorText">Field cannot be empty</div>
             }
           </div>
-          <p>* = Required Field</p>
+          <p className="helpMessage">
+            To save as PDF in Powerpoint File > Export > Create PDF/XPS Document
+          </p>
           <InjectedUploadContainer/>
         </form>
       </div>
@@ -233,5 +235,33 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   .errorText {
     position: absolute;
     color: #e46373;
+  }
+  
+  .header {
+    position: relative;
+    margin-bottom: 10px;
+    padding-top: 15px;
+  }
+  
+  .header > span {
+    color: rgb(216, 229, 255);
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+  
+  .header > h2 {
+    line-height: 0.7;
+    font-size: 24px;
+  }
+  
+  .helpMessage {
+    color: rgb(216, 229, 255);
+  }
+  
+  #pdfFileName {
+    text-overflow: ellipsis;
+    width: 390px;
+    overflow: hidden;
+    white-space: nowrap;
   }
 `);

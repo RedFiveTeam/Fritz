@@ -49,7 +49,7 @@ export const StyledHeader = inject('classificationStore', 'classificationActions
   position: fixed;
   top: 26px;
   background: #2B303C;
-  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
   width: 100%;
   a {
   color: #FFF;

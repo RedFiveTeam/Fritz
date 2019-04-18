@@ -3,7 +3,6 @@ package mil.af.dgs1sdt.fritz.Controllers;
 import io.restassured.http.Header;
 import mil.af.dgs1sdt.fritz.BaseIntegrationTest;
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
-import mil.af.dgs1sdt.fritz.Stores.StatusStore;
 import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.junit.Test;
 
@@ -14,14 +13,14 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class UploadControllerTest extends BaseIntegrationTest {
 
-  StatusStore store;
   TrackingStore trackingStore;
   TrackingModel tm = new TrackingModel();
 
   @Test
   public void getStatusTest() throws Exception {
     tm.setHash("1234");
-    tm.setStatus("pending");
+    tm.setCompletedSlides(0);
+    tm.setTotalSlides(10);
     trackingStore.addToList(tm);
 
     given()
@@ -40,7 +39,6 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .orElse(new TrackingModel());
 
     tracking.setCompletedSlides(10);
-    tracking.setStatus("complete");
 
     given()
       .port(port)
@@ -56,11 +54,11 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void uploadFileTest() throws Exception {
     given()
       .port(port)
-      .multiPart("file[]", new File("./samplepptx.jpg"))
+      .multiPart(new File("./PDFExample.pdf"))
       .when()
       .post(UploadController.URI)
       .then()
       .statusCode(200)
-      .body("file", equalTo("samplepptx.jpg"));
+      .body("file", equalTo("PDFExample.pdf"));
   }
 }

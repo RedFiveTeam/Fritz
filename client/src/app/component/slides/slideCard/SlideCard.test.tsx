@@ -9,9 +9,14 @@ describe('SlideCard', () => {
   let slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
   let slidesActions: any;
   let slidesStore: any;
+  let uploadStore: any;
   let metricActions: any;
 
   beforeEach(() => {
+    uploadStore = {
+      hash: 'ljndslkm'
+    };
+
     slideNumber = 2;
 
     slidesStore = {
@@ -38,6 +43,7 @@ describe('SlideCard', () => {
 
     subject = mount(
       <SlideCard
+        uploadStore={uploadStore}
         slideNumber={slideNumber}
         slideModel={slideModel}
         slidesActions={slidesActions}

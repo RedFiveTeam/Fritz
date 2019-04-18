@@ -29,20 +29,4 @@ public class StatusModel {
   public void setFiles(List<String> files) {
     this.files = files;
   }
-
-  public int getProgress() {
-    return progress;
-  }
-
-  public void setProgress(int progress) {
-    this.progress = progress;
-  }
-
-  public int getTotal() {
-    return total;
-  }
-
-  public void setTotal(int total) {
-    this.total = total;
-  }
 }

@@ -31,7 +31,7 @@ describe('UploadActions', () => {
     };
 
     uploadRepository.upload = jest.fn(() => {
-      return new UploadModel('chucknorris.jpg');
+      return new UploadModel('chucknorris.pdf');
     });
 
     uploadRepository.status = jest.fn(() => {
@@ -51,24 +51,26 @@ describe('UploadActions', () => {
      async () => {
       await subject.upload({});
       expect(uploadStore.uploaded).toBeTruthy();
+      expect(uploadStore.processing).toBeTruthy();
       expect(uploadStore.ConversionStatus).toBeTruthy();
       expect(uploadStore.placeholder).toBeFalsy();
     });
 
   it('should pass the file to the backend', async () => {
-    const file = new File(['(⌐□_□)'], 'chucknorris.jpg', {type: 'application/vnd.ms-powerpoint'});
+    const file = new File(['(⌐□_□)'], 'chucknorris.pdf', {type: 'application/pdf'});
     await subject.upload({file: file});
     expect(uploadRepository.upload).toHaveBeenCalledWith({file: file});
     expect(uploadStore.uploaded).toBeTruthy();
-    expect(uploadStore.fileName).toBe('chucknorris.jpg');
+    expect(uploadStore.fileName).toBe('chucknorris.pdf');
   });
 
-  it('should populate the files in the model when checking status', async () => {
+  it('should populate the files and times in the model when checking status', async () => {
     await subject.checkStatus();
     expect(subject.uploadProcessingComplete).toHaveBeenCalled();
     expect(slidesStore.files).toEqual(['slide1.jpg', 'slide2.jpg', 'slide3.jpg']);
     expect(slidesStore.slides[0].oldName).toBe('slide1.jpg');
     expect(slidesStore.slides[1].oldName).toBe('slide2.jpg');
     expect(slidesStore.slides[2].oldName).toBe('slide3.jpg');
+    expect(slidesStore.slides[0].time).toBe('1525');
   });
 });

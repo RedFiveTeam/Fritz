@@ -6,6 +6,7 @@ import { SlidesStore } from '../SlidesStore';
 import styled from 'styled-components';
 import * as ReactDOM from 'react-dom';
 import { MetricActions } from '../../metrics/actions/MetricActions';
+import { UploadStore } from '../../form/upload/UploadStore';
 
 const expandIcon = require('../../../../icon/expandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
@@ -16,6 +17,7 @@ interface Props {
   slideModel: SlideModel;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
+  uploadStore?: UploadStore;
   metricActions?: MetricActions;
   deletedCount?: number;
 }
@@ -52,7 +54,7 @@ export class SlideCard extends React.Component<Props> {
           this.props.slidesStore!.day
         }
         {
-          s.time === 'TTTT' ? <span className="text-info font-italic">TTTTZ</span> : <span>
+          s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> : <span>
             {s.time}Z
           </span>}
         {
@@ -78,7 +80,7 @@ export class SlideCard extends React.Component<Props> {
 
   deleteSlide = async () => {
     this.props.slideModel.setDeleted(true);
-    await this.props.metricActions!.createMetric('Delete PNG');
+    await this.props.metricActions!.createMetric('Delete JPG');
   };
 
   render() {
@@ -90,7 +92,8 @@ export class SlideCard extends React.Component<Props> {
           <div className="row no-gutters">
             <div className="col-md-4">
               <img
-                src={'api/image/' + this.props.slideModel.oldName.replace('.JPG', '.jpg')}
+                src={'api/image/' + this.props.uploadStore!.hash + '/' +
+                this.props.slideModel.oldName.replace('.JPG', '.jpg')}
                 className="card-img"
                 onClick={() => {
                   let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);
@@ -177,7 +180,7 @@ export class SlideCard extends React.Component<Props> {
   }
 }
 
-export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions')(styled(SlideCard)`
+export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions', 'uploadStore')(styled(SlideCard)`
   input {
     width: 166px;
     color: #fff;

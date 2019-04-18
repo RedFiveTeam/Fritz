@@ -35,6 +35,8 @@ export class UploadActions {
     await this.metricActions.updateMetric('Upload');
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
+    this.uploadStore.setUploading(false);
+    this.uploadStore.setProcessing(true);
     this.uploadStore.setPlaceholder(false);
     this.uploadStore.setConversionStatus(true);
     await this.metricActions.trackMetric('Conversion');
@@ -47,13 +49,16 @@ export class UploadActions {
   async checkStatus() {
     this.uploadRepository.status()
       .then((status: StatusModel) => {
+        if (status.status === 'pending') {
+          this.uploadStore.setTotal(status.total);
+          this.uploadStore.setProgress(status.progress);
+        }
         if (status.status === 'complete') {
-          this.uploadStore.setUploading(false);
           this.metricActions.updateMetric('Conversion');
           this.metricActions.trackMetric('Renaming');
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
-          this.setSlides(status.files);
+          this.setSlides(status.files, status.times);
         }
       });
     return;
@@ -65,10 +70,13 @@ export class UploadActions {
   }
 
   @action.bound
-  setSlides(names: string[]) {
+  setSlides(names: string[], times: string[]) {
     let temp: SlideModel[] = [];
     names.map((name, idx) => {
       let slide = new SlideModel();
+      if (times[idx]) {
+        slide.setTime(times[idx]);
+      }
       slide.setOldName(name);
       temp.push(slide);
     });
@@ -78,6 +86,7 @@ export class UploadActions {
 
   uploadProcessingComplete() {
     clearInterval(this.poll);
+    this.uploadStore.setProcessing(false);
     this.uploadStore.setConversionStatus(false);
   }
 }

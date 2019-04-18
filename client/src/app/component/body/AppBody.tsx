@@ -64,12 +64,13 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   .right {
     scroll-behavior: smooth;
     width: 51%;
-    max-height: 745px;
+    max-height: 800px;
     min-height: 500px;
     display: inline-block;
     position: absolute;
     padding-top: 16px;
     overflow-y: auto;
+    overflow-x: hidden;
     margin-top: 3px;
     /* width */
     ::-webkit-scrollbar {

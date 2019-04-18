@@ -54,7 +54,7 @@ export class SlideCard extends React.Component<Props> {
           this.props.slidesStore!.day
         }
         {
-          s.time === 'TTTT' ? <span className="text-info font-italic">TTTTZ</span> : <span>
+          s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> : <span>
             {s.time}Z
           </span>}
         {

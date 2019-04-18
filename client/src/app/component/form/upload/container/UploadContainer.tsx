@@ -102,7 +102,7 @@ export class UploadContainer extends React.Component<Props> {
         </div>
         <div className="p-2 text-uppercase w-100 col-9 mx-auto border-top border-bottom" id="pdfName">
           <img className="float-left" src={paperclipIcon}/>
-          <div className="float-left pl-2">
+          <div id="pdfFileName" className="float-left pl-2">
             {this.props.uploadStore!.fileName}
           </div>
           <img

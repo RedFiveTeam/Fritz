@@ -257,4 +257,11 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   .helpMessage {
     color: rgb(216, 229, 255);
   }
+  
+  #pdfFileName {
+    text-overflow: ellipsis;
+    width: 390px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 `);

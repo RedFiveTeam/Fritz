@@ -2,13 +2,20 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Header } from './Header';
 import { StyledClassificationBanner } from '../classification/ClassificationBanner';
+import { MissionModel } from '../unicorn/model/MissionModel';
 
 describe('Header', () => {
   let subject: ShallowWrapper;
   let classificationStore: any;
   let classificationActions: any;
+  let unicornStore: any;
 
   beforeEach(() => {
+    unicornStore = {
+      activeMission: new MissionModel('1', '04-18-19', 'Kirby1', 'descr', 'open'),
+      setActiveMission: jest.fn()
+    };
+
     classificationStore = {
       classification: 'UNCLASS'
     };
@@ -19,6 +26,7 @@ describe('Header', () => {
 
     subject = shallow(
       <Header
+        unicornStore={unicornStore}
         classificationStore={classificationStore}
         classificationActions={classificationActions}
       />
@@ -31,5 +39,14 @@ describe('Header', () => {
 
   it('should contain a fritz header', () => {
     expect(subject.find('.logo').exists()).toBeTruthy();
+  });
+
+  it('should have the correct mission name', () => {
+    expect(subject.find('.selectedMission').text()).toContain('Kirby1');
+  });
+
+  it('should clear the select mission on change Mission button click', () => {
+    subject.find('.changeMissionBtn').simulate('click');
+    expect(unicornStore.setActiveMission).toHaveBeenCalledWith(null);
   });
 });

@@ -240,7 +240,6 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   .header {
     position: relative;
     margin-bottom: 10px;
-    padding-top: 15px;
   }
   
   .header > span {

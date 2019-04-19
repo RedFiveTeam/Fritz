@@ -4,6 +4,9 @@ Feature('Home Page');
 
 Scenario('should allow you to edit the activity and time of a image and view image in expanded view', (I) => {
   I.amOnPage('/');
+  I.waitForText('TEST11', 10);
+  I.click('.testId');
+  I.waitForText('Mission: TEST11', 10);
   I.attachFile('#uploadButton', 'data/PDFExample.pdf');
   I.wait(5);
   I.waitForText('DD1525ZMONYY_TGT_NAME_ACTY_ASSET_CLASSIFICATION', 10);
@@ -21,6 +24,9 @@ Scenario('should allow you to edit the activity and time of a image and view ima
 
 Scenario('should allow you to upload a file, validate it, and display the jpgs', (I) => {
   I.amOnPage('/');
+  I.waitForText('TEST11', 10);
+  I.click('.testId');
+  I.waitForText('Mission: TEST11', 10);
   I.click('#downloadbutton');
   I.waitForText('You must upload a PDF', 10);
   I.waitForText('Field cannot be empty', 10);

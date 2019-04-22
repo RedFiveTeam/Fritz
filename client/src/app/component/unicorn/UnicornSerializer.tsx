@@ -9,7 +9,8 @@ export class UnicornSerializer implements Serializer<MissionModel> {
       callsign: item.callsign,
       description: item.description,
       status: item.status,
-      org: item.org
+      org: item.org,
+      platform: item.platform
     };
   }
 
@@ -20,7 +21,8 @@ export class UnicornSerializer implements Serializer<MissionModel> {
       item.callsign,
       item.description,
       item.status,
-      item.org
+      item.org,
+      item.platform
     );
   }
 }

@@ -7,14 +7,24 @@ export class MissionModel {
   @observable private _description: string;
   @observable private _status: string;
   @observable private _org: string;
+  @observable private _platform: string;
 
-  constructor(id: string, startTime: string, callsign: string, description: string, status: string, org: string) {
+  constructor(
+    id: string,
+    startTime: string,
+    callsign: string,
+    description: string,
+    status: string,
+    org: string,
+    platform: string
+  ) {
     this._id = id;
     this._startTime = startTime;
     this._callsign = callsign;
     this._description = description;
     this._status = status;
     this._org = org;
+    this._platform = platform;
   }
 
   @computed
@@ -47,6 +57,11 @@ export class MissionModel {
     return this._org;
   }
 
+  @computed
+  get platform(): string {
+    return this._platform;
+  }
+
   @action.bound
   setId(value: string) {
     this._id = value;
@@ -75,5 +90,10 @@ export class MissionModel {
   @action.bound
   setOrg(value: string) {
     this._org = value;
+  }
+
+  @action.bound
+  setPlatform(value: string) {
+    this._platform = value;
   }
 }

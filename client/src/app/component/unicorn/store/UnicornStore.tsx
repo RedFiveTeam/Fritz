@@ -2,15 +2,22 @@ import { action, computed, observable } from 'mobx';
 import { MissionModel } from '../model/MissionModel';
 import { UnicornRepository } from '../repositories/UnicornRepository';
 
+const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
+
 export class UnicornStore {
   @observable private _missions: MissionModel[] = [];
   @observable private _activeMission: MissionModel | null;
   @observable private _selectedSite: string = 'DGS 1';
 
   async hydrate(unicornRepository: UnicornRepository) {
-    this._missions = await unicornRepository.getMissions();
+    this._missions = (await unicornRepository.getMissions())
+      .filter((m) => {
+        return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
+      });
     if (window.location.hostname.toLowerCase() === 'localhost') {
-      this._missions.push(new MissionModel('testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1'));
+      this._missions.push(new MissionModel(
+        'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
+      );
     }
   }
 

@@ -41,6 +41,7 @@ public class UnicornInterface {
         mission.setDescription(ele.getElementsByTagName("description").item(0).getTextContent());
         mission.setStatus(ele.getElementsByTagName("missionStatus").item(0).getTextContent());
         mission.setOrg(ele.getElementsByTagName("primaryorg").item(0).getTextContent().replace('-', ' '));
+        mission.setPlatform(ele.getElementsByTagName("platform").item(0).getTextContent());
         missionList.add(mission);
       }
     }

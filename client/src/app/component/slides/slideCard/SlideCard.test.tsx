@@ -58,7 +58,7 @@ describe('SlideCard', () => {
   });
 
   it('should render a title for each slide', () => {
-    expect(subject.find('h5').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_CLASSIFICATION');
+    expect(subject.find('h5').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_RELEASABILITY');
   });
 
   it('should have an activity input', () => {

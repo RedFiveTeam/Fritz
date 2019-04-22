@@ -6,7 +6,7 @@ import { MissionModel } from '../model/MissionModel';
 describe('Mission', () => {
   let subject: ShallowWrapper;
   let unicornStore: any;
-  let mission = new MissionModel('testID1', '04-18-19', 'Kirby1', 'testDescr', 'testStatus');
+  let mission = new MissionModel('testID1', '04-18-19', 'Kirby1', 'testDescr', 'testStatus', 'DGS-1');
 
   beforeEach(() => {
     unicornStore = {

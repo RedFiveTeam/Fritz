@@ -8,7 +8,8 @@ export class UnicornSerializer implements Serializer<MissionModel> {
       startTime: item.startTime,
       callsign: item.callsign,
       description: item.description,
-      status: item.status
+      status: item.status,
+      org: item.org
     };
   }
 
@@ -18,7 +19,8 @@ export class UnicornSerializer implements Serializer<MissionModel> {
       item.startTime,
       item.callsign,
       item.description,
-      item.status
+      item.status,
+      item.org
     );
   }
 }

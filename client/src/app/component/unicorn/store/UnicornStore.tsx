@@ -5,11 +5,12 @@ import { UnicornRepository } from '../repositories/UnicornRepository';
 export class UnicornStore {
   @observable private _missions: MissionModel[] = [];
   @observable private _activeMission: MissionModel | null;
+  @observable private _selectedSite: string = 'DGS 1';
 
   async hydrate(unicornRepository: UnicornRepository) {
     this._missions = await unicornRepository.getMissions();
     if (window.location.hostname.toLowerCase() === 'localhost') {
-      this._missions.push(new MissionModel('testId', 'starttime', 'TEST11', 'fake mission', 'OPEN'));
+      this._missions.push(new MissionModel('testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1'));
     }
   }
 
@@ -23,6 +24,11 @@ export class UnicornStore {
     return this._activeMission;
   }
 
+  @computed
+  get selectedSite(): string {
+    return this._selectedSite;
+  }
+
   @action.bound
   setMissions(value: MissionModel[]) {
     this._missions = value;
@@ -31,5 +37,10 @@ export class UnicornStore {
   @action.bound
   setActiveMission(value: MissionModel | null) {
     this._activeMission = value;
+  }
+
+  @action.bound
+  setSelectedSite(value: string) {
+    this._selectedSite = value;
   }
 }

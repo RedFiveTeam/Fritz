@@ -9,6 +9,7 @@ public class MissionModel {
   private String description;
   private String status;
   private String startTime;
+  private String org;
 
   public String getStartTime() {
     return startTime;
@@ -46,6 +47,14 @@ public class MissionModel {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public String getOrg() {
+    return org;
+  }
+
+  public void setOrg(String org) {
+    this.org = org;
   }
 
 }

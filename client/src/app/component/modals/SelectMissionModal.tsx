@@ -4,12 +4,15 @@ import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { StyledMission } from '../unicorn/Mission/Mission';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
+import { StyledDropdown } from '../dropdown/Dropdown';
 
 interface Props {
   className?: string;
   unicornStore?: UnicornStore;
   unicornActions?: UnicornActions;
 }
+
+const sites = ['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5', 'DGS AR', 'DGS AL', 'DGS IN', 'DGS KS', 'DGS MA', 'DGS NV'];
 
 @observer
 export class SelectMissionModal extends React.Component<Props> {
@@ -24,21 +27,27 @@ export class SelectMissionModal extends React.Component<Props> {
       >
         <div className="modal">
           <div className="title">
-            Select a Mission from UNICORN
+            <span>Select a Mission from UNICORN</span>
+            <span>Site</span>
+            <StyledDropdown options={sites} />
           </div>
           <div className="headers">
             <span>Callsign</span>
             <span>Start Date</span>
           </div>
           {
-            this.props.unicornStore!.missions.map((m, idx) => {
-              return (
-                <StyledMission
-                  key={idx}
-                  mission={m}
-                />
-              );
-            })
+            this.props.unicornStore!.missions
+              .filter((m) => {
+                return m.org === this.props.unicornStore!.selectedSite;
+              })
+              .map((m, idx) => {
+                return (
+                  <StyledMission
+                    key={idx}
+                    mission={m}
+                  />
+                );
+              })
           }
         </div>
       </div>
@@ -74,7 +83,23 @@ export const StyledSelectMissionModal = inject('unicornStore', 'unicornActions')
   padding-left: 21px;
   background-color: #1f1f2c;
   color: white;
+  font-weight: bold;
+  letter-spacing: 1.1px;
   font-size: 30px;
+  
+  span:nth-of-type(2) {
+    position: absolute;
+    left: 655px;
+    color: #6c7f9c;
+    font-weight: 300;
+    letter-spacing: 0.9px;
+  }
+  
+  .dropdown {
+    position: absolute;
+    left: 713px;
+    top: 8px;
+  }
 }
 
 .headers {

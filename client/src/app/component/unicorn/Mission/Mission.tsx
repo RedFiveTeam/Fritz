@@ -3,10 +3,12 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UnicornStore } from '../store/UnicornStore';
 import { MissionModel } from '../model/MissionModel';
+import { UnicornActions } from '../actions/UnicornActions';
 
 interface Props {
   className?: string;
   unicornStore?: UnicornStore;
+  unicornActions?: UnicornActions;
   mission: MissionModel;
 }
 
@@ -16,8 +18,11 @@ export class Mission extends React.Component<Props> {
     return (
       <div
         className={this.props.className + ' missionRow ' + this.props.mission.id}
-        onClick={() => {
+        onClick={async () => {
           this.props.unicornStore!.setActiveMission(this.props.mission);
+          if (navigator.userAgent.toLowerCase().indexOf('electron') === -1) {
+            await this.props.unicornActions!.getCallouts(this.props.mission.id);
+          }
         }}
       >
         <div className="content">
@@ -34,7 +39,7 @@ export class Mission extends React.Component<Props> {
   }
 }
 
-export const StyledMission = inject('unicornStore')(styled(Mission)`
+export const StyledMission = inject('unicornStore', 'unicornActions')(styled(Mission)`
 width: 100%;
 transition: background-color 200ms;
 

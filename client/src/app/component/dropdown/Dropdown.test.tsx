@@ -5,6 +5,7 @@ import { StyledDropdown } from './Dropdown';
 describe('Dropdown', () => {
   let subject: ReactWrapper;
   let unicornStore: any;
+  let fakeFunction: any;
 
   beforeEach(() => {
 
@@ -12,10 +13,14 @@ describe('Dropdown', () => {
       setSelectedSite: jest.fn()
     };
 
+    fakeFunction = jest.fn();
+
     subject = mount(
       <StyledDropdown
         unicornStore={unicornStore}
         options={['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5']}
+        defaultValue="Test"
+        callback={(s: any) => { fakeFunction(s); }}
       />
     );
   });
@@ -27,8 +32,15 @@ describe('Dropdown', () => {
   it('should update the store on selecting an option', () => {
     subject.find('.ddd').at(3).simulate(
       'click',
-      { target: {classList: { add: () => { return; }}, dataset: { option: 'DGS 3'}}});
-    expect(unicornStore.setSelectedSite).toHaveBeenCalledWith('DGS 3');
+      {
+        target: {
+          classList: {
+            add: () => {
+              return;
+            }
+          }, dataset: {option: 'DGS 3'}
+        }
+      });
+    expect(fakeFunction).toHaveBeenCalledWith('DGS 3');
   });
-
 });

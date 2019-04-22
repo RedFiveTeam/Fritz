@@ -2,13 +2,16 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
+import * as ReactDOM from 'react-dom';
 
 const DropdownIcon = require('../../../icon/DropdownIcon.svg');
 
 interface Props {
   className?: string;
   options: string[];
+  defaultValue: string;
   unicornStore?: UnicornStore;
+  callback: (s: string) => void;
 }
 
 @observer
@@ -32,22 +35,23 @@ export class Dropdown extends React.Component<Props> {
   };
 
   optionSelect = (e: any) => {
-    let btn = document.querySelector('.dropdownBtn') as HTMLButtonElement;
+    let component = (ReactDOM.findDOMNode(this) as HTMLElement);
+    let btn = component.querySelector('.dropdownBtn') as HTMLButtonElement;
     if (btn) {
       btn.innerText = e.target.dataset.option.toUpperCase();
     }
-    let dd = document.querySelector('.dd') as HTMLElement;
+    let dd = component.querySelector('.dd') as HTMLElement;
     if (dd) {
       dd.style.display = 'none';
     }
     (e.target as HTMLElement).classList.add('selected');
-    let options = document.querySelectorAll('.ddd');
+    let options = component.querySelectorAll('.ddd');
     for (let i = 0; i < options.length; i++) {
       if (options[i] !== e.target) {
         (options[i] as HTMLElement).classList.remove('selected');
       }
     }
-    this.props.unicornStore!.setSelectedSite(e.target.dataset.option);
+    this.props.callback(e.target.dataset.option);
   };
 
   render() {
@@ -58,10 +62,11 @@ export class Dropdown extends React.Component<Props> {
         <button
           className="dropdownBtn"
           onClick={(e: any) => {
-            (document.querySelector('.dd') as HTMLElement).style.display = 'block';
+            let component = (ReactDOM.findDOMNode(this) as HTMLElement);
+            (component.querySelector('.dd') as HTMLElement).style.display = 'block';
           }}
         >
-          {this.props.unicornStore!.selectedSite}
+          {this.props.defaultValue}
         </button>
         <img src={DropdownIcon} />
         <div className="dd">

@@ -4,6 +4,7 @@ import { SlidesStore } from '../SlidesStore';
 import styled from 'styled-components';
 import { StyledSlideCard } from '../slideCard/SlideCard';
 import { StyledUndoDeleteContainer } from '../../UndoDelete/UndoDeleteContainer';
+import { StyledCallout } from '../../unicorn/Callout/Callout';
 
 interface Props {
   className?: string;
@@ -40,6 +41,12 @@ export class SlidesContainer extends React.Component<Props> {
                     />
                   }
                   {
+                    !s.deleted &&
+                    <StyledCallout
+                        slide={s}
+                    />
+                  }
+                  {
                     s.deleted &&
                     <StyledUndoDeleteContainer
                         slideModel={s}
@@ -58,4 +65,5 @@ export const StyledSlidesContainer = inject('slidesStore')(styled(SlidesContaine
 max-width: 755px;
 color: white;
 margin-left: 47px;
+white-space: nowrap;
 `);

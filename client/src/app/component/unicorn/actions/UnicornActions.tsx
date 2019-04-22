@@ -17,4 +17,9 @@ export class UnicornActions {
   async initializeStores() {
     await this.unicornStore.hydrate(this.unicornRepository);
   }
+
+  @action.bound
+  async getCallouts(missionId: string) {
+    this.unicornStore.setCallouts(await this.unicornRepository.getCallouts(missionId));
+  }
 }

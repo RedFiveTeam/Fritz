@@ -29,7 +29,13 @@ export class SelectMissionModal extends React.Component<Props> {
           <div className="title">
             <span>Select a Mission from UNICORN</span>
             <span>Site</span>
-            <StyledDropdown options={sites} />
+            <StyledDropdown
+              options={sites}
+              defaultValue={this.props.unicornStore!.selectedSite}
+              callback={(s: string) => {
+                this.props.unicornStore!.setSelectedSite(s);
+              }}
+            />
           </div>
           <div className="headers">
             <span>Callsign</span>

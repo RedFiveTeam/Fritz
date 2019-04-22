@@ -56,14 +56,14 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   }
   
   .left {
-    width: 49%;
-    min-width: 800px;
+    width: 43vw;
+    min-width: 700px;
     display: inline-block;
   }
   
   .right {
     scroll-behavior: smooth;
-    width: 51%;
+    width: 57vw;
     max-height: 800px;
     min-height: 500px;
     display: inline-block;

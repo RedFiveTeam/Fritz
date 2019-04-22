@@ -1,7 +1,7 @@
 import { Serializer } from '../../../utils/Serializer';
 import { MissionModel } from './model/MissionModel';
 
-export class UnicornSerializer implements Serializer<MissionModel> {
+export class MissionSerializer implements Serializer<MissionModel> {
   serialize(item: MissionModel): any {
     return {
       id: item.id,

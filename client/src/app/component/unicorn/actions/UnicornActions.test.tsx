@@ -9,7 +9,8 @@ describe('UnicornActions', () => {
 
   beforeEach(() => {
     unicornStore = {
-      hydrate: jest.fn()
+      hydrate: jest.fn(),
+      setCallouts: jest.fn()
     };
 
     unicornRepository = new StubUnicornRepository();
@@ -20,6 +21,11 @@ describe('UnicornActions', () => {
   it('should hydrate the unicorn store', async () => {
     await subject.initializeStores();
     expect(unicornStore.hydrate).toHaveBeenCalled();
+  });
+
+  it('should set the callouts when getCallouts is called', async () => {
+    await subject.getCallouts('test');
+    expect(unicornStore.setCallouts).toHaveBeenCalled();
   });
 
 });

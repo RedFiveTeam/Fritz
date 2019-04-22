@@ -181,6 +181,12 @@ export class SlideCard extends React.Component<Props> {
 }
 
 export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions', 'uploadStore')(styled(SlideCard)`
+  
+  width: 686px;
+  display: inline-block;
+  height: 168px;
+  margin-right: 17px;
+
   input {
     width: 166px;
     color: #fff;

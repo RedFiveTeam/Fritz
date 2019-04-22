@@ -1,6 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { MissionModel } from '../model/MissionModel';
 import { UnicornRepository } from '../repositories/UnicornRepository';
+import { CalloutModel } from '../model/CalloutModel';
 
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
@@ -8,6 +9,7 @@ export class UnicornStore {
   @observable private _missions: MissionModel[] = [];
   @observable private _activeMission: MissionModel | null;
   @observable private _selectedSite: string = 'DGS 1';
+  @observable private _callouts: CalloutModel[] = [];
 
   async hydrate(unicornRepository: UnicornRepository) {
     this._missions = (await unicornRepository.getMissions())
@@ -36,6 +38,11 @@ export class UnicornStore {
     return this._selectedSite;
   }
 
+  @computed
+  get callouts(): CalloutModel[] {
+    return this._callouts;
+  }
+
   @action.bound
   setMissions(value: MissionModel[]) {
     this._missions = value;
@@ -49,5 +56,10 @@ export class UnicornStore {
   @action.bound
   setSelectedSite(value: string) {
     this._selectedSite = value;
+  }
+
+  @action.bound
+  setCallouts(value: CalloutModel[]) {
+    this._callouts = value;
   }
 }

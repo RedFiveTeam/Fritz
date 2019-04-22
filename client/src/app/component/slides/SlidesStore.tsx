@@ -2,6 +2,7 @@ import { action, computed, observable } from 'mobx';
 import { SlideModel } from './SlideModel';
 
 export class SlidesStore {
+
   @observable private _files: string[] = [];
   @observable private _opName: string | null;
   @observable private _asset: string | null;
@@ -13,6 +14,7 @@ export class SlidesStore {
   @observable private _month: string | null = 'MON';
   @observable private _year: string | null = 'YY';
   @observable private _day: string | null = 'DD';
+  @observable private _help: boolean = false;
 
   @computed
   get month(): string | null {
@@ -67,6 +69,11 @@ export class SlidesStore {
   @computed
   get validate(): boolean {
     return this._validate;
+  }
+
+  @computed
+  get help(): boolean {
+    return this._help;
   }
 
   @action.bound
@@ -124,6 +131,11 @@ export class SlidesStore {
   @action.bound
   setDay(value: string | null) {
     this._day = value;
+  }
+
+  @action.bound
+  setHelp(value: boolean) {
+    this._help = value;
   }
 
   isValidName(): boolean {

@@ -189,7 +189,7 @@ export class SlidesStore {
       (this._opName || 'TGT_NAME') + '_' +
       (this._activity || '_ACTY_') + '_' +
       (this._asset || 'ASSET') + '_' +
-      (this._classification || 'CLASSIFICATION'))
+      (this._classification || 'RELEASABILITY'))
       .split(' ').join('_')
       .toUpperCase());
   }

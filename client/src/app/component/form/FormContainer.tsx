@@ -129,21 +129,51 @@ export class FormContainer extends React.Component<Props> {
               <div className="errorText">Field cannot be empty</div>
             }
           </div>
-          <div className="form-group">
+          <div
+            id="classGroup"
+            className="form-group"
+          >
             <label
+              id="classLabel"
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
                 this.badLabelCSS : this.goodCSS}
             >
               Classification
             </label>
             <input
+              id="classificationInput"
+              data-name="classification"
+              onChange={() => {
+                return;
+              }}
+              type="text"
+              className="form-control "
+              placeholder="Secret"
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
+                this.badInputCSS : this.goodCSS}
+            />
+            {
+              this.props.slidesStore!.validate &&
+              !this.props.slidesStore!.isValidClassification() &&
+              <div className="errorText">Field cannot be empty</div>
+            }
+          </div>
+          <div className="form-group">
+            <label
+              id="releaseLabel"
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
+                this.badLabelCSS : this.goodCSS}
+            >
+              Releasability
+            </label>
+            <input
+              id="releaseInput"
               data-name="classification"
               onChange={(e: any) => {
                 this.props.slidesActions!.setAndUpdateClassification(e.target.value);
               }}
               type="text"
               className="form-control "
-              id="classificationInput"
               placeholder="e.g. FVEY"
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
                 this.badInputCSS : this.goodCSS}
@@ -278,5 +308,26 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
     margin-left: 10px;
     padding-bottom: 1px;
     cursor: pointer;
+  }
+  
+  #releaseInput {
+    width: 280px;
+    margin-left: 300px;
+  }
+  
+  #releaseLabel {
+    margin-left: 300px;
+  }
+  
+  #classificationInput {
+    width: 280px;
+  }
+  
+  #classificationInput::placeholder {
+    color: white;
+  }
+  
+  #classGroup {
+    position: absolute;
   }
 `);

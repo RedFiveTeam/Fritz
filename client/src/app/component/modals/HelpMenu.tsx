@@ -26,7 +26,7 @@ export class HelpMenu extends React.Component<Props> {
         >
           <div className="helpTitle">
             <span>Your product must be uploaded in PDF format</span>
-            <span>Follow the instructions below to save your Powerpoint file as a PDF</span>
+            <span>Follow the instructions below to save your Powerpoint file as a PDF.</span>
           </div>
           <img
             className="closeHelp"
@@ -51,7 +51,7 @@ export class HelpMenu extends React.Component<Props> {
           </div>
           <div className="step1">
             <span>STEP 1</span>
-            <span>Select “File” at the top toolbar area of Powerpoint</span>
+            <span>Select “File” at the top toolbar area of Powerpoint.</span>
           </div>
           <div className="step2">
             <span>STEP 2</span>

@@ -39,16 +39,16 @@ describe('SlidesActions', () => {
 
   it('update the slide model name when called', () => {
     subject.setAndUpdateActivity(slidesStore.slides[0], 'Test activity');
-    expect(slidesStore.slides[0].newName).toBe('DDTTTTZMONYY_TGT_NAME_TEST_ACTIVITY_ASSET_CLASSIFICATION' + 1);
+    expect(slidesStore.slides[0].newName).toBe('DDTTTTZMONYY_TGT_NAME_TEST_ACTIVITY_ASSET_RELEASABILITY' + 1);
 
     subject.setAndUpdateDate('JAN', '19', '20');
-    expect(slidesStore.slides[1].newName).toBe('20TTTTZJAN19_TGT_NAME_ACTY_ASSET_CLASSIFICATION' + 2);
+    expect(slidesStore.slides[1].newName).toBe('20TTTTZJAN19_TGT_NAME_ACTY_ASSET_RELEASABILITY' + 2);
 
     subject.setAndUpdateOpName('op hello');
-    expect(slidesStore.slides[2].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_CLASSIFICATION' + 3);
+    expect(slidesStore.slides[2].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY' + 3);
 
     subject.setAndUpdateAsset('asset');
-    expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_CLASSIFICATION' + 4);
+    expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY' + 4);
 
     subject.setAndUpdateClassification('secret');
     expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_SECRET' + 5);

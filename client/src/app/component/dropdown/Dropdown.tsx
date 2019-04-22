@@ -1,0 +1,158 @@
+import * as React from 'react';
+import { inject, observer } from 'mobx-react';
+import styled from 'styled-components';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
+
+const DropdownIcon = require('../../../icon/DropdownIcon.svg');
+
+interface Props {
+  className?: string;
+  options: string[];
+  unicornStore?: UnicornStore;
+}
+
+@observer
+export class Dropdown extends React.Component<Props> {
+
+  componentDidMount() {
+    document.addEventListener('click', this.handleClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClick);
+  }
+
+  handleClick = (e: any) => {
+    let dd = document.querySelectorAll('.dd');
+    for (let i = 0; i < dd.length; i++) {
+      if ((dd[i] as HTMLElement).parentNode!.firstChild !== e.target) {
+        (dd[i] as HTMLElement).style.display = 'none';
+      }
+    }
+  };
+
+  optionSelect = (e: any) => {
+    let btn = document.querySelector('.dropdownBtn') as HTMLButtonElement;
+    if (btn) {
+      btn.innerText = e.target.dataset.option.toUpperCase();
+    }
+    let dd = document.querySelector('.dd') as HTMLElement;
+    if (dd) {
+      dd.style.display = 'none';
+    }
+    (e.target as HTMLElement).classList.add('selected');
+    let options = document.querySelectorAll('.ddd');
+    for (let i = 0; i < options.length; i++) {
+      if (options[i] !== e.target) {
+        (options[i] as HTMLElement).classList.remove('selected');
+      }
+    }
+    this.props.unicornStore!.setSelectedSite(e.target.dataset.option);
+  };
+
+  render() {
+    return (
+      <div
+        className={this.props.className + ' dropdown'}
+      >
+        <button
+          className="dropdownBtn"
+          onClick={(e: any) => {
+            (document.querySelector('.dd') as HTMLElement).style.display = 'block';
+          }}
+        >
+          DGS 1
+        </button>
+        <img src={DropdownIcon} />
+        <div className="dd">
+          {
+            this.props.options.map((o, idx) => {
+              return (
+                <div
+                  onClick={this.optionSelect}
+                  className="ddd"
+                  data-option={o}
+                  key={idx}
+                >
+                  {o}
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+export const StyledDropdown = inject('unicornStore')(styled(Dropdown)`
+  display: inline-block;
+  position: relative;
+  
+  width: 117px;
+  height: 44px;
+  background-color: #151524;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  .dropdownBtn {
+    cursor: pointer;
+    height: 40px;
+    margin: auto;
+    line-height: 44px;
+    white-space: nowrap;
+    vertical-align: middle;
+    position: absolute;
+    left: -11px;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0);
+    outline: none;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .dd {
+    position: absolute;
+    display: none;
+    text-align: center;
+    width: 141px;
+    height: auto;
+    left: -24px;
+    top: 47px;
+    border-radius: 4px;
+    background: #151524;
+    z-index: 125;
+    font-weight: 300;
+  }
+  
+  .ddd {
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.5s ease;
+    font-size: 20px;
+    line-height: 36px;
+    vertical-align: middle;
+    height: 36px;
+    color: #fff;
+    letter-spacing: 0.7px;
+    padding-left: 2px;
+        
+    :hover {
+      background-color: #2b303c;
+    }
+  }
+  
+  .selected {
+    background-color: #5689F3;
+   }
+   
+  img {
+    pointer-events: none;
+    position: absolute;
+    right: 8px;
+    top: 20px;
+  }
+`);

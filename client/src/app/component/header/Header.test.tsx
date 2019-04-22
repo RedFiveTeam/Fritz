@@ -12,7 +12,7 @@ describe('Header', () => {
 
   beforeEach(() => {
     unicornStore = {
-      activeMission: new MissionModel('1', '04-18-19', 'Kirby1', 'descr', 'open'),
+      activeMission: new MissionModel('1', '04-18-19', 'Kirby1', 'descr', 'open', 'DGS-1'),
       setActiveMission: jest.fn()
     };
 

@@ -16,10 +16,11 @@ describe('SelectMissionModal', () => {
 
     unicornStore = {
       missions: [
-        new MissionModel('1', '04-17-19', 'testCallsign1', 'testDescr1', 'openTest1'),
-        new MissionModel('2', '04-18-19', 'testCallsign2', 'testDescr2', 'openTest2'),
-        new MissionModel('3', '04-19-19', 'testCallsign3', 'testDescr3', 'openTest3')
-      ]
+        new MissionModel('1', '04-17-19', 'testCallsign1', 'testDescr1', 'openTest1', 'DGS 1'),
+        new MissionModel('2', '04-18-19', 'testCallsign2', 'testDescr2', 'openTest2', 'DGS 1'),
+        new MissionModel('3', '04-19-19', 'testCallsign3', 'testDescr3', 'openTest3', 'DGS 1')
+      ],
+      selectedSite: 'DGS 1'
     };
 
     subject = shallow(

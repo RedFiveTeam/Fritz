@@ -63,6 +63,7 @@ transition: background-color 200ms;
 
 span:first-of-type {
   display: inline-block;
+  white-space: nowrap;
   margin-left: 5px;
   width: 70px;
   overflow: visible;

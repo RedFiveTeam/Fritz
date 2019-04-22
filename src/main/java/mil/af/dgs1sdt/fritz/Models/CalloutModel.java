@@ -1,0 +1,53 @@
+package mil.af.dgs1sdt.fritz.Models;
+
+import lombok.Data;
+
+@Data
+public class CalloutModel {
+  private String name;
+  private String classification;
+  private String releasability;
+  private String activity;
+  private String eventId;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getClassification() {
+    return classification;
+  }
+
+  public void setClassification(String classification) {
+    this.classification = classification;
+  }
+
+  public String getReleasability() {
+    return releasability;
+  }
+
+  public void setReleasability(String releasability) {
+    this.releasability = releasability;
+  }
+
+  public String getActivity() {
+    return activity;
+  }
+
+  public void setActivity(String activity) {
+    this.activity = activity;
+  }
+
+  public String getEventId() {
+    return eventId;
+  }
+
+  public void setEventId(String eventId) {
+    this.eventId = eventId;
+  }
+}
+

@@ -61,7 +61,7 @@ export class Dropdown extends React.Component<Props> {
             (document.querySelector('.dd') as HTMLElement).style.display = 'block';
           }}
         >
-          DGS 1
+          {this.props.unicornStore!.selectedSite}
         </button>
         <img src={DropdownIcon} />
         <div className="dd">

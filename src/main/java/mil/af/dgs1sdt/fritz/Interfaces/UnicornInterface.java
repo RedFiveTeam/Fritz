@@ -1,5 +1,6 @@
 package mil.af.dgs1sdt.fritz.Interfaces;
 
+import mil.af.dgs1sdt.fritz.Models.CalloutModel;
 import mil.af.dgs1sdt.fritz.Models.MissionModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,6 +46,31 @@ public class UnicornInterface {
     }
     return missionList;
   }
+
+  public List<CalloutModel> getCallouts(String missionId) throws Exception {
+    List<CalloutModel> targets = new ArrayList<>();
+    String uri = "https://codweb1.leidoshost.com/UNICORN.NET/WebServices/PMSServicesReltoNF" +
+      ".asmx/GetPMSTargets?ato=&missionID=" + missionId + "&atoDay=";
+    Document doc = makeRequest(uri);
+    NodeList t = doc.getElementsByTagName("target");
+    for (int i = 0; i < t.getLength(); i++) {
+      Node element = t.item(i);
+      if (element.getNodeType() == Node.ELEMENT_NODE) {
+        Element ele = (Element) element;
+        CalloutModel target = new CalloutModel();
+        target.setName(ele.getElementsByTagName("targetName").item(0).getTextContent());
+        target.setClassification(ele.getElementsByTagName("classification").item(0).getTextContent());
+        target.setReleasability(ele.getElementsByTagName("releasability").item(0).getTextContent());
+        target.setActivity(ele.getElementsByTagName("targetActivity").item(0).getTextContent());
+        target.setEventId(ele.getElementsByTagName("targetEventID").item(0).getTextContent());
+        targets.add(target);
+        System.out.println("Target Name: " + ele.getElementsByTagName("targetName").item(0).getTextContent());
+        System.out.println("Target Event ID: " + ele.getElementsByTagName("targetEventID").item(0).getTextContent());
+      }
+    }
+    return targets;
+  }
+
 
 
   public Document makeRequest(String uri) throws Exception {

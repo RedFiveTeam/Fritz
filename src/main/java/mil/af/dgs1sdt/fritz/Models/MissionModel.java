@@ -10,6 +10,7 @@ public class MissionModel {
   private String status;
   private String startTime;
   private String org;
+  private String platform;
 
   public String getStartTime() {
     return startTime;
@@ -55,6 +56,12 @@ public class MissionModel {
 
   public void setOrg(String org) {
     this.org = org;
+  }
+
+  public String getPlatform() { return platform; }
+
+  public void setPlatform(String platform) {
+    this.platform = platform;
   }
 
 }

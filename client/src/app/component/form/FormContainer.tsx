@@ -6,6 +6,8 @@ import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/SlidesStore';
 import { CSSProperties } from 'react';
 
+const helpMenuIcon = require('../../../icon/helpMenu.svg');
+
 interface Props {
   className?: string;
   slidesActions?: SlidesActions;
@@ -33,7 +35,15 @@ export class FormContainer extends React.Component<Props> {
         <form>
           <div className="form-group">
             <div className="header">
-              <h2>JPEG Renamer - Details</h2>
+              <h2>JPEG Renamer - Details
+                <img
+                  onClick={() => {
+                    this.props.slidesStore!.setHelp(true);
+                  }}
+                  className="helpMenuIcon"
+                  src={helpMenuIcon}
+                />
+              </h2>
               <span>Upload a powerpoint .pdf file to view and download converted JPEGs</span>
             </div>
             <label
@@ -262,5 +272,11 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
     width: 390px;
     overflow: hidden;
     white-space: nowrap;
+  }
+  
+  .helpMenuIcon {
+    margin-left: 10px;
+    padding-bottom: 1px;
+    cursor: pointer;
   }
 `);

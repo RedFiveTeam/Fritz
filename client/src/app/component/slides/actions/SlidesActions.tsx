@@ -68,6 +68,12 @@ export class SlidesActions {
   }
 
   @action.bound
+  setAndUpdateReleasability(releasability: string) {
+    this.slidesStore.setReleasability(releasability);
+    this.updateNewNames();
+  }
+
+  @action.bound
   setAndUpdateClassification(classification: string) {
     this.slidesStore.setClassification(classification);
     this.updateNewNames();

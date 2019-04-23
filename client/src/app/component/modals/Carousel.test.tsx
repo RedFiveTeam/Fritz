@@ -40,7 +40,7 @@ describe('Carousel', () => {
   });
 
   it('should render a title for each slide', () => {
-    expect(subject.find('.slide').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_CLASSIFICATION');
+    expect(subject.find('.slide').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_RELEASABILITY');
   });
 
   it('should display the number of slides', () => {

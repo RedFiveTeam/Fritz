@@ -50,11 +50,11 @@ describe('SlidesActions', () => {
     subject.setAndUpdateAsset('asset');
     expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY' + 4);
 
-    subject.setAndUpdateClassification('secret');
-    expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_SECRET' + 5);
+    subject.setAndUpdateReleasability('fvey');
+    expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_FVEY' + 5);
 
     subject.setAndUpdateTime(slidesStore.slides[5], '1234');
-    expect(slidesStore.slides[5].newName).toBe('201234ZJAN19_OP_HELLO_ACTY_ASSET_SECRET' + 6);
+    expect(slidesStore.slides[5].newName).toBe('201234ZJAN19_OP_HELLO_ACTY_ASSET_FVEY' + 6);
   });
 
   it('should log metrics on download', async () => {

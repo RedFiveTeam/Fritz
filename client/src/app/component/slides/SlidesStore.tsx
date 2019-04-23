@@ -6,7 +6,7 @@ export class SlidesStore {
   @observable private _files: string[] = [];
   @observable private _opName: string | null;
   @observable private _asset: string | null;
-  @observable private _classification: string | null;
+  @observable private _classification: string | null = 'Secret';
   @observable private _slides: SlideModel[] = [];
   @observable private _validate: boolean = false;
   @observable private _activity: string | null;
@@ -15,6 +15,7 @@ export class SlidesStore {
   @observable private _year: string | null = 'YY';
   @observable private _day: string | null = 'DD';
   @observable private _help: boolean = false;
+  @observable private _releasability: string | null;
 
   @computed
   get month(): string | null {
@@ -76,6 +77,21 @@ export class SlidesStore {
     return this._help;
   }
 
+  @computed
+  get releasability(): string | null {
+    return this._releasability;
+  }
+
+  @action.bound
+  setReleasability(value: string | null) {
+    this._releasability = value;
+  }
+
+  @action.bound
+  setClassification(value: string | null) {
+    this._classification = value;
+  }
+
   @action.bound
   setTime(slide: SlideModel, value: string) {
     this._time = value;
@@ -101,11 +117,6 @@ export class SlidesStore {
   @action.bound
   setAsset(value: string) {
     this._asset = value;
-  }
-
-  @action.bound
-  setClassification(value: string) {
-    this._classification = value;
   }
 
   @action.bound
@@ -142,7 +153,7 @@ export class SlidesStore {
     return (
       (this._opName !== undefined && this._opName!.length > 0) &&
       (this._asset !== undefined && this._asset!.length > 0) &&
-      (this._classification !== undefined && this._classification!.length > 0)
+      (this._releasability !== undefined && this._releasability!.length > 0)
     );
   }
 
@@ -175,8 +186,8 @@ export class SlidesStore {
     return (this._asset !== undefined && this._asset!.length > 0);
   }
 
-  isValidClassification(): boolean {
-    return (this._classification !== undefined && this._classification!.length > 0);
+  isValidReleasability(): boolean {
+    return (this._releasability !== undefined && this._releasability!.length > 0);
   }
 
   @computed
@@ -189,7 +200,7 @@ export class SlidesStore {
       (this._opName || 'TGT_NAME') + '_' +
       (this._activity || '_ACTY_') + '_' +
       (this._asset || 'ASSET') + '_' +
-      (this._classification || 'RELEASABILITY'))
+      (this._releasability || 'RELEASABILITY'))
       .split(' ').join('_')
       .toUpperCase());
   }

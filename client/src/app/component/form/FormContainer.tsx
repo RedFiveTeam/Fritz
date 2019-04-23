@@ -135,53 +135,47 @@ export class FormContainer extends React.Component<Props> {
           >
             <label
               id="classLabel"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
-                this.badLabelCSS : this.goodCSS}
+              style={this.goodCSS}
             >
               Classification
             </label>
             <input
               id="classificationInput"
               data-name="classification"
-              onChange={() => {
-                return;
+              onChange={(e: any) => {
+                this.props.slidesActions!.setAndUpdateClassification(e.target.value);
               }}
+              defaultValue="Secret"
               type="text"
               className="form-control "
-              placeholder="Secret"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
-                this.badInputCSS : this.goodCSS}
+              placeholder="e.g. Secret"
+              style={this.goodCSS}
             />
-            {
-              this.props.slidesStore!.validate &&
-              !this.props.slidesStore!.isValidClassification() &&
-              <div className="errorText">Field cannot be empty</div>
-            }
           </div>
           <div className="form-group">
             <label
               id="releaseLabel"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidReleasability()) ?
                 this.badLabelCSS : this.goodCSS}
             >
               Releasability
             </label>
             <input
               id="releaseInput"
-              data-name="classification"
+              data-name="releasability"
               onChange={(e: any) => {
-                this.props.slidesActions!.setAndUpdateClassification(e.target.value);
+                this.props.slidesActions!.setAndUpdateReleasability(e.target.value);
               }}
               type="text"
               className="form-control "
               placeholder="e.g. FVEY"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidReleasability()) ?
                 this.badInputCSS : this.goodCSS}
             />
             {
               this.props.slidesStore!.validate &&
-              !this.props.slidesStore!.isValidClassification() &&
-              <div className="errorText">Field cannot be empty</div>
+              !this.props.slidesStore!.isValidReleasability() &&
+              <div className="RerrorText">Field cannot be empty</div>
             }
           </div>
           <p className="helpMessage">
@@ -274,9 +268,14 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   
   .errorText {
     position: absolute;
-    color: #e46373;
+    color: #e46373; 
   }
   
+  .RerrorText {
+    position: absolute;
+    color: #e46373; 
+    left: 300px;
+  }
   .header {
     position: relative;
     margin-bottom: 10px;
@@ -321,10 +320,6 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   
   #classificationInput {
     width: 280px;
-  }
-  
-  #classificationInput::placeholder {
-    color: white;
   }
   
   #classGroup {

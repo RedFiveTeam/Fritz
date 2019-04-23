@@ -10,5 +10,6 @@ applications:
   environment:
     - FRITZ_DB_URL=jdbc:mysql://localhost:3306/fritzdev?useSSL=false
     - FRITZ_DB_USERNAME=fritz
+    - UNICORN_URL=https://codweb1.leidoshost.com/UNICORN.NET
   services:
     - fritz-acceptance-db

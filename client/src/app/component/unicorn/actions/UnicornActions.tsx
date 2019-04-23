@@ -3,6 +3,8 @@ import { UnicornRepository } from '../repositories/UnicornRepository';
 import { Repositories } from '../../../../utils/Repositories';
 import { Stores } from '../../../../utils/Stores';
 import { action } from 'mobx';
+import { UnicornUploadModel } from '../model/UnicornUploadModel';
+import { SlideModel } from '../../slides/SlideModel';
 
 export class UnicornActions {
   private unicornStore: UnicornStore;
@@ -21,5 +23,20 @@ export class UnicornActions {
   @action.bound
   async getCallouts(missionId: string) {
     this.unicornStore.setCallouts(await this.unicornRepository.getCallouts(missionId));
+  }
+
+  @action.bound
+  async buildUploadModel(slide: SlideModel) {
+    let unicornUploadModel = new UnicornUploadModel();
+    unicornUploadModel.setFileName(slide.oldName);
+    unicornUploadModel.setEndFilePath('\\Mission\\' + this.unicornStore.activeMission!.id);
+    unicornUploadModel.setProductName(slide.oldName);
+    unicornUploadModel.setClassificationId('a8b17b94-f23a-41a1-822f-96c7ce642006');
+    unicornUploadModel.setTargetEventId(slide.targetEventId);
+    unicornUploadModel.setReleasabilityId('6516455c-54e2-4667-95ea-a70f2a7167ad');
+    unicornUploadModel.setMissionId(this.unicornStore.activeMission!.id);
+    unicornUploadModel.setPersonnelId('2a7081f8-7cc9-45f3-a29e-f94a0003b3fe');
+    unicornUploadModel.setIsrRoleId('');
+    await this.unicornRepository.upload(unicornUploadModel);
   }
 }

@@ -23,7 +23,6 @@ export class DownloadButton extends React.Component<Props> {
         <button
           id="downloadbutton"
           type="button"
-          className="btn rounded bg-info float-right"
           onClick={async () => {
             if (!this.props.uploadStore!.uploaded) {
               this.props.slidesStore!.setValidate(true);
@@ -62,5 +61,20 @@ export const StyledDownloadButton = inject('slidesActions', 'uploadStore', 'slid
   #downloadbutton {
     color: #fff;
     margin: 5px;
+  }
+  
+  button {
+    float: right;
+     width: 157px;
+    height: 38px;
+    border-radius: 4px;
+    border: solid 1px #00818C;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 250ms;
+    cursor: pointer;
+    
+    :hover {
+      background-color: #00818C;
+    }
   }
 `);

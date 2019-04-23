@@ -12,14 +12,15 @@ export class UnicornStore {
   @observable private _callouts: CalloutModel[] = [];
 
   async hydrate(unicornRepository: UnicornRepository) {
-    this._missions = (await unicornRepository.getMissions())
-      .filter((m) => {
-        return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
-      });
-    if (window.location.hostname.toLowerCase() === 'localhost') {
+    if (navigator.userAgent.toLowerCase().indexOf('electron') !== -1) {
       this._missions.push(new MissionModel(
         'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
       );
+    } else {
+      this._missions = (await unicornRepository.getMissions())
+        .filter((m) => {
+          return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
+        });
     }
   }
 

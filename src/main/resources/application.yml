@@ -21,3 +21,4 @@ spring:
 server.compression.enabled: false
 
 classified: {$CLASSIFIED}
+UnicornBaseURL: {$UNICORN_URL}

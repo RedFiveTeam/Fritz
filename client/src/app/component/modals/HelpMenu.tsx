@@ -21,7 +21,6 @@ export class HelpMenu extends React.Component<Props> {
         className={this.props.className}
       >
         <div
-          onClick={close}
           id="modal"
         >
           <div className="helpTitle">

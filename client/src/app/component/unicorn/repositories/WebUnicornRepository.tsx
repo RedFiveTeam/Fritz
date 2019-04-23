@@ -4,10 +4,13 @@ import { MissionSerializer } from '../MissionSerializer';
 import { MissionModel } from '../model/MissionModel';
 import { CalloutModel } from '../model/CalloutModel';
 import { CalloutSerializer } from '../CalloutSerializer';
+import { UnicornUploadModel } from '../model/UnicornUploadModel';
+import { UnicornUploadSerializer } from '../UnicornUploadSerializer';
 
 export class WebUnicornRepository implements UnicornRepository {
   private missionSerializer = new MissionSerializer();
   private calloutSerializer = new CalloutSerializer();
+  private unicornUploadSerializer = new UnicornUploadSerializer();
 
   constructor(private client: HTTPClient) {
   }
@@ -24,5 +27,14 @@ export class WebUnicornRepository implements UnicornRepository {
     return json.map((obj: any) => {
       return this.calloutSerializer.deserialize(obj);
     });
+  }
+
+  async upload(model: UnicornUploadModel): Promise<void> {
+    const body = JSON.stringify(this.unicornUploadSerializer.serialize(model));
+    await this.client.postJSON(
+      '/api/unicorn',
+      body
+    );
+    return Promise.resolve();
   }
 }

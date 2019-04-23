@@ -2,6 +2,13 @@ package mil.af.dgs1sdt.fritz.Interfaces;
 
 import mil.af.dgs1sdt.fritz.Models.CalloutModel;
 import mil.af.dgs1sdt.fritz.Models.MissionModel;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.springframework.beans.factory.annotation.Value;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -9,15 +16,20 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 public class UnicornInterface {
+
+  private String unicornBaseURL = System.getenv("UNICORN_URL");
 
   public List<MissionModel> getMissions() throws Exception {
     List<MissionModel> missionList = new ArrayList<>();
@@ -26,7 +38,7 @@ public class UnicornInterface {
     String now = sdf.format(new Date());
     String yesterday = sdf.format(new Date(System.currentTimeMillis() - (48 * 60 * 60 * 1000)));
 
-    String uri = "https://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebServicesV2" +
+    String uri = unicornBaseURL + "/WebServices/UnicornMissionWebServicesV2" +
       ".asmx/GetMissionMetaDataRest?keyword=&start=" + yesterday + "&end=" + now + "&latitude=&longitude=&radius=";
     Document doc = makeRequest(uri);
     NodeList missions = doc.getElementsByTagName("missionMetaData");
@@ -50,7 +62,7 @@ public class UnicornInterface {
 
   public List<CalloutModel> getCallouts(String missionId) throws Exception {
     List<CalloutModel> targets = new ArrayList<>();
-    String uri = "https://codweb1.leidoshost.com/UNICORN.NET/WebServices/PMSServicesReltoNF" +
+    String uri = unicornBaseURL + "/WebServices/PMSServicesReltoNF" +
       ".asmx/GetPMSTargets?ato=&missionID=" + missionId + "&atoDay=";
     Document doc = makeRequest(uri);
     NodeList t = doc.getElementsByTagName("target");
@@ -65,14 +77,10 @@ public class UnicornInterface {
         target.setActivity(ele.getElementsByTagName("targetActivity").item(0).getTextContent());
         target.setEventId(ele.getElementsByTagName("targetEventID").item(0).getTextContent());
         targets.add(target);
-        System.out.println("Target Name: " + ele.getElementsByTagName("targetName").item(0).getTextContent());
-        System.out.println("Target Event ID: " + ele.getElementsByTagName("targetEventID").item(0).getTextContent());
       }
     }
     return targets;
   }
-
-
 
   public Document makeRequest(String uri) throws Exception {
     URL url = new URL(uri);
@@ -85,5 +93,18 @@ public class UnicornInterface {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     DocumentBuilder db = dbf.newDocumentBuilder();
     return db.parse(xml);
+  }
+
+  public void makePostRequest(String uri, List<NameValuePair> params) throws Exception {
+    CloseableHttpClient client = HttpClients.createDefault();
+    HttpPost httpPost = new HttpPost(uri);
+    httpPost.setEntity(new UrlEncodedFormEntity(params));
+    client.execute(httpPost);
+    client.close();
+  }
+
+  public static String convertFileToBase64(File file) throws IOException {
+    byte[] content = FileUtils.readFileToByteArray(file);
+    return Base64.getEncoder().encodeToString(content);
   }
 }

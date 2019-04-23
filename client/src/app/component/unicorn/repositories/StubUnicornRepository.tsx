@@ -1,6 +1,7 @@
 import { UnicornRepository } from './UnicornRepository';
 import { MissionModel } from '../model/MissionModel';
 import { CalloutModel } from '../model/CalloutModel';
+import { UnicornUploadModel } from '../model/UnicornUploadModel';
 
 export class StubUnicornRepository implements UnicornRepository {
   getMissions(): Promise<MissionModel[]> {
@@ -13,5 +14,9 @@ export class StubUnicornRepository implements UnicornRepository {
     return Promise.resolve([
       new CalloutModel('Callout1', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512521', '1450Z')
     ]);
+  }
+
+  upload(model: UnicornUploadModel): Promise<void> {
+    return Promise.resolve();
   }
 }

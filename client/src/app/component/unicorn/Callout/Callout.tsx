@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { UnicornStore } from '../store/UnicornStore';
 import { SlideModel } from '../../slides/SlideModel';
 import { StyledDropdown } from '../../dropdown/Dropdown';
+import { SlidesStore } from '../../slides/SlidesStore';
+import { CalloutModel } from '../model/CalloutModel';
 
 const Unicorn = require('../../../../icon/Unicorn.svg');
 const Chain = require('../../../../icon/Chain.svg');
@@ -12,6 +14,7 @@ interface Props {
   className?: string;
   unicornStore?: UnicornStore;
   slide: SlideModel;
+  slidesStore?: SlidesStore;
 }
 
 @observer
@@ -35,7 +38,13 @@ export class Callout extends React.Component<Props> {
             }
             defaultValue="Select"
             callback={(s: string) => {
-              return;
+              this.props.slidesStore!.slides.filter((f: SlideModel) => {
+                return f.time === this.props.slide.time;
+              })[0].setTargetEventId(
+                this.props.unicornStore!.callouts.filter((c: CalloutModel) => {
+                  return c.time.toString() === s;
+                })[0].eventId
+              );
             }}
           />
         </div>
@@ -44,7 +53,7 @@ export class Callout extends React.Component<Props> {
   }
 }
 
-export const StyledCallout = inject('unicornStore')(styled(Callout)`
+export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callout)`
 
   display: inline-block;
   position: relative;
@@ -104,6 +113,12 @@ export const StyledCallout = inject('unicornStore')(styled(Callout)`
       ::-webkit-scrollbar-thumb:hover {
         background: #5C667D; 
       }
+    }
+    
+    .ddd {
+      :hover {
+        font-weight: bold;
+    }
     }
   }
   

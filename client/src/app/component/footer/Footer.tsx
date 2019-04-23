@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledDownloadButton } from '../buttons/DownloadButton';
+import { StyledUnicornUploadButton } from '../buttons/UnicornUploadButton';
 
 interface Props {
   className?: string;
@@ -19,6 +20,7 @@ export class Footer extends React.Component<Props> {
             className="container-fluid"
           >
             <StyledDownloadButton/>
+            <StyledUnicornUploadButton/>
           </div>
         </nav>
       </div>
@@ -33,7 +35,7 @@ bottom: 0;
 right: 0;
 box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.5);
 width: 100%;
-z-index: 1;
+z-index: 3;
 
   .container-fluid {
     justify-content: flex-end;

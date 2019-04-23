@@ -12,7 +12,7 @@ describe('FormContainer', () => {
     setAndUpdateDate: jest.fn(),
     setAndUpdateOpName: jest.fn(),
     setAndUpdateAsset: jest.fn(),
-    setAndUpdateClassification: jest.fn()
+    setAndUpdateReleasability: jest.fn()
   };
 
   slidesStore = {
@@ -42,9 +42,9 @@ describe('FormContainer', () => {
     expect(slidesActions.setAndUpdateAsset).toHaveBeenCalledWith('flyguy');
   });
 
-  it('should contain a classification input that updates the header string when changed', () => {
-    subject.find('#releaseInput').simulate('change', {target: {value: 'secret'}});
-    expect(slidesActions.setAndUpdateClassification).toHaveBeenCalledWith('secret');
+  it('should contain a releasability input that updates the header string when changed', () => {
+    subject.find('#releaseInput').simulate('change', {target: {value: 'fvey'}});
+    expect(slidesActions.setAndUpdateReleasability).toHaveBeenCalledWith('fvey');
   });
 
   it('should contain an upload container', () => {

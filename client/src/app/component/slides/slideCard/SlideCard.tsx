@@ -71,7 +71,7 @@ export class SlideCard extends React.Component<Props> {
             {s.activity.split(' ').join('_')}
           </span>}
         {('_' + (this.props.slidesStore!.asset || 'ASSET') + '_' +
-          (this.props.slidesStore!.classification || 'RELEASABILITY'))
+          (this.props.slidesStore!.releasability || 'RELEASABILITY'))
           .split(' ').join('_').toUpperCase()
         }
       </div>

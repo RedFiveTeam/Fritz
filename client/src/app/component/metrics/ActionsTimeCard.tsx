@@ -175,8 +175,9 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   
   div:nth-of-type(2) {
     font-size: 24px;
-    color: #D4D6DB;
+    color: #6c7f9c;
     width: 161px;
+    font-weight: 100;
   }
 }
 

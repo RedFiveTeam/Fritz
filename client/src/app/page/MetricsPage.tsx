@@ -6,6 +6,7 @@ import { MetricActions } from '../component/metrics/actions/MetricActions';
 import { StyledActionsTimeCard } from '../component/metrics/ActionsTimeCard';
 import { MetricStore } from '../component/metrics/MetricStore';
 import { ClockIcon } from '../../icon/ClockIcon';
+import { StyledUserActionsCard } from '../component/metrics/UserActionsCard';
 
 interface Props {
   className?: string;
@@ -100,6 +101,7 @@ export class MetricsPage extends React.Component<Props> {
         </nav>
         <div id="tab1">
           <StyledActionsTimeCard/>
+          <StyledUserActionsCard/>
         </div>
         <div id="tab2">
           <StyledMetricsTable/>

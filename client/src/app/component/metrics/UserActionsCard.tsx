@@ -14,9 +14,6 @@ interface Props {
 
 @observer
 export class UserActionsCard extends React.Component<Props> {
-  async componentWillMount() {
-    await this.props.metricActions!.initializeStores();
-  }
 
   render() {
     return (
@@ -32,7 +29,7 @@ export class UserActionsCard extends React.Component<Props> {
         <div className="cardContent">
           <div className="totalUploads">
             <div className="totalUploadCount">
-              {this.props.metricStore!.totalUploads}
+              {this.props.metricActions!.countUploads(this.props.metricStore!.filteredMetrics)}
             </div>
             <div >PDF Files Uploaded</div>
           </div>

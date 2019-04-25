@@ -24,7 +24,6 @@ export class MetricActions {
     await this.metricStore.hydrate(this.metricRepository);
     await this.setWorkflowAverage();
     await this.setAverages();
-    await this.countUploads();
   }
 
   @action.bound
@@ -137,14 +136,14 @@ export class MetricActions {
   }
 
   @action.bound
-  async countUploads() {
+  countUploads(metrics: MetricModel[]) {
     let count = 0;
-    await this.metricStore.filteredMetrics.map((m: MetricModel) => {
+    metrics.map((m: MetricModel) => {
       if (m.action === 'Upload') {
        count++;
       }
     });
-    this.metricStore.setTotalUploads(count);
+    return count;
   }
 
   @action.bound

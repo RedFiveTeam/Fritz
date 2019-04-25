@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { UserActionsCard } from './UserActionsCard';
 import { MetricStore } from './MetricStore';
 
 describe('UserActionsCard', () => {
-  let subject: ReactWrapper;
+  let subject: ShallowWrapper;
   let metricStore: MetricStore;
   let metricActions: any;
 
@@ -14,12 +14,11 @@ describe('UserActionsCard', () => {
 
     metricActions = {
       initializeStores: jest.fn(),
-      setTotalUploads: jest.fn()
+      setTotalUploads: jest.fn(),
+      countUploads: () => { return 3; }
     };
 
-    metricStore.setTotalUploads(3);
-
-    subject = mount(
+    subject = shallow(
       <UserActionsCard
         metricActions={metricActions}
         metricStore={metricStore}

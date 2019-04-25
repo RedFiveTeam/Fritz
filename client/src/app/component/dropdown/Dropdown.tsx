@@ -63,12 +63,21 @@ export class Dropdown extends React.Component<Props> {
           className="dropdownBtn"
           onClick={(e: any) => {
             let component = (ReactDOM.findDOMNode(this) as HTMLElement);
+            let parent = component.parentElement!.parentElement!.parentElement;
+            if (parent && parent.classList.contains('slideCardContainer')) {
+              let options = component.querySelector('.dd') as HTMLElement;
+              if (window.innerHeight - parent.getBoundingClientRect().bottom < 175) {
+                options.style.top = '-189px';
+              } else {
+                options.style.top = '47px';
+              }
+            }
             (component.querySelector('.dd') as HTMLElement).style.display = 'block';
           }}
         >
           {this.props.defaultValue}
         </button>
-        <img src={DropdownIcon} />
+        <img src={DropdownIcon}/>
         <div className="dd">
           {
             this.props.options.map((o, idx) => {

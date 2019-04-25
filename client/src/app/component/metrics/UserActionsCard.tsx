@@ -39,6 +39,12 @@ export class UserActionsCard extends React.Component<Props> {
             </div>
             <div >Zip Files Downloaded</div>
           </div>
+          <div className="totalDeletes">
+            <div className="totalDeleteCount">
+              {this.props.metricActions!.countDeletes(this.props.metricStore!.filteredMetrics)}
+            </div>
+            <div >JPEGs Deleted</div>
+          </div>
         </div>
       </div>
     );
@@ -67,6 +73,10 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
 
 .leftTab {
   margin-top: 13px;
+}
+
+.totalDeletes {
+  bottom: 35px;
 }
 
 .cardContent {

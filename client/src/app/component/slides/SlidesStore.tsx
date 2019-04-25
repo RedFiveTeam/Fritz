@@ -15,7 +15,7 @@ export class SlidesStore {
   @observable private _year: string | null = 'YY';
   @observable private _day: string | null = 'DD';
   @observable private _help: boolean = false;
-  @observable private _releasability: string | null;
+  @observable private _releasability: string;
 
   @computed
   get month(): string | null {
@@ -78,12 +78,12 @@ export class SlidesStore {
   }
 
   @computed
-  get releasability(): string | null {
+  get releasability(): string {
     return this._releasability;
   }
 
   @action.bound
-  setReleasability(value: string | null) {
+  setReleasability(value: string) {
     this._releasability = value;
   }
 
@@ -152,8 +152,7 @@ export class SlidesStore {
   isValidName(): boolean {
     return (
       (this._opName !== undefined && this._opName!.length > 0) &&
-      (this._asset !== undefined && this._asset!.length > 0) &&
-      (this._releasability !== undefined && this._releasability!.length > 0)
+      (this._asset !== undefined && this._asset!.length > 0)
     );
   }
 
@@ -187,7 +186,7 @@ export class SlidesStore {
   }
 
   isValidReleasability(): boolean {
-    return (this._releasability !== undefined && this._releasability!.length > 0);
+    return (this._releasability !== undefined);
   }
 
   @computed

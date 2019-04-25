@@ -1,10 +1,14 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
 import { InjectedUploadContainer } from './upload/container/UploadContainer';
 import styled from 'styled-components';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/SlidesStore';
-import { CSSProperties } from 'react';
+import { ReleasabilityModel } from '../unicorn/model/ReleasabilityModel';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { UnicornActions } from '../unicorn/actions/UnicornActions';
+import { StyledDropdown } from '../dropdown/Dropdown';
 
 const helpMenuIcon = require('../../../icon/HelpMenu.svg');
 
@@ -12,11 +16,12 @@ interface Props {
   className?: string;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
+  unicornStore?: UnicornStore;
+  unicornActions?: UnicornActions;
 }
 
 @observer
 export class FormContainer extends React.Component<Props> {
-
   badInputCSS: CSSProperties = {
     border: '1px solid #e46373'
   };
@@ -27,7 +32,12 @@ export class FormContainer extends React.Component<Props> {
 
   goodCSS: CSSProperties = {};
 
+  async componentDidMount() {
+    await this.props.unicornActions!.getReleasabilities();
+  }
+
   render() {
+
     return (
       <div
         className={this.props.className}
@@ -160,17 +170,21 @@ export class FormContainer extends React.Component<Props> {
             >
               Releasability
             </label>
-            <input
-              id="releaseInput"
-              data-name="releasability"
-              onChange={(e: any) => {
-                this.props.slidesActions!.setAndUpdateReleasability(e.target.value);
+            {
+              !this.props.slidesStore!.releasability &&
+              <span className="releasePlaceholder">Select</span>
+            }
+            <StyledDropdown
+              options={
+                this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
+                  return e.releasabilityName;
+                })}
+              defaultValue=""
+              callback={(r: string) => {
+                this.props.slidesActions!.setAndUpdateReleasability(r);
+                console.log(r);
+                console.log(this.props.slidesStore!.releasability);
               }}
-              type="text"
-              className="form-control "
-              placeholder="e.g. FVEY"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidReleasability()) ?
-                this.badInputCSS : this.goodCSS}
             />
             {
               this.props.slidesStore!.validate &&
@@ -188,7 +202,8 @@ export class FormContainer extends React.Component<Props> {
   }
 }
 
-export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled(FormContainer)`
+export const StyledFormContainer = inject('slidesActions', 'slidesStore', 'unicornStore', 'unicornActions')
+(styled(FormContainer)`
   color: #fff;
   margin-top: 45px;
   margin-left: 50px;
@@ -251,11 +266,12 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   }
 
   .uploadContainer {
+      margin-top: 30px;
       box-sizing: border-box;
       border: 1px dashed #d4d6db;
       border-radius: 4px;
       width: 580px;
-      height: 241px;
+      height: 230px;
   }
   
   .clickable {
@@ -272,9 +288,10 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   }
   
   .RerrorText {
-    position: absolute;
+    position: relative;
     color: #e46373; 
     left: 300px;
+    top: 20px;
   }
   .header {
     position: relative;
@@ -309,13 +326,10 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
     cursor: pointer;
   }
   
-  #releaseInput {
-    width: 280px;
-    margin-left: 300px;
-  }
-  
   #releaseLabel {
     margin-left: 300px;
+    position: relative;
+    bottom: 24px;
   }
   
   #classificationInput {
@@ -324,5 +338,48 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   
   #classGroup {
     position: absolute;
+  }
+  
+  .dropdown {
+    color: #fff;
+    background-color:rgba(0, 0, 0, 0);
+    top: 31px;
+    right: 94px;
+    height: 39px;
+    width: 280px;
+    border: 1px solid #ced4da;
+    font-weight: normal;
+    font-size: 1rem;
+      .dropdownBtn {
+        font-weight: normal;
+        font-size: 1rem;
+        text-align: left;
+        padding-left: 24px;
+        line-height: 40px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    
+      .dd {
+        width: 280px;
+        left: 0;
+      }
+      
+      .ddd {
+        text-align: left;
+        padding-left: 8px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+  }
+  
+  .releasePlaceholder {
+    opacity: 0.4;
+    color: #FFF;
+    bottom: 380px;
+    left: 360px;
+    position: fixed;
   }
 `);

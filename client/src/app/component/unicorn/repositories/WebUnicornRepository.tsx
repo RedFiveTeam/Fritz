@@ -1,16 +1,19 @@
 import { HTTPClient } from '../../../../utils/HTTPClient';
 import { UnicornRepository } from './UnicornRepository';
-import { MissionSerializer } from '../MissionSerializer';
+import { MissionSerializer } from '../serializers/MissionSerializer';
 import { MissionModel } from '../model/MissionModel';
 import { CalloutModel } from '../model/CalloutModel';
-import { CalloutSerializer } from '../CalloutSerializer';
+import { CalloutSerializer } from '../serializers/CalloutSerializer';
 import { UnicornUploadModel } from '../model/UnicornUploadModel';
-import { UnicornUploadSerializer } from '../UnicornUploadSerializer';
+import { UnicornUploadSerializer } from '../serializers/UnicornUploadSerializer';
+import { ReleasabilityModel } from '../model/ReleasabilityModel';
+import { ReleasabilitySerializer } from '../serializers/ReleasabilitySerializer';
 
 export class WebUnicornRepository implements UnicornRepository {
   private missionSerializer = new MissionSerializer();
   private calloutSerializer = new CalloutSerializer();
   private unicornUploadSerializer = new UnicornUploadSerializer();
+  private releasabilitySerializer = new ReleasabilitySerializer();
 
   constructor(private client: HTTPClient) {
   }
@@ -36,5 +39,12 @@ export class WebUnicornRepository implements UnicornRepository {
       body
     );
     return Promise.resolve();
+  }
+
+  async getReleasabilities(): Promise<ReleasabilityModel[]> {
+    const json = await this.client.getJSON('/api/unicorn/releasabilities');
+    return json.map((obj: any) => {
+      return this.releasabilitySerializer.deserialize(obj);
+    });
   }
 }

@@ -1,5 +1,5 @@
-import { Serializer } from '../../../utils/Serializer';
-import { CalloutModel } from './model/CalloutModel';
+import { Serializer } from '../../../../utils/Serializer';
+import { CalloutModel } from '../model/CalloutModel';
 
 export class CalloutSerializer implements Serializer<CalloutModel> {
   serialize(item: CalloutModel): any {

@@ -4,23 +4,18 @@ import { StyledDropdown } from './Dropdown';
 
 describe('Dropdown', () => {
   let subject: ReactWrapper;
-  let unicornStore: any;
   let fakeFunction: any;
 
   beforeEach(() => {
-
-    unicornStore = {
-      setSelectedSite: jest.fn()
-    };
-
     fakeFunction = jest.fn();
 
     subject = mount(
       <StyledDropdown
-        unicornStore={unicornStore}
         options={['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5']}
         defaultValue="Test"
-        callback={(s: any) => { fakeFunction(s); }}
+        callback={(s: any) => {
+          fakeFunction(s);
+        }}
       />
     );
   });

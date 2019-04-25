@@ -1,5 +1,5 @@
-import { Serializer } from '../../../utils/Serializer';
-import { MissionModel } from './model/MissionModel';
+import { Serializer } from '../../../../utils/Serializer';
+import { MissionModel } from '../model/MissionModel';
 
 export class MissionSerializer implements Serializer<MissionModel> {
   serialize(item: MissionModel): any {

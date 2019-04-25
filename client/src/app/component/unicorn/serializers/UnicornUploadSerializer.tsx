@@ -1,5 +1,5 @@
-import { Serializer } from '../../../utils/Serializer';
-import { UnicornUploadModel } from './model/UnicornUploadModel';
+import { Serializer } from '../../../../utils/Serializer';
+import { UnicornUploadModel } from '../model/UnicornUploadModel';
 
 export class UnicornUploadSerializer implements  Serializer<UnicornUploadModel> {
   serialize(item: UnicornUploadModel): any {

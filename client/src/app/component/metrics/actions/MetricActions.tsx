@@ -158,6 +158,17 @@ export class MetricActions {
   }
 
   @action.bound
+  countDeletes(metrics: MetricModel[]) {
+    let count = 0;
+    metrics.map((m: MetricModel) => {
+      if (m.action === 'Delete PNG') {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  @action.bound
   calculateAverage(average: string, filter: number) {
     let averages = (this.metricStore.averages[average] as AverageSubsetModel[])
       .filter((asm: AverageSubsetModel) => {

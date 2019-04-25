@@ -16,7 +16,8 @@ describe('UserActionsCard', () => {
       initializeStores: jest.fn(),
       setTotalUploads: jest.fn(),
       countUploads: () => { return 3; },
-      countDownloads: () => { return 4; }
+      countDownloads: () => { return 4; },
+      countDeletes: () => { return 1; }
     };
 
     subject = shallow(
@@ -39,4 +40,7 @@ describe('UserActionsCard', () => {
     expect(subject.find('.totalDownloadCount').text()).toBe('4');
   });
 
+  it('should contain the total JPEGs deleted', () => {
+    expect(subject.find('.totalDeleteCount').text()).toBe('1');
+  });
 });

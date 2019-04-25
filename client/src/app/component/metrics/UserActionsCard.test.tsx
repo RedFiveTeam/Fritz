@@ -17,7 +17,8 @@ describe('UserActionsCard', () => {
       setTotalUploads: jest.fn(),
       countUploads: () => { return 3; },
       countDownloads: () => { return 4; },
-      countDeletes: () => { return 1; }
+      countDeletes: () => { return 1; },
+      countConverted: () => { return 99; }
     };
 
     subject = shallow(
@@ -42,5 +43,9 @@ describe('UserActionsCard', () => {
 
   it('should contain the total JPEGs deleted', () => {
     expect(subject.find('.totalDeleteCount').text()).toBe('1');
+  });
+
+  it('should display the number of slides converted', () => {
+    expect(subject.find('.totalConvertedCount').text()).toBe('99');
   });
 });

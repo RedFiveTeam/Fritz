@@ -27,7 +27,8 @@ describe('UploadActions', () => {
       }),
       updateMetric: jest.fn(async () => {
         await Promise.resolve();
-      })
+      }),
+      trackConversion: jest.fn()
     };
 
     uploadRepository.upload = jest.fn(() => {

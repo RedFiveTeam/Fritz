@@ -14,12 +14,14 @@ public class MetricJSON {
   private String action;
   private Long startTime;
   private Long endTime;
+  private Long count;
 
-  public MetricJSON(String uid, String action, Long startTime, Long endTime) {
+  public MetricJSON(String uid, String action, Long startTime, Long endTime, Long count) {
     this.uid = uid;
     this.startTime = startTime;
     this.endTime = endTime;
     this.action = action;
+    this.count = count;
   }
 }
 

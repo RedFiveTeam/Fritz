@@ -36,7 +36,8 @@ describe('MetricActions', () => {
         new MetricModel(6, 'test1', 'Renaming', '1551711488', '1551711498', null),
         new MetricModel(7, 'test2', 'Renaming', '1551711565', '1551711580', null),
         new MetricModel(7, 'test5', 'Converted', '1551711565', '1551711580', 15),
-        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535', null)
+        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535', null),
+        new MetricModel(7, 'test2', 'Conversion', '1551711565', '1551711580', null),
       ],
       filteredMetrics: [
         new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498', null),
@@ -48,13 +49,15 @@ describe('MetricActions', () => {
         new MetricModel(6, 'test1', 'Renaming', '1551711488', '1551711498', null),
         new MetricModel(7, 'test2', 'Renaming', '1551711565', '1551711580', null),
         new MetricModel(7, 'test5', 'Converted', '1551711565', '1551711580', 15),
-        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535', null)
+        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535', null),
+        new MetricModel(7, 'test2', 'Conversion', '1551711565', '1551711580', null),
       ],
       averages: {
         download: [],
         upload: [],
         rename: [],
-        workflow: []
+        workflow: [],
+        conversion: []
       },
       filterValue: moment().unix() - 1551711563
     };
@@ -88,11 +91,12 @@ describe('MetricActions', () => {
     expect(metricStore.setFilteredMetrics).toHaveBeenCalled();
   });
 
-  it('should be able to calculate the correct averages for upload, rename and download', async () => {
+  it('should be able to calculate the correct averages for upload, rename, download, and conversion', async () => {
     await subject.setAverages();
     expect(metricStore.averages.download.length).toBe(3);
     expect(metricStore.averages.upload.length).toBe(3);
     expect(metricStore.averages.rename.length).toBe(3);
+    expect(metricStore.averages.conversion.length).toBe(1);
   });
 
   it('should calculate the average for the filtered metrics', async () => {

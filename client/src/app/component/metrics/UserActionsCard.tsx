@@ -60,7 +60,7 @@ export class UserActionsCard extends React.Component<Props> {
 export const StyledUserActionsCard = inject('metricActions', 'metricStore')(styled(UserActionsCard)`
 position: relative;
 margin: auto;
-width: 1286px;
+width: 1363px;
 height: 263px;
 overflow: hidden;
 margin-top: 80px;
@@ -89,6 +89,7 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   display: inline-block;
   position: relative;
   bottom: 38px;
+  left: 66px;
 }
 
 .userActionsIcon > div > div {

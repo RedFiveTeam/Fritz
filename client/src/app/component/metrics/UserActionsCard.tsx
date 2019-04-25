@@ -27,17 +27,23 @@ export class UserActionsCard extends React.Component<Props> {
           </div>
         </div>
         <div className="cardContent">
-          <div className="totalUploads">
-            <div className="totalUploadCount">
-              {this.props.metricActions!.countUploads(this.props.metricStore!.filteredMetrics)}
+          <div className="totalConverted">
+            <div className="totalConvertedCount">
+              {this.props.metricActions!.countConverted(this.props.metricStore!.filteredMetrics)}
             </div>
-            <div >PDF Files Uploaded</div>
+            <div >Slides Converted</div>
           </div>
           <div className="totalDownloads">
             <div className="totalDownloadCount">
               {this.props.metricActions!.countDownloads(this.props.metricStore!.filteredMetrics)}
             </div>
             <div >Zip Files Downloaded</div>
+          </div>
+          <div className="totalUploads">
+            <div className="totalUploadCount">
+              {this.props.metricActions!.countUploads(this.props.metricStore!.filteredMetrics)}
+            </div>
+            <div >PDF Files Uploaded</div>
           </div>
           <div className="totalDeletes">
             <div className="totalDeleteCount">

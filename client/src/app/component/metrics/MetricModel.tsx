@@ -6,13 +6,15 @@ export class MetricModel {
   @observable private _action: string;
   @observable private _startTime: string;
   @observable private _endTime: string | null;
+  @observable private _count: number | null;
 
-  constructor(id: any, uid: string, act: string, startTime: string, endTime: string | null) {
+  constructor(id: any, uid: string, act: string, startTime: string, endTime: string | null, count: number | null) {
     this._id = id;
     this._uid = uid;
     this._action = act;
     this._startTime = startTime;
     this._endTime = endTime;
+    this._count = count;
   }
 
   @computed
@@ -40,6 +42,11 @@ export class MetricModel {
     return this._endTime;
   }
 
+  @computed
+  get count(): number | null {
+    return this._count;
+  }
+
   @action.bound
   setId(value: any) {
     this._id = value;
@@ -63,5 +70,10 @@ export class MetricModel {
   @action.bound
   setEndTime(value: string) {
     this._endTime = value;
+  }
+
+  @action.bound
+  setCount(value: number) {
+    this._count = value;
   }
 }

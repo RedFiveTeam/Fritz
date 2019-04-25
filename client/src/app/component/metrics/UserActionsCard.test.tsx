@@ -37,6 +37,6 @@ describe('UserActionsCard', () => {
 
   it('should contain total zips downloaded', () => {
     expect(subject.find('.totalDownloadCount').text()).toBe('4');
-  })
+  });
 
 });

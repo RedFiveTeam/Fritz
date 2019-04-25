@@ -15,7 +15,8 @@ describe('UserActionsCard', () => {
     metricActions = {
       initializeStores: jest.fn(),
       setTotalUploads: jest.fn(),
-      countUploads: () => { return 3; }
+      countUploads: () => { return 3; },
+      countDownloads: () => { return 4; }
     };
 
     subject = shallow(
@@ -33,5 +34,9 @@ describe('UserActionsCard', () => {
   it('should contain total slides uploaded', () => {
     expect(subject.find('.totalUploadCount').text()).toBe('3');
   });
+
+  it('should contain total zips downloaded', () => {
+    expect(subject.find('.totalDownloadCount').text()).toBe('4');
+  })
 
 });

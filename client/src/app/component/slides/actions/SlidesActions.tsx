@@ -85,16 +85,10 @@ export class SlidesActions {
       let slide = this.slidesStore.slides[i];
       this.slidesStore.setActivity(this.slidesStore.slides[i], slide.activity);
       this.slidesStore.setTime(this.slidesStore.slides[i], slide.time);
-
-      // check for duplicate names
       let duplicates = this.slidesStore.slides.filter((s, idx) => {
         return s.newName.replace(/\d+\b/, '') === this.slidesStore.nameFormat && idx < i;
       }).length;
-      // for (let j = 0; j < i; j++) {
-      //
-      // }
       newName = this.slidesStore.nameFormat + (duplicates > 0 ? duplicates : '');
-      console.log(newName);
       this.slidesStore.slides[i].setNewName(newName);
     }
   }

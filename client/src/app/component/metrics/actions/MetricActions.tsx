@@ -137,6 +137,10 @@ export class MetricActions {
         this.metricStore.averages.download.push(
           new AverageSubsetModel(parseInt(m.startTime, 10), (parseInt(m.endTime, 10) - parseInt(m.startTime, 10)))
         );
+      } else if (m.action === 'Conversion' && m.startTime && m.endTime) {
+        this.metricStore.averages.conversion.push(
+          new AverageSubsetModel(parseInt(m.startTime, 10), (parseInt(m.endTime, 10) - parseInt(m.startTime, 10)))
+        );
       }
     });
   }
@@ -179,7 +183,7 @@ export class MetricActions {
   countDeletes(metrics: MetricModel[]) {
     let count = 0;
     metrics.map((m: MetricModel) => {
-      if (m.action === 'Delete PNG') {
+      if (m.action === 'Delete JPG') {
         count++;
       }
     });

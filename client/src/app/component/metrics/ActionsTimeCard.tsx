@@ -111,6 +111,23 @@ export class ActionsTimeCard extends React.Component<Props> {
               }
             </div>
           </div>
+          <div className="averageConversion">
+            <div>
+              {
+                this.props.metricStore!.averages.conversion.length > 0 &&
+                this.props.metricActions!.calculateAverage(
+                  'conversion',
+                  this.props.metricStore!.filterValue
+                ) + 's'}
+            </div>
+            <div>Avg. Conversion Time</div>
+            <div className="difference">
+              {
+                this.props.metricStore!.averages.conversion.length > 0 &&
+                this.calculateAverage('conversion')
+              }
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -120,7 +137,7 @@ export class ActionsTimeCard extends React.Component<Props> {
 export const StyledActionsTimeCard = inject('metricActions', 'metricStore')(styled(ActionsTimeCard)`
 position: relative;
 margin: auto;
-width: 1286px;
+width: 1363px;
 height: 263px;
 overflow: hidden;
 margin-top: 80px;
@@ -162,9 +179,9 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   width: 100px;
 }
 
-.averageTime, .averageUpload, .averageRename, .averageDownload {
+.averageTime, .averageUpload, .averageRename, .averageDownload, .averageConversion {
   position: relative;
-  margin-left: 66px;
+  margin-left: 55px;
   text-align: center;
   display: inline-block;
   

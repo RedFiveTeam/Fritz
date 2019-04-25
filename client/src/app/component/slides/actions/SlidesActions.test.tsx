@@ -39,22 +39,22 @@ describe('SlidesActions', () => {
 
   it('update the slide model name when called', () => {
     subject.setAndUpdateActivity(slidesStore.slides[0], 'Test activity');
-    expect(slidesStore.slides[0].newName).toBe('DDTTTTZMONYY_TGT_NAME_TEST_ACTIVITY_ASSET_RELEASABILITY' + 1);
+    expect(slidesStore.slides[0].newName).toBe('DDTTTTZMONYY_TGT_NAME_TEST_ACTIVITY_ASSET_RELEASABILITY');
 
     subject.setAndUpdateDate('JAN', '19', '20');
-    expect(slidesStore.slides[1].newName).toBe('20TTTTZJAN19_TGT_NAME_ACTY_ASSET_RELEASABILITY' + 2);
+    expect(slidesStore.slides[1].newName).toBe('20TTTTZJAN19_TGT_NAME_ACTY_ASSET_RELEASABILITY');
 
     subject.setAndUpdateOpName('op hello');
-    expect(slidesStore.slides[2].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY' + 3);
+    expect(slidesStore.slides[2].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY1');
 
     subject.setAndUpdateAsset('asset');
-    expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY' + 4);
+    expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY2');
 
     subject.setAndUpdateReleasability('fvey');
-    expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_FVEY' + 5);
+    expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_FVEY3');
 
     subject.setAndUpdateTime(slidesStore.slides[5], '1234');
-    expect(slidesStore.slides[5].newName).toBe('201234ZJAN19_OP_HELLO_ACTY_ASSET_FVEY' + 6);
+    expect(slidesStore.slides[5].newName).toBe('201234ZJAN19_OP_HELLO_ACTY_ASSET_FVEY');
   });
 
   it('should log metrics on download', async () => {

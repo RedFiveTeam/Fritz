@@ -33,7 +33,12 @@ export class UserActionsCard extends React.Component<Props> {
             </div>
             <div >PDF Files Uploaded</div>
           </div>
-
+          <div className="totalDownloads">
+            <div className="totalDownloadCount">
+              {this.props.metricActions!.countDownloads(this.props.metricStore!.filteredMetrics)}
+            </div>
+            <div >Zip Files Downloaded</div>
+          </div>
         </div>
       </div>
     );
@@ -67,7 +72,7 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
 .cardContent {
   display: inline-block;
   position: relative;
-  bottom: 20px;
+  bottom: 38px;
 }
 
 .userActionsIcon > div > div {
@@ -77,15 +82,19 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   width: 100px;
 }
 
- .totalUploads {
+ .cardContent > div {
   position: relative;
   margin-left: 66px;
   text-align: center;
   display: inline-block;
-}
-
-.totalUploadCount {
+  
+  > div:first-of-type {
     font-weight: normal;
+  }
+  
+  > div:last-of-type {
+    width: 161px;
+  }
 }
 
   div:first-of-type {
@@ -96,7 +105,6 @@ box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.5);
   div:nth-of-type(2) {
     font-size: 24px;
     color: #6c7f9c;
-    width: 161px;
     font-weight: 100;
   }
 `);

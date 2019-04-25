@@ -147,6 +147,17 @@ export class MetricActions {
   }
 
   @action.bound
+  countDownloads(metrics: MetricModel[]) {
+    let count = 0;
+    metrics.map((m: MetricModel) => {
+      if (m.action === 'Download') {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  @action.bound
   calculateAverage(average: string, filter: number) {
     let averages = (this.metricStore.averages[average] as AverageSubsetModel[])
       .filter((asm: AverageSubsetModel) => {

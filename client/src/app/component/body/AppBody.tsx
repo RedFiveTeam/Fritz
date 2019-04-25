@@ -56,7 +56,7 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   }
   
   .left {
-    width: 43vw;
+    width: 44vw;
     min-width: 700px;
     display: inline-block;
   }

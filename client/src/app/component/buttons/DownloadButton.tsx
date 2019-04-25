@@ -37,6 +37,9 @@ export class DownloadButton extends React.Component<Props> {
             } else if (!this.props.slidesStore!.isValidDate()) {
               this.props.slidesStore!.setValidate(true);
               return Promise.resolve();
+            } else if (!this.props.slidesStore!.isValidReleasability()) {
+              this.props.slidesStore!.setValidate(true);
+              return Promise.resolve();
             } else if (this.props.uploadStore!.uploading) {
               Toast.create(
                 5000,

@@ -3,6 +3,7 @@ package mil.af.dgs1sdt.fritz.Controllers;
 import mil.af.dgs1sdt.fritz.Interfaces.UnicornInterface;
 import mil.af.dgs1sdt.fritz.Models.CalloutModel;
 import mil.af.dgs1sdt.fritz.Models.MissionModel;
+import mil.af.dgs1sdt.fritz.Models.ReleasabilityModel;
 import mil.af.dgs1sdt.fritz.Models.UnicornUploadModel;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -18,7 +19,8 @@ import java.util.List;
 @RequestMapping(UnicornController.URI)
 public class UnicornController {
 
-  @Value("${UNICORN_URL}") private String unicornBaseURL;
+  @Value("${UNICORN_URL}")
+  private String unicornBaseURL;
 
   public static final String URI = "/api/unicorn";
 
@@ -36,8 +38,16 @@ public class UnicornController {
     return unicorn.getCallouts(missionId);
   }
 
+  @ResponseBody
+  @GetMapping(produces = "application/json", path = "/releasabilities")
+  public List<ReleasabilityModel> releasabilities() throws Exception {
+    UnicornInterface unicorn = new UnicornInterface();
+    return unicorn.getReleasabilities();
+  }
+
   @PostMapping(produces = "application/json")
-  public @ResponseBody String upload(@CookieValue("id") String id, @RequestBody UnicornUploadModel json) throws Exception {
+  public @ResponseBody
+  String upload(@CookieValue("id") String id, @RequestBody UnicornUploadModel json) throws Exception {
     File convFile = new File("/tmp/complete/" + id + "/" + json.getFileName());
     String image = UnicornInterface.convertFileToBase64(convFile);
     UnicornInterface unicorn = new UnicornInterface();
@@ -46,6 +56,7 @@ public class UnicornController {
     params.add(new BasicNameValuePair("missionId", json.getMissionId()));
     params.add(new BasicNameValuePair("targetEventId", json.getTargetEventId()));
     params.add(new BasicNameValuePair("classificationId", json.getClassificationId()));
+    System.out.println(json.getReleasabilityId());
     params.add(new BasicNameValuePair("releasabilityId", json.getReleasabilityId()));
     params.add(new BasicNameValuePair("personnelId", json.getPersonnelId()));
     params.add(new BasicNameValuePair("isrRoleId", ""));

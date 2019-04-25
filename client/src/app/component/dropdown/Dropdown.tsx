@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { UnicornStore } from '../unicorn/store/UnicornStore';
 import * as ReactDOM from 'react-dom';
 
 const DropdownIcon = require('../../../icon/DropdownIcon.svg');
@@ -10,8 +9,7 @@ interface Props {
   className?: string;
   options: string[];
   defaultValue: string;
-  unicornStore?: UnicornStore;
-  callback: (s: string) => void;
+  callback: (s: any) => void;
 }
 
 @observer
@@ -63,6 +61,7 @@ export class Dropdown extends React.Component<Props> {
           className="dropdownBtn"
           onClick={(e: any) => {
             let component = (ReactDOM.findDOMNode(this) as HTMLElement);
+            e.preventDefault();
             let parent = component.parentElement!.parentElement!.parentElement;
             if (parent && parent.classList.contains('slideCardContainer')) {
               let options = component.querySelector('.dd') as HTMLElement;
@@ -80,7 +79,7 @@ export class Dropdown extends React.Component<Props> {
         <img src={DropdownIcon}/>
         <div className="dd">
           {
-            this.props.options.map((o, idx) => {
+            this.props.options.map((o: any, idx) => {
               return (
                 <div
                   onClick={this.optionSelect}
@@ -99,10 +98,9 @@ export class Dropdown extends React.Component<Props> {
   }
 }
 
-export const StyledDropdown = inject('unicornStore')(styled(Dropdown)`
+export const StyledDropdown = (styled(Dropdown)`
   display: inline-block;
   position: relative;
-  
   width: 117px;
   height: 44px;
   background-color: #151524;
@@ -117,6 +115,7 @@ export const StyledDropdown = inject('unicornStore')(styled(Dropdown)`
     white-space: nowrap;
     vertical-align: middle;
     position: absolute;
+    top: -2px;
     left: -11px;
     display: inline-block;
     background-color: rgba(0, 0, 0, 0);
@@ -167,6 +166,6 @@ export const StyledDropdown = inject('unicornStore')(styled(Dropdown)`
     pointer-events: none;
     position: absolute;
     right: 8px;
-    top: 20px;
+    top: 16px;
   }
 `);

@@ -22,6 +22,9 @@ describe('DownloadButton', () => {
     },
     setValidate: () => {
       return;
+    },
+    isValidReleasability: () => {
+      return true;
     }
   };
 

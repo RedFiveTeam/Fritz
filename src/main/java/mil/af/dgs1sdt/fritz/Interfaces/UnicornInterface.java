@@ -2,6 +2,7 @@ package mil.af.dgs1sdt.fritz.Interfaces;
 
 import mil.af.dgs1sdt.fritz.Models.CalloutModel;
 import mil.af.dgs1sdt.fritz.Models.MissionModel;
+import mil.af.dgs1sdt.fritz.Models.ReleasabilityModel;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -80,6 +81,24 @@ public class UnicornInterface {
       }
     }
     return targets;
+  }
+
+  public List<ReleasabilityModel> getReleasabilities() throws Exception {
+    List<ReleasabilityModel> releasabilities = new ArrayList<>();
+    String uri = unicornBaseURL + "/WebServices/UnicornData.asmx/GetReleasabilities";
+    Document doc = makeRequest(uri);
+    NodeList r = doc.getElementsByTagName("RELEASABILITY");
+    for (int i = 0; i < r.getLength(); i++) {
+      Node element = r.item(i);
+      if (element.getNodeType() == Node.ELEMENT_NODE) {
+        Element ele = (Element) element;
+        ReleasabilityModel releasability = new ReleasabilityModel();
+        releasability.setReleasabilityId(ele.getElementsByTagName("RELEASABILITY_ID").item(0).getTextContent());
+        releasability.setReleasabilityName(ele.getElementsByTagName("RELEASABILITY_NAME_TXT").item(0).getTextContent());
+        releasabilities.add(releasability);
+      }
+    }
+    return releasabilities;
   }
 
   public Document makeRequest(String uri) throws Exception {

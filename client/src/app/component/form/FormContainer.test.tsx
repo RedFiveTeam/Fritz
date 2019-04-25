@@ -7,21 +7,33 @@ describe('FormContainer', () => {
   let subject: ShallowWrapper;
   let slidesActions: any;
   let slidesStore: any;
-
-  slidesActions = {
-    setAndUpdateDate: jest.fn(),
-    setAndUpdateOpName: jest.fn(),
-    setAndUpdateAsset: jest.fn(),
-    setAndUpdateReleasability: jest.fn()
-  };
-
-  slidesStore = {
-    setHelp: jest.fn()
-  };
+  let unicornStore: any;
+  let unicornActions: any;
 
   beforeEach(() => {
+    unicornStore = {
+      releasabilities: []
+    };
+
+    unicornActions = {
+      getReleasabilities: jest.fn()
+    };
+
+    slidesActions = {
+      setAndUpdateDate: jest.fn(),
+      setAndUpdateOpName: jest.fn(),
+      setAndUpdateAsset: jest.fn(),
+      setAndUpdateReleasability: jest.fn()
+    };
+
+    slidesStore = {
+      setHelp: jest.fn()
+    };
+
     subject = shallow(
       <FormContainer
+        unicornStore={unicornStore}
+        unicornActions={unicornActions}
         slidesActions={slidesActions}
         slidesStore={slidesStore}
       />);
@@ -40,11 +52,6 @@ describe('FormContainer', () => {
   it('should contain an asset input that updates the header string when changed', () => {
     subject.find('#assetInput').simulate('change', {target: {value: 'flyguy'}});
     expect(slidesActions.setAndUpdateAsset).toHaveBeenCalledWith('flyguy');
-  });
-
-  it('should contain a releasability input that updates the header string when changed', () => {
-    subject.find('#releaseInput').simulate('change', {target: {value: 'fvey'}});
-    expect(slidesActions.setAndUpdateReleasability).toHaveBeenCalledWith('fvey');
   });
 
   it('should contain an upload container', () => {

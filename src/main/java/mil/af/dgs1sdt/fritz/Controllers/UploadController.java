@@ -4,7 +4,6 @@ import mil.af.dgs1sdt.fritz.Conversion;
 import mil.af.dgs1sdt.fritz.Metrics.MetricRepository;
 import mil.af.dgs1sdt.fritz.Models.StatusModel;
 import mil.af.dgs1sdt.fritz.Models.TrackingModel;
-import mil.af.dgs1sdt.fritz.Statistics.StatisticRepository;
 import mil.af.dgs1sdt.fritz.Stores.TrackingStore;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Controller
 @RequestMapping(UploadController.URI)
@@ -29,9 +31,6 @@ public class UploadController {
 
   @Autowired
   MetricRepository metricRepository;
-
-  @Autowired
-  StatisticRepository statisticRepository;
 
   @PostMapping(produces = "application/json")
   public @ResponseBody
@@ -114,7 +113,6 @@ public class UploadController {
 
             Long extractInt(String s) {
               String num = s.replaceAll("\\D", "");
-              // return 0 if no digits found
               return num.isEmpty() ? 0 : Long.parseLong(num);
             }
           });
@@ -123,11 +121,9 @@ public class UploadController {
         status.setTimes(tracking.getTimes());
         status.setStatus("complete");
         tracking.setCompletedSlides(0);
-        statisticRepository.increase(Long.valueOf(tracking.getTotalSlides()));
         return status;
       }
       StatusModel status = new StatusModel();
-
       status.setFiles(new ArrayList<>());
       status.setProgress(tracking.getCompletedSlides());
       status.setTotal(tracking.getTotalSlides());

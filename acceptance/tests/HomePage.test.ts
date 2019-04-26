@@ -44,8 +44,3 @@ Scenario('should allow you to upload a file, validate it, and display the jpgs',
   I.waitForText('PDF File Removed', 10);
   I.waitForText('Drag and drop', 10);
 });
-
-Scenario('should display a classification banner on the homepage', (I) => {
-  I.amOnPage('/');
-  I.waitForText('UNCLASSIFIED');
-});

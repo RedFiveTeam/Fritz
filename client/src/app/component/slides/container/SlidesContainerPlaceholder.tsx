@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 
-const placeholder = require('../../../../icon/slidesContainerPlaceholder.svg');
+const placeholder = require('../../../../icon/SlidesContainerPlaceholder.svg');
 
 interface Props {
   className?: string;

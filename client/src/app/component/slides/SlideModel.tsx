@@ -8,6 +8,7 @@ export class SlideModel {
   @observable private _newName: string = '';
   @observable private _deleted: boolean = false;
   @observable private _targetEventId: string = '';
+  @observable private _id: number | null = null;
 
   constructor(
     oldName: string = '',
@@ -55,6 +56,11 @@ export class SlideModel {
     return this._targetEventId;
   }
 
+  @computed
+  get id(): number | null {
+    return this._id;
+  }
+
   @action.bound
   setOldName(value: string) {
     this._oldName = value;
@@ -83,6 +89,11 @@ export class SlideModel {
   @action.bound
   setTargetEventId(value: string) {
     this._targetEventId = value;
+  }
+
+  @action.bound
+  setId(value: number | null) {
+    this._id = value;
   }
 
 }

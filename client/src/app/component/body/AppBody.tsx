@@ -71,7 +71,6 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
     padding-top: 16px;
     overflow-y: auto;
     overflow-x: hidden;
-    overflow-y: visible;
     margin-top: 3px;
     /* width */
     ::-webkit-scrollbar {

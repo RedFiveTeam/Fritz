@@ -79,6 +79,12 @@ export class SlidesActions {
     this.updateNewNames();
   }
 
+  @action.bound
+  deleteSlide = async (s: SlideModel) => {
+    s.setDeleted(true);
+    await this.metricActions!.createMetric('Delete JPG');
+  };
+
   updateNewNames() {
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
       let newName: string = '';

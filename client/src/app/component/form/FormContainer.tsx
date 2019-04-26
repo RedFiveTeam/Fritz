@@ -6,7 +6,7 @@ import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/SlidesStore';
 import { CSSProperties } from 'react';
 
-const helpMenuIcon = require('../../../icon/helpMenu.svg');
+const helpMenuIcon = require('../../../icon/HelpMenu.svg');
 
 interface Props {
   className?: string;
@@ -109,7 +109,7 @@ export class FormContainer extends React.Component<Props> {
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidAsset()) ?
                 this.badLabelCSS : this.goodCSS}
             >
-              Asset*
+              Callsign
             </label>
             <input
               data-name="asset"

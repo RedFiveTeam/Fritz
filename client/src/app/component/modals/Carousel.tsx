@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { SlideModel } from '../slides/SlideModel';
 import { SlidesStore } from '../slides/SlidesStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
+import { UploadStore } from '../form/upload/UploadStore';
 
 interface Props {
   className?: string;
@@ -11,6 +12,7 @@ interface Props {
   slideNumber: number;
   slidesStore?: SlidesStore;
   slidesActions?: SlidesActions;
+  uploadStore?: UploadStore;
 }
 
 @observer
@@ -50,7 +52,7 @@ export class Carousel extends React.Component<Props> {
     return (
       <div className={this.props.className + ' carousel-item'}>
         <img
-          src={'/api/image/' + this.props.slideModel.oldName}
+          src={'/api/image/' + this.props.uploadStore!.hash + '/' + this.props.slideModel.oldName}
           className="d-block"
           alt="..."
         />
@@ -130,7 +132,7 @@ export class Carousel extends React.Component<Props> {
   }
 }
 
-export const StyledCarousel = inject('slidesStore', 'slidesActions')(styled(Carousel)`
+export const StyledCarousel = inject('slidesStore', 'slidesActions', 'uploadStore')(styled(Carousel)`
 
   input {
     width: 166px;

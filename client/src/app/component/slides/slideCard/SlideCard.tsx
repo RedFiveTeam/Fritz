@@ -8,7 +8,7 @@ import * as ReactDOM from 'react-dom';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UploadStore } from '../../form/upload/UploadStore';
 
-const expandIcon = require('../../../../icon/expandIcon.svg');
+const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
 
 interface Props {
@@ -78,11 +78,6 @@ export class SlideCard extends React.Component<Props> {
     );
   };
 
-  deleteSlide = async () => {
-    this.props.slideModel.setDeleted(true);
-    await this.props.metricActions!.createMetric('Delete JPG');
-  };
-
   render() {
     return (
       <div
@@ -117,7 +112,13 @@ export class SlideCard extends React.Component<Props> {
               </span>
             </div>
             <div className="col-md-8">
-              <img className="deleteIcon" onClick={this.deleteSlide} src={DeleteIcon}/>
+              <img
+                className="deleteIcon"
+                onClick={async () => {
+                  await this.props.slidesActions!.deleteSlide(this.props.slideModel);
+                }}
+                src={DeleteIcon}
+              />
               <div className="card-body">
                 <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
               </div>
@@ -238,7 +239,6 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     left: 0;
     background: rgba(43, 48, 60, 0.557886);
     color: white;
-    font-family: Helvetica Neue;
     font-style: normal;
     font-size: 14px;
     font-weight: 500;

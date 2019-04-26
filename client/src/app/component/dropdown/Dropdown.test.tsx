@@ -29,7 +29,7 @@ describe('Dropdown', () => {
     expect(subject.find('.ddd').length).toBe(5);
   });
 
-  it('should update the store on selecting an option', () => {
+  it('should execute a callback on selecting an option', () => {
     subject.find('.ddd').at(3).simulate(
       'click',
       {

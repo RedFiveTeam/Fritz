@@ -43,5 +43,4 @@ describe('DownloadButton', () => {
     expect(subject.find('#downloadbutton').simulate('click'));
     expect(slidesActions.trackRenameAndDownload).toHaveBeenCalled();
   });
-
 });

@@ -42,7 +42,8 @@ export class UploadActions {
     await this.metricActions.trackMetric('Conversion');
     this.poll = setInterval(
       async () => { await this.checkStatus(); },
-      1000);
+      1000
+    );
   }
 
   @action.bound
@@ -78,6 +79,7 @@ export class UploadActions {
       if (times[idx]) {
         slide.setTime(times[idx]);
       }
+      slide.setId(idx);
       slide.setOldName(name);
       temp.push(slide);
     });

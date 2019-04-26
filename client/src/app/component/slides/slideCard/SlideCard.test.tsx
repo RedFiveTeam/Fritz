@@ -33,6 +33,7 @@ describe('SlideCard', () => {
     };
 
     slidesActions = {
+      deleteSlide: jest.fn(),
       setAndUpdateActivity: jest.fn(),
       setAndUpdateTime: jest.fn()
     };
@@ -85,7 +86,6 @@ describe('SlideCard', () => {
 
   it('should flag slide as deleted when the delete icon is clicked and have an undo button', () => {
     expect(subject.find('.deleteIcon').simulate('click'));
-    expect(slideModel.deleted).toBeTruthy();
-    expect(metricActions.createMetric).toHaveBeenCalled();
+    expect(slidesActions.deleteSlide).toHaveBeenCalled();
   });
 });

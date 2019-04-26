@@ -74,7 +74,9 @@ export class Dropdown extends React.Component<Props> {
             (component.querySelector('.dd') as HTMLElement).style.display = 'block';
           }}
         >
+          <span className="default">
           {this.props.defaultValue}
+          </span>
         </button>
         <img src={DropdownIcon}/>
         <div className="dd">

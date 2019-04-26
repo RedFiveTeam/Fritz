@@ -170,16 +170,12 @@ export class FormContainer extends React.Component<Props> {
             >
               Releasability
             </label>
-            {
-              !this.props.slidesStore!.releasability &&
-              <span className="releasePlaceholder">Select</span>
-            }
             <StyledDropdown
               options={
                 this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
                   return e.releasabilityName;
                 })}
-              defaultValue=""
+              defaultValue="Select"
               callback={(r: string) => {
                 this.props.slidesActions!.setAndUpdateReleasability(r);
                 console.log(r);
@@ -375,11 +371,8 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore', 'unico
       }
   }
   
-  .releasePlaceholder {
-    opacity: 0.4;
+  .default {
     color: #FFF;
-    bottom: 380px;
-    left: 360px;
-    position: fixed;
+    opacity: 0.4;
   }
 `);

@@ -120,6 +120,7 @@ public class UploadController {
         status.setFiles(fileNames);
         status.setTimes(tracking.getTimes());
         status.setDate(tracking.getDate());
+        status.setOp(tracking.getOp());
         status.setStatus("complete");
         tracking.setCompletedSlides(0);
         return status;

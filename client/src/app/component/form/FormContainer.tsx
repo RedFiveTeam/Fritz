@@ -179,8 +179,6 @@ export class FormContainer extends React.Component<Props> {
               defaultValue="Select"
               callback={(r: string) => {
                 this.props.slidesActions!.setAndUpdateReleasability(r);
-                console.log(r);
-                console.log(this.props.slidesStore!.releasability);
               }}
             />
             {

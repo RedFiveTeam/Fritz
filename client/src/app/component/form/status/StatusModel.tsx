@@ -7,6 +7,7 @@ export class StatusModel {
   @observable private _progress: number;
   @observable private _total: number;
   @observable private _date: string;
+  @observable private _op: string;
 
   constructor(
     status: string = '',
@@ -14,7 +15,8 @@ export class StatusModel {
     times: string[] = [],
     progress: number = 0,
     total: number,
-    date: string
+    date: string,
+    op: string
   ) {
     this._status = status;
     this._files = files;
@@ -22,6 +24,7 @@ export class StatusModel {
     this._progress = progress;
     this._total = total;
     this._date = date;
+    this._op = op;
   }
 
   @action.bound
@@ -37,6 +40,11 @@ export class StatusModel {
   @action.bound
   setDate(value: string) {
     this._date = value;
+  }
+
+  @action.bound
+  setOp(value: string) {
+    this._op = value;
   }
 
   @computed
@@ -67,5 +75,10 @@ export class StatusModel {
   @computed
   get date(): string {
     return this._date;
+  }
+
+  @computed
+  get op(): string {
+    return this._op;
   }
 }

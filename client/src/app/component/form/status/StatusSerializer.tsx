@@ -9,7 +9,8 @@ export class StatusSerializer implements Serializer<StatusModel> {
       times: item.times,
       progress: item.progress,
       total: item.total,
-      date: item.date
+      date: item.date,
+      op: item.op
     };
   }
 
@@ -20,7 +21,8 @@ export class StatusSerializer implements Serializer<StatusModel> {
       item.times,
       item.progress,
       item.total,
-      item.date
+      item.date,
+      item.op
     );
   }
 }

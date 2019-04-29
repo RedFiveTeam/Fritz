@@ -62,13 +62,16 @@ export class UploadActions {
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files, status.times);
           if (status.date && status.date !== '') {
-            console.log(status.date);
             this.slidesActions.setAndUpdateDate(
               status.date.substr(2, 3),
               status.date.substr(-2),
               status.date.substr(0, 2)
             );
             this.setDateInput(status.date);
+          }
+          if (status.op && status.op !== '') {
+            this.slidesActions.setAndUpdateOpName(status.op);
+            this.setOpInput(status.op);
           }
         }
       });
@@ -78,14 +81,19 @@ export class UploadActions {
   setDateInput(date: string) {
     let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     let monthStr = date.substr(2, 3);
-    console.log(monthStr);
     let monthInt = ('0' + (months.indexOf(monthStr) + 1)).slice(-2);
-    console.log(monthInt);
     let day = date.substr(0, 2);
     let year = date.substr(-2);
     let dateInput = document.querySelector('#dateInput') as HTMLInputElement;
     if (dateInput) {
       dateInput.value = '20' + year + '-' + monthInt + '-' + day;
+    }
+  }
+
+  setOpInput(op: string) {
+    let opInput = document.querySelector('#opInput') as HTMLInputElement;
+    if (opInput) {
+      opInput.value = op;
     }
   }
 

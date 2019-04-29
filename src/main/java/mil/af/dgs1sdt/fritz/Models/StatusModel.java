@@ -14,6 +14,7 @@ public class StatusModel {
   private Thread thread;
   private String[] times;
   private String date = "";
+  private String op = "";
 
   public String getStatus() {
     return status;
@@ -32,4 +33,6 @@ public class StatusModel {
   }
 
   public void setDate(String value) { this.date = value; }
+
+  public void setOp(String value) { this.op = value; }
 }

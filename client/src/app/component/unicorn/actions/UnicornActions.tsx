@@ -49,7 +49,6 @@ export class UnicornActions {
   @action.bound
   setReleasabilityId(rel: string) {
     const releasabilities = this.unicornStore!.releasabilities;
-    console.log(releasabilities);
     for (let i = 0; i < releasabilities.length; i++) {
       if (rel === releasabilities[i].releasabilityName) {
         return this.unicornStore!.setReleasabilityId(releasabilities[i].releasabilityId);

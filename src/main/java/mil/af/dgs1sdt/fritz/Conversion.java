@@ -51,6 +51,11 @@ public class Conversion {
           if (dateMatcher.find()) {
             tracking.setDate(dateMatcher.group().replaceAll(" ", ""));
           }
+          String opPattern = "OP \\w+";
+          Matcher opMatcher = Pattern.compile(opPattern).matcher(text);
+          if (opMatcher.find()) {
+            tracking.setOp(opMatcher.group());
+          }
         }
         Matcher m = Pattern.compile(pattern).matcher(text);
         if (m.find()) {

@@ -27,6 +27,8 @@ public class TrackingModel {
 
   private String date;
 
+  private String op;
+
   public String getHash() {
     return hash;
   }
@@ -74,6 +76,10 @@ public class TrackingModel {
   public String getDate() { return date; }
 
   public void setDate(String value) { this.date = value; }
+
+  public String getOp() { return op; }
+
+  public void setOp(String value) { this.op = value; }
 
   public void updateFileList(String oldName, String newName) {
     fileList.set(fileList.indexOf(oldName), newName);

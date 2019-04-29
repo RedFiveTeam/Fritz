@@ -61,7 +61,8 @@ export class UploadActions {
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files, status.times);
-          if (status.date !== '') {
+          if (status.date && status.date !== '') {
+            console.log(status.date);
             this.slidesActions.setAndUpdateDate(
               status.date.substr(2, 3),
               status.date.substr(-2),

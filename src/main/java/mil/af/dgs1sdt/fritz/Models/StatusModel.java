@@ -13,6 +13,7 @@ public class StatusModel {
   private int total;
   private Thread thread;
   private String[] times;
+  private String date = "";
 
   public String getStatus() {
     return status;
@@ -29,4 +30,6 @@ public class StatusModel {
   public void setFiles(List<String> files) {
     this.files = files;
   }
+
+  public void setDate(String value) { this.date = value; }
 }

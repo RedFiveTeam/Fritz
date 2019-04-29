@@ -61,9 +61,31 @@ export class UploadActions {
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files, status.times);
+          if (status.date !== '') {
+            this.slidesActions.setAndUpdateDate(
+              status.date.substr(2, 3),
+              status.date.substr(-2),
+              status.date.substr(0, 2)
+            );
+            this.setDateInput(status.date);
+          }
         }
       });
     return;
+  }
+
+  setDateInput(date: string) {
+    let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    let monthStr = date.substr(2, 3);
+    console.log(monthStr);
+    let monthInt = ('0' + (months.indexOf(monthStr) + 1)).slice(-2);
+    console.log(monthInt);
+    let day = date.substr(0, 2);
+    let year = date.substr(-2);
+    let dateInput = document.querySelector('#dateInput') as HTMLInputElement;
+    if (dateInput) {
+      dateInput.value = '20' + year + '-' + monthInt + '-' + day;
+    }
   }
 
   @action.bound

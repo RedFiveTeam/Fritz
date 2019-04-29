@@ -37,7 +37,7 @@ describe('UploadActions', () => {
 
     uploadRepository.status = jest.fn(() => {
       return Promise.resolve(new StatusModel(
-        'complete', ['slide1.jpg', 'slide2.jpg', 'slide3.jpg'], ['1525', '', ''], 0, 3
+        'complete', ['slide1.jpg', 'slide2.jpg', 'slide3.jpg'], ['1525', '', ''], 0, 3, '05MAR19'
       ));
     });
 
@@ -45,6 +45,7 @@ describe('UploadActions', () => {
     slidesStore = new SlidesStore();
     subject = new UploadActions({uploadRepository, metricRepository} as any, {uploadStore, slidesStore} as any);
     subject.uploadProcessingComplete = jest.fn();
+    subject.setDateInput = jest.fn();
     subject.metricActions = metricActions;
   });
 
@@ -73,5 +74,10 @@ describe('UploadActions', () => {
     expect(slidesStore.slides[1].oldName).toBe('slide2.jpg');
     expect(slidesStore.slides[2].oldName).toBe('slide3.jpg');
     expect(slidesStore.slides[0].time).toBe('1525');
+  });
+
+  it('should update the date when a status model is returned', async () => {
+    await subject.checkStatus();
+    expect(subject.setDateInput).toHaveBeenCalledWith('05MAR19');
   });
 });

@@ -22,6 +22,7 @@ interface Props {
 
 @observer
 export class FormContainer extends React.Component<Props> {
+
   badInputCSS: CSSProperties = {
     border: '1px solid #e46373'
   };

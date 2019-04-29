@@ -12,6 +12,8 @@ import org.springframework.scheduling.annotation.Async;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +44,14 @@ public class Conversion {
         stripper.setStartPage(page + 1);
         stripper.setEndPage(page + 1);
         String text = stripper.getText(document);
+        if (page == 0) {
+          //do parsing
+          String datePattern = "\\d{2}[A-z]{3}\\d{2}";
+          Matcher dateMatcher = Pattern.compile(datePattern).matcher(text);
+          if (dateMatcher.find()) {
+            tracking.setDate(dateMatcher.group());
+          }
+        }
         Matcher m = Pattern.compile(pattern).matcher(text);
         if (m.find()) {
           String[] times = tracking.getTimes();

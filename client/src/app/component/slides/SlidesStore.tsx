@@ -16,6 +16,7 @@ export class SlidesStore {
   @observable private _day: string | null = 'DD';
   @observable private _help: boolean = false;
   @observable private _releasability: string;
+  @observable private _fullDate: string;
 
   @computed
   get month(): string | null {
@@ -80,6 +81,11 @@ export class SlidesStore {
   @computed
   get releasability(): string {
     return this._releasability;
+  }
+
+  @computed
+  get fullDate(): string {
+    return this._fullDate;
   }
 
   @action.bound
@@ -147,6 +153,11 @@ export class SlidesStore {
   @action.bound
   setHelp(value: boolean) {
     this._help = value;
+  }
+
+  @action.bound
+  setFullDate(value: string) {
+    this._fullDate = value;
   }
 
   isValidName(): boolean {

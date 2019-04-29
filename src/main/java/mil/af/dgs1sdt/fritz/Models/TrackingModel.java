@@ -25,6 +25,8 @@ public class TrackingModel {
 
   private String[] times;
 
+  private String date;
+
   public String getHash() {
     return hash;
   }
@@ -68,6 +70,10 @@ public class TrackingModel {
   }
 
   public String[] getTimes() { return times; }
+
+  public String getDate() { return date; }
+
+  public void setDate(String value) { this.date = value; }
 
   public void updateFileList(String oldName, String newName) {
     fileList.set(fileList.indexOf(oldName), newName);

@@ -64,7 +64,7 @@ public class UnicornInterface {
   public List<CalloutModel> getCallouts(String missionId) throws Exception {
     List<CalloutModel> targets = new ArrayList<>();
     String uri = unicornBaseURL + "/WebServices/PMSServicesReltoNF" +
-      ".asmx/GetPMSTargets?ato=&missionID=" + missionId + "&atoDay=";
+      ".asmx/GetPMSTargetInfo?ato=&missionID=" + missionId + "&atoDay=";
     Document doc = makeRequest(uri);
     NodeList t = doc.getElementsByTagName("target");
     for (int i = 0; i < t.getLength(); i++) {

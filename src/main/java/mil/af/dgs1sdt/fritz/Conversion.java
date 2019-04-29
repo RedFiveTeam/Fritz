@@ -46,10 +46,10 @@ public class Conversion {
         String text = stripper.getText(document);
         if (page == 0) {
           //do parsing
-          String datePattern = "\\d{2}[A-z]{3}\\d{2}";
+          String datePattern = "\\d{2} [A-z]{3} \\d{2}";
           Matcher dateMatcher = Pattern.compile(datePattern).matcher(text);
           if (dateMatcher.find()) {
-            tracking.setDate(dateMatcher.group());
+            tracking.setDate(dateMatcher.group().replaceAll(" ", ""));
           }
         }
         Matcher m = Pattern.compile(pattern).matcher(text);

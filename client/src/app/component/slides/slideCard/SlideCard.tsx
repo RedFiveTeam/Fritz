@@ -286,4 +286,9 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     top: 8px;
     cursor: pointer;
   }
+  
+  .slide {
+    width: 480px;
+    white-space: pre-wrap;
+  }
 `);

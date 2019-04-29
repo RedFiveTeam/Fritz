@@ -76,7 +76,7 @@ export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callou
     margin-left: 9px;
     margin-right: 8px;
     vertical-align: middle;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
   }
   
   .dropdown {

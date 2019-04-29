@@ -41,20 +41,22 @@ export class SelectMissionModal extends React.Component<Props> {
             <span>Callsign</span>
             <span>Start Date</span>
           </div>
-          {
-            this.props.unicornStore!.missions
-              .filter((m) => {
-                return m.org === this.props.unicornStore!.selectedSite;
-              })
-              .map((m, idx) => {
-                return (
-                  <StyledMission
-                    key={idx}
-                    mission={m}
-                  />
-                );
-              })
-          }
+          <div className="missionRows">
+            {
+              this.props.unicornStore!.missions
+                .filter((m) => {
+                  return m.org === this.props.unicornStore!.selectedSite;
+                })
+                .map((m, idx) => {
+                  return (
+                    <StyledMission
+                      key={idx}
+                      mission={m}
+                    />
+                  );
+                })
+            }
+          </div>
         </div>
       </div>
     );
@@ -108,6 +110,10 @@ export const StyledSelectMissionModal = inject('unicornStore', 'unicornActions')
   }
 }
 
+  .ddd:hover {
+    font-weight: bold;
+  }
+
 .headers {
   height: 40px;
   line-height: 40px;
@@ -120,5 +126,9 @@ export const StyledSelectMissionModal = inject('unicornStore', 'unicornActions')
     margin-left: 21px;
     margin-right: 125px;
   }
+}
+.missionRows {
+  overflow-y: auto;
+  height: 390px;
 }
 `);

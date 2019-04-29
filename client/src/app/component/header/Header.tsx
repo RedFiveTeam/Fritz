@@ -63,7 +63,7 @@ export class Header extends React.Component<Props> {
 
 export const StyledHeader = inject('classificationStore', 'classificationActions', 'unicornStore')(styled(Header)`
   position: fixed;
-  top: 26px;
+  top: 15px;
   background: #2B303C;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
   width: 100%;
@@ -95,8 +95,8 @@ export const StyledHeader = inject('classificationStore', 'classificationActions
   top: 0;
   z-index: 1000;
   position: fixed;
-  height: 27px;
+  height: 16px;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 11px;
   }
 `);

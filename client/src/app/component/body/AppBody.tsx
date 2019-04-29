@@ -7,6 +7,7 @@ import { UploadStore } from '../form/upload/UploadStore';
 import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
 import { StyledUploadProgressContainer } from '../slides/container/UploadProgressContainer';
 import { StyledProgressBar } from '../progressBar/ProgressBar';
+import { InjectedUploadContainer } from '../form/upload/container/UploadContainer';
 
 interface Props {
   className?: string;
@@ -21,7 +22,11 @@ export class AppBody extends React.Component<Props> {
         className={this.props.className}
       >
         <div className="left">
-          <StyledFormContainer/>
+          {
+            this.props.uploadStore!.uploaded &&
+            <StyledFormContainer/>
+          }
+          <InjectedUploadContainer/>
         </div>
         <div className="spacer"/>
         <div className="right">
@@ -91,5 +96,92 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
     ::-webkit-scrollbar-thumb:hover {
       background: #5C667D; 
     }
+  }
+  
+    .uploadButton {
+    width: .1px;
+    height: .1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .uploadContainer {
+      margin-top: 158px;
+      box-sizing: border-box;
+      border: 1px dashed #d4d6db;
+      border-radius: 4px;
+      width: 580px;
+      height: 548px;
+      margin-left: 40px;
+  }
+  
+  .browse {
+    color: #15deec;
+  }
+  
+  #pdfName {
+    margin-top: 15px;
+  }
+  
+  #uploadCompleteContainer {
+    top: -120px;
+    position: relative;
+    left: 30px;
+  }
+  
+  #deletePP {
+    cursor: pointer;
+  }
+  
+  .converterTitle {
+    position: absolute;
+    top: 29px;
+    left: 40px;
+    
+       h2 {
+        font-size: 24px;
+      }
+      
+       span {
+        font-size: 16px;
+        color: #d8e5ff;
+      }
+  }
+  
+  .helpMenuIcon {
+    cursor: pointer;
+    margin-left: 8px;
+    margin-bottom: 5px;
+  }
+  
+  .step1 {
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    top: 118px;
+    left: 40px;
+  }
+  
+  #adobe {
+    position: relative;
+    left: 159px;
+    top: 68px;
+  }
+  
+  #dragMessage {
+    font-size: 24px;
+    width: 500px;
+    position: relative;
+    top: 126px;
+    left: 32px;
+    padding-bottom: 6rem;
+    color: #d4d6db;
+  }
+  
+  .dragMessage2 {
+    font-size: 20px;
+    color: #d4d6db;
   }
 `);

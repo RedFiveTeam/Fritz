@@ -26,7 +26,8 @@ export class Dropdown extends React.Component<Props> {
   handleClick = (e: any) => {
     let dd = document.querySelectorAll('.dd');
     for (let i = 0; i < dd.length; i++) {
-      if ((dd[i] as HTMLElement).parentNode!.firstChild !== e.target) {
+      if ((dd[i] as HTMLElement).parentNode!.firstChild !== e.target
+      ) {
         (dd[i] as HTMLElement).style.display = 'none';
       }
     }
@@ -158,6 +159,10 @@ export const StyledDropdown = (styled(Dropdown)`
     :hover {
       background-color: #2b303c;
     }
+  }
+  
+  span {
+    pointer-events: none;
   }
   
   .selected {

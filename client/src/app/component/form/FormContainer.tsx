@@ -360,6 +360,8 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore', 'unico
       .dd {
         width: 280px;
         left: 0;
+        overflow: auto;
+        max-height: 250px;
       }
       
       .ddd {

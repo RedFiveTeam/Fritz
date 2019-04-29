@@ -59,11 +59,11 @@ transition: background-color 200ms;
 }
 
 .selectText {
-  position: absolute;
   font-size: 16px;
   color: #15deec;
-  right: 0px;
-  margin-right: 31px;
+  display: inline-block;
+  position: relative;
+  left: 400px;
 }
 
 span:first-of-type {

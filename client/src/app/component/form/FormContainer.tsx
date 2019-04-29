@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
-import { InjectedUploadContainer } from './upload/container/UploadContainer';
 import styled from 'styled-components';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/SlidesStore';
@@ -9,8 +8,6 @@ import { ReleasabilityModel } from '../unicorn/model/ReleasabilityModel';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { StyledDropdown } from '../dropdown/Dropdown';
-
-const helpMenuIcon = require('../../../icon/HelpMenu.svg');
 
 interface Props {
   className?: string;
@@ -47,15 +44,8 @@ export class FormContainer extends React.Component<Props> {
           <div className="form-group">
             <div className="header">
               <h2>JPEG Renamer - Details
-                <img
-                  onClick={() => {
-                    this.props.slidesStore!.setHelp(true);
-                  }}
-                  className="helpMenuIcon"
-                  src={helpMenuIcon}
-                />
               </h2>
-              <span>Upload a powerpoint .pdf file to view and download converted JPEGs</span>
+              <span>Complete the fields below to view and download JPEGs</span>
             </div>
             <label
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidDate()) ?
@@ -190,7 +180,6 @@ export class FormContainer extends React.Component<Props> {
           <p className="helpMessage">
             To save as PDF in Powerpoint File > Export > Create PDF/XPS Document
           </p>
-          <InjectedUploadContainer/>
         </form>
       </div>
     );
@@ -249,24 +238,6 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore', 'unico
 
   label {
     color: #fff;
-  }
-  
-  .uploadButton {
-    width: .1px;
-    height: .1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-  }
-
-  .uploadContainer {
-      margin-top: 30px;
-      box-sizing: border-box;
-      border: 1px dashed #d4d6db;
-      border-radius: 4px;
-      width: 580px;
-      height: 230px;
   }
   
   .clickable {

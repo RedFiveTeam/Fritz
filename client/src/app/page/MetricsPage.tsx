@@ -44,7 +44,7 @@ export class MetricsPage extends React.Component<Props> {
         >
           <div id="bannerTitle">
             <a>
-            Metrics
+              Metrics
             </a>
           </div>
           <div
@@ -52,22 +52,22 @@ export class MetricsPage extends React.Component<Props> {
             role="group"
             aria-label="..."
           >
-          <button
-            id="dashBoardButton"
-            type="button"
-            className="btn btn-default text-white shadow"
-            onClick={() => this.handleToggle('tab1', 'tab2', 'dashBoardButton', 'activityLogButton')}
-          >
-            Dashboard
-          </button>
-          <button
-            id="activityLogButton"
-            type="button"
-            className="btn text-white shadow"
-            onClick={() => this.handleToggle('tab2', 'tab1', 'activityLogButton', 'dashBoardButton')}
-          >
-           Activity Log
-          </button>
+            <button
+              id="dashBoardButton"
+              type="button"
+              className="btn btn-default text-white shadow"
+              onClick={() => this.handleToggle('tab1', 'tab2', 'dashBoardButton', 'activityLogButton')}
+            >
+              Dashboard
+            </button>
+            <button
+              id="activityLogButton"
+              type="button"
+              className="btn text-white shadow"
+              onClick={() => this.handleToggle('tab2', 'tab1', 'activityLogButton', 'dashBoardButton')}
+            >
+              Activity Log
+            </button>
           </div>
           <div className="secondary-text">
             <div className="sortSection">
@@ -105,7 +105,7 @@ export class MetricsPage extends React.Component<Props> {
         </div>
         <div id="tab2">
           <StyledMetricsTable/>
-          </div>
+        </div>
       </div>
     );
   }
@@ -118,6 +118,8 @@ export const StyledMetricsPage = inject(
 (styled(MetricsPage)`
 
 height: 90vh;
+top: -12px;
+position: relative;
 
   #bannerTitle {
     width: 200px;
@@ -195,7 +197,7 @@ height: 90vh;
   
   .exportMetrics {
   right: 21px;
-  top: 167px;
+  top: 72px;
   position: absolute;
   
   }

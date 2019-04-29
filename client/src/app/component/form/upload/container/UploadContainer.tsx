@@ -3,16 +3,19 @@ import { inject, observer } from 'mobx-react';
 import { UploadActions } from '../actions/UploadActions';
 import { UploadStore } from '../UploadStore';
 import { Toast } from '../../../../../utils/Toast';
+import { SlidesStore } from '../../../slides/SlidesStore';
 
-const uploadIcon = require('../../../../../icon/UploadIcon.svg');
 const pdfIcon = require('../../../../../icon/PDFIcon.svg');
 const paperclipIcon = require('../../../../../icon/PaperclipIcon.svg');
 const resetUploadIcon = require('../../../../../icon/ResetUploadIcon.svg');
+const adobe = require('../../../../../icon/Adobe.svg');
+const helpMenuIcon = require('../../../../../icon/HelpMenu.svg');
 
 interface Props {
   className?: string;
   uploadActions?: UploadActions;
   uploadStore?: UploadStore;
+  slidesStore?: SlidesStore;
 }
 
 @observer
@@ -61,34 +64,61 @@ export class UploadContainer extends React.Component<Props> {
 
   displayUploadRequest() {
     return (
-      <div
-        onDragEnter={(e: any) => {
-          let evt = e as Event;
-          evt.preventDefault();
-        }}
-        onDragOver={(e: any) => {
-          let evt = e as Event;
-          evt.preventDefault();
-        }}
-        onDrop={this.doUpload}
-        className="row align-items-center h-100 text-center"
-      >
-        <p className="col-8 mx-auto mt-5">Drag and drop .pdf file</p>
-        <p className="col-9 mx-auto ">or</p>
-        <input
-          name="uploadButton"
-          id="uploadButton"
-          className="uploadButton"
-          type="file"
-          onChange={this.doUpload}
-        />
+      <div>
+        <div className="converterTitle">
+          <h2>JPEG Converter - Details</h2>
+          <span>Complete the fields below to view and download JPEGs</span>
+        </div>
         <label
           id="uploadLabel"
           htmlFor="uploadButton"
-          className="btn btn-outline-info form-control-file col-5 mx-auto mb-5 w-25 text-white"
+          className="pdfUploadButton"
         >
-          <img draggable={true} src={uploadIcon}/>
-          <span className="ml-2 font-weight-bold">Upload PDF</span>
+          <div
+            onDragEnter={(e: any) => {
+              let evt = e as Event;
+              evt.preventDefault();
+            }}
+            onDragOver={(e: any) => {
+              let evt = e as Event;
+              evt.preventDefault();
+            }}
+            onDrop={this.doUpload}
+            className="row align-items-center h-100 text-center"
+          >
+        <span
+          className="step1"
+        >
+          Step 1: Upload a PDF
+          <img
+            onClick={() => {
+              this.props.slidesStore!.setHelp(true);
+            }}
+            className="helpMenuIcon"
+            src={helpMenuIcon}
+          />
+        </span>
+            <img
+              id="adobe"
+              src={adobe}
+            />
+            <p
+              id="dragMessage"
+            >
+              Drag and drop Mission Storyboard saved as PDF
+              <span className="dragMessage2"> or
+            <span className="browse">&nbsp; Browse &nbsp;</span>
+              for your file
+            </span>
+            </p>
+            <input
+              name="uploadButton"
+              id="uploadButton"
+              className="uploadButton"
+              type="file"
+              onChange={this.doUpload}
+            />
+          </div>
         </label>
       </div>
     );
@@ -96,7 +126,7 @@ export class UploadContainer extends React.Component<Props> {
 
   displayUploadedInfo() {
     return (
-      <div className="row align-items-center h-100 text-center" id="uploadCompleteContainer">
+      <div className="row align-items-center text-center" id="uploadCompleteContainer">
         <div className="col-8 mx-auto" id="pdfIcon">
           <img src={pdfIcon}/>
         </div>
@@ -139,4 +169,4 @@ export class UploadContainer extends React.Component<Props> {
   }
 }
 
-export const InjectedUploadContainer = inject('uploadActions', 'uploadStore')(UploadContainer);
+export const InjectedUploadContainer = inject('uploadActions', 'uploadStore', 'slidesStore')(UploadContainer);

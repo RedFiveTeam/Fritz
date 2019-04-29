@@ -22,6 +22,12 @@ public class UnicornController {
   @Value("${UNICORN_URL}")
   private String unicornBaseURL;
 
+  @Value("${PERSONNEL_ID}")
+  private String personnelId;
+
+  @Value("${CLASSIFICATION_ID}")
+  private String classificationId;
+
   public static final String URI = "/api/unicorn";
 
   @ResponseBody
@@ -55,10 +61,9 @@ public class UnicornController {
     params.add(new BasicNameValuePair("productName", json.getFileName()));
     params.add(new BasicNameValuePair("missionId", json.getMissionId()));
     params.add(new BasicNameValuePair("targetEventId", json.getTargetEventId()));
-    params.add(new BasicNameValuePair("classificationId", json.getClassificationId()));
-    System.out.println(json.getReleasabilityId());
+    params.add(new BasicNameValuePair("classificationId", classificationId));
     params.add(new BasicNameValuePair("releasabilityId", json.getReleasabilityId()));
-    params.add(new BasicNameValuePair("personnelId", json.getPersonnelId()));
+    params.add(new BasicNameValuePair("personnelId", personnelId));
     params.add(new BasicNameValuePair("isrRoleId", ""));
     params.add(new BasicNameValuePair("endFilePath", "Mission\\" + json.getMissionId() + "\\"));
     params.add(new BasicNameValuePair("uploadType", "targetevent"));

@@ -18,7 +18,9 @@ describe('UnicornActions', () => {
       setPendingUpload: jest.fn(),
       activeMission: jest.fn(),
       releasabilityId: jest.fn(),
-      releasabilities: jest.fn()
+      releasabilities: jest.fn(),
+      setUploadComplete: jest.fn(),
+      setCurrentUploadCount: jest.fn()
     };
 
     slidesStore = {
@@ -26,7 +28,6 @@ describe('UnicornActions', () => {
     };
 
     unicornRepository = new StubUnicornRepository();
-
     unicornRepository.upload = jest.fn(() => {
       return new UnicornUploadModel();
     });
@@ -47,8 +48,6 @@ describe('UnicornActions', () => {
 
   it('should upload to unicorn', async () => {
     await subject.buildUploadModel(slide);
-    expect(unicornStore.setPendingUpload).toHaveBeenCalledWith(true);
     expect(unicornRepository.upload).toHaveBeenCalled();
-    expect(unicornStore.setPendingUpload).toHaveBeenCalledWith(false);
   });
 });

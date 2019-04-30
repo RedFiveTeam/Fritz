@@ -64,8 +64,11 @@ export class UnicornActions {
     unicornUploadModel.setMissionId(this.unicornStore.activeMission!.id);
     unicornUploadModel.setPersonnelId('2a7081f8-7cc9-45f3-a29e-f94a0003b3fe');
     unicornUploadModel.setIsrRoleId('');
-    await this.unicornRepository.upload(unicornUploadModel);
-    this.unicornStore!.setPendingUpload(false);
+    await this.unicornRepository.upload(unicornUploadModel, this.increaseCurrentUploadCount);
+    if (this.slidesStore!.assignedCalloutCount === this.unicornStore!.currentUploadCount) {
+      this.unicornStore!.setUploadComplete(true);
+      this.unicornStore!.setCurrentUploadCount(0);
+    }
   }
 
   @action.bound
@@ -77,5 +80,9 @@ export class UnicornActions {
       }
     }
     return rel;
+  }
+
+  increaseCurrentUploadCount = () => {
+    this.unicornStore!.setCurrentUploadCount(this.unicornStore!.currentUploadCount + 1);
   }
 }

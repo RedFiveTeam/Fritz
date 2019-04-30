@@ -130,4 +130,14 @@ export class SlidesActions {
     };
     request.send(JSON.stringify(this.slidesStore.slides));
   }
+
+  getAssignedCallouts() {
+    let count: number = 0;
+    for (let i = 0; i < this.slidesStore.slides.length; i++) {
+      if (this.slidesStore.slides[i].targetEventId !== '') {
+        count++;
+      }
+    }
+    this.slidesStore.setAssignedCalloutCount(count);
+  }
 }

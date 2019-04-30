@@ -121,6 +121,7 @@ public class UploadController {
         status.setTimes(tracking.getTimes());
         status.setDate(tracking.getDate());
         status.setOp(tracking.getOp());
+        status.setCallsign(tracking.getCallsign());
         status.setStatus("complete");
         tracking.setCompletedSlides(0);
         return status;

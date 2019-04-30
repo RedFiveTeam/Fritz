@@ -52,6 +52,7 @@ export class UnicornActions {
 
   @action.bound
   async buildUploadModel(slide: SlideModel) {
+    this.unicornStore!.setPendingUpload(true);
     let unicornUploadModel = new UnicornUploadModel();
     unicornUploadModel.setFileName(slide.oldName);
     unicornUploadModel.setEndFilePath('\\Mission\\' + this.unicornStore.activeMission!.id);
@@ -64,6 +65,7 @@ export class UnicornActions {
     unicornUploadModel.setPersonnelId('2a7081f8-7cc9-45f3-a29e-f94a0003b3fe');
     unicornUploadModel.setIsrRoleId('');
     await this.unicornRepository.upload(unicornUploadModel);
+    this.unicornStore!.setPendingUpload(false);
   }
 
   @action.bound

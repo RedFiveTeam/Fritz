@@ -7,6 +7,7 @@ import { ReleasabilityModel } from '../model/ReleasabilityModel';
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
 export class UnicornStore {
+
   @observable private _missions: MissionModel[] = [];
   @observable private _activeMission: MissionModel | null;
   @observable private _selectedSite: string = 'DGS 1';
@@ -14,6 +15,7 @@ export class UnicornStore {
   @observable private _releasabilities: ReleasabilityModel[] = [];
   @observable private _releasability: string;
   @observable private _releasabilityId: string;
+  @observable private _pendingUpload: boolean = false;
 
   async hydrate(unicornRepository: UnicornRepository) {
     if (navigator.userAgent.toLowerCase().indexOf('electron') !== -1) {
@@ -64,6 +66,11 @@ export class UnicornStore {
     return this._callouts;
   }
 
+  @computed
+  get pendingUpload(): boolean {
+    return this._pendingUpload;
+  }
+
   @action.bound
   setMissions(value: MissionModel[]) {
     this._missions = value;
@@ -97,5 +104,10 @@ export class UnicornStore {
   @action.bound
   setReleasabilityId(value: string) {
     this._releasabilityId = value;
+  }
+
+  @action.bound
+  setPendingUpload(value: boolean) {
+    this._pendingUpload = value;
   }
 }

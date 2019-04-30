@@ -8,10 +8,13 @@ import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesCont
 import { StyledUploadProgressContainer } from '../slides/container/UploadProgressContainer';
 import { StyledProgressBar } from '../progressBar/ProgressBar';
 import { InjectedUploadContainer } from '../form/upload/container/UploadContainer';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { StyledUnicornUploadModal } from '../modals/UnicornUploadModal';
 
 interface Props {
   className?: string;
   uploadStore?: UploadStore;
+  unicornStore?: UnicornStore;
 }
 
 @observer
@@ -43,13 +46,17 @@ export class AppBody extends React.Component<Props> {
             this.props.uploadStore!.placeholder && !this.props.uploadStore!.uploading &&
             <StyledSlidesContainerPlaceholder/>
           }
+          {
+            this.props.unicornStore!.pendingUpload &&
+              <StyledUnicornUploadModal/>
+          }
         </div>
       </div>
     );
   }
 }
 
-export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
+export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBody)`
   .spacer {
     width: 5px;
     overflow: hidden;

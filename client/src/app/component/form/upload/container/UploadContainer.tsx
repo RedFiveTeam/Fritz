@@ -64,17 +64,25 @@ export class UploadContainer extends React.Component<Props> {
 
   displayUploadRequest() {
     return (
-      <div>
+      <div className="uploadBox">
         <div className="converterTitle">
           <h2>JPEG Converter - Details</h2>
           <span>Complete the fields below to view and download JPEGs</span>
         </div>
+        <img
+          onClick={() => {
+            this.props.slidesStore!.setHelp(true);
+          }}
+          className="helpMenuIcon"
+          src={helpMenuIcon}
+        />
         <label
           id="uploadLabel"
           htmlFor="uploadButton"
           className="pdfUploadButton"
         >
           <div
+            id="clickable"
             onDragEnter={(e: any) => {
               let evt = e as Event;
               evt.preventDefault();
@@ -90,13 +98,6 @@ export class UploadContainer extends React.Component<Props> {
           className="step1"
         >
           Step 1: Upload a PDF
-          <img
-            onClick={() => {
-              this.props.slidesStore!.setHelp(true);
-            }}
-            className="helpMenuIcon"
-            src={helpMenuIcon}
-          />
         </span>
             <img
               id="adobe"

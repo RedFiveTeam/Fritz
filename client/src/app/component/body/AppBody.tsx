@@ -154,6 +154,9 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
     cursor: pointer;
     margin-left: 8px;
     margin-bottom: 5px;
+    position: absolute;
+    top: 123px;
+    left: 240px;
   }
   
   .step1 {
@@ -162,6 +165,7 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
     position: absolute;
     top: 118px;
     left: 40px;
+    pointer-events: none;
   }
   
   #adobe {
@@ -172,16 +176,20 @@ export const StyledAppBody = inject('uploadStore')(styled(AppBody)`
   
   #dragMessage {
     font-size: 24px;
-    width: 500px;
+    width: 580px;
     position: relative;
     top: 126px;
-    left: 32px;
     padding-bottom: 6rem;
     color: #d4d6db;
+    cursor: pointer;
   }
   
   .dragMessage2 {
     font-size: 20px;
     color: #d4d6db;
+  }
+  
+  #clickable {
+    cursor: pointer;
   }
 `);

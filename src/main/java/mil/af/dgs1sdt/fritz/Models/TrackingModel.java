@@ -29,6 +29,8 @@ public class TrackingModel {
 
   private String op;
 
+  private String callsign;
+
   public String getHash() {
     return hash;
   }
@@ -80,6 +82,10 @@ public class TrackingModel {
   public String getOp() { return op; }
 
   public void setOp(String value) { this.op = value; }
+
+  public String getCallsign() { return callsign; }
+
+  public void setCallsign(String value) { this.callsign = value; }
 
   public void updateFileList(String oldName, String newName) {
     fileList.set(fileList.indexOf(oldName), newName);

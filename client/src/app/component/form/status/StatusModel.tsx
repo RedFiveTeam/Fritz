@@ -8,6 +8,7 @@ export class StatusModel {
   @observable private _total: number;
   @observable private _date: string;
   @observable private _op: string;
+  @observable private _callsign: string;
 
   constructor(
     status: string = '',
@@ -16,7 +17,8 @@ export class StatusModel {
     progress: number = 0,
     total: number,
     date: string,
-    op: string
+    op: string,
+    callsign: string
   ) {
     this._status = status;
     this._files = files;
@@ -25,6 +27,7 @@ export class StatusModel {
     this._total = total;
     this._date = date;
     this._op = op;
+    this._callsign = callsign;
   }
 
   @action.bound
@@ -45,6 +48,11 @@ export class StatusModel {
   @action.bound
   setOp(value: string) {
     this._op = value;
+  }
+
+  @action.bound
+  setCallsign(value: string) {
+    this._callsign = value;
   }
 
   @computed
@@ -80,5 +88,10 @@ export class StatusModel {
   @computed
   get op(): string {
     return this._op;
+  }
+
+  @computed
+  get callsign(): string {
+    return this._callsign;
   }
 }

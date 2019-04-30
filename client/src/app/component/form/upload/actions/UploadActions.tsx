@@ -73,6 +73,10 @@ export class UploadActions {
             this.slidesActions.setAndUpdateOpName(status.op);
             this.setOpInput(status.op);
           }
+          if (status.callsign && status.callsign !== '') {
+            this.slidesActions.setAndUpdateAsset(status.callsign);
+            this.setCallsignInput(status.callsign);
+          }
         }
       });
     return;
@@ -94,6 +98,13 @@ export class UploadActions {
     let opInput = document.querySelector('#opInput') as HTMLInputElement;
     if (opInput) {
       opInput.value = op;
+    }
+  }
+
+  setCallsignInput(callsign: string) {
+    let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
+    if (callsignInput) {
+      callsignInput.value = callsign;
     }
   }
 

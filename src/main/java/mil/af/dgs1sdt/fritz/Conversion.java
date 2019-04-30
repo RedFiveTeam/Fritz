@@ -56,6 +56,11 @@ public class Conversion {
           if (opMatcher.find()) {
             tracking.setOp(opMatcher.group());
           }
+          String callsignPattern = "CALLSIGN: [A-z]+ [0-9]{2}";
+          Matcher callsignMatcher = Pattern.compile(callsignPattern).matcher(text);
+          if (callsignMatcher.find()) {
+            tracking.setCallsign(callsignMatcher.group().replace("CALLSIGN: ", ""));
+          }
         }
         Matcher m = Pattern.compile(pattern).matcher(text);
         if (m.find()) {

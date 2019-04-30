@@ -48,7 +48,7 @@ export class AppBody extends React.Component<Props> {
           }
           {
             this.props.unicornStore!.pendingUpload &&
-              <StyledUnicornUploadModal/>
+            <StyledUnicornUploadModal/>
           }
         </div>
       </div>

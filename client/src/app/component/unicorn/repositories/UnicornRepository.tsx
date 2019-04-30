@@ -5,7 +5,10 @@ import { ReleasabilityModel } from '../model/ReleasabilityModel';
 
 export interface UnicornRepository {
   getMissions(): Promise<MissionModel[]>;
+
   getCallouts(missionId: string): Promise<CalloutModel[]>;
-  upload(model: UnicornUploadModel): Promise<void>;
+
+  upload(model: UnicornUploadModel, callBack: () => void): Promise<void>;
+
   getReleasabilities(): Promise<ReleasabilityModel[]>;
 }

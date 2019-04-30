@@ -1,17 +1,28 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { SlidesStore } from '../slides/SlidesStore';
+import { SlidesActions } from '../slides/actions/SlidesActions';
 
 const flame = require('../../../icon/FlameIcon.svg');
 const arrow = require('../../../icon/ArrowIcon.svg');
 const unicorn = require('../../../icon/UnicornIcon.svg');
+const complete = require('../../../icon/CompleteIcon.svg');
 
 interface Props {
   className?: string;
+  unicornStore?: UnicornStore;
+  slidesActions?: SlidesActions;
+  slidesStore?: SlidesStore;
 }
 
 @observer
 export class UnicornUploadModal extends React.Component<Props> {
+  componentDidMount() {
+    this.props.slidesActions!.getAssignedCallouts();
+  }
+
   render() {
     return (
       <div
@@ -21,36 +32,140 @@ export class UnicornUploadModal extends React.Component<Props> {
           <div className="title">
             Upload To Unicorn
           </div>
-          <div className="allIcons">
-            <img src={flame} id="flameIcon"/>
-            <div className="arrowGroup">
-              <img src={arrow}/>
-              <img src={arrow}/>
-              <img src={arrow}/>
-              <img src={arrow}/>
-              <img src={arrow}/>
-              <img src={arrow}/>
+          {
+            !this.props.unicornStore!.uploadComplete &&
+            <div>
+                <div className="allIcons">
+                    <img src={flame} id="flameIcon"/>
+                    <div className="arrowGroup">
+                        <img src={arrow}/>
+                        <img src={arrow}/>
+                        <img src={arrow}/>
+                        <img src={arrow}/>
+                        <img src={arrow}/>
+                        <img src={arrow}/>
+                    </div>
+                    <img src={unicorn} id="unicorn"/>
+                </div>
+                < div className="modalText">
+                    One moment please, we're uploading your JPEGs to Unicorn
+                </div>
             </div>
-            <img src={unicorn} id="unicorn"/>
-          </div>
-          <div className="modalText">
-            One moment please, we're uploading your JPEGs to Unicorn
-          </div>
+          }
+          {
+            this.props.unicornStore!.uploadComplete &&
+            <div className="uploadComplete">
+                <img src={complete} id="checkIcon"/>
+                <div className="uploadStatus">
+                    Upload Complete!
+                </div>
+                <div className="uploadMsg">
+                  {this.props.slidesStore!.assignedCalloutCount}
+                    <span>images successfully uploaded to UNICORN</span>
+                </div>
+                <div className="btnGroup">
+                    <button
+                        className="createNewBtn"
+                        onClick={() => {
+                          location.reload();
+                        }}
+                    >
+                        Create New
+                    </button>
+                    <button
+                        className="returnBtn"
+                        onClick={() => {
+                          this.props.unicornStore!.setPendingUpload(false);
+                          this.props.unicornStore!.setUploadComplete(false);
+                          this.props.slidesStore!.setAssignedCalloutCount(0);
+                        }}
+                    >
+                        Return To Product
+                    </button>
+                </div>
+            </div>
+          }
         </div>
-
       </div>
     );
   }
 }
 
-export const StyledUnicornUploadModal = styled(UnicornUploadModal)`
- background: rgba(0, 0, 0, 0.5);
+export const StyledUnicornUploadModal = inject('unicornStore', 'slidesActions', 'slidesStore')
+(styled(UnicornUploadModal)`
+  background: rgba(0, 0, 0, 0.5);
   top: 0px;
   left: 0px;
   bottom: 0px;
   right: 0px;
   position: fixed;
   z-index: 100;
+  
+  span {
+  position: relative;
+  left: 5px;
+  }
+  
+  #checkIcon {
+  position: relative;
+  top: 24px;
+  }
+  
+  .uploadComplete {
+    text-align: center;
+    top: 24px
+  }
+  
+  .uploadStatus {
+    position: relative;
+    top: 55px;
+    letter-spacing: 1.1px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  .uploadMsg {
+    position: relative;
+    top: 60px;
+    letter-spacing: 0.9px;
+    font-weight: 300;
+    font-size: 24px;
+    color: #eaf3ff;
+  }
+  
+  .btnGroup {
+    position: relative;
+    top: 85px;
+  }
+  
+  .createNewBtn {
+    cursor: pointer;
+    position: relative;
+    background: transparent;
+    border-radius: 4px;
+    font-size: 16px;
+    border: solid 1px #00818c;
+    width: 208px;
+    height: 38px;
+    right: 8px;
+    color: white;
+  }
+  
+  .returnBtn {
+    cursor: pointer;
+    position: relative;
+    border-radius: 4px;
+    width: 208px;
+    font-size: 16px;
+    height: 38px;
+    background: #00818c;
+    border: none;
+    left: 8px;
+    color: white;
+  }
+  
+  
   
   .allIcons {
     display: inline-flex;
@@ -68,7 +183,7 @@ export const StyledUnicornUploadModal = styled(UnicornUploadModal)`
     box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.5);
     background-color: #2b303c;
   }
-
+  
   .title {
     height: 60px;
     line-height: 60px;
@@ -238,4 +353,4 @@ export const StyledUnicornUploadModal = styled(UnicornUploadModal)`
     top: 130px;
   }
   
-`;
+`);

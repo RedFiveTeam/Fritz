@@ -32,12 +32,13 @@ export class WebUnicornRepository implements UnicornRepository {
     });
   }
 
-  async upload(model: UnicornUploadModel): Promise<void> {
+  async upload(model: UnicornUploadModel, callBack: () => void): Promise<void> {
     const body = JSON.stringify(this.unicornUploadSerializer.serialize(model));
     await this.client.postJSON(
       '/api/unicorn',
       body
     );
+    callBack();
     return Promise.resolve();
   }
 

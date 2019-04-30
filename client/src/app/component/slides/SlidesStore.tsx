@@ -17,6 +17,12 @@ export class SlidesStore {
   @observable private _help: boolean = false;
   @observable private _releasability: string;
   @observable private _fullDate: string;
+  @observable private _assignedCalloutCount: number;
+
+  @computed
+  get assignedCalloutCount(): number {
+    return this._assignedCalloutCount;
+  }
 
   @computed
   get month(): string | null {
@@ -86,6 +92,11 @@ export class SlidesStore {
   @computed
   get fullDate(): string {
     return this._fullDate;
+  }
+
+  @action.bound
+  setAssignedCalloutCount(value: number) {
+    this._assignedCalloutCount = value;
   }
 
   @action.bound

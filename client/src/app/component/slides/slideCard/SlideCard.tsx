@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import * as ReactDOM from 'react-dom';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UploadStore } from '../../form/upload/UploadStore';
+import { observable } from 'mobx';
+import { CSSProperties } from 'react';
 
 const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
@@ -24,6 +26,18 @@ interface Props {
 
 @observer
 export class SlideCard extends React.Component<Props> {
+
+  goodCSS: CSSProperties = {};
+
+  badCSS: CSSProperties = {
+    border: '1px solid #e46373'
+  };
+
+  badLabelCSS: CSSProperties = {
+    color: '#e46373'
+  };
+
+  @observable private valid: boolean = true;
 
   componentDidUpdate() {
     let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
@@ -78,6 +92,18 @@ export class SlideCard extends React.Component<Props> {
     );
   };
 
+  isValidTime = (militaryTime: string) => {
+    if (militaryTime.length !== 4) {
+      this.valid = false;
+      return;
+    }
+    if (militaryTime.search(/^([0-1]?[0-9]|2[0-4])([0-5][0-9])(:[0-5][0-9])?$/)) {
+      this.valid = false;
+      return;
+    }
+    this.valid = true;
+  };
+
   render() {
     return (
       <div
@@ -124,12 +150,18 @@ export class SlideCard extends React.Component<Props> {
               </div>
               <div className="slidesInputs">
                 <div className="timeInputField">
-                  <label>
+                  <label
+                    style={this.valid ? this.goodCSS : this.badLabelCSS}
+                  >
                     Time
                   </label>
                   <input
                     maxLength={4}
+                    style={this.valid ? this.goodCSS : this.badCSS}
                     onChange={(e: any) => {
+                      if (e.target.value.length === 4) {
+                        this.isValidTime(e.target.value);
+                      }
                       let carouselItem = document.querySelector(
                         '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
                       if (carouselItem) {
@@ -140,11 +172,18 @@ export class SlideCard extends React.Component<Props> {
                       }
                       this.props.slidesActions!.setAndUpdateTime(this.props.slideModel, e.target.value.toUpperCase());
                     }}
+                    onBlur={(e: any) => {
+                      this.isValidTime(e.target.value);
+                    }}
                     type="text"
                     className="form-control"
                     id="timeInput"
                     placeholder="e.g. 0830"
                   />
+                  {
+                    !this.valid &&
+                    <div className="wrongTime">Invalid Time</div>
+                  }
                 </div>
                 <div className="activityInputField">
                   <label>
@@ -229,6 +268,11 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
   .expandImg {
     width: 20px;
     height: 20px;
+  }
+  
+  .wrongTime {
+    position: absolute;
+    color: #e46373; 
   }
   
   .slideCounter {

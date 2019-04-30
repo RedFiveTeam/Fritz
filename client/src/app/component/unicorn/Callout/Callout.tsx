@@ -38,7 +38,9 @@ export class Callout extends React.Component<Props> {
               })
             }
             defaultValue={this.props.slide.targetEventId ?
-              this.props.slide.time + 'Z' : 'Select'}
+              this.props.unicornStore!.callouts.filter((c) => {
+                return c.eventId === this.props.slide.targetEventId;
+              })[0].time : 'Select'}
             callback={(s: string) => {
               this.props.slidesStore!.slides.filter((f: SlideModel) => {
                 return f.id === this.props.slide.id;

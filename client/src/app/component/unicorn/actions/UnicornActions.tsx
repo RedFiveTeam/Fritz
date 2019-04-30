@@ -29,15 +29,25 @@ export class UnicornActions {
     if (this.slidesStore.slides.length > 0) {
       for (let i = 0; i < this.slidesStore.slides.length; i++) {
         this.unicornStore.callouts.map((c) => {
-          if (this.unicornStore.callouts[i].time.toString().indexOf(this.slidesStore.slides[i].time) > -1) {
-            let calloutMatches = this.unicornStore.callouts.filter((f) => {
-              return f.time.indexOf(this.slidesStore.slides[i].time) > -1;
-            });
-            let timeMatches = this.slidesStore.slides.filter((s) => {
-              return s.time.indexOf(c.time.replace('Z', ''));
-            });
-            if (timeMatches.length < 2 && calloutMatches.length < 2) {
-              this.slidesStore.slides[i].setTargetEventId(this.unicornStore.callouts[i].eventId);
+          if (this.unicornStore.callouts[i] && this.unicornStore.callouts[i].time &&
+            this.unicornStore.callouts[i].time.length > 0 && this.slidesStore.slides[i] &&
+            this.slidesStore.slides[i].time && this.slidesStore.slides[i].time.length > 0) {
+            if (this.unicornStore.callouts[i].time.toString().indexOf(this.slidesStore.slides[i].time) > -1) {
+              let calloutMatches = this.unicornStore.callouts.filter((f) => {
+                if (f.time && f.time.length > 0) {
+                  return f.time.indexOf(this.slidesStore.slides[i].time) > -1;
+                }
+                return false;
+              });
+              let timeMatches = this.slidesStore.slides.filter((s) => {
+                if (s.time && s.time.length) {
+                  return s.time.indexOf(c.time.replace('Z', ''));
+                }
+                return false;
+              });
+              if (timeMatches.length < 2 && calloutMatches.length < 2) {
+                this.slidesStore.slides[i].setTargetEventId(this.unicornStore.callouts[i].eventId);
+              }
             }
           }
         });

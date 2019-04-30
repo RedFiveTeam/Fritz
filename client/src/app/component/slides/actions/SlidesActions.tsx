@@ -6,16 +6,19 @@ import * as FileSaver from 'file-saver';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { action } from 'mobx';
 import { Repositories } from '../../../../utils/Repositories';
+import { UnicornStore } from '../../unicorn/store/UnicornStore';
 
 export class SlidesActions {
   public metricActions: MetricActions;
 
   private slidesStore: SlidesStore;
   private uploadStore: UploadStore;
+  private unicornStore: UnicornStore;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.slidesStore = stores.slidesStore!;
     this.uploadStore = stores.uploadStore!;
+    this.unicornStore = stores.unicornStore!;
     this.metricActions = new MetricActions(repositories, stores);
   }
 
@@ -70,6 +73,7 @@ export class SlidesActions {
   @action.bound
   setAndUpdateReleasability(releasability: string) {
     this.slidesStore.setReleasability(releasability);
+    this.unicornStore.setReleasability(releasability);
     this.updateNewNames();
   }
 

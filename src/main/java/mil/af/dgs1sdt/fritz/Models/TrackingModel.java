@@ -31,6 +31,8 @@ public class TrackingModel {
 
   private String callsign;
 
+  private String releasability;
+
   public String getHash() {
     return hash;
   }
@@ -86,6 +88,10 @@ public class TrackingModel {
   public String getCallsign() { return callsign; }
 
   public void setCallsign(String value) { this.callsign = value; }
+
+  public String releasability() { return releasability; }
+
+  public void setReleasability(String value) { this.releasability = value; }
 
   public void updateFileList(String oldName, String newName) {
     fileList.set(fileList.indexOf(oldName), newName);

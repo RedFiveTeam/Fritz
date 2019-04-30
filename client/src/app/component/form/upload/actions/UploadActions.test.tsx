@@ -7,6 +7,7 @@ import { StatusModel } from '../../status/StatusModel';
 import { SlidesStore } from '../../../slides/SlidesStore';
 import { MetricRepository } from '../../../metrics/repository/MetricRepository';
 import { StubMetricRepository } from '../../../metrics/repository/StubMetricRepository';
+import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
 
 describe('UploadActions', () => {
   let subject: UploadActions;
@@ -33,7 +34,11 @@ describe('UploadActions', () => {
     };
 
     unicornStore = {
-      callouts: []
+      callouts: [],
+      releasabilities: [
+        new ReleasabilityModel('1', 'FOUO')
+      ],
+      setReleasability: jest.fn()
     };
 
     uploadRepository.upload = jest.fn(() => {
@@ -42,7 +47,15 @@ describe('UploadActions', () => {
 
     uploadRepository.status = jest.fn(() => {
       return Promise.resolve(new StatusModel(
-        'complete', ['slide1.jpg', 'slide2.jpg', 'slide3.jpg'], ['1525', '', ''], 0, 3, '05MAR19', 'OP MATT', 'MATT 81'
+        'complete',
+        ['slide1.jpg', 'slide2.jpg', 'slide3.jpg'],
+        ['1525', '', ''],
+        0,
+        3,
+        '05MAR19',
+        'OP MATT',
+        'MATT 81',
+        'FOUO'
       ));
     });
 
@@ -55,6 +68,7 @@ describe('UploadActions', () => {
     subject.setDateInput = jest.fn();
     subject.setOpInput = jest.fn();
     subject.setCallsignInput = jest.fn();
+    subject.setReleasabilityInput = jest.fn();
     subject.metricActions = metricActions;
   });
 
@@ -98,5 +112,10 @@ describe('UploadActions', () => {
   it('should update the callsign when a status model with a callsign is returned', async () => {
     await subject.checkStatus();
     expect(subject.setCallsignInput).toHaveBeenCalledWith('MATT 81');
+  });
+
+  it('should update the releasability when a status model with a releasbility is returned', async () => {
+    await subject.checkStatus();
+    expect(subject.setReleasabilityInput).toHaveBeenCalledWith('FOUO');
   });
 });

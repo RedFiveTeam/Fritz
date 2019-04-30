@@ -11,7 +11,8 @@ export class StatusSerializer implements Serializer<StatusModel> {
       total: item.total,
       date: item.date,
       op: item.op,
-      callsign: item.callsign
+      callsign: item.callsign,
+      releasability: item.releasability
     };
   }
 
@@ -24,7 +25,8 @@ export class StatusSerializer implements Serializer<StatusModel> {
       item.total,
       item.date,
       item.op,
-      item.callsign
+      item.callsign,
+      item.releasability
     );
   }
 }

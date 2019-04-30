@@ -7,11 +7,16 @@ describe('SlidesActions', () => {
   let slidesStore: SlidesStore;
   let metricActions: any;
   let uploadStore: any;
+  let unicornStore: any;
 
   slidesStore = new SlidesStore();
 
   uploadStore = {
     hash: 'ewerwerw'
+  };
+
+  unicornStore = {
+    setReleasability: jest.fn()
   };
 
   metricActions = {
@@ -33,7 +38,7 @@ describe('SlidesActions', () => {
       new SlideModel('test6', 'test6')
     ]);
 
-    subject = new SlidesActions({} as any, {slidesStore, uploadStore} as any);
+    subject = new SlidesActions({} as any, {slidesStore, uploadStore, unicornStore} as any);
     subject.metricActions = metricActions;
   });
 

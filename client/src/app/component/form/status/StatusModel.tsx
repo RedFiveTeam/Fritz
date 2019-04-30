@@ -9,6 +9,7 @@ export class StatusModel {
   @observable private _date: string;
   @observable private _op: string;
   @observable private _callsign: string;
+  @observable private _releasability: string;
 
   constructor(
     status: string = '',
@@ -18,7 +19,8 @@ export class StatusModel {
     total: number,
     date: string,
     op: string,
-    callsign: string
+    callsign: string,
+    releasability: string
   ) {
     this._status = status;
     this._files = files;
@@ -28,6 +30,7 @@ export class StatusModel {
     this._date = date;
     this._op = op;
     this._callsign = callsign;
+    this._releasability = releasability;
   }
 
   @action.bound
@@ -53,6 +56,11 @@ export class StatusModel {
   @action.bound
   setCallsign(value: string) {
     this._callsign = value;
+  }
+
+  @action.bound
+  setReleasability(value: string) {
+    this._releasability = value;
   }
 
   @computed
@@ -93,5 +101,10 @@ export class StatusModel {
   @computed
   get callsign(): string {
     return this._callsign;
+  }
+
+  @computed
+  get releasability(): string {
+    return this._releasability;
   }
 }

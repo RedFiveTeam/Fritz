@@ -9,6 +9,7 @@ import { SlideModel } from '../../../slides/SlideModel';
 import { SlidesActions } from '../../../slides/actions/SlidesActions';
 import { MetricActions } from '../../../metrics/actions/MetricActions';
 import { UnicornStore } from '../../../unicorn/store/UnicornStore';
+import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
 
 export class UploadActions {
   public metricActions: MetricActions;
@@ -44,7 +45,9 @@ export class UploadActions {
     this.uploadStore.setConversionStatus(true);
     await this.metricActions.trackMetric('Conversion');
     this.poll = setInterval(
-      async () => { await this.checkStatus(); },
+      async () => {
+        await this.checkStatus();
+      },
       1000
     );
   }
@@ -80,6 +83,16 @@ export class UploadActions {
             this.slidesActions.setAndUpdateAsset(status.callsign);
             this.setCallsignInput(status.callsign);
           }
+          if (status.releasability && status.releasability !== '') {
+            if (this.unicornStore.releasabilities.some(
+              (r: ReleasabilityModel) => {
+                return r.releasabilityName === status.releasability; })
+            ) {
+              this.slidesActions.setAndUpdateReleasability(status.releasability);
+              this.setReleasabilityInput(status.releasability);
+              this.unicornStore.setReleasability(status.releasability);
+            }
+          }
         }
       });
     return;
@@ -108,6 +121,15 @@ export class UploadActions {
     let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
     if (callsignInput) {
       callsignInput.value = callsign;
+    }
+  }
+
+  setReleasabilityInput(releasability: string) {
+    let releasabilityInput = document.querySelector(
+      '.form-group:last-of-type > .dropdown > button'
+    ) as HTMLElement;
+    if (releasabilityInput) {
+      releasabilityInput.innerHTML = releasability;
     }
   }
 

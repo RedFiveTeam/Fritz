@@ -61,6 +61,11 @@ public class Conversion {
           if (callsignMatcher.find()) {
             tracking.setCallsign(callsignMatcher.group().replace("CALLSIGN: ", ""));
           }
+          String releasabilityPattern = "\\/\\/[A-z ,]+";
+          Matcher releasabilityMatcher = Pattern.compile(releasabilityPattern).matcher(text);
+          if (releasabilityMatcher.find()) {
+            tracking.setReleasability(releasabilityMatcher.group().replace("//", ""));
+          }
         }
         Matcher m = Pattern.compile(pattern).matcher(text);
         if (m.find()) {

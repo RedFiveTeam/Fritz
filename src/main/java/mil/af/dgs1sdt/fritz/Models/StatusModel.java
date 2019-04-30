@@ -16,6 +16,7 @@ public class StatusModel {
   private String date = "";
   private String op = "";
   private String callsign = "";
+  private String releasability = "";
 
   public String getStatus() {
     return status;
@@ -38,4 +39,6 @@ public class StatusModel {
   public void setOp(String value) { this.op = value; }
 
   public void setCallsign(String value) { this.callsign = value; }
+
+  public void setReleasability(String value) { this.releasability = value; }
 }

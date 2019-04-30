@@ -45,6 +45,7 @@ public class Conversion {
         stripper.setEndPage(page + 1);
         String text = stripper.getText(document);
         if (page == 0) {
+          System.out.println(text);
           //do parsing
           String datePattern = "\\d{2} [A-z]{3} \\d{2}";
           Matcher dateMatcher = Pattern.compile(datePattern).matcher(text);
@@ -64,7 +65,7 @@ public class Conversion {
           String releasabilityPattern = "\\/\\/[A-z ,]+";
           Matcher releasabilityMatcher = Pattern.compile(releasabilityPattern).matcher(text);
           if (releasabilityMatcher.find()) {
-            tracking.setReleasability(releasabilityMatcher.group().replace("//", ""));
+            tracking.setReleasability(releasabilityMatcher.group().replace("//", "").trim());
           }
         }
         Matcher m = Pattern.compile(pattern).matcher(text);

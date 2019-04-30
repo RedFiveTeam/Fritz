@@ -19,6 +19,7 @@ interface Props {
 
 @observer
 export class Callout extends React.Component<Props> {
+
   render() {
     return (
       <div
@@ -36,7 +37,8 @@ export class Callout extends React.Component<Props> {
                 return c.time;
               })
             }
-            defaultValue="Select"
+            defaultValue={this.props.slide.targetEventId ?
+              this.props.slide.time + 'Z' : 'Select'}
             callback={(s: string) => {
               this.props.slidesStore!.slides.filter((f: SlideModel) => {
                 return f.id === this.props.slide.id;

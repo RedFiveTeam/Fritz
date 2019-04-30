@@ -5,6 +5,7 @@ import { StubUnicornRepository } from '../repositories/StubUnicornRepository';
 describe('UnicornActions', () => {
   let subject: UnicornActions;
   let unicornStore: any;
+  let slidesStore: any;
   let unicornRepository: UnicornRepository;
 
   beforeEach(() => {
@@ -13,9 +14,13 @@ describe('UnicornActions', () => {
       setCallouts: jest.fn()
     };
 
+    slidesStore = {
+      slides: []
+    };
+
     unicornRepository = new StubUnicornRepository();
 
-    subject = new UnicornActions({unicornRepository} as any, {unicornStore} as any);
+    subject = new UnicornActions({unicornRepository} as any, {unicornStore, slidesStore} as any);
   });
 
   it('should hydrate the unicorn store', async () => {

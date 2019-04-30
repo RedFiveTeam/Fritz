@@ -5,13 +5,16 @@ import { Stores } from '../../../../utils/Stores';
 import { action } from 'mobx';
 import { SlideModel } from '../../slides/SlideModel';
 import { UnicornUploadModel } from '../model/UnicornUploadModel';
+import { SlidesStore } from '../../slides/SlidesStore';
 
 export class UnicornActions {
   private unicornStore: UnicornStore;
+  private slidesStore: SlidesStore;
   private readonly unicornRepository: UnicornRepository;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.unicornStore = stores.unicornStore!;
+    this.slidesStore = stores.slidesStore!;
     this.unicornRepository = repositories.unicornRepository!;
   }
 
@@ -23,6 +26,23 @@ export class UnicornActions {
   @action.bound
   async getCallouts(missionId: string) {
     this.unicornStore.setCallouts(await this.unicornRepository.getCallouts(missionId));
+    if (this.slidesStore.slides.length > 0) {
+      for (let i = 0; i < this.slidesStore.slides.length; i++) {
+        this.unicornStore.callouts.map((c) => {
+          if (this.unicornStore.callouts[i].time.toString().indexOf(this.slidesStore.slides[i].time) > -1) {
+            let calloutMatches = this.unicornStore.callouts.filter((f) => {
+              return f.time.indexOf(this.slidesStore.slides[i].time) > -1;
+            });
+            let timeMatches = this.slidesStore.slides.filter((s) => {
+              return s.time.indexOf(c.time.replace('Z', ''));
+            });
+            if (timeMatches.length < 2 && calloutMatches.length < 2) {
+              this.slidesStore.slides[i].setTargetEventId(this.unicornStore.callouts[i].eventId);
+            }
+          }
+        });
+      }
+    }
   }
 
   @action.bound

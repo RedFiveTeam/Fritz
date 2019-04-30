@@ -51,10 +51,10 @@ public class Conversion {
           if (dateMatcher.find()) {
             tracking.setDate(dateMatcher.group().replaceAll(" ", ""));
           }
-          String opPattern = "OP \\w+";
+          String opPattern = "OP NAME: .*";
           Matcher opMatcher = Pattern.compile(opPattern).matcher(text);
           if (opMatcher.find()) {
-            tracking.setOp(opMatcher.group());
+            tracking.setOp(opMatcher.group().replace("OP NAME: ", ""));
           }
           String callsignPattern = "CALLSIGN: [A-z]+ [0-9]{2}";
           Matcher callsignMatcher = Pattern.compile(callsignPattern).matcher(text);

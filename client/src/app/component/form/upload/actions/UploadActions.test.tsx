@@ -14,6 +14,7 @@ describe('UploadActions', () => {
   let metricRepository: MetricRepository;
   let uploadStore: UploadStore;
   let slidesStore: SlidesStore;
+  let unicornStore: any;
   let metricActions: any;
 
   beforeEach(() => {
@@ -31,6 +32,10 @@ describe('UploadActions', () => {
       trackConversion: jest.fn()
     };
 
+    unicornStore = {
+      callouts: []
+    };
+
     uploadRepository.upload = jest.fn(() => {
       return new UploadModel('chucknorris.pdf');
     });
@@ -43,7 +48,9 @@ describe('UploadActions', () => {
 
     uploadStore = new UploadStore();
     slidesStore = new SlidesStore();
-    subject = new UploadActions({uploadRepository, metricRepository} as any, {uploadStore, slidesStore} as any);
+    subject = new UploadActions(
+      {uploadRepository, metricRepository} as any, {uploadStore, slidesStore, unicornStore} as any
+    );
     subject.uploadProcessingComplete = jest.fn();
     subject.setDateInput = jest.fn();
     subject.setOpInput = jest.fn();

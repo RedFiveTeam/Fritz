@@ -8,6 +8,7 @@ import { SlidesStore } from '../../../slides/SlidesStore';
 import { SlideModel } from '../../../slides/SlideModel';
 import { SlidesActions } from '../../../slides/actions/SlidesActions';
 import { MetricActions } from '../../../metrics/actions/MetricActions';
+import { UnicornStore } from '../../../unicorn/store/UnicornStore';
 
 export class UploadActions {
   public metricActions: MetricActions;
@@ -15,12 +16,14 @@ export class UploadActions {
   private slidesActions: SlidesActions;
   private uploadRepository: UploadRepository;
   private uploadStore: UploadStore;
+  private unicornStore: UnicornStore;
   private slidesStore: SlidesStore;
   private poll: any;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.uploadRepository = repositories.uploadRepository!;
     this.uploadStore = stores.uploadStore!;
+    this.unicornStore = stores.unicornStore!;
     this.slidesStore = stores.slidesStore!;
     this.slidesActions = new SlidesActions(repositories, stores);
     this.metricActions = new MetricActions(repositories, stores);
@@ -120,6 +123,21 @@ export class UploadActions {
       let slide = new SlideModel();
       if (times[idx]) {
         slide.setTime(times[idx]);
+        if (this.unicornStore.callouts.length > 0) {
+          for (let i = 0; i < this.unicornStore.callouts.length; i++) {
+            if (this.unicornStore.callouts[i].time.toString().indexOf(times[idx]) > -1) {
+              let timeMatches = times.filter((t) => {
+                return t.indexOf(this.unicornStore.callouts[i].time.toString().replace('Z', '')) > -1;
+              });
+              let calloutMatches = this.unicornStore.callouts.filter((f) => {
+                return f.time.toString().indexOf(times[idx]) > -1;
+              });
+              if (timeMatches.length < 2 && calloutMatches.length < 2) {
+                slide.setTargetEventId(this.unicornStore.callouts[i].eventId);
+              }
+            }
+          }
+        }
       }
       slide.setId(idx);
       slide.setOldName(name);

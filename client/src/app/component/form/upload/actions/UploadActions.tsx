@@ -147,15 +147,23 @@ export class UploadActions {
         slide.setTime(times[idx]);
         if (this.unicornStore.callouts.length > 0) {
           for (let i = 0; i < this.unicornStore.callouts.length; i++) {
-            if (this.unicornStore.callouts[i].time.toString().indexOf(times[idx]) > -1) {
-              let timeMatches = times.filter((t) => {
-                return t.indexOf(this.unicornStore.callouts[i].time.toString().replace('Z', '')) > -1;
-              });
-              let calloutMatches = this.unicornStore.callouts.filter((f) => {
-                return f.time.toString().indexOf(times[idx]) > -1;
-              });
-              if (timeMatches.length < 2 && calloutMatches.length < 2) {
-                slide.setTargetEventId(this.unicornStore.callouts[i].eventId);
+            if (this.unicornStore.callouts[i].time && this.unicornStore.callouts[i].time.length > 0 && times[idx]) {
+              if (this.unicornStore.callouts[i].time.toString().indexOf(times[idx]) > -1) {
+                let timeMatches = times.filter((t) => {
+                  if (t && t.length > 0) {
+                    return t.indexOf(this.unicornStore.callouts[i].time.toString().replace('Z', '')) > -1;
+                  }
+                  return false;
+                });
+                let calloutMatches = this.unicornStore.callouts.filter((f) => {
+                  if (f && f.time && f.time.length > 0) {
+                    return f.time.toString().indexOf(times[idx]) > -1;
+                  }
+                  return false;
+                });
+                if (timeMatches.length < 2 && calloutMatches.length < 2) {
+                  slide.setTargetEventId(this.unicornStore.callouts[i].eventId);
+                }
               }
             }
           }

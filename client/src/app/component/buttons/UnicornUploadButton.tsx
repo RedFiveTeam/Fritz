@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
-import { UnicornActions } from '../unicorn/actions/UnicornActions';
-import { SlidesStore } from '../slides/SlidesStore';
-import { SlideModel } from '../slides/SlideModel';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
 
 interface Props {
   className?: string;
-  unicornActions?: UnicornActions;
-  slidesStore?: SlidesStore;
+  unicornStore?: UnicornStore;
 }
 
 @observer
@@ -19,12 +16,10 @@ export class UnicornUploadButton extends React.Component<Props> {
         className={this.props.className}
       >
         <button
+          className="uploadBtn"
           onClick={() => {
-            this.props.slidesStore!.slides.filter((s: SlideModel) => {
-              return s.targetEventId !== '';
-            }).map(async (e: any) => {
-              await this.props.unicornActions!.buildUploadModel(e);
-            });
+            this.props.unicornStore!.setPendingUpload(true);
+            this.props.unicornStore!.setConfirmUploadStatus(true);
           }}
           disabled={this.props.slidesStore!.differentAsset}
         >
@@ -35,7 +30,8 @@ export class UnicornUploadButton extends React.Component<Props> {
   }
 }
 
-export const StyledUnicornUploadButton = inject('slidesStore', 'unicornActions')(styled(UnicornUploadButton)`
+export const StyledUnicornUploadButton = inject('unicornStore')
+(styled(UnicornUploadButton)`
   
   button {
     outline: none;

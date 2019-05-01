@@ -5,6 +5,8 @@ import { StyledClassificationBanner } from '../classification/ClassificationBann
 import { ClassificationStore } from '../classification/store/ClassificationStore';
 import { ClassificationActions } from '../classification/ClassificationActions';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { CSSProperties } from 'react';
+import { SlidesStore } from '../slides/SlidesStore';
 
 const Logo = require('../../../icon/FritzLogo.svg');
 
@@ -13,10 +15,17 @@ interface Props {
   classificationStore?: ClassificationStore;
   classificationActions?: ClassificationActions;
   unicornStore?: UnicornStore;
+  slidesStore?: SlidesStore;
 }
 
 @observer
 export class Header extends React.Component<Props> {
+  badCallsignCSS: CSSProperties = {
+    border: '1px solid #ae4754',
+    borderRadius: '7px'
+  };
+
+  goodCSS: CSSProperties = {};
 
   async componentDidMount() {
     await this.props.classificationActions!.initializeStore();
@@ -39,19 +48,24 @@ export class Header extends React.Component<Props> {
                 <a className="navbar-brand" href="#">
                   <img className="logo" alt="FRiTZ" src={Logo}/>
                 </a>
-                <span className="selectedMission">Mission: {
-                  this.props.unicornStore!.activeMission ?
-                    this.props.unicornStore!.activeMission.callsign : 'None Selected'
-                }
-                </span>
-                <span
-                  className="changeMissionBtn"
-                  onClick={() => {
-                    this.props.unicornStore!.setActiveMission(null);
-                  }}
+                <div
+                  className="missionInfo"
+                  style={this.props.slidesStore!.differentAsset ? this.badCallsignCSS : this.goodCSS}
                 >
+                  <span className="selectedMission">Mission: {
+                    this.props.unicornStore!.activeMission ?
+                      this.props.unicornStore!.activeMission.callsign : 'None Selected'
+                  }
+                  </span>
+                  <span
+                    className="changeMissionBtn"
+                    onClick={() => {
+                      this.props.unicornStore!.setActiveMission(null);
+                    }}
+                  >
                   Change
-                </span>
+                  </span>
+                </div>
               </div>
             </div>
           </nav>
@@ -61,7 +75,8 @@ export class Header extends React.Component<Props> {
   }
 }
 
-export const StyledHeader = inject('classificationStore', 'classificationActions', 'unicornStore')(styled(Header)`
+export const StyledHeader = inject('classificationStore', 'classificationActions', 'unicornStore', 'slidesStore')
+(styled(Header)`
   position: fixed;
   top: 15px;
   background: #2B303C;
@@ -72,8 +87,9 @@ export const StyledHeader = inject('classificationStore', 'classificationActions
   }
   
   .selectedMission {
-    position: absolute;
-    right: 100px;
+    padding-left: 10px;
+    position: relative;
+    bottom: 8px;
     line-height: 54px;
     height: 54px;
     color: #fff;
@@ -81,12 +97,14 @@ export const StyledHeader = inject('classificationStore', 'classificationActions
   }
   
   .changeMissionBtn {
+    padding-right: 10px;
+    position: relative;
+    bottom: 8px;
     color: #15deec;
-    position: absolute;
-    right: 27px;
     line-height: 54px;
     height: 54px;
     cursor: pointer;
+    margin-left: 13px;
   }
   
   .parentClassificationBanner {
@@ -98,5 +116,13 @@ export const StyledHeader = inject('classificationStore', 'classificationActions
   height: 16px;
   font-weight: bold;
   font-size: 11px;
+  }
+  
+  .missionInfo {
+    position: absolute;
+    width: auto;
+    height: 39px;
+    right: 11px;
+    top: 15px;
   }
 `);

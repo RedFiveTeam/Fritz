@@ -8,8 +8,13 @@ describe('Mission', () => {
   let unicornStore: any;
   let unicornActions: any;
   let mission = new MissionModel('testID1', '04-18-19', 'Kirby1', 'testDescr', 'testStatus', 'DGS-1', 'Pred');
+  let uploadActions: any;
 
   beforeEach(() => {
+    uploadActions = {
+      checkCallsign: jest.fn()
+    };
+
     unicornStore = {
       setActiveMission: jest.fn()
     };
@@ -20,6 +25,7 @@ describe('Mission', () => {
 
     subject = shallow(
       <Mission
+        uploadActions={uploadActions}
         unicornStore={unicornStore}
         mission={mission}
         unicornActions={unicornActions}

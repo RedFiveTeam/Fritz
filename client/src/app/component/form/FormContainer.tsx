@@ -8,6 +8,7 @@ import { ReleasabilityModel } from '../unicorn/model/ReleasabilityModel';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { StyledDropdown } from '../dropdown/Dropdown';
+import { UploadActions } from './upload/actions/UploadActions';
 
 interface Props {
   className?: string;
@@ -15,6 +16,7 @@ interface Props {
   slidesStore?: SlidesStore;
   unicornStore?: UnicornStore;
   unicornActions?: UnicornActions;
+  uploadActions?: UploadActions;
 }
 
 @observer
@@ -107,13 +109,16 @@ export class FormContainer extends React.Component<Props> {
           </div>
           <div className="form-group">
             <label
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidAsset()) ?
+              style={(this.props.slidesStore!.differentAsset) ?
                 this.badLabelCSS : this.goodCSS}
             >
               Callsign
             </label>
             <input
               data-name="asset"
+              onBlur={(e: any) => {
+                this.props.uploadActions!.setCallsignInput(e.target.value);
+              }}
               onChange={(e: any) => {
                 this.props.slidesActions!.setAndUpdateAsset(e.target.value);
               }}
@@ -121,13 +126,17 @@ export class FormContainer extends React.Component<Props> {
               className="form-control"
               id="assetInput"
               placeholder="Callsign"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidAsset()) ?
+              style={(this.props.slidesStore!.differentAsset) ?
                 this.badInputCSS : this.goodCSS}
             />
             {
               this.props.slidesStore!.validate &&
               !this.props.slidesStore!.isValidAsset() &&
               <div className="errorText">Field cannot be empty</div>
+            }
+            {
+              this.props.slidesStore!.differentAsset &&
+              <div className="errorText">Mismatch Callsign</div>
             }
           </div>
           <div
@@ -186,7 +195,9 @@ export class FormContainer extends React.Component<Props> {
   }
 }
 
-export const StyledFormContainer = inject('slidesActions', 'slidesStore', 'unicornStore', 'unicornActions')
+export const StyledFormContainer = inject(
+  'slidesActions', 'slidesStore', 'unicornStore', 'unicornActions', 'uploadActions'
+)
 (styled(FormContainer)`
   color: #fff;
   margin-top: 45px;

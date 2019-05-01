@@ -13,7 +13,6 @@ import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
 
 export class UploadActions {
   public metricActions: MetricActions;
-
   private slidesActions: SlidesActions;
   private uploadRepository: UploadRepository;
   private uploadStore: UploadStore;
@@ -86,7 +85,8 @@ export class UploadActions {
           if (status.releasability && status.releasability !== '') {
             if (this.unicornStore.releasabilities.some(
               (r: ReleasabilityModel) => {
-                return r.releasabilityName === status.releasability; })
+                return r.releasabilityName === status.releasability;
+              })
             ) {
               this.slidesActions.setAndUpdateReleasability(status.releasability);
               this.setReleasabilityInput(status.releasability);
@@ -121,6 +121,20 @@ export class UploadActions {
     let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
     if (callsignInput) {
       callsignInput.value = callsign;
+    }
+    this.checkCallsign(callsign);
+  }
+
+  checkCallsign(callsign: string) {
+    let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
+    if (callsignInput) {
+      if (this.unicornStore!.activeMission!.callsign.toUpperCase() === callsign.toUpperCase() &&
+        this.unicornStore!.activeMission!.callsign.toUpperCase() === callsignInput.value.toUpperCase()
+      ) {
+        this.slidesStore!.setDifferentAsset(false);
+      } else {
+        this.slidesStore!.setDifferentAsset(true);
+      }
     }
   }
 

@@ -9,8 +9,13 @@ describe('Header', () => {
   let classificationStore: any;
   let classificationActions: any;
   let unicornStore: any;
+  let slidesStore: any;
 
   beforeEach(() => {
+    slidesStore = {
+      differentAsset: jest.fn()
+    };
+
     unicornStore = {
       activeMission: new MissionModel('1', '04-18-19', 'Kirby1', 'descr', 'open', 'DGS-1', 'Pred'),
       setActiveMission: jest.fn()
@@ -26,6 +31,7 @@ describe('Header', () => {
 
     subject = shallow(
       <Header
+        slidesStore={slidesStore}
         unicornStore={unicornStore}
         classificationStore={classificationStore}
         classificationActions={classificationActions}

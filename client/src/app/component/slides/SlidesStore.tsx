@@ -18,6 +18,12 @@ export class SlidesStore {
   @observable private _releasability: string;
   @observable private _fullDate: string;
   @observable private _assignedCalloutCount: number;
+  @observable private _differentAsset: boolean = false;
+  
+  @computed
+  get differentAsset(): boolean {
+    return this._differentAsset;
+  }
 
   @computed
   get assignedCalloutCount(): number {
@@ -92,6 +98,11 @@ export class SlidesStore {
   @computed
   get fullDate(): string {
     return this._fullDate;
+  }
+
+  @action.bound
+  setDifferentAsset(value: boolean) {
+    this._differentAsset = value;
   }
 
   @action.bound

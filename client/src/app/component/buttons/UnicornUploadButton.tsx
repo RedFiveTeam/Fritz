@@ -26,6 +26,7 @@ export class UnicornUploadButton extends React.Component<Props> {
               await this.props.unicornActions!.buildUploadModel(e);
             });
           }}
+          disabled={this.props.slidesStore!.differentAsset}
         >
           Upload To UNICORN
         </button>
@@ -51,5 +52,13 @@ export const StyledUnicornUploadButton = inject('slidesStore', 'unicornActions')
     :hover {
       background-color: #3BB7C1;
     }
+  }
+  
+  button:disabled,
+  button[disabled] {
+    background-color: #303b3c;
+    color: #676767;
+    border: none;
+    cursor: not-allowed;
   }
 `);

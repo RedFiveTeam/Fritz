@@ -46,7 +46,6 @@ public class Conversion {
         String text = stripper.getText(document);
         if (page == 0) {
           System.out.println(text);
-          //do parsing
           String datePattern = "\\d{2} [A-z]{3} \\d{2}";
           Matcher dateMatcher = Pattern.compile(datePattern).matcher(text);
           if (dateMatcher.find()) {

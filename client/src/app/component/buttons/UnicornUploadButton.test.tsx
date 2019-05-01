@@ -1,32 +1,26 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { UnicornUploadButton } from './UnicornUploadButton';
-import { SlideModel } from '../slides/SlideModel';
 
 describe('UnicornUploadButton', () => {
   let subject: ShallowWrapper;
-  let unicornActions: any;
-  let slidesStore: any;
+  let unicornStore: any;
 
   beforeEach(() => {
-    slidesStore = {
-      slides: [new SlideModel('', '', '', '', false, '1'), new SlideModel('', '', '', '', false, '2')]
-    };
-
-    unicornActions = {
-      buildUploadModel: jest.fn()
+    unicornStore = {
+      setPendingUpload: jest.fn(),
+      setConfirmUploadStatus: jest.fn()
     };
 
     subject = shallow(
       <UnicornUploadButton
-        unicornActions={unicornActions}
-        slidesStore={slidesStore}
+        unicornStore={unicornStore}
       />
     );
   });
 
-  it('should call upload to unicorn on click', () => {
-    subject.find('button').simulate('click');
-    expect(unicornActions.buildUploadModel).toHaveBeenCalled();
+  it('should render confirm upload modal', () => {
+    subject.find('.uploadBtn').simulate('click');
+    expect(unicornStore.setPendingUpload).toHaveBeenCalled();
   });
 });

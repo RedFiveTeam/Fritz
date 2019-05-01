@@ -18,6 +18,7 @@ export class UnicornStore {
   @observable private _pendingUpload: boolean = false;
   @observable private _uploadComplete: boolean = false;
   @observable private _currentUploadCount: number = 0;
+  @observable private _confirmUploadStatus: boolean = false;
 
   async hydrate(unicornRepository: UnicornRepository) {
     if (navigator.userAgent.toLowerCase().indexOf('electron') !== -1) {
@@ -31,6 +32,11 @@ export class UnicornStore {
           return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
         });
     }
+  }
+
+  @computed
+  get confirmUploadStatus(): boolean {
+    return this._confirmUploadStatus;
   }
 
   @computed
@@ -83,6 +89,10 @@ export class UnicornStore {
     return this._uploadComplete;
   }
 
+  @action.bound
+  setConfirmUploadStatus(value: boolean) {
+    this._confirmUploadStatus = value;
+  }
   @action.bound
   setMissions(value: MissionModel[]) {
     this._missions = value;

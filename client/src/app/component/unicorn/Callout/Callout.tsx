@@ -33,8 +33,14 @@ export class Callout extends React.Component<Props> {
           <img src={Chain}/>
           <StyledDropdown
             options={
-              this.props.unicornStore!.callouts.map((c: any) => {
-                return c.time;
+              this.props.unicornStore!.callouts
+                .filter((c: any) => {
+                  return c.time !== null;
+                })
+                .map((c: any) => {
+                  if (c.time && c.time.toString().length > 0) {
+                    return c.time;
+                }
               })
             }
             defaultValue={this.props.slide.targetEventId ?
@@ -45,8 +51,15 @@ export class Callout extends React.Component<Props> {
               this.props.slidesStore!.slides.filter((f: SlideModel) => {
                 return f.id === this.props.slide.id;
               })[0].setTargetEventId(
-                this.props.unicornStore!.callouts.filter((c: CalloutModel) => {
-                  return c.time.toString() === s;
+                this.props.unicornStore!.callouts
+                  .filter((c: CalloutModel) => {
+                    return c.time !== null;
+                  })
+                  .filter((c: CalloutModel) => {
+                  if (c.time && c.time.toString().length > 0) {
+                    return c.time.toString() === s;
+                  }
+                  return false;
                 })[0].eventId
               );
             }}

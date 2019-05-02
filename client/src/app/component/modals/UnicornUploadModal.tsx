@@ -50,7 +50,6 @@ export class UnicornUploadModal extends React.Component<Props> {
                         className="cancelBtn"
                         onClick={() => {
                           this.props.unicornStore!.setPendingUpload(false);
-                          this.props.unicornStore!.setConfirmUploadStatus(false);
                         }}
                     >
                         Cancel
@@ -158,7 +157,7 @@ export const StyledUnicornUploadModal = inject('unicornStore', 'slidesActions', 
 
           .uploadStatus {
           position: relative;
-          top: 55px;
+          top: 39px;
           letter-spacing: 1.1px;
           font-size: 30px;
           font-weight: bold;
@@ -167,7 +166,7 @@ export const StyledUnicornUploadModal = inject('unicornStore', 'slidesActions', 
 
           .uploadMsg {
           position: relative;
-          top: 60px;
+          top: 37px;
           letter-spacing: 0.9px;
           font-weight: 300;
           font-size: 24px;
@@ -175,9 +174,10 @@ export const StyledUnicornUploadModal = inject('unicornStore', 'slidesActions', 
         }
 
           .btnGroup {
-          position: relative;
+          position: absolute;
           text-align: center;
-          top: 85px;
+          top: 404px;
+          left: 202px;
         }
 
           .createNewBtn {
@@ -426,8 +426,9 @@ export const StyledUnicornUploadModal = inject('unicornStore', 'slidesActions', 
           .confirmText {
           font-size: 24px;
           color: #eaf3ff;
-          top: 48px;
-          position: relative;
+          top: 308px;
+          left: 172px;
+          position: absolute;
           text-align: center;
         }
 `);

@@ -20,8 +20,8 @@ export class UnicornUploadButton extends React.Component<Props> {
         <button
           className="uploadBtn"
           onClick={() => {
-            this.props.unicornStore!.setPendingUpload(true);
             this.props.unicornStore!.setConfirmUploadStatus(true);
+            this.props.unicornStore!.setPendingUpload(true);
           }}
           disabled={this.props.slidesStore!.differentAsset}
         >

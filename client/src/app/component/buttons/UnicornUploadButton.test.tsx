@@ -5,16 +5,23 @@ import { UnicornUploadButton } from './UnicornUploadButton';
 describe('UnicornUploadButton', () => {
   let subject: ShallowWrapper;
   let unicornStore: any;
+  let slidesStore: any;
 
   beforeEach(() => {
+
     unicornStore = {
       setPendingUpload: jest.fn(),
       setConfirmUploadStatus: jest.fn()
     };
 
+    slidesStore = {
+      differentAsset: false
+    };
+
     subject = shallow(
       <UnicornUploadButton
         unicornStore={unicornStore}
+        slidesStore={slidesStore}
       />
     );
   });

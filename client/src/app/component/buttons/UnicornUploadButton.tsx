@@ -2,10 +2,12 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { SlidesStore } from '../slides/SlidesStore';
 
 interface Props {
   className?: string;
   unicornStore?: UnicornStore;
+  slidesStore?: SlidesStore;
 }
 
 @observer
@@ -30,7 +32,7 @@ export class UnicornUploadButton extends React.Component<Props> {
   }
 }
 
-export const StyledUnicornUploadButton = inject('unicornStore')
+export const StyledUnicornUploadButton = inject('unicornStore', 'slidesStore')
 (styled(UnicornUploadButton)`
   
   button {

@@ -12,7 +12,19 @@ interface Props {
   unicornActions?: UnicornActions;
 }
 
-const sites = ['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5', 'DGS AR', 'DGS AL', 'DGS IN', 'DGS KS', 'DGS MA', 'DGS NV'];
+const sites = ['DGS 1',
+  'DGS 2',
+  'DGS 3',
+  'DGS 4',
+  'DGS 5',
+  'AFSOC',
+  'DGS AR',
+  'DGS AL',
+  'DGS IN',
+  'DGS KS',
+  'DGS MA',
+  'DGS NV'
+];
 
 @observer
 export class SelectMissionModal extends React.Component<Props> {

@@ -26,12 +26,12 @@ export class UnicornActions {
   @action.bound
   async getCallouts(missionId: string) {
     this.unicornStore.setCallouts(await this.unicornRepository.getCallouts(missionId));
-    if (this.slidesStore.slides.length > 0) {
+    if (this.slidesStore.slides.length > 1) {
       for (let i = 0; i < this.slidesStore.slides.length; i++) {
         this.unicornStore.callouts.map((c) => {
           if (this.unicornStore.callouts[i] && this.unicornStore.callouts[i].time &&
-            this.unicornStore.callouts[i].time.length > 0 && this.slidesStore.slides[i] &&
-            this.slidesStore.slides[i].time && this.slidesStore.slides[i].time.length > 0) {
+            this.unicornStore.callouts[i].time.length > 1 && this.slidesStore.slides[i] &&
+            this.slidesStore.slides[i].time && this.slidesStore.slides[i].time.length > 1) {
             if (this.unicornStore.callouts[i].time.toString().indexOf(this.slidesStore.slides[i].time) > -1) {
               let calloutMatches = this.unicornStore.callouts.filter((f) => {
                 if (f.time && f.time.length > 0) {

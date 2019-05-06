@@ -3,12 +3,13 @@ package mil.af.dgs1sdt.fritz.Models;
 import lombok.Data;
 
 @Data
-public class CalloutModel {
+public class CalloutModel implements Comparable<CalloutModel> {
   private String name;
   private String classification;
   private String releasability;
   private String activity;
   private String eventId;
+  private Long tot;
 
   public String getName() {
     return name;
@@ -48,6 +49,15 @@ public class CalloutModel {
 
   public void setEventId(String eventId) {
     this.eventId = eventId;
+  }
+
+  public Long getTot() { return tot; }
+
+  public void setTot(Long tot) { this.tot = tot; }
+
+  @Override
+  public int compareTo(CalloutModel c) {
+    return getTot().compareTo(c.getTot());
   }
 }
 

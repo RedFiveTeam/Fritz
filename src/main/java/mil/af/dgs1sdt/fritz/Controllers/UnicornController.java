@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -41,7 +43,11 @@ public class UnicornController {
   @GetMapping(produces = "application/json", path = "/targets/{missionId}")
   public List<CalloutModel> targets(@PathVariable String missionId) throws Exception {
     UnicornInterface unicorn = new UnicornInterface();
-    return unicorn.getCallouts(missionId);
+    List<CalloutModel> callouts = new ArrayList<>();
+    callouts = unicorn.getCallouts(missionId);
+    Collections.sort(callouts);
+    System.out.println(callouts.toString());
+    return callouts;
   }
 
   @ResponseBody

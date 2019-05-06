@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -67,6 +68,8 @@ public class UnicornInterface {
       ".asmx/GetPMSTargetInfo?ato=&missionID=" + missionId + "&atoDay=";
     Document doc = makeRequest(uri);
     NodeList t = doc.getElementsByTagName("target");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+      //2019-04-29 13:08:00.0
     for (int i = 0; i < t.getLength(); i++) {
       Node element = t.item(i);
       if (element.getNodeType() == Node.ELEMENT_NODE) {
@@ -77,6 +80,10 @@ public class UnicornInterface {
         target.setReleasability(ele.getElementsByTagName("releasability").item(0).getTextContent());
         target.setActivity(ele.getElementsByTagName("targetActivity").item(0).getTextContent());
         target.setEventId(ele.getElementsByTagName("targetEventID").item(0).getTextContent());
+        Date date = df.parse(ele.getElementsByTagName("tot").item(0).getTextContent());
+        long time = (long) date.getTime() / 1000;
+        System.out.println(time);
+        target.setTot(time);
         targets.add(target);
       }
     }

@@ -6,9 +6,11 @@ import mil.af.dgs1sdt.fritz.Models.ReleasabilityModel;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -69,7 +71,6 @@ public class UnicornInterface {
     Document doc = makeRequest(uri);
     NodeList t = doc.getElementsByTagName("target");
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-      //2019-04-29 13:08:00.0
     for (int i = 0; i < t.getLength(); i++) {
       Node element = t.item(i);
       if (element.getNodeType() == Node.ELEMENT_NODE) {
@@ -82,7 +83,6 @@ public class UnicornInterface {
         target.setEventId(ele.getElementsByTagName("targetEventID").item(0).getTextContent());
         Date date = df.parse(ele.getElementsByTagName("tot").item(0).getTextContent());
         long time = (long) date.getTime() / 1000;
-        System.out.println(time);
         target.setTot(time);
         targets.add(target);
       }
@@ -121,12 +121,14 @@ public class UnicornInterface {
     return db.parse(xml);
   }
 
-  public void makePostRequest(String uri, List<NameValuePair> params) throws Exception {
+  public String makePostRequest(String uri, List<NameValuePair> params) throws Exception {
     CloseableHttpClient client = HttpClients.createDefault();
     HttpPost httpPost = new HttpPost(uri);
     httpPost.setEntity(new UrlEncodedFormEntity(params));
-    client.execute(httpPost);
+    CloseableHttpResponse response = client.execute(httpPost);
+    String result = EntityUtils.toString(response.getEntity());
     client.close();
+    return result;
   }
 
   public static String convertFileToBase64(File file) throws IOException {

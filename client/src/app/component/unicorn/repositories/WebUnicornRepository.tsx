@@ -34,7 +34,7 @@ export class WebUnicornRepository implements UnicornRepository {
 
   async upload(model: UnicornUploadModel, callBack: () => void): Promise<void> {
     const body = JSON.stringify(this.unicornUploadSerializer.serialize(model));
-    await this.client.postJSON(
+    await this.client.postJSONNoParse(
       '/api/unicorn',
       body
     );

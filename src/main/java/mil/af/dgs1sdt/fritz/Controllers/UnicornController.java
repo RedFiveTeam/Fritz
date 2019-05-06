@@ -46,7 +46,6 @@ public class UnicornController {
     List<CalloutModel> callouts = new ArrayList<>();
     callouts = unicorn.getCallouts(missionId);
     Collections.sort(callouts);
-    System.out.println(callouts.toString());
     return callouts;
   }
 
@@ -75,7 +74,7 @@ public class UnicornController {
     params.add(new BasicNameValuePair("uploadType", "targetevent"));
     params.add(new BasicNameValuePair("uploadedFile", image));
     String URL = unicornBaseURL + "/WebServices/PowerPointUploadServices.asmx/UploadFile";
-    unicorn.makePostRequest(URL, params);
-    return "{}";
+    // unicorn.makePostRequest(URL, params);
+    return unicorn.makePostRequest(URL, params);
   }
 }

@@ -62,7 +62,6 @@ export class UnicornUploadModal extends React.Component<Props> {
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
                           for (let i = 0; i < slides.length; i++) {
-                            console.log('uploading');
                             await this.props.unicornActions!.buildUploadModel(slides[i]);
                           }
                         }}

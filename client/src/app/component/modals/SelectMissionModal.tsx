@@ -47,6 +47,11 @@ export class SelectMissionModal extends React.Component<Props> {
                 .filter((m) => {
                   return m.org === this.props.unicornStore!.selectedSite;
                 })
+                .sort((a, b) => {
+                  let name1 = a.callsign!.toLowerCase();
+                  let name2 = b.callsign!.toLowerCase();
+                  return name1 < name2 ? -1 : (name1 > name2 ? 1 : 0);
+                })
                 .map((m, idx) => {
                   return (
                     <StyledMission

@@ -6,6 +6,7 @@ import { SlidesStore } from '../slides/SlidesStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlideModel } from '../slides/SlideModel';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
+import { MetricActions } from '../metrics/actions/MetricActions';
 
 const flame = require('../../../icon/FlameIcon.svg');
 const arrow = require('../../../icon/ArrowIcon.svg');
@@ -18,6 +19,7 @@ interface Props {
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
   unicornActions?: UnicornActions;
+  metricActions?: MetricActions;
 }
 
 @observer
@@ -61,6 +63,7 @@ export class UnicornUploadModal extends React.Component<Props> {
                             return s.targetEventId !== '';
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
+                          await this.props.metricActions!.trackMetric('UploadToUnicorn');
                           for (let i = 0; i < slides.length; i++) {
                             await this.props.unicornActions!.buildUploadModel(slides[i]);
                           }
@@ -131,7 +134,12 @@ export class UnicornUploadModal extends React.Component<Props> {
   }
 }
 
-export const StyledUnicornUploadModal = inject('unicornStore', 'slidesActions', 'slidesStore', 'unicornActions')
+export const StyledUnicornUploadModal = inject(
+  'unicornStore',
+  'slidesActions',
+  'slidesStore',
+  'unicornActions',
+  'metricActions')
 (styled(UnicornUploadModal)`
             background: rgba(0, 0, 0, 0.5);
             top: 0px;

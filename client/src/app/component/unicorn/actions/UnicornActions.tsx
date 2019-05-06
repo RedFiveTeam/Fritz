@@ -6,8 +6,10 @@ import { action } from 'mobx';
 import { SlideModel } from '../../slides/SlideModel';
 import { UnicornUploadModel } from '../model/UnicornUploadModel';
 import { SlidesStore } from '../../slides/SlidesStore';
+import { MetricActions } from '../../metrics/actions/MetricActions';
 
 export class UnicornActions {
+  public metricActions: MetricActions;
   private unicornStore: UnicornStore;
   private slidesStore: SlidesStore;
   private readonly unicornRepository: UnicornRepository;
@@ -16,6 +18,7 @@ export class UnicornActions {
     this.unicornStore = stores.unicornStore!;
     this.slidesStore = stores.slidesStore!;
     this.unicornRepository = repositories.unicornRepository!;
+    this.metricActions = new MetricActions(repositories, stores);
   }
 
   @action.bound
@@ -77,6 +80,7 @@ export class UnicornActions {
     await this.unicornRepository.upload(unicornUploadModel, this.increaseCurrentUploadCount);
     if (this.slidesStore!.assignedCalloutCount === this.unicornStore!.currentUploadCount) {
       this.unicornStore!.setUploadComplete(true);
+      this.metricActions!.updateMetric('UploadToUnicorn');
       this.unicornStore!.setCurrentUploadCount(0);
     }
   }

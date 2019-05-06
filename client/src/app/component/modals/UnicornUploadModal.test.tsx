@@ -10,6 +10,7 @@ describe('UnicornUploadModal', () => {
   let slidesStore: any;
   let slidesActions: any;
   let unicornActions: any;
+  let metricActions: any;
 
   beforeEach(() => {
     unicornStore = new UnicornStore();
@@ -28,24 +29,30 @@ describe('UnicornUploadModal', () => {
       getAssignedCallouts: jest.fn()
     };
 
+    metricActions = {
+      trackMetric: jest.fn(),
+      updateMetric: jest.fn()
+    };
+
     subject = shallow(
       <UnicornUploadModal
         unicornStore={unicornStore}
         slidesActions={slidesActions}
         slidesStore={slidesStore}
         unicornActions={unicornActions}
+        metricActions={metricActions}
       />
     );
   });
 
-  it('should render upload confirmation modal upon upload button click', () => {
+  it('should render upload confirmation modal upon upload button click', async () => {
     unicornStore.setPendingUpload(true);
     unicornStore.setConfirmUploadStatus(true);
     expect(subject.find('.title').text()).toContain('Upload To Unicorn');
     expect(subject.find('#unicornConfirm').exists()).toBeTruthy();
     expect(subject.find('.cancelBtn').exists()).toBeTruthy();
     expect(subject.find('.confirmText').text()).toContain('5');
-    subject.find('.confirmBtn').simulate('click');
+    await subject.find('.confirmBtn').simulate('click');
     expect(unicornStore.confirmUploadStatus).toBeFalsy();
     expect(unicornActions.buildUploadModel).toHaveBeenCalled();
   });
@@ -72,13 +79,12 @@ describe('UnicornUploadModal', () => {
     expect(subject.find('.returnBtn').exists()).toBeFalsy();
   });
 
-  it('should refresh the page after clicking createNew', () => {
+  it('should refresh the page after clicking createNew', async () => {
     unicornStore.setPendingUpload(true);
     unicornStore.setConfirmUploadStatus(true);
-    subject.find('.confirmBtn').simulate('click');
+    await subject.find('.confirmBtn').simulate('click');
     expect(unicornActions.buildUploadModel).toHaveBeenCalled();
     unicornStore.setUploadComplete(true);
     subject.find('.createNewBtn').simulate('click');
-
   });
 });

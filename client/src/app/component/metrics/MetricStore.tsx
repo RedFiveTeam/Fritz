@@ -13,6 +13,7 @@ export class MetricStore {
   @observable private _filteredMetrics: MetricModel[] = [];
   @observable private _filterValue: number = 9007199254740991;
   @observable private _averages: AverageModel = new AverageModel();
+  @observable private _pendingUploadToUnicornMetric: MetricModel;
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
@@ -64,6 +65,16 @@ export class MetricStore {
   @computed
   get endTime(): String {
     return this._endTime;
+  }
+
+  @computed
+  get pendingUploadToUnicornMetric(): MetricModel {
+    return this._pendingUploadToUnicornMetric;
+  }
+
+  @action.bound
+  setPendingUploadToUnicornMetric(value: MetricModel) {
+    this._pendingUploadToUnicornMetric = value;
   }
 
   @action.bound

@@ -20,7 +20,7 @@ export class MetricsTable extends React.Component<Props> {
         key={i}
       >
         <td>{m.uid ? m.uid.substr(0, 6) : '000000'}</td>
-        <td>{m.action}</td>
+        <td>{m.action === 'UploadToUnicorn' ? 'Upload to Unicorn' : m.action}</td>
         <td>{moment.unix(m.startTime).format('MMMM D, YYYY @HHmm') + 'L'}</td>
         <td>{m.endTime ? parseInt(m.endTime, 10) - parseInt(m.startTime, 10) + 's' : 'n/a'}</td>
       </tr>

@@ -108,7 +108,7 @@ export class MetricActions {
           if (m.action === 'Upload') {
             startTime = m.startTime;
           }
-          if (m.action === 'Download' && m.endTime) {
+          if ((m.action === 'Download' || m.action === 'UploadToUnicorn') && m.endTime) {
             endTime = m.endTime;
             if (startTime && endTime) {
               this.metricStore.averages.workflow.push(

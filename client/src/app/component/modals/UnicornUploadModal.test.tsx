@@ -53,6 +53,7 @@ describe('UnicornUploadModal', () => {
     expect(subject.find('.cancelBtn').exists()).toBeTruthy();
     expect(subject.find('.confirmText').text()).toContain('5');
     await subject.find('.confirmBtn').simulate('click');
+    expect(metricActions.trackMetric).toHaveBeenCalledWith('UploadToUnicorn');
     expect(unicornStore.confirmUploadStatus).toBeFalsy();
     expect(unicornActions.buildUploadModel).toHaveBeenCalled();
   });

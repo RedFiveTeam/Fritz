@@ -1,8 +1,8 @@
 {
   "main.css": "static/css/main.88bd9f4c.css",
   "main.css.map": "static/css/main.88bd9f4c.css.map",
-  "main.js": "static/js/main.68aa94c6.js",
-  "main.js.map": "static/js/main.68aa94c6.js.map",
+  "main.js": "static/js/main.d122d260.js",
+  "main.js.map": "static/js/main.d122d260.js.map",
   "static/media/ActionTimesIcon.svg": "static/media/ActionTimesIcon.af993332.svg",
   "static/media/Adobe.svg": "static/media/Adobe.442c7c0c.svg",
   "static/media/ArrowIcon.svg": "static/media/ArrowIcon.28464624.svg",
@@ -18,6 +18,7 @@
   "static/media/HelpMenu.svg": "static/media/HelpMenu.b6c78eaa.svg",
   "static/media/HelpStep1.svg": "static/media/HelpStep1.7d0075b4.svg",
   "static/media/HelpStep2.svg": "static/media/HelpStep2.fa6b1161.svg",
+  "static/media/ImageIcon.svg": "static/media/ImageIcon.3dd7b4e1.svg",
   "static/media/PDFIcon.svg": "static/media/PDFIcon.f6cbd823.svg",
   "static/media/PaperclipIcon.svg": "static/media/PaperclipIcon.7a827f87.svg",
   "static/media/ResetUploadIcon.svg": "static/media/ResetUploadIcon.b0eb21bc.svg",

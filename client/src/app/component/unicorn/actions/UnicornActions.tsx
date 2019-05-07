@@ -98,5 +98,18 @@ export class UnicornActions {
 
   increaseCurrentUploadCount = () => {
     this.unicornStore!.setCurrentUploadCount(this.unicornStore!.currentUploadCount + 1);
+  };
+
+  @action.bound
+  checkForUnassignedCallouts() {
+    let slides = this.slidesStore.slides;
+    for (let i = 0; i < slides.length; i++) {
+      if (slides[i].targetEventId === '') {
+        this.unicornStore!.setUnassignedCallouts(true);
+        break;
+      } else {
+        this.unicornStore!.setUnassignedCallouts(false);
+      }
+    }
   }
 }

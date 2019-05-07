@@ -35,7 +35,7 @@ public class Conversion {
       out.mkdirs();
 
     try (final PDDocument document = PDDocument.load(file)) {
-      String pattern = "[0-9]{4}Z";
+      String pattern = "\\/ [0-9]{4}Z";
       tracking.setTimes(new String[document.getNumberOfPages()]);
       tracking.setTotalSlides(document.getNumberOfPages());
       PDFRenderer pdfRenderer = new PDFRenderer(document);
@@ -69,8 +69,15 @@ public class Conversion {
         Matcher m = Pattern.compile(pattern).matcher(text);
         if (m.find()) {
           String[] times = tracking.getTimes();
-          times[page] = (m.group().replace("Z", ""));
+          times[page] = (m.group().replace("Z", "").replace("/ ", ""));
           tracking.setTimes(times);
+        } else {
+          Matcher time = Pattern.compile("[0-9]{4}Z").matcher(text);
+          if (time.find()) {
+            String[] times = tracking.getTimes();
+            times[page] = (m.group().replace("Z", ""));
+            tracking.setTimes(times);
+          }
         }
         BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
         String fileName = outdir + "image-" + page + ".jpg";

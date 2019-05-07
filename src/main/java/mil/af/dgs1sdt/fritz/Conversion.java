@@ -75,7 +75,7 @@ public class Conversion {
           Matcher time = Pattern.compile("[0-9]{4}Z").matcher(text);
           if (time.find()) {
             String[] times = tracking.getTimes();
-            times[page] = (m.group().replace("Z", ""));
+            times[page] = (time.group().replace("Z", ""));
             tracking.setTimes(times);
           }
         }

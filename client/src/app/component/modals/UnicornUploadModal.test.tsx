@@ -88,4 +88,12 @@ describe('UnicornUploadModal', () => {
     unicornStore.setUploadComplete(true);
     subject.find('.createNewBtn').simulate('click');
   });
+
+  it('should display some info if there are unassigned callouts', () => {
+    unicornStore.setUnassignedCallouts(true);
+    expect(subject.find('.unassignedMessage').text()).toContain('The following images');
+    subject.find('.confirmBtn').simulate('click');
+    expect(unicornStore.unassignedCallouts).toBeFalsy();
+    expect(unicornStore.confirmUploadStatus).toBeFalsy();
+  });
 });

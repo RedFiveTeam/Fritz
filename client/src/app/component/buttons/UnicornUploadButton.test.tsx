@@ -6,6 +6,7 @@ describe('UnicornUploadButton', () => {
   let subject: ShallowWrapper;
   let unicornStore: any;
   let slidesStore: any;
+  let unicornActions: any;
 
   beforeEach(() => {
 
@@ -18,8 +19,13 @@ describe('UnicornUploadButton', () => {
       differentAsset: false
     };
 
+    unicornActions = {
+      checkForUnassignedCallouts: jest.fn()
+    };
+
     subject = shallow(
       <UnicornUploadButton
+        unicornActions={unicornActions}
         unicornStore={unicornStore}
         slidesStore={slidesStore}
       />
@@ -28,6 +34,8 @@ describe('UnicornUploadButton', () => {
 
   it('should render confirm upload modal', () => {
     subject.find('.uploadBtn').simulate('click');
-    expect(unicornStore.setPendingUpload).toHaveBeenCalled();
+    expect(unicornStore.setPendingUpload).toHaveBeenCalledWith(true);
+    expect(unicornStore.setConfirmUploadStatus).toHaveBeenCalledWith(true);
+    expect(unicornActions.checkForUnassignedCallouts).toHaveBeenCalled();
   });
 });

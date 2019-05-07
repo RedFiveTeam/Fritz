@@ -12,6 +12,7 @@ const flame = require('../../../icon/FlameIcon.svg');
 const arrow = require('../../../icon/ArrowIcon.svg');
 const unicorn = require('../../../icon/UnicornIcon.svg');
 const complete = require('../../../icon/CompleteIcon.svg');
+const image = require('../../../icon/ImageIcon.svg');
 
 interface Props {
   className?: string;
@@ -38,7 +39,7 @@ export class UnicornUploadModal extends React.Component<Props> {
             Upload To Unicorn
           </div>
           {
-            this.props.unicornStore!.confirmUploadStatus &&
+            this.props.unicornStore!.confirmUploadStatus && !this.props.unicornStore!.unassignedCallouts &&
             <div>
                 <div className="allIcons">
                     <img src={unicorn} id="unicornConfirm"/>
@@ -76,6 +77,7 @@ export class UnicornUploadModal extends React.Component<Props> {
           }
           {
             !this.props.unicornStore!.uploadComplete &&
+            !this.props.unicornStore!.unassignedCallouts &&
             !this.props.unicornStore!.confirmUploadStatus &&
             <div>
                 <div className="allIcons">
@@ -120,10 +122,60 @@ export class UnicornUploadModal extends React.Component<Props> {
                         onClick={() => {
                           this.props.unicornStore!.setPendingUpload(false);
                           this.props.unicornStore!.setUploadComplete(false);
+                          this.props.unicornStore!.setUnassignedCallouts(false);
                           this.props.slidesStore!.setAssignedCalloutCount(0);
                         }}
                     >
                         Return To Product
+                    </button>
+                </div>
+            </div>
+          }
+          {
+            this.props.unicornStore!.unassignedCallouts &&
+            <div>
+                <div className="unassignedMessage">
+                    The following images are not assigned to a UNICORN Callout and <br/> will not be uploaded.
+                    They can still be downloaded to your desktop.
+                </div>
+                <div className="unassignedImages">
+                  {this.props.slidesStore!.slides.map((s: SlideModel, idx) => {
+                      if (s.targetEventId === '') {
+                        return (
+                          <div
+                            key={idx}
+                            className="unassignedCallout"
+                          >
+                            <img src={image}/>
+                            {s.newName}
+                          </div>
+                        );
+                      }
+                      return;
+                    }
+                  )}
+                </div>
+                <div className="continueText">
+                    Would you like to continue without uploading these images?
+                </div>
+                <div className="buttons">
+                    <button
+                        className="cancelBtn"
+                        id="goBack"
+                        onClick={() => {
+                          this.props.unicornStore!.setPendingUpload(false);
+                        }}
+                    >
+                        Go Back
+                    </button>
+                    <button
+                        className="confirmBtn"
+                        onClick={() => {
+                          this.props.unicornStore!.setUnassignedCallouts(false);
+                          this.props.unicornStore!.setConfirmUploadStatus(false);
+                        }}
+                    >
+                        Yes, Upload to UNICORN
                     </button>
                 </div>
             </div>
@@ -439,5 +491,60 @@ export const StyledUnicornUploadModal = inject(
           left: 172px;
           position: absolute;
           text-align: center;
+        }
+        
+        .unassignedMessage {
+          position: relative;
+          display: block;
+          text-align: center;
+          font-size: 24px;
+          width: 840px;
+          letter-spacing: .86px;
+          color:#eaf3ff;
+          top:16px;
+        }
+        
+        .unassignedImages {
+          position: relative;
+          height: 176px;
+          width: 815px;
+          background-color: #1f1f2c;
+          display: block;
+          border-radius: 2px;
+          left: 13px;
+          overflow-y: auto;
+          top: 35px;
+          padding-top: 18px;
+        }
+        
+        .unassignedCallout {
+          font-size: 16px;
+          color: #d4d6db;
+          margin-left: 13px;
+          padding-bottom: 16px;
+          
+          img {
+          margin-right: 12px;
+          }
+        }
+        
+        .continueText {
+          color: #eaf3ff;
+          font-size: 24px;
+          position: relative;
+          display: block;
+          text-align: center;
+          top: 50px;
+        }
+        
+        .buttons {
+          position: relative;
+          display: block;
+          top: 75px;
+          left: 198px;
+        }
+        
+        #goBack {
+          border: solid 1px #15deec;
         }
 `);

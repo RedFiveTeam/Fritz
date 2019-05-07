@@ -3,11 +3,13 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { SlidesStore } from '../slides/SlidesStore';
+import { UnicornActions } from '../unicorn/actions/UnicornActions';
 
 interface Props {
   className?: string;
   unicornStore?: UnicornStore;
   slidesStore?: SlidesStore;
+  unicornActions?: UnicornActions;
 }
 
 @observer
@@ -22,6 +24,7 @@ export class UnicornUploadButton extends React.Component<Props> {
           onClick={() => {
             this.props.unicornStore!.setConfirmUploadStatus(true);
             this.props.unicornStore!.setPendingUpload(true);
+            this.props.unicornActions!.checkForUnassignedCallouts();
           }}
           disabled={this.props.slidesStore!.differentAsset}
         >
@@ -32,7 +35,7 @@ export class UnicornUploadButton extends React.Component<Props> {
   }
 }
 
-export const StyledUnicornUploadButton = inject('unicornStore', 'slidesStore')
+export const StyledUnicornUploadButton = inject('unicornStore', 'slidesStore', 'unicornActions')
 (styled(UnicornUploadButton)`
   
   button {

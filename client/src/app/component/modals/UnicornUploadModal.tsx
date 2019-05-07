@@ -170,9 +170,16 @@ export class UnicornUploadModal extends React.Component<Props> {
                     </button>
                     <button
                         className="confirmBtn"
-                        onClick={() => {
-                          this.props.unicornStore!.setUnassignedCallouts(false);
+                        onClick={async () => {
+                          let slides = this.props.slidesStore!.slides.filter((s: SlideModel) => {
+                            return s.targetEventId !== '';
+                          });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
+                          this.props.unicornStore!.setUnassignedCallouts(false);
+                          await this.props.metricActions!.trackMetric('UploadToUnicorn');
+                          for (let i = 0; i < slides.length; i++) {
+                            await this.props.unicornActions!.buildUploadModel(slides[i]);
+                          }
                         }}
                     >
                         Yes, Upload to UNICORN

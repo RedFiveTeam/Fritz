@@ -31,24 +31,29 @@ export class Callout extends React.Component<Props> {
         </div>
         <div className="content">
           <img src={Chain}/>
+          {
+            this.props.unicornStore!.unassignedCallouts &&
+            this.props.slide!.targetEventId === '' &&
+            <div className="redBox"/>
+          }
           <StyledDropdown
             options={
               this.props.unicornStore!.callouts ?
-              this.props.unicornStore!.callouts
-                .filter((c: any) => {
-                  return c.time !== null;
-                })
-                .map((c: any) => {
-                  if (c.time && c.time.toString().length > 0) {
-                    return c.time;
-                }
-              }) : []
+                this.props.unicornStore!.callouts
+                  .filter((c: any) => {
+                    return c.time !== null;
+                  })
+                  .map((c: any) => {
+                    if (c.time && c.time.toString().length > 0) {
+                      return c.time;
+                    }
+                  }) : []
             }
             defaultValue={this.props.slide.targetEventId &&
-              this.props.unicornStore!.callouts &&
-              this.props.unicornStore!.callouts.filter((c) => {
-                return c.eventId === this.props.slide.targetEventId;
-              }).length > 0 ? this.props.unicornStore!.callouts.filter((c) => {
+            this.props.unicornStore!.callouts &&
+            this.props.unicornStore!.callouts.filter((c) => {
+              return c.eventId === this.props.slide.targetEventId;
+            }).length > 0 ? this.props.unicornStore!.callouts.filter((c) => {
                 return c.eventId === this.props.slide.targetEventId;
               })[0].time
               : 'Select'}
@@ -62,11 +67,11 @@ export class Callout extends React.Component<Props> {
                     return c.time !== null;
                   })
                   .filter((c: CalloutModel) => {
-                  if (c.time && c.time.toString().length > 0) {
-                    return c.time.toString() === s;
-                  }
-                  return false;
-                })[0].eventId
+                    if (c.time && c.time.toString().length > 0) {
+                      return c.time.toString() === s;
+                    }
+                    return false;
+                  })[0].eventId
               );
             }}
           />
@@ -149,6 +154,16 @@ export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callou
     top: 84px;
     z-index: 2;
     left: -20px;
+    position: absolute;
+  }
+  
+  .redBox {
+    width: 121px;
+    height: 48px;
+    left: 18px;
+    top: 66px;
+    border: solid 2px #ae4754;
+    border-radius: 4px;
     position: absolute;
   }
 `);

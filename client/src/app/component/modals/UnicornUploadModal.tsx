@@ -298,6 +298,8 @@ export const StyledUnicornUploadModal = inject(
           display: inline-flex;
           position: relative;
           top: 72px;
+          width: 840px;
+          height: 167px;
         }
 
           .modal {

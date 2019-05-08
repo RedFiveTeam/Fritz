@@ -86,7 +86,6 @@ export class SlidesActions {
   @action.bound
   deleteSlide = async (s: SlideModel) => {
     s.setDeleted(true);
-    await this.metricActions!.createMetric('Delete JPG');
   };
 
   updateNewNames() {
@@ -134,8 +133,10 @@ export class SlidesActions {
   getAssignedCallouts() {
     let count: number = 0;
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
-      if (this.slidesStore.slides[i].targetEventId !== '') {
+      if (this.slidesStore.slides[i].targetEventId !== '' && !this.slidesStore.slides[i].deleted) {
         count++;
+      } else if (this.slidesStore.slides[i].deleted) {
+        this.metricActions!.createMetric('Delete JPG');
       }
     }
     this.slidesStore.setAssignedCalloutCount(count);

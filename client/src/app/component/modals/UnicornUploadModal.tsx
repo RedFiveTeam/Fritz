@@ -177,7 +177,6 @@ export class UnicornUploadModal extends React.Component<Props> {
                           this.props.unicornStore!.setConfirmUploadStatus(false);
                           this.props.unicornStore!.setUnassignedCallouts(false);
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');
-                          console.log(slides.length);
                           for (let i = 0; i < slides.length; i++) {
                             await this.props.unicornActions!.buildUploadModel(slides[i]);
                           }

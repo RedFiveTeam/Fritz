@@ -61,7 +61,7 @@ export class UnicornUploadModal extends React.Component<Props> {
                         className="confirmBtn"
                         onClick={async () => {
                           let slides = this.props.slidesStore!.slides.filter((s: SlideModel) => {
-                            return s.targetEventId !== '';
+                            return s.targetEventId !== '' && s.deleted !== true;
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');

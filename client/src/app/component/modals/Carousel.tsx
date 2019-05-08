@@ -169,14 +169,14 @@ export const StyledCarousel = inject('slidesStore', 'slidesActions', 'uploadStor
    }
 
    img {
-      left: 25%;
-      width: 860px;
+      left: 11.3%;
+      width: 1280px;
       height: auto;
       position: relative;
    }
 
    .carousel-item {
-      transition: transform 500ms ease, opacity 100ms ease-out
+      transition: transform 500ms ease, opacity 100ms ease-out;
    }
 
    .numberAndTitle {

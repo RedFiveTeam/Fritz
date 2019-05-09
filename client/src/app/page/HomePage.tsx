@@ -8,15 +8,19 @@ import { StyledDeleteModal } from '../component/modals/DeleteModal';
 import { StyledExpandedView } from '../component/modals/ExpandedView';
 import { UnicornStore } from '../component/unicorn/store/UnicornStore';
 import { StyledSelectMissionModal } from '../component/modals/SelectMissionModal';
-import { SlidesStore } from '../component/slides/SlidesStore';
+import { SlidesStore } from '../component/slides/store/SlidesStore';
 import { StyledHelpMenu } from '../component/modals/HelpMenu';
-import { UploadStore } from '../component/form/upload/UploadStore';
+import { SlidesActions } from '../component/slides/actions/SlidesActions';
+import { UnicornActions } from '../component/unicorn/actions/UnicornActions';
 import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
+import { UploadStore } from '../component/form/upload/UploadStore';
 
 interface Props {
   className?: string;
   unicornStore?: UnicornStore;
   slidesStore?: SlidesStore;
+  slidesActions?: SlidesActions;
+  unicornActions?: UnicornActions;
   uploadStore?: UploadStore;
 }
 
@@ -39,28 +43,35 @@ export class HomePage extends React.Component<Props> {
           this.props.slidesStore!.help &&
           <StyledHelpMenu/>
         }
-        <div
-          className="mainBody"
-        >
-          {
-            (this.props.uploadStore!.uploading || this.props.uploadStore!.processing) ?
-              <StyledLoadingScreen/>
-              :
-              <StyledAppBody/>
-          }
-        </div>
         {
-          (!this.props.uploadStore!.uploading && !this.props.uploadStore!.processing) &&
-          <StyledFooter/>
+          (this.props.uploadStore!.uploading || this.props.uploadStore!.processing) ?
+            <StyledLoadingScreen/>
+            :
+            <div
+              className="mainBody"
+            >
+              <StyledAppBody/>
+              <StyledFooter
+                downloader={this.props.slidesActions!.trackRenameAndDownload}
+                uploader={this.props.unicornActions!.uploadToUnicorn}
+                hideButtons={this.props.unicornStore!.isUploading}
+              />
+            </div>
         }
       </div>
     );
   }
 }
 
-export const StyledHomePage = inject('unicornStore', 'slidesStore', 'uploadStore')(styled(HomePage)`
-height: auto;
-min-height: 1060px;
-overflow-y: hidden;
-position: relative;
+export const StyledHomePage = inject(
+  'unicornStore',
+  'slidesStore',
+  'slidesActions',
+  'unicornActions',
+  'uploadStore'
+)(styled(HomePage)`
+  height: auto;
+  min-height: 1060px;
+  overflow-y: hidden;
+  position: relative;
 `);

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { UnicornUploadModal } from './UnicornUploadModal';
+import { SlideModel } from '../slides/models/SlideModel';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
-import { SlideModel } from '../slides/SlideModel';
 
 describe('UnicornUploadModal', () => {
   let subject: ShallowWrapper;
@@ -16,14 +16,15 @@ describe('UnicornUploadModal', () => {
     unicornStore = new UnicornStore();
 
     slidesStore = {
-      slides: [new SlideModel('', '', '', '', false, '1'), new SlideModel('', '', '', '', false, '2')],
+      slides: [new SlideModel('', '', '', '', false, '1'), new SlideModel('', '', '', '', false, '')],
       assignedCalloutCount: 5,
       setAssignedCalloutCount: jest.fn()
     };
 
     unicornActions = {
       buildUploadModel: jest.fn(),
-      startUploading: jest.fn()
+      startUploading: jest.fn(),
+      confirmUpload: jest.fn()
     };
 
     slidesActions = {
@@ -47,24 +48,23 @@ describe('UnicornUploadModal', () => {
     );
   });
 
-  it('should render upload confirmation modal upon upload button click', async () => {
+  it('should render upload confirmation modal upon upload button click all callouts assigned', async () => {
     unicornStore.setPendingUpload(true);
-    unicornStore.setConfirmUploadStatus(true);
+    unicornStore.setUnassignedCallouts(false);
+    expect(subject.find('.unassignedCallout').exists()).toBeFalsy();
     expect(subject.find('.title').text()).toContain('Upload To Unicorn');
     expect(subject.find('#unicornConfirm').exists()).toBeTruthy();
     expect(subject.find('.cancelBtn').exists()).toBeTruthy();
     expect(subject.find('.confirmText').text()).toContain('5');
     await subject.find('.confirmBtn').simulate('click');
-    expect(metricActions.trackMetric).toHaveBeenCalledWith('UploadToUnicorn');
-    expect(unicornStore.confirmUploadStatus).toBeFalsy();
-    expect(unicornActions.startUploading).toHaveBeenCalled();
+    expect(unicornActions.confirmUpload).toHaveBeenCalled();
   });
 
-  it('should display some info if there are unassigned callouts', () => {
+  it('should display some info if there are unassigned callouts and still confirm', () => {
     unicornStore.setUnassignedCallouts(true);
+    expect(subject.find('.unassignedCallout').length).toBe(1);
     expect(subject.find('.unassignedMessage').text()).toContain('The following images');
     subject.find('.confirmBtn').simulate('click');
-    expect(unicornStore.unassignedCallouts).toBeFalsy();
-    expect(unicornStore.confirmUploadStatus).toBeFalsy();
+    expect(unicornActions.confirmUpload).toHaveBeenCalled();
   });
 });

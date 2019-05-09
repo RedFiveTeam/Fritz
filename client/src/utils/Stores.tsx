@@ -1,5 +1,5 @@
 import { UploadStore } from '../app/component/form/upload/UploadStore';
-import { SlidesStore } from '../app/component/slides/SlidesStore';
+import { SlidesStore } from '../app/component/slides/store/SlidesStore';
 import { MetricStore } from '../app/component/metrics/MetricStore';
 import { ClassificationStore } from '../app/component/classification/store/ClassificationStore';
 import { UnicornStore } from '../app/component/unicorn/store/UnicornStore';

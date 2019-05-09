@@ -9,7 +9,9 @@ interface Props {
   className?: string;
   options: string[];
   defaultValue: string;
+  value: string | null;
   callback: (s: any) => void;
+  id?: string;
 }
 
 @observer
@@ -31,6 +33,13 @@ export class Dropdown extends React.Component<Props> {
         (dd[i] as HTMLElement).style.display = 'none';
       }
     }
+  };
+
+  renderText = () => {
+    if (this.props.value !== '' && this.props.value !== null) {
+      return <span className="default">{this.props.value}</span>;
+    }
+    return <span className="default">{this.props.defaultValue}</span>;
   };
 
   optionSelect = (e: any) => {
@@ -70,10 +79,9 @@ export class Dropdown extends React.Component<Props> {
             }
             (component.querySelector('.dd') as HTMLElement).style.display = 'block';
           }}
+          id={this.props.id ? this.props.id : ''}
         >
-          <span className="default">
-          {this.props.defaultValue}
-          </span>
+          {this.renderText()}
         </button>
         <img src={DropdownIcon}/>
         <div className="dd">

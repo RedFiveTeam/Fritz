@@ -16,16 +16,18 @@ describe('Mission', () => {
       checkCallsign: jest.fn()
     };
 
-    slidesActions = {
-      resetSlides: jest.fn()
-    };
-
     unicornStore = {
       setActiveMission: jest.fn()
     };
 
     unicornActions = {
       getCallouts: jest.fn()
+    };
+
+    slidesActions = {
+      updateMission: jest.fn(),
+      resetSlides: jest.fn(),
+      compareCallsigns: jest.fn()
     };
 
     subject = shallow(
@@ -50,7 +52,7 @@ describe('Mission', () => {
   it('should display a select button that sets the mission and retrieves the callouts', () => {
     subject.simulate('click');
     expect(slidesActions.resetSlides).toHaveBeenCalled();
-    expect(unicornStore.setActiveMission).toHaveBeenCalledWith(mission);
+    expect(slidesActions.updateMission).toHaveBeenCalledWith(mission);
     expect(unicornActions.getCallouts).toHaveBeenCalledWith(mission.id);
   });
 });

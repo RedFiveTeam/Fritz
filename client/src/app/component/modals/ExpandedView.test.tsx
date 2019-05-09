@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { ExpandedView } from './ExpandedView';
-import { SlideModel } from '../slides/SlideModel';
+import { SlideModel } from '../slides/models/SlideModel';
 import { StyledCarousel } from './Carousel';
 
 describe('ExpandedView', () => {

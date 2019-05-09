@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { SlideModel } from '../SlideModel';
+import { SlideModel } from '../models/SlideModel';
 import { SlidesActions } from '../actions/SlidesActions';
-import { SlidesStore } from '../SlidesStore';
+import { SlidesStore } from '../store/SlidesStore';
 import styled from 'styled-components';
 import * as ReactDOM from 'react-dom';
 import { MetricActions } from '../../metrics/actions/MetricActions';

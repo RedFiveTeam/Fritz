@@ -2,9 +2,9 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
-import { SlidesStore } from '../slides/SlidesStore';
+import { SlidesStore } from '../slides/store/SlidesStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
-import { SlideModel } from '../slides/SlideModel';
+import { SlideModel } from '../slides/models/SlideModel';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { MetricActions } from '../metrics/actions/MetricActions';
 
@@ -36,108 +36,77 @@ export class UnicornUploadModal extends React.Component<Props> {
             Upload To Unicorn
           </div>
           {
-            this.props.unicornStore!.confirmUploadStatus && !this.props.unicornStore!.unassignedCallouts &&
+            !this.props.unicornStore!.unassignedCallouts &&
             <div>
-                <div className="allIcons">
-                    <img src={unicorn} id="unicornConfirm"/>
-                </div>
-                <div className="confirmText">
-                    You are about to upload {this.props.slidesStore!.assignedCalloutCount}
-                    <a> images to UNICORN.<br/> Would you like to continue?</a>
-                </div>
-                <div className="btnGroup">
-                    <button
-                        className="cancelBtn"
-                        onClick={() => {
-                          this.props.unicornStore!.setPendingUpload(false);
-                        }}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        className="confirmBtn"
-                        onClick={async () => {
-                          let slides = this.props.slidesStore!.slides.filter((s: SlideModel) => {
-                            if (s.deleted) {
-                              this.props.metricActions!.createMetric('Delete JPG');
-                            }
-                            return s.targetEventId !== '' && s.deleted !== true;
-                          });
-                          this.props.unicornStore!.setConfirmUploadStatus(false);
-                          this.props.metricActions!.updateMetric('Renaming');
-                          await this.props.metricActions!.trackMetric('UploadToUnicorn');
-                          this.props.unicornStore!.setPendingUpload(false);
-                          for (let i = 0; i < slides.length; i++) {
-                            this.props.unicornStore!.addToUploadQueue(slides[i]);
-                          }
-                          await this.props.unicornActions!.startUploading();
-                        }}
-                    >
-                        Yes, upload to UNICORN
-                    </button>
-                </div>
+              <div className="allIcons">
+                <img src={unicorn} id="unicornConfirm"/>
+              </div>
+              <div className="confirmText">
+                You are about to upload {this.props.slidesStore!.assignedCalloutCount}
+                <a> images to UNICORN.<br/> Would you like to continue?</a>
+              </div>
+              <div className="btnGroup">
+                <button
+                  className="cancelBtn"
+                  onClick={() => {
+                    this.props.unicornStore!.setPendingUpload(false);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="confirmBtn"
+                  onClick={this.props.unicornActions!.confirmUpload}
+                >
+                  Yes, upload to UNICORN
+                </button>
+              </div>
             </div>
           }
           {
             this.props.unicornStore!.unassignedCallouts &&
             <div>
-                <div className="unassignedMessage">
-                    The following images are not assigned to a UNICORN Callout and <br/> will not be uploaded.
-                    They can still be downloaded to your desktop.
-                </div>
-                <div className="unassignedImages">
-                  {this.props.slidesStore!.slides.map((s: SlideModel, idx) => {
-                      if (s.targetEventId === '') {
-                        return (
-                          <div
-                            key={idx}
-                            className="unassignedCallout"
-                          >
-                            <img src={image}/>
-                            {s.newName}
-                          </div>
-                        );
-                      }
-                      return;
+              <div className="unassignedMessage">
+                The following images are not assigned to a UNICORN Callout and <br/> will not be uploaded.
+                They can still be downloaded to your desktop.
+              </div>
+              <div className="unassignedImages">
+                {this.props.slidesStore!.slides.map((s: SlideModel, idx) => {
+                    if (s.targetEventId === '') {
+                      return (
+                        <div
+                          key={idx}
+                          className="unassignedCallout"
+                        >
+                          <img src={image}/>
+                          {s.newName}
+                        </div>
+                      );
                     }
-                  )}
-                </div>
-                <div className="continueText">
-                    Would you like to continue without uploading these images?
-                </div>
-                <div className="buttons">
-                    <button
-                        className="cancelBtn"
-                        id="goBack"
-                        onClick={() => {
-                          this.props.unicornStore!.setPendingUpload(false);
-                        }}
-                    >
-                        Go Back
-                    </button>
-                    <button
-                        className="confirmBtn"
-                        onClick={async () => {
-                          let slides = this.props.slidesStore!.slides.filter((s: SlideModel) => {
-                            if (s.deleted) {
-                              this.props.metricActions!.createMetric('Delete JPG');
-                            }
-                            return s.targetEventId !== '' && s.deleted !== true;
-                          });
-                          this.props.unicornStore!.setConfirmUploadStatus(false);
-                          this.props.unicornStore!.setUnassignedCallouts(false);
-                          this.props.unicornStore!.setPendingUpload(false);
-                          await this.props.metricActions!.updateMetric('Renaming');
-                          await this.props.metricActions!.trackMetric('UploadToUnicorn');
-                          for (let i = 0; i < slides.length; i++) {
-                            this.props.unicornStore!.addToUploadQueue(slides[i]);
-                          }
-                          await this.props.unicornActions!.startUploading();
-                        }}
-                    >
-                        Yes, Upload to UNICORN
-                    </button>
-                </div>
+                    return;
+                  }
+                )}
+              </div>
+              <div className="continueText">
+                Would you like to continue without uploading these images?
+              </div>
+              <div className="buttons">
+                <button
+                  className="cancelBtn"
+                  id="goBack"
+                  onClick={() => {
+                    this.props.unicornStore!.setPendingUpload(false);
+                  }}
+                >
+                  Go Back
+                </button>
+                <button
+                  className="confirmBtn"
+                  onClick={this.props.unicornActions!.confirmUpload}
+                >
+                  Yes, Upload to UNICORN
+                </button>
+              </div>
             </div>
           }
         </div>

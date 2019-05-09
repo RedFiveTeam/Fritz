@@ -12,7 +12,8 @@ describe('Dropdown', () => {
     subject = mount(
       <StyledDropdown
         options={['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5']}
-        defaultValue="Test"
+        defaultValue="defaultValue"
+        value={''}
         callback={(s: any) => {
           fakeFunction(s);
         }}
@@ -37,5 +38,21 @@ describe('Dropdown', () => {
         }
       });
     expect(fakeFunction).toHaveBeenCalledWith('DGS 3');
+  });
+
+  it('should render a selection in the button', () => {
+    expect(subject.find('.default')).toBeTruthy();
+    expect(subject.find('.default').text()).toBe('defaultValue');
+    subject = mount(
+      <StyledDropdown
+        options={['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5']}
+        defaultValue="defaultValue"
+        value={'testValue'}
+        callback={(s: any) => {
+          fakeFunction(s);
+        }}
+      />
+    );
+    expect(subject.find('.default').text()).toBe('testValue');
   });
 });

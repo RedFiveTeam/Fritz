@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
-import { SlidesStore } from '../slides/SlidesStore';
+import { SlidesStore } from '../slides/store/SlidesStore';
 
 const helpStep1 = require('../../../icon/HelpStep1.svg');
 const helpStep2 = require('../../../icon/HelpStep2.svg');

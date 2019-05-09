@@ -2,9 +2,9 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Callout } from './Callout';
 import { StyledDropdown } from '../../dropdown/Dropdown';
-import { SlideModel } from '../../slides/SlideModel';
 import { CalloutModel } from '../model/CalloutModel';
 import { StyledPseudoDropdown } from '../../dropdown/PseudoDropdown';
+import { SlideModel } from '../../slides/models/SlideModel';
 
 describe('Callout', () => {
   let subject: ShallowWrapper;

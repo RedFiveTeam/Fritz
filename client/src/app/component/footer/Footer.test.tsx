@@ -1,30 +1,49 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Footer } from './Footer';
-import { StyledUnicornUploadButton } from '../buttons/UnicornUploadButton';
-import { StyledDownloadButton } from '../buttons/DownloadButton';
+import { StyledActionButton } from '../button/ActionButton';
+import { StyledUnicornUploadProgress } from '../unicorn/components/UnicornUploadProgress';
 
 describe('Footer', () => {
   let subject: ShallowWrapper;
-  let unicornStore: any;
+  let downloader: any;
+  let uploader: any;
 
   beforeEach(() => {
-    unicornStore = {
-      uploadsInProgress: false
-    };
+    downloader = jest.fn();
+    uploader = jest.fn();
 
     subject = shallow(
       <Footer
-        unicornStore={unicornStore}
+        downloader={downloader}
+        uploader={uploader}
+        hideButtons={false}
       />
     );
   });
 
   it('should have a download button', () => {
-    expect(subject.find(StyledDownloadButton).exists()).toBeTruthy();
+    expect(subject.find(StyledActionButton).at(0).exists()).toBeTruthy();
+    expect(subject.find(StyledActionButton).at(0)
+      .prop('clickAction')).toBe(downloader);
   });
 
   it('should have a unicorn upload button', () => {
-    expect(subject.find(StyledUnicornUploadButton).exists()).toBeTruthy();
+    expect(subject.find(StyledActionButton).at(1).exists()).toBeTruthy();
+    expect(subject.find(StyledActionButton).at(1)
+      .prop('clickAction')).toBe(uploader);
+  });
+
+  it('should hide buttons', () => {
+    expect(subject.find(StyledUnicornUploadProgress).exists()).toBeFalsy();
+    subject = shallow(
+      <Footer
+        downloader={downloader}
+        uploader={uploader}
+        hideButtons={true}
+      />
+    );
+    expect(subject.find(StyledActionButton).length).toBe(0);
+    expect(subject.find(StyledUnicornUploadProgress).exists()).toBeTruthy();
   });
 });

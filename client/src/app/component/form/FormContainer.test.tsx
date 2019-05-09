@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { FormContainer } from './FormContainer';
+import { StyledValidatingInput } from '../input/ValidatingInput';
+import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
+import { SlidesStore } from '../slides/store/SlidesStore';
 
 describe('FormContainer', () => {
   let subject: ShallowWrapper;
   let slidesActions: any;
-  let slidesStore: any;
+  let slidesStore: SlidesStore;
   let unicornStore: any;
   let unicornActions: any;
+  let uploadActions: any;
 
   beforeEach(() => {
     unicornStore = {
@@ -19,15 +23,13 @@ describe('FormContainer', () => {
     };
 
     slidesActions = {
-      setAndUpdateDate: jest.fn(),
+      setDateFromInput: jest.fn(),
       setAndUpdateOpName: jest.fn(),
       setAndUpdateAsset: jest.fn(),
       setAndUpdateReleasability: jest.fn()
     };
 
-    slidesStore = {
-      setHelp: jest.fn()
-    };
+    slidesStore = new SlidesStore();
 
     subject = shallow(
       <FormContainer
@@ -35,21 +37,18 @@ describe('FormContainer', () => {
         unicornActions={unicornActions}
         slidesActions={slidesActions}
         slidesStore={slidesStore}
+        uploadActions={uploadActions}
       />);
   });
 
-  it('should contain a date input that updates the header string when changed', () => {
-    subject.find('#dateInput').simulate('change', {target: {value: '2018/05/12'}});
-    expect(slidesActions.setAndUpdateDate).toHaveBeenCalledWith('MAY', '18', '12');
+  it('should display a date after store change', () => {
+    expect(subject.find(StyledValidatingInput).at(0).props().value).toBe('mm/dd/yyyy');
+    slidesStore.setFullDate('2000-02-02');
+    expect(subject.find(StyledValidatingInput).at(0).props().value).toBe('2000-02-02');
   });
 
-  it('should contain an operation input that updates the header string when changed', () => {
-    subject.find('#opInput').simulate('change', {target: {value: 'op superman'}});
-    expect(slidesActions.setAndUpdateOpName).toHaveBeenCalledWith('op superman');
-  });
-
-  it('should contain an asset input that updates the header string when changed', () => {
-    subject.find('#assetInput').simulate('change', {target: {value: 'flyguy'}});
-    expect(slidesActions.setAndUpdateAsset).toHaveBeenCalledWith('flyguy');
+  it('should contain fields for Date, Op Name, Callsign, Classification, and Releasability', () => {
+    expect(subject.find(StyledValidatingInput).length).toBe(4);
+    expect(subject.find(StyledValidatingDropdown).length).toBe(1);
   });
 });

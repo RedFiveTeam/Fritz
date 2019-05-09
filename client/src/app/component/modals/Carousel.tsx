@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
-import { SlideModel } from '../slides/SlideModel';
-import { SlidesStore } from '../slides/SlidesStore';
+import { SlideModel } from '../slides/models/SlideModel';
+import { SlidesStore } from '../slides/store/SlidesStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { UploadStore } from '../form/upload/UploadStore';
 import { StyledDropdown } from '../dropdown/Dropdown';
@@ -68,8 +68,8 @@ export class Carousel extends React.Component<Props> {
                   }
                 }) : []
           }
-          defaultValue={this.props.slideModel.calloutTime ? this.props.slideModel.calloutTime
-            : 'Select'}
+          defaultValue={'Select'}
+          value={this.props.slideModel.calloutTime}
           callback={(s: string) => {
             let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
               return f.id === this.props.slideModel.id;

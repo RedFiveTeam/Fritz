@@ -1,12 +1,14 @@
 import { Stores } from '../../../../utils/Stores';
-import { SlidesStore } from '../SlidesStore';
 import { UploadStore } from '../../form/upload/UploadStore';
-import { SlideModel } from '../SlideModel';
+import { SlideModel } from '../models/SlideModel';
 import * as FileSaver from 'file-saver';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { action } from 'mobx';
 import { Repositories } from '../../../../utils/Repositories';
 import { UnicornStore } from '../../unicorn/store/UnicornStore';
+import { Toast } from '../../../../utils/Toast';
+import { SlidesStore } from '../store/SlidesStore';
+import { MissionModel } from '../../unicorn/model/MissionModel';
 
 export class SlidesActions {
   public metricActions: MetricActions;
@@ -41,33 +43,41 @@ export class SlidesActions {
   }
 
   @action.bound
-  setAndUpdateDate(month: string | null, year: string | null, day: string | null) {
-    if (month == null) {
-      month = 'MON';
+  setDateFromInput(e: any) {
+    this.slidesStore!.setFullDate(e.target.value);
+    if (this.slidesStore.hasInitiallyValidated) {
+      this.slidesStore.validate();
     }
-    if (year == null) {
-      year = 'YY';
-    }
-    if (day == null) {
-      day = 'DD';
-    }
-
-    this.slidesStore.setMonth(month);
-    this.slidesStore.setYear(year);
-    this.slidesStore.setDay(day);
     this.updateNewNames();
   }
 
   @action.bound
-  setAndUpdateOpName(name: string) {
-    this.slidesStore.setOpName(name);
-    this.updateNewNames();
+  setDateFromStatus(date: string) {
+    this.slidesStore.setFullDate(date);
   }
 
   @action.bound
-  setAndUpdateAsset(name: string) {
-    this.slidesStore.setAsset(name);
-    this.updateNewNames();
+  setAndUpdateOpName(e: any) {
+    if (e.target != null) {
+      this.slidesStore.setOpName(e.target.value);
+      this.updateNewNames();
+    }
+
+    if (this.slidesStore.hasInitiallyValidated) {
+      this.slidesStore.validate();
+    }
+  }
+
+  @action.bound
+  setAndUpdateAsset(e: any) {
+    if (e.target != null) {
+      this.slidesStore.setAsset(e.target.value);
+      this.compareCallsigns();
+      if (this.slidesStore.hasInitiallyValidated) {
+        this.slidesStore.validate();
+      }
+      this.updateNewNames();
+    }
   }
 
   @action.bound
@@ -111,9 +121,48 @@ export class SlidesActions {
     });
   }
 
-  async trackRenameAndDownload() {
-    await this.metricActions.updateMetric('Renaming');
-    await this.metricActions.trackMetric('Download');
+  trackRenameAndDownload = async () => {
+    this.slidesStore.initialValidation();
+    if (this.uploadStore.uploaded) {
+      if (this.slidesStore.validate()) {
+        await this.metricActions.updateMetric('Renaming');
+        await this.metricActions.trackMetric('Download');
+        await this.download();
+      }
+    } else if (this.uploadStore.uploading) {
+      this.triggerMustFinishConversionToast();
+    } else {
+      this.triggerMustUploadFirstToast();
+    }
+  };
+
+  triggerMustUploadFirstToast() {
+    Toast.create(
+      5000,
+      'errorToast',
+      '<b>Error:</b> You must upload a PDF file before you can download JPEGS'
+    );
+  }
+
+  triggerMustFinishConversionToast() {
+    Toast.create(
+      5000,
+      'errorToast',
+      '<b>Error:</b> Please wait. Your file is being converted'
+    );
+  }
+
+  getAssignedCallouts() {
+    let count: number = 0;
+    for (let i = 0; i < this.slidesStore.slides.length; i++) {
+      if (this.slidesStore.slides[i].targetEventId !== '' && !this.slidesStore.slides[i].deleted) {
+        count++;
+      }
+    }
+    this.slidesStore.setAssignedCalloutCount(count);
+  }
+
+  async download() {
     let request = new XMLHttpRequest();
     request.onreadystatechange = async () => {
       if (request.readyState === 4) {
@@ -133,14 +182,22 @@ export class SlidesActions {
     request.send(JSON.stringify(this.slidesStore.slides));
   }
 
-  async getAssignedCallouts() {
-    let count: number = 0;
-    for (let i = 0; i < this.slidesStore.slides.length; i++) {
-      if (this.slidesStore.slides[i].targetEventId !== '' && !this.slidesStore.slides[i].deleted) {
-        count++;
+  compareCallsigns() {
+    if (this.slidesStore.asset !== undefined) {
+      if (this.slidesStore.asset === '') {
+        this.slidesStore.setDifferentAsset(false);
+      } else if (this.slidesStore.asset !== '') {
+        this.slidesStore.setDifferentAsset(this.unicornStore!.activeMission!.callsign.toUpperCase() !==
+          this.slidesStore.asset!.toUpperCase());
       }
     }
-    this.slidesStore.setAssignedCalloutCount(count);
+  }
+
+  updateMission(mission: MissionModel) {
+    this.unicornStore!.setActiveMission(mission);
+    if (this.unicornStore!.activeMission) {
+      this.compareCallsigns();
+    }
   }
 
   @action.bound

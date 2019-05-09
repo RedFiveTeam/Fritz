@@ -4,8 +4,8 @@ import { action } from 'mobx';
 import { UploadStore } from '../UploadStore';
 import { Stores } from '../../../../../utils/Stores';
 import { StatusModel } from '../../status/StatusModel';
-import { SlidesStore } from '../../../slides/SlidesStore';
-import { SlideModel } from '../../../slides/SlideModel';
+import { SlidesStore } from '../../../slides/store/SlidesStore';
+import { SlideModel } from '../../../slides/models/SlideModel';
 import { SlidesActions } from '../../../slides/actions/SlidesActions';
 import { MetricActions } from '../../../metrics/actions/MetricActions';
 import { UnicornStore } from '../../../unicorn/store/UnicornStore';
@@ -70,11 +70,7 @@ export class UploadActions {
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files, status.times);
           if (status.date && status.date !== '') {
-            this.slidesActions.setAndUpdateDate(
-              status.date.substr(2, 3),
-              status.date.substr(-2),
-              status.date.substr(0, 2)
-            );
+            this.slidesActions.setDateFromStatus(status.date);
             this.setDateInput(status.date);
           }
           if (status.op && status.op !== '') {
@@ -96,6 +92,8 @@ export class UploadActions {
               this.unicornStore.setReleasability(status.releasability);
             }
           }
+          this.slidesActions!.compareCallsigns();
+          this.slidesStore!.validate();
         }
       });
     return;
@@ -114,6 +112,7 @@ export class UploadActions {
   }
 
   setOpInput(op: string) {
+    this.slidesStore!.setOpName(op);
     let opInput = document.querySelector('#opInput') as HTMLInputElement;
     if (opInput) {
       opInput.value = op;
@@ -121,27 +120,16 @@ export class UploadActions {
   }
 
   setCallsignInput(callsign: string) {
+    this.slidesStore!.setAsset(callsign);
     let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
     if (callsignInput) {
       callsignInput.value = callsign;
     }
-    this.checkCallsign(callsign);
-  }
-
-  checkCallsign(callsign: string) {
-    let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
-    if (callsignInput) {
-      if (this.unicornStore!.activeMission!.callsign.toUpperCase() === callsign.toUpperCase() &&
-        this.unicornStore!.activeMission!.callsign.toUpperCase() === callsignInput.value.toUpperCase()
-      ) {
-        this.slidesStore!.setDifferentAsset(false);
-      } else {
-        this.slidesStore!.setDifferentAsset(true);
-      }
-    }
+    this.slidesActions!.compareCallsigns();
   }
 
   setReleasabilityInput(releasability: string) {
+    this.slidesStore!.setReleasability(releasability);
     let releasabilityInput = document.querySelector(
       '.form-group:last-of-type > .dropdown > button'
     ) as HTMLElement;

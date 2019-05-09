@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
 import { UploadActions } from '../actions/UploadActions';
 import { UploadStore } from '../UploadStore';
 import { Toast } from '../../../../../utils/Toast';
-import { SlidesStore } from '../../../slides/SlidesStore';
+import { SlidesStore } from '../../../slides/store/SlidesStore';
 import styled from 'styled-components';
-import { CSSProperties } from 'react';
 
 const pdfIcon = require('../../../../../icon/PDFIcon.svg');
 const paperclipIcon = require('../../../../../icon/PaperclipIcon.svg');

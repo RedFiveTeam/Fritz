@@ -28,6 +28,7 @@ export class UnicornActions {
 
   @action.bound
   async getCallouts(missionId: string) {
+    this.unicornStore.setCallouts([]);
     this.unicornStore.setCallouts(await this.unicornRepository.getCallouts(missionId));
     if (this.slidesStore.slides.length > 1) {
       for (let i = 0; i < this.slidesStore.slides.length; i++) {

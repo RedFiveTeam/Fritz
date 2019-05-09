@@ -6,6 +6,7 @@ import { MetricActions } from '../component/metrics/actions/MetricActions';
 import { StyledActionsTimeCard } from '../component/metrics/ActionsTimeCard';
 import { MetricStore } from '../component/metrics/MetricStore';
 import { ClockIcon } from '../../icon/ClockIcon';
+import { StyledUserActionsCard } from '../component/metrics/UserActionsCard';
 
 interface Props {
   className?: string;
@@ -43,7 +44,7 @@ export class MetricsPage extends React.Component<Props> {
         >
           <div id="bannerTitle">
             <a>
-            Metrics
+              Metrics
             </a>
           </div>
           <div
@@ -51,22 +52,22 @@ export class MetricsPage extends React.Component<Props> {
             role="group"
             aria-label="..."
           >
-          <button
-            id="dashBoardButton"
-            type="button"
-            className="btn btn-default text-white shadow"
-            onClick={() => this.handleToggle('tab1', 'tab2', 'dashBoardButton', 'activityLogButton')}
-          >
-            Dashboard
-          </button>
-          <button
-            id="activityLogButton"
-            type="button"
-            className="btn text-white shadow"
-            onClick={() => this.handleToggle('tab2', 'tab1', 'activityLogButton', 'dashBoardButton')}
-          >
-           Activity Log
-          </button>
+            <button
+              id="dashBoardButton"
+              type="button"
+              className="btn btn-default text-white shadow"
+              onClick={() => this.handleToggle('tab1', 'tab2', 'dashBoardButton', 'activityLogButton')}
+            >
+              Dashboard
+            </button>
+            <button
+              id="activityLogButton"
+              type="button"
+              className="btn text-white shadow"
+              onClick={() => this.handleToggle('tab2', 'tab1', 'activityLogButton', 'dashBoardButton')}
+            >
+              Activity Log
+            </button>
           </div>
           <div className="secondary-text">
             <div className="sortSection">
@@ -100,10 +101,11 @@ export class MetricsPage extends React.Component<Props> {
         </nav>
         <div id="tab1">
           <StyledActionsTimeCard/>
+          <StyledUserActionsCard/>
         </div>
         <div id="tab2">
           <StyledMetricsTable/>
-          </div>
+        </div>
       </div>
     );
   }
@@ -116,6 +118,8 @@ export const StyledMetricsPage = inject(
 (styled(MetricsPage)`
 
 height: 90vh;
+top: -12px;
+position: relative;
 
   #bannerTitle {
     width: 200px;
@@ -153,7 +157,7 @@ height: 90vh;
     right: 0;
     color: #93A7C3;
     margin-right: 20px;
-    width: 293px;
+    width: 300px;
     margin: 17px;
     float: right;
   }
@@ -178,7 +182,8 @@ height: 90vh;
     display: inline-block;
     height: 50px;
     vertical-align: top;
-    left: 634px;
+    left: 50%;
+    position: absolute;
     transform: translate(-50%, 0);
   }
 
@@ -192,7 +197,7 @@ height: 90vh;
   
   .exportMetrics {
   right: 21px;
-  top: 167px;
+  top: 72px;
   position: absolute;
   
   }

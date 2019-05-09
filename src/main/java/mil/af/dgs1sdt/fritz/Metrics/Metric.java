@@ -25,11 +25,14 @@ public class Metric {
 
   private Long endTime;
 
-  public Metric(String uid, String action, Long startTime, Long endTime) {
+  private Long count;
+
+  public Metric(String uid, String action, Long startTime, Long endTime, Long count) {
     this.uid = uid;
     this.action = action;
     this.startTime = startTime;
     this.endTime = endTime;
+    this.count = count;
   }
 
   public Metric update(MetricJSON json) {
@@ -38,6 +41,7 @@ public class Metric {
     this.setAction(json.getAction());
     this.setStartTime(json.getStartTime());
     this.setEndTime(json.getEndTime());
+    this.setCount(json.getCount());
     return this;
   }
 }

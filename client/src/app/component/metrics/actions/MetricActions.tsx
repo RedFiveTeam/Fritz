@@ -28,7 +28,9 @@ export class MetricActions {
 
   @action.bound
   async trackMetric(act: string) {
-    let metric = new MetricModel(null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null);
+    let metric = new MetricModel(
+      null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null, null
+    );
     this.metricStore['setPending' + act + 'Metric'](await this.metricRepository.create(metric));
   }
 
@@ -43,7 +45,21 @@ export class MetricActions {
 
   @action.bound
   async createMetric(act: string) {
-    let metric = new MetricModel(null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null);
+    let metric = new MetricModel(
+      null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null, null
+    );
+    await this.metricRepository.create(metric);
+  }
+
+  async trackConversion(count: number) {
+    let metric = new MetricModel(
+      null,
+      this.uploadStore.hash,
+      'Converted',
+      Math.round((Date.now() / 1000)).toString(),
+      Math.round((Date.now() / 1000)).toString(),
+      count
+    );
     await this.metricRepository.create(metric);
   }
 
@@ -53,7 +69,9 @@ export class MetricActions {
     const array = ['uid,action,time_taken\r\n'];
 
     const file = new Blob(
-      array.concat(this.metricStore.metrics.slice().reverse().map((m: MetricModel) => {
+      array.concat(this.metricStore.metrics.filter((m) => {
+        return m.action !== 'Converted';
+      }).slice().reverse().map((m: MetricModel) => {
         let endTime = parseFloat(m.endTime!);
         let startTime = parseFloat(m.startTime);
         let timeTaken = endTime - startTime;
@@ -90,7 +108,7 @@ export class MetricActions {
           if (m.action === 'Upload') {
             startTime = m.startTime;
           }
-          if (m.action === 'Download' && m.endTime) {
+          if ((m.action === 'Download' || m.action === 'UploadToUnicorn') && m.endTime) {
             endTime = m.endTime;
             if (startTime && endTime) {
               this.metricStore.averages.workflow.push(
@@ -119,6 +137,10 @@ export class MetricActions {
         this.metricStore.averages.download.push(
           new AverageSubsetModel(parseInt(m.startTime, 10), (parseInt(m.endTime, 10) - parseInt(m.startTime, 10)))
         );
+      } else if (m.action === 'Conversion' && m.startTime && m.endTime) {
+        this.metricStore.averages.conversion.push(
+          new AverageSubsetModel(parseInt(m.startTime, 10), (parseInt(m.endTime, 10) - parseInt(m.startTime, 10)))
+        );
       }
     });
   }
@@ -133,6 +155,51 @@ export class MetricActions {
     );
     await this.setAverages();
     await this.setWorkflowAverage();
+  }
+
+  @action.bound
+  countUploads(metrics: MetricModel[]) {
+    let count = 0;
+    metrics.map((m: MetricModel) => {
+      if (m.action === 'Upload') {
+       count++;
+      }
+    });
+    return count;
+  }
+
+  @action.bound
+  countDownloads(metrics: MetricModel[]) {
+    let count = 0;
+    metrics.map((m: MetricModel) => {
+      if (m.action === 'Download') {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  @action.bound
+  countDeletes(metrics: MetricModel[]) {
+    let count = 0;
+    metrics.map((m: MetricModel) => {
+      if (m.action === 'Delete JPG') {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  @action.bound
+  countConverted(metrics: MetricModel[]) {
+    let counts = metrics.filter((m) => {
+      return m.action === 'Converted';
+    });
+    let count = 0;
+    for (let i = 0; i < counts.length; i++) {
+      count = count + (counts[i].count || 0);
+    }
+    return count;
   }
 
   @action.bound

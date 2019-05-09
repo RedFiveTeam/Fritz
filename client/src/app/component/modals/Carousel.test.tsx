@@ -10,8 +10,13 @@ describe('Carousel', () => {
   let slideNumber = 0;
   let slidesStore: any;
   let slidesActions: any;
+  let uploadStore: any;
 
   beforeEach(() => {
+    uploadStore = {
+      hash: '1'
+    };
+
     slidesActions = {
       setAndUpdateActivity: jest.fn(),
       setAndUpdateTime: jest.fn()
@@ -26,6 +31,7 @@ describe('Carousel', () => {
 
     subject = mount(
       <Carousel
+        uploadStore={uploadStore}
         slideModel={slideModel1}
         slideNumber={slideNumber}
         slidesStore={slidesStore}
@@ -40,7 +46,7 @@ describe('Carousel', () => {
   });
 
   it('should render a title for each slide', () => {
-    expect(subject.find('.slide').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_CLASSIFICATION');
+    expect(subject.find('.slide').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_RELEASABILITY');
   });
 
   it('should display the number of slides', () => {

@@ -3,8 +3,12 @@ import { action, computed, observable } from 'mobx';
 export class UploadStore {
   @observable private _uploaded: boolean = false;
   @observable private _fileName: string = '';
+  @observable private _processing: boolean = false;
   @observable private _hash: string = '';
   @observable private _conversionStatus: boolean = false;
+  @observable private _progress: number;
+  @observable private _total: number;
+  @observable private _percentConverted: number;
   @observable private _placeholder: boolean = true;
   @observable private _uploading: boolean = false;
 
@@ -19,6 +23,11 @@ export class UploadStore {
   }
 
   @action.bound
+  setProcessing(value: boolean) {
+    this._processing = value;
+  }
+
+  @action.bound
   setHash(value: string) {
     this._hash = value;
   }
@@ -29,6 +38,16 @@ export class UploadStore {
   }
 
   @action.bound
+  setProgress(value: number) {
+    this._progress = value;
+  }
+
+  @action.bound
+  setTotal(value: number) {
+    this._total = value;
+  }
+
+  @action.bound
   setPlaceholder(value: boolean) {
     this._placeholder = value;
   }
@@ -36,6 +55,12 @@ export class UploadStore {
   @action.bound
   setUploading(value: boolean) {
     this._uploading = value;
+  }
+
+  @computed
+  get PercentConverted() {
+    this._percentConverted = Math.ceil((this.progress / this.total) * 100);
+    return this._percentConverted;
   }
 
   @computed
@@ -54,8 +79,23 @@ export class UploadStore {
   }
 
   @computed
+  get processing() {
+    return this._processing;
+  }
+
+  @computed
   get hash() {
     return this._hash;
+  }
+
+  @computed
+  get progress() {
+    return this._progress;
+  }
+
+  @computed
+  get total() {
+    return this._total;
   }
 
   @computed

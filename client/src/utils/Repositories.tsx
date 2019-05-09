@@ -13,12 +13,16 @@ import { WebClassificationRepository } from
     '../app/component/classification/repositories/WebClassificationRepository';
 import { StubClassificationRepository } from
     '../app/component/classification/repositories/StubClassificationRepository';
+import { UnicornRepository } from '../app/component/unicorn/repositories/UnicornRepository';
+import { WebUnicornRepository } from '../app/component/unicorn/repositories/WebUnicornRepository';
+import { StubUnicornRepository } from '../app/component/unicorn/repositories/StubUnicornRepository';
 
 export interface Repositories {
   uploadRepository: UploadRepository;
   renameRepository: RenameRepository;
   metricRepository: MetricRepository;
   classificationRepository: ClassificationRepository;
+  unicornRepository: UnicornRepository;
 }
 
 const client = new HTTPClient();
@@ -27,12 +31,14 @@ export const WebRepositories: Repositories = Object.freeze({
   uploadRepository: new WebUploadRepository(client),
   renameRepository: new WebRenameRepository(client),
   metricRepository: new WebMetricRepository(client),
-  classificationRepository: new WebClassificationRepository(client)
+  classificationRepository: new WebClassificationRepository(client),
+  unicornRepository: new WebUnicornRepository(client)
 });
 
 export const StubRepositories: Repositories = {
   uploadRepository: new StubUploadRepository(),
   renameRepository: new StubRenameRepository(),
   metricRepository: new StubMetricRepository(),
-  classificationRepository: new StubClassificationRepository()
+  classificationRepository: new StubClassificationRepository(),
+  unicornRepository: new StubUnicornRepository()
 };

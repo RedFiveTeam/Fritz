@@ -6,8 +6,11 @@ import { SlidesStore } from '../SlidesStore';
 import styled from 'styled-components';
 import * as ReactDOM from 'react-dom';
 import { MetricActions } from '../../metrics/actions/MetricActions';
+import { UploadStore } from '../../form/upload/UploadStore';
+import { observable } from 'mobx';
+import { CSSProperties } from 'react';
 
-const expandIcon = require('../../../../icon/expandIcon.svg');
+const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
 
 interface Props {
@@ -16,12 +19,25 @@ interface Props {
   slideModel: SlideModel;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
+  uploadStore?: UploadStore;
   metricActions?: MetricActions;
   deletedCount?: number;
 }
 
 @observer
 export class SlideCard extends React.Component<Props> {
+
+  goodCSS: CSSProperties = {};
+
+  badCSS: CSSProperties = {
+    border: '1px solid #e46373'
+  };
+
+  badLabelCSS: CSSProperties = {
+    color: '#e46373'
+  };
+
+  @observable private valid: boolean = true;
 
   componentDidUpdate() {
     let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
@@ -52,7 +68,7 @@ export class SlideCard extends React.Component<Props> {
           this.props.slidesStore!.day
         }
         {
-          s.time === 'TTTT' ? <span className="text-info font-italic">TTTTZ</span> : <span>
+          s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> : <span>
             {s.time}Z
           </span>}
         {
@@ -69,16 +85,23 @@ export class SlideCard extends React.Component<Props> {
             {s.activity.split(' ').join('_')}
           </span>}
         {('_' + (this.props.slidesStore!.asset || 'ASSET') + '_' +
-          (this.props.slidesStore!.classification || 'CLASSIFICATION'))
+          (this.props.slidesStore!.releasability || 'RELEASABILITY'))
           .split(' ').join('_').toUpperCase()
         }
       </div>
     );
   };
 
-  deleteSlide = async () => {
-    this.props.slideModel.setDeleted(true);
-    await this.props.metricActions!.createMetric('Delete PNG');
+  isValidTime = (militaryTime: string) => {
+    if (militaryTime.length !== 4) {
+      this.valid = false;
+      return;
+    }
+    if (militaryTime.search(/^([0-1]?[0-9]|2[0-3])([0-5][0-9])(:[0-5][0-9])?$/)) {
+      this.valid = false;
+      return;
+    }
+    this.valid = true;
   };
 
   render() {
@@ -90,7 +113,8 @@ export class SlideCard extends React.Component<Props> {
           <div className="row no-gutters">
             <div className="col-md-4">
               <img
-                src={'api/image/' + this.props.slideModel.oldName.replace('.JPG', '.jpg')}
+                src={'api/image/' + this.props.uploadStore!.hash + '/' +
+                this.props.slideModel.oldName.replace('.JPG', '.jpg')}
                 className="card-img"
                 onClick={() => {
                   let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);
@@ -114,18 +138,30 @@ export class SlideCard extends React.Component<Props> {
               </span>
             </div>
             <div className="col-md-8">
-              <img className="deleteIcon" onClick={this.deleteSlide} src={DeleteIcon}/>
+              <img
+                className="deleteIcon"
+                onClick={async () => {
+                  await this.props.slidesActions!.deleteSlide(this.props.slideModel);
+                }}
+                src={DeleteIcon}
+              />
               <div className="card-body">
                 <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
               </div>
               <div className="slidesInputs">
                 <div className="timeInputField">
-                  <label>
+                  <label
+                    style={this.valid ? this.goodCSS : this.badLabelCSS}
+                  >
                     Time
                   </label>
                   <input
                     maxLength={4}
+                    style={this.valid ? this.goodCSS : this.badCSS}
                     onChange={(e: any) => {
+                      if (e.target.value.length === 4) {
+                        this.isValidTime(e.target.value);
+                      }
                       let carouselItem = document.querySelector(
                         '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
                       if (carouselItem) {
@@ -136,11 +172,18 @@ export class SlideCard extends React.Component<Props> {
                       }
                       this.props.slidesActions!.setAndUpdateTime(this.props.slideModel, e.target.value.toUpperCase());
                     }}
+                    onBlur={(e: any) => {
+                      this.isValidTime(e.target.value);
+                    }}
                     type="text"
                     className="form-control"
                     id="timeInput"
                     placeholder="e.g. 0830"
                   />
+                  {
+                    !this.valid &&
+                    <div className="wrongTime">Invalid Time</div>
+                  }
                 </div>
                 <div className="activityInputField">
                   <label>
@@ -177,7 +220,13 @@ export class SlideCard extends React.Component<Props> {
   }
 }
 
-export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions')(styled(SlideCard)`
+export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions', 'uploadStore')(styled(SlideCard)`
+  
+  width: 686px;
+  display: inline-block;
+  height: 168px;
+  margin-right: 17px;
+
   input {
     width: 166px;
     color: #fff;
@@ -221,6 +270,11 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     height: 20px;
   }
   
+  .wrongTime {
+    position: absolute;
+    color: #e46373; 
+  }
+  
   .slideCounter {
     position: absolute;
     text-align: center;
@@ -229,7 +283,6 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     left: 0;
     background: rgba(43, 48, 60, 0.557886);
     color: white;
-    font-family: Helvetica Neue;
     font-style: normal;
     font-size: 14px;
     font-weight: 500;
@@ -276,5 +329,10 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     right: 0;
     top: 8px;
     cursor: pointer;
+  }
+  
+  .slide {
+    width: 480px;
+    white-space: pre-wrap;
   }
 `);

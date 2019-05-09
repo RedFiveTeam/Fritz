@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { SlideModel } from '../slides/SlideModel';
 import { SlidesStore } from '../slides/SlidesStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
+import { UploadStore } from '../form/upload/UploadStore';
 
 interface Props {
   className?: string;
@@ -11,6 +12,7 @@ interface Props {
   slideNumber: number;
   slidesStore?: SlidesStore;
   slidesActions?: SlidesActions;
+  uploadStore?: UploadStore;
 }
 
 @observer
@@ -22,7 +24,7 @@ export class Carousel extends React.Component<Props> {
           this.props.slidesStore!.day
         }
         {
-          s.time === 'TTTT' ? <span className="text-info font-italic">TTTTZ</span> : <span>
+          s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> : <span>
             {s.time}Z
           </span>}
         {
@@ -39,7 +41,7 @@ export class Carousel extends React.Component<Props> {
             {s.activity.split(' ').join('_')}
           </span>}
         {('_' + (this.props.slidesStore!.asset || 'ASSET') + '_' +
-          (this.props.slidesStore!.classification || 'CLASSIFICATION'))
+          (this.props.slidesStore!.releasability || 'RELEASABILITY'))
           .split(' ').join('_').toUpperCase()
         }
       </div>
@@ -50,7 +52,7 @@ export class Carousel extends React.Component<Props> {
     return (
       <div className={this.props.className + ' carousel-item'}>
         <img
-          src={'/api/image/' + this.props.slideModel.oldName}
+          src={'/api/image/' + this.props.uploadStore!.hash + '/' + this.props.slideModel.oldName}
           className="d-block"
           alt="..."
         />
@@ -130,7 +132,7 @@ export class Carousel extends React.Component<Props> {
   }
 }
 
-export const StyledCarousel = inject('slidesStore', 'slidesActions')(styled(Carousel)`
+export const StyledCarousel = inject('slidesStore', 'slidesActions', 'uploadStore')(styled(Carousel)`
 
   input {
     width: 166px;
@@ -167,14 +169,14 @@ export const StyledCarousel = inject('slidesStore', 'slidesActions')(styled(Caro
    }
 
    img {
-      left: 25%;
-      width: 860px;
+      left: 11.3%;
+      width: 1280px;
       height: auto;
       position: relative;
    }
 
    .carousel-item {
-      transition: transform 500ms ease, opacity 100ms ease-out
+      transition: transform 500ms ease, opacity 100ms ease-out;
    }
 
    .numberAndTitle {

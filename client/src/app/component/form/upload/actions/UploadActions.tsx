@@ -8,19 +8,22 @@ import { SlidesStore } from '../../../slides/SlidesStore';
 import { SlideModel } from '../../../slides/SlideModel';
 import { SlidesActions } from '../../../slides/actions/SlidesActions';
 import { MetricActions } from '../../../metrics/actions/MetricActions';
+import { UnicornStore } from '../../../unicorn/store/UnicornStore';
+import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
 
 export class UploadActions {
   public metricActions: MetricActions;
-
   private slidesActions: SlidesActions;
   private uploadRepository: UploadRepository;
   private uploadStore: UploadStore;
+  private unicornStore: UnicornStore;
   private slidesStore: SlidesStore;
   private poll: any;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.uploadRepository = repositories.uploadRepository!;
     this.uploadStore = stores.uploadStore!;
+    this.unicornStore = stores.unicornStore!;
     this.slidesStore = stores.slidesStore!;
     this.slidesActions = new SlidesActions(repositories, stores);
     this.metricActions = new MetricActions(repositories, stores);
@@ -35,28 +38,113 @@ export class UploadActions {
     await this.metricActions.updateMetric('Upload');
     this.uploadStore.setUploaded(true);
     this.uploadStore.setFileName(resp.file);
+    this.uploadStore.setUploading(false);
+    this.uploadStore.setProcessing(true);
     this.uploadStore.setPlaceholder(false);
     this.uploadStore.setConversionStatus(true);
     await this.metricActions.trackMetric('Conversion');
     this.poll = setInterval(
-      async () => { await this.checkStatus(); },
-      1000);
+      async () => {
+        await this.checkStatus();
+      },
+      1000
+    );
   }
 
   @action.bound
   async checkStatus() {
     this.uploadRepository.status()
       .then((status: StatusModel) => {
+        if (status.status === 'pending') {
+          this.uploadStore.setTotal(status.total);
+          this.uploadStore.setProgress(status.progress);
+        }
         if (status.status === 'complete') {
-          this.uploadStore.setUploading(false);
           this.metricActions.updateMetric('Conversion');
           this.metricActions.trackMetric('Renaming');
+          this.metricActions.trackConversion(status.files.length);
           this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
-          this.setSlides(status.files);
+          this.setSlides(status.files, status.times);
+          if (status.date && status.date !== '') {
+            this.slidesActions.setAndUpdateDate(
+              status.date.substr(2, 3),
+              status.date.substr(-2),
+              status.date.substr(0, 2)
+            );
+            this.setDateInput(status.date);
+          }
+          if (status.op && status.op !== '') {
+            this.slidesActions.setAndUpdateOpName(status.op);
+            this.setOpInput(status.op);
+          }
+          if (status.callsign && status.callsign !== '') {
+            this.slidesActions.setAndUpdateAsset(status.callsign);
+            this.setCallsignInput(status.callsign);
+          }
+          if (status.releasability && status.releasability !== '') {
+            if (this.unicornStore.releasabilities.some(
+              (r: ReleasabilityModel) => {
+                return r.releasabilityName === status.releasability;
+              })
+            ) {
+              this.slidesActions.setAndUpdateReleasability(status.releasability);
+              this.setReleasabilityInput(status.releasability);
+              this.unicornStore.setReleasability(status.releasability);
+            }
+          }
         }
       });
     return;
+  }
+
+  setDateInput(date: string) {
+    let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    let monthStr = date.substr(2, 3);
+    let monthInt = ('0' + (months.indexOf(monthStr) + 1)).slice(-2);
+    let day = date.substr(0, 2);
+    let year = date.substr(-2);
+    let dateInput = document.querySelector('#dateInput') as HTMLInputElement;
+    if (dateInput) {
+      dateInput.value = '20' + year + '-' + monthInt + '-' + day;
+    }
+  }
+
+  setOpInput(op: string) {
+    let opInput = document.querySelector('#opInput') as HTMLInputElement;
+    if (opInput) {
+      opInput.value = op;
+    }
+  }
+
+  setCallsignInput(callsign: string) {
+    let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
+    if (callsignInput) {
+      callsignInput.value = callsign;
+    }
+    this.checkCallsign(callsign);
+  }
+
+  checkCallsign(callsign: string) {
+    let callsignInput = document.querySelector('#assetInput') as HTMLInputElement;
+    if (callsignInput) {
+      if (this.unicornStore!.activeMission!.callsign.toUpperCase() === callsign.toUpperCase() &&
+        this.unicornStore!.activeMission!.callsign.toUpperCase() === callsignInput.value.toUpperCase()
+      ) {
+        this.slidesStore!.setDifferentAsset(false);
+      } else {
+        this.slidesStore!.setDifferentAsset(true);
+      }
+    }
+  }
+
+  setReleasabilityInput(releasability: string) {
+    let releasabilityInput = document.querySelector(
+      '.form-group:last-of-type > .dropdown > button'
+    ) as HTMLElement;
+    if (releasabilityInput) {
+      releasabilityInput.innerHTML = releasability;
+    }
   }
 
   @action.bound
@@ -65,10 +153,37 @@ export class UploadActions {
   }
 
   @action.bound
-  setSlides(names: string[]) {
+  setSlides(names: string[], times: string[]) {
     let temp: SlideModel[] = [];
     names.map((name, idx) => {
       let slide = new SlideModel();
+      if (times[idx]) {
+        slide.setTime(times[idx]);
+        if (this.unicornStore.callouts.length > 0) {
+          for (let i = 0; i < this.unicornStore.callouts.length; i++) {
+            if (this.unicornStore.callouts[i].time && this.unicornStore.callouts[i].time.length > 0 && times[idx]) {
+              if (this.unicornStore.callouts[i].time.toString().indexOf(times[idx]) > -1) {
+                let timeMatches = times.filter((t) => {
+                  if (t && t.length > 0) {
+                    return t.indexOf(this.unicornStore.callouts[i].time.toString().replace('Z', '')) > -1;
+                  }
+                  return false;
+                });
+                let calloutMatches = this.unicornStore.callouts.filter((f) => {
+                  if (f && f.time && f.time.length > 0) {
+                    return f.time.toString().indexOf(times[idx]) > -1;
+                  }
+                  return false;
+                });
+                if (timeMatches.length < 2 && calloutMatches.length < 2) {
+                  slide.setTargetEventId(this.unicornStore.callouts[i].eventId);
+                }
+              }
+            }
+          }
+        }
+      }
+      slide.setId(idx);
       slide.setOldName(name);
       temp.push(slide);
     });
@@ -78,6 +193,7 @@ export class UploadActions {
 
   uploadProcessingComplete() {
     clearInterval(this.poll);
+    this.uploadStore.setProcessing(false);
     this.uploadStore.setConversionStatus(false);
   }
 }

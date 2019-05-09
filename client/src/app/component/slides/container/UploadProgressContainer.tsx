@@ -38,7 +38,7 @@ export class UploadProgressContainer extends React.Component<Props> {
       >
         <img src={UploadingIcon} />
         <div className="uploadingText">
-          Please give us a moment while we upload your JPGs
+          Please give us a moment while we upload your PDF
           <span>...</span>
         </div>
       </div>

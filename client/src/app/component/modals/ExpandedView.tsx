@@ -122,7 +122,7 @@ export const StyledExpandedView = inject('slidesStore', 'slidesActions')(styled(
      font-size: 22px;
         
     #carouselControls {
-     top: 8%;
+     top: 2%;
     }
         
     .carousel-inner {
@@ -132,16 +132,27 @@ export const StyledExpandedView = inject('slidesStore', 'slidesActions')(styled(
     }
         
    .carousel-control-prev {
-     left: 10%;
+     width: 186px;
+     justify-content: normal;
    }
 
    .carousel-control-next {
-     right: 8%;
+     justify-content: normal;
+     width: 186px;
+   }
+   
+   .carousel-control-next-icon {
+    left: 20%;
+   }
+   
+   .carousel-control-prev-icon {
+   left: 61%;
    }
    
    .carousel-control-prev-icon, .carousel-control-next-icon {
      height: 36px;
      width: 36px;
+     position: relative;
    }
    
    a {
@@ -154,7 +165,8 @@ export const StyledExpandedView = inject('slidesStore', 'slidesActions')(styled(
      height: 50px;
      align-items: center;
      position: absolute;
-     right: 14%;
+     right: 7%;
+     top: 3%;
      cursor: pointer;
      z-index: 20;
    }

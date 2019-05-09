@@ -6,16 +6,19 @@ import * as FileSaver from 'file-saver';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { action } from 'mobx';
 import { Repositories } from '../../../../utils/Repositories';
+import { UnicornStore } from '../../unicorn/store/UnicornStore';
 
 export class SlidesActions {
   public metricActions: MetricActions;
 
   private slidesStore: SlidesStore;
   private uploadStore: UploadStore;
+  private unicornStore: UnicornStore;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.slidesStore = stores.slidesStore!;
     this.uploadStore = stores.uploadStore!;
+    this.unicornStore = stores.unicornStore!;
     this.metricActions = new MetricActions(repositories, stores);
   }
 
@@ -68,10 +71,22 @@ export class SlidesActions {
   }
 
   @action.bound
+  setAndUpdateReleasability(releasability: string) {
+    this.slidesStore.setReleasability(releasability);
+    this.unicornStore.setReleasability(releasability);
+    this.updateNewNames();
+  }
+
+  @action.bound
   setAndUpdateClassification(classification: string) {
     this.slidesStore.setClassification(classification);
     this.updateNewNames();
   }
+
+  @action.bound
+  deleteSlide = async (s: SlideModel) => {
+    s.setDeleted(true);
+  };
 
   updateNewNames() {
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
@@ -79,7 +94,10 @@ export class SlidesActions {
       let slide = this.slidesStore.slides[i];
       this.slidesStore.setActivity(this.slidesStore.slides[i], slide.activity);
       this.slidesStore.setTime(this.slidesStore.slides[i], slide.time);
-      newName = this.slidesStore.nameFormat + (i + 1);
+      let duplicates = this.slidesStore.slides.filter((s, idx) => {
+        return s.newName.replace(/\d+\b/, '') === this.slidesStore.nameFormat && idx < i;
+      }).length;
+      newName = this.slidesStore.nameFormat + (duplicates > 0 ? duplicates : '');
       this.slidesStore.slides[i].setNewName(newName);
     }
   }
@@ -107,8 +125,20 @@ export class SlidesActions {
     request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     request.onload = () => {
       let blob = request.response;
-      FileSaver.saveAs(blob, this.uploadStore.fileName + '.zip');
+      FileSaver.saveAs(blob, this.uploadStore.fileName.toUpperCase().replace('.PDF', '.zip'));
     };
     request.send(JSON.stringify(this.slidesStore.slides));
+  }
+
+  getAssignedCallouts() {
+    let count: number = 0;
+    for (let i = 0; i < this.slidesStore.slides.length; i++) {
+      if (this.slidesStore.slides[i].targetEventId !== '' && !this.slidesStore.slides[i].deleted) {
+        count++;
+      } else if (this.slidesStore.slides[i].deleted) {
+        this.metricActions!.createMetric('Delete JPG');
+      }
+    }
+    this.slidesStore.setAssignedCalloutCount(count);
   }
 }

@@ -17,7 +17,7 @@ public class MetricControllerTest extends BaseIntegrationTest {
   @Test
   public void metricTest() {
 
-    metricRepository.save(new Metric("e2352352352", "Upload", 23525323L, null));
+    metricRepository.save(new Metric("e2352352352", "Upload", 23525323L, null, null));
 
     given()
       .port(port)

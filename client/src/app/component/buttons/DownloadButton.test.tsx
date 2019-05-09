@@ -22,6 +22,9 @@ describe('DownloadButton', () => {
     },
     setValidate: () => {
       return;
+    },
+    isValidReleasability: () => {
+      return true;
     }
   };
 
@@ -43,5 +46,4 @@ describe('DownloadButton', () => {
     expect(subject.find('#downloadbutton').simulate('click'));
     expect(slidesActions.trackRenameAndDownload).toHaveBeenCalled();
   });
-
 });

@@ -42,6 +42,21 @@ export class HTTPClient {
     return json;
   }
 
+  async postJSONNoParse(path: string, body: string) {
+    await fetch(
+      urljoin(this.baseURL, path),
+      {
+        method: 'POST',
+        headers: [
+          ['Content-Type', 'application/json'],
+        ],
+        credentials: 'include',
+        body: body,
+      }
+    );
+    return;
+  }
+
   async postFile(path: string, body: string) {
     const resp = await fetch(
       urljoin(this.baseURL, path),

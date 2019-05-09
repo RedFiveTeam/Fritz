@@ -8,6 +8,6 @@ export class StubUploadRepository implements UploadRepository {
   }
 
   status(): Promise<StatusModel> {
-    return Promise.resolve(new StatusModel('pending', ['file1', 'file2'], ['', ''], 0, 2));
+    return Promise.resolve(new StatusModel('pending', ['file1', 'file2'], ['', ''], 0, 2, '', '', '', ''));
   }
 }

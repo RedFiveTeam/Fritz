@@ -2,34 +2,24 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { UploadActions } from '../actions/UploadActions';
 import { UploadStore } from '../UploadStore';
+import { Toast } from '../../../../../utils/Toast';
+import { SlidesStore } from '../../../slides/SlidesStore';
 
-const uploadIcon = require('../../../../../icon/UploadIcon.svg');
-const folderIcon = require('../../../../../icon/folder.svg');
+const pdfIcon = require('../../../../../icon/PDFIcon.svg');
 const paperclipIcon = require('../../../../../icon/PaperclipIcon.svg');
 const resetUploadIcon = require('../../../../../icon/ResetUploadIcon.svg');
+const adobe = require('../../../../../icon/Adobe.svg');
+const helpMenuIcon = require('../../../../../icon/HelpMenu.svg');
 
 interface Props {
   className?: string;
   uploadActions?: UploadActions;
   uploadStore?: UploadStore;
+  slidesStore?: SlidesStore;
 }
 
 @observer
 export class UploadContainer extends React.Component<Props> {
-  componentDidMount(): void {
-    let ele = document.querySelector('#uploadButton');
-    if (ele) {
-      ele.setAttribute('webkitdirectory', 'true');
-    }
-  }
-
-  componentDidUpdate(): void {
-    let ele = document.querySelector('#uploadButton');
-    if (ele) {
-      ele.setAttribute('webkitdirectory', 'true');
-    }
-  }
-
   doUpload = async (e: any) => {
     e.preventDefault();
     let formData = new FormData();
@@ -37,56 +27,99 @@ export class UploadContainer extends React.Component<Props> {
     if (e.type === 'change') {
       const element = document.querySelector('#uploadButton')! as HTMLInputElement;
       if (element != null && element.files) {
-        let files = element.files as FileList;
-        for (let i = 0; i < files.length; i++) {
-          if (files[i].name.toLowerCase().endsWith('.jpg')) {
-            formData.append('file[]', files[i], files[i].name.replace('.JPG', '.jpg'));
-          }
-        }
+        formData.append('file', element.files[0]);
       }
     } else {
-      formData.append('file[]', e.dataTransfer.files[0]);
+      formData.append('file', e.dataTransfer.files[0]);
     }
-    let file: File = formData.get('file[]') as File;
+    let file: File = formData.get('file') as File;
     if (file) {
-      await this.props.uploadActions!.upload(formData);
-      let ele = document.querySelector('.uploadContainer') as HTMLElement;
-      if (ele) {
-        ele.style.border = 'none';
+      let fileName = file.name;
+      if (fileName.toLowerCase().endsWith('ppt')) {
+        (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
+        Toast.create(
+          5000,
+          'errorToast',
+          'The file format .ppt is not compatible with Fritz. File must be saved as .pdf.'
+        );
+      }
+      if (fileName.toLowerCase().endsWith('pdf')) {
+        await this.props.uploadActions!.upload(formData);
+        let ele1 = document.querySelector('.uploadContainer') as HTMLElement;
+        let ele2 = document.querySelector('.helpMessage') as HTMLElement;
+        if (ele1 && ele2) {
+          ele1.style.border = 'none';
+          ele2.style.display = 'none';
+        }
+      } else if (!fileName.toLowerCase().endsWith('ppt')) {
+        (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
+        Toast.create(
+          5000,
+          'errorToast',
+          '<b>Error:</b> File must be a PDF(<b>.pdf</b>)'
+        );
       }
     }
   };
 
   displayUploadRequest() {
     return (
-      <div
-        onDragEnter={(e: any) => {
-          let evt = e as Event;
-          evt.preventDefault();
-        }}
-        onDragOver={(e: any) => {
-          let evt = e as Event;
-          evt.preventDefault();
-        }}
-        onDrop={this.doUpload}
-        className="row align-items-center h-100 text-center"
-      >
-        <p className="col-8 mx-auto mt-5">Drag and drop Folder</p>
-        <p className="col-9 mx-auto ">or</p>
-        <input
-          name="uploadButton"
-          id="uploadButton"
-          className="uploadButton"
-          type="file"
-          onChange={this.doUpload}
+      <div className="uploadBox">
+        <div className="converterTitle">
+          <h2>JPEG Converter - Details</h2>
+          <span>Complete the fields below to view and download JPEGs</span>
+        </div>
+        <img
+          onClick={() => {
+            this.props.slidesStore!.setHelp(true);
+          }}
+          className="helpMenuIcon"
+          src={helpMenuIcon}
         />
         <label
           id="uploadLabel"
           htmlFor="uploadButton"
-          className="btn btn-outline-info form-control-file col-5 mx-auto mb-5 w-25 text-white"
+          className="pdfUploadButton"
         >
-          <img draggable={true} src={uploadIcon}/>
-          <span className="ml-2 font-weight-bold">Upload Folder</span>
+          <div
+            id="clickable"
+            onDragEnter={(e: any) => {
+              let evt = e as Event;
+              evt.preventDefault();
+            }}
+            onDragOver={(e: any) => {
+              let evt = e as Event;
+              evt.preventDefault();
+            }}
+            onDrop={this.doUpload}
+            className="row align-items-center h-100 text-center"
+          >
+        <span
+          className="step1"
+        >
+          Step 1: Upload a PDF
+        </span>
+            <img
+              id="adobe"
+              src={adobe}
+            />
+            <p
+              id="dragMessage"
+            >
+              Drag and drop Mission Storyboard saved as PDF
+              <span className="dragMessage2"> or
+            <span className="browse">&nbsp; Browse &nbsp;</span>
+              for your file
+            </span>
+            </p>
+            <input
+              name="uploadButton"
+              id="uploadButton"
+              className="uploadButton"
+              type="file"
+              onChange={this.doUpload}
+            />
+          </div>
         </label>
       </div>
     );
@@ -94,17 +127,17 @@ export class UploadContainer extends React.Component<Props> {
 
   displayUploadedInfo() {
     return (
-      <div className="row align-items-center h-100 text-center" id="uploadCompleteContainer">
-        <div className="col-8 mx-auto" id="folderIcon">
-          <img src={folderIcon}/>
+      <div className="row align-items-center text-center" id="uploadCompleteContainer">
+        <div className="col-8 mx-auto" id="pdfIcon">
+          <img src={pdfIcon}/>
         </div>
-        <div className="p-2 text-uppercase w-100 col-9 mx-auto border-top border-bottom" id="folderName">
+        <div className="p-2 text-uppercase w-100 col-9 mx-auto border-top border-bottom" id="pdfName">
           <img className="float-left" src={paperclipIcon}/>
-          <div className="float-left pl-2 filename">
+          <div id="pdfFileName" className="float-left pl-2">
             {this.props.uploadStore!.fileName}
           </div>
           <img
-            id="deleteFolder"
+            id="deletePP"
             className="float-right pt-1 clickable"
             data-toggle="modal"
             data-target="#deleteModal"
@@ -137,4 +170,4 @@ export class UploadContainer extends React.Component<Props> {
   }
 }
 
-export const InjectedUploadContainer = inject('uploadActions', 'uploadStore')(UploadContainer);
+export const InjectedUploadContainer = inject('uploadActions', 'uploadStore', 'slidesStore')(UploadContainer);

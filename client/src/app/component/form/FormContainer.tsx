@@ -1,15 +1,22 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
-import { InjectedUploadContainer } from './upload/container/UploadContainer';
 import styled from 'styled-components';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/SlidesStore';
-import { CSSProperties } from 'react';
+import { ReleasabilityModel } from '../unicorn/model/ReleasabilityModel';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { UnicornActions } from '../unicorn/actions/UnicornActions';
+import { StyledDropdown } from '../dropdown/Dropdown';
+import { UploadActions } from './upload/actions/UploadActions';
 
 interface Props {
   className?: string;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
+  unicornStore?: UnicornStore;
+  unicornActions?: UnicornActions;
+  uploadActions?: UploadActions;
 }
 
 @observer
@@ -25,22 +32,28 @@ export class FormContainer extends React.Component<Props> {
 
   goodCSS: CSSProperties = {};
 
+  async componentDidMount() {
+    await this.props.unicornActions!.getReleasabilities();
+  }
+
   render() {
+
     return (
       <div
         className={this.props.className}
       >
-        <div className="leftText">
-          <h2>JPEG Renamer - Details</h2>
-          <span>Complete the fields below to view and download JPEGs</span>
-        </div>
         <form>
           <div className="form-group">
+            <div className="header">
+              <h2>JPEG Renamer - Details
+              </h2>
+              <span>Complete the fields below to view and download JPEGs</span>
+            </div>
             <label
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidDate()) ?
                 this.badLabelCSS : this.goodCSS}
             >
-              Date*
+              Date
             </label>
             <br/>
             <input
@@ -74,7 +87,7 @@ export class FormContainer extends React.Component<Props> {
               style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidOpName()) ?
                 this.badLabelCSS : this.goodCSS}
             >
-              Operation Name*
+              Operation Name
             </label>
             <input
               data-name="opName"
@@ -96,13 +109,16 @@ export class FormContainer extends React.Component<Props> {
           </div>
           <div className="form-group">
             <label
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidAsset()) ?
+              style={(this.props.slidesStore!.differentAsset) ?
                 this.badLabelCSS : this.goodCSS}
             >
-              Asset*
+              Callsign
             </label>
             <input
               data-name="asset"
+              onBlur={(e: any) => {
+                this.props.uploadActions!.setCallsignInput(e.target.value);
+              }}
               onChange={(e: any) => {
                 this.props.slidesActions!.setAndUpdateAsset(e.target.value);
               }}
@@ -110,7 +126,7 @@ export class FormContainer extends React.Component<Props> {
               className="form-control"
               id="assetInput"
               placeholder="Callsign"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidAsset()) ?
+              style={(this.props.slidesStore!.differentAsset) ?
                 this.badInputCSS : this.goodCSS}
             />
             {
@@ -118,41 +134,71 @@ export class FormContainer extends React.Component<Props> {
               !this.props.slidesStore!.isValidAsset() &&
               <div className="errorText">Field cannot be empty</div>
             }
+            {
+              this.props.slidesStore!.differentAsset &&
+              <div className="errorText">Mismatch Callsign</div>
+            }
           </div>
-          <div className="form-group">
+          <div
+            id="classGroup"
+            className="form-group"
+          >
             <label
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
-                this.badLabelCSS : this.goodCSS}
+              id="classLabel"
+              style={this.goodCSS}
             >
-              Classification*
+              Classification
             </label>
             <input
+              id="classificationInput"
               data-name="classification"
               onChange={(e: any) => {
                 this.props.slidesActions!.setAndUpdateClassification(e.target.value);
               }}
+              defaultValue="Secret"
               type="text"
               className="form-control "
-              id="classificationInput"
-              placeholder="e.g. FVEY"
-              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidClassification()) ?
-                this.badInputCSS : this.goodCSS}
+              placeholder="e.g. Secret"
+              style={this.goodCSS}
+            />
+          </div>
+          <div className="form-group">
+            <label
+              id="releaseLabel"
+              style={(this.props.slidesStore!.validate && !this.props.slidesStore!.isValidReleasability()) ?
+                this.badLabelCSS : this.goodCSS}
+            >
+              Releasability
+            </label>
+            <StyledDropdown
+              options={
+                this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
+                  return e.releasabilityName;
+                })}
+              defaultValue="Select"
+              callback={(r: string) => {
+                this.props.slidesActions!.setAndUpdateReleasability(r);
+              }}
             />
             {
               this.props.slidesStore!.validate &&
-              !this.props.slidesStore!.isValidClassification() &&
-              <div className="errorText">Field cannot be empty</div>
+              !this.props.slidesStore!.isValidReleasability() &&
+              <div className="RerrorText">Field cannot be empty</div>
             }
           </div>
-          <p>* = Required Field</p>
-          <InjectedUploadContainer/>
+          <p className="helpMessage">
+            To save as PDF in Powerpoint File > Export > Create PDF/XPS Document
+          </p>
         </form>
       </div>
     );
   }
 }
 
-export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled(FormContainer)`
+export const StyledFormContainer = inject(
+  'slidesActions', 'slidesStore', 'unicornStore', 'unicornActions', 'uploadActions'
+)
+(styled(FormContainer)`
   color: #fff;
   margin-top: 45px;
   margin-left: 50px;
@@ -205,23 +251,6 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
     color: #fff;
   }
   
-  .uploadButton {
-    width: .1px;
-    height: .1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-  }
-
-  .uploadContainer {
-      box-sizing: border-box;
-      border: 1px dashed #d4d6db;
-      border-radius: 4px;
-      width: 580px;
-      height: 241px;
-  }
-  
   .clickable {
       cursor: pointer;
   }
@@ -232,6 +261,101 @@ export const StyledFormContainer = inject('slidesActions', 'slidesStore')(styled
   
   .errorText {
     position: absolute;
-    color: #e46373;
+    color: #e46373; 
+  }
+  
+  .RerrorText {
+    position: relative;
+    color: #e46373; 
+    left: 300px;
+    top: 20px;
+  }
+  .header {
+    position: relative;
+    margin-bottom: 10px;
+  }
+  
+  .header > span {
+    color: rgb(216, 229, 255);
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+  
+  .header > h2 {
+    line-height: 0.7;
+    font-size: 24px;
+  }
+  
+  .helpMessage {
+    color: rgb(216, 229, 255);
+  }
+  
+  #pdfFileName {
+    text-overflow: ellipsis;
+    width: 390px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .helpMenuIcon {
+    margin-left: 10px;
+    padding-bottom: 1px;
+    cursor: pointer;
+  }
+  
+  #releaseLabel {
+    margin-left: 300px;
+    position: relative;
+    bottom: 24px;
+  }
+  
+  #classificationInput {
+    width: 280px;
+  }
+  
+  #classGroup {
+    position: absolute;
+  }
+  
+  .dropdown {
+    color: #fff;
+    background-color:rgba(0, 0, 0, 0);
+    top: 31px;
+    right: 94px;
+    height: 39px;
+    width: 280px;
+    border: 1px solid #ced4da;
+    font-weight: normal;
+    font-size: 1rem;
+      .dropdownBtn {
+        font-weight: normal;
+        font-size: 1rem;
+        text-align: left;
+        padding-left: 24px;
+        line-height: 40px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    
+      .dd {
+        width: 280px;
+        left: 0;
+        overflow: auto;
+        max-height: 250px;
+      }
+      
+      .ddd {
+        text-align: left;
+        padding-left: 8px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+  }
+  
+  .default {
+    color: #FFF;
+    opacity: 0.4;
   }
 `);

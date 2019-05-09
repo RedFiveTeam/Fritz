@@ -13,6 +13,10 @@ public class StatusModel {
   private int total;
   private Thread thread;
   private String[] times;
+  private String date = "";
+  private String op = "";
+  private String callsign = "";
+  private String releasability = "";
 
   public String getStatus() {
     return status;
@@ -30,19 +34,11 @@ public class StatusModel {
     this.files = files;
   }
 
-  public int getProgress() {
-    return progress;
-  }
+  public void setDate(String value) { this.date = value; }
 
-  public void setProgress(int progress) {
-    this.progress = progress;
-  }
+  public void setOp(String value) { this.op = value; }
 
-  public int getTotal() {
-    return total;
-  }
+  public void setCallsign(String value) { this.callsign = value; }
 
-  public void setTotal(int total) {
-    this.total = total;
-  }
+  public void setReleasability(String value) { this.releasability = value; }
 }

@@ -15,8 +15,8 @@ describe('MetricActions', () => {
       setPendingUploadMetric: jest.fn(),
       hydrate: jest.fn(),
       setEndTime: jest.fn(),
-      pendingUploadMetric: new MetricModel(null, 'hi', 'Upload', '1', null),
-      pendingDownloadMetric: new MetricModel(null, 'hi', 'Download', '1', null),
+      pendingUploadMetric: new MetricModel(null, 'hi', 'Upload', '1', null, null),
+      pendingDownloadMetric: new MetricModel(null, 'hi', 'Download', '1', null, null),
       setUploadAverage: jest.fn(),
       setRenameAverage: jest.fn(),
       setDownloadAverage: jest.fn(),
@@ -25,33 +25,39 @@ describe('MetricActions', () => {
       downloadAverage: jest.fn(),
       setFilteredMetrics: jest.fn(),
       setFilterValue: jest.fn(),
+      setTotalUploads: jest.fn(),
       metrics: [
-        new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498'),
-        new MetricModel(1, 'test2', 'Upload', '1551711565', '1551711580'),
-        new MetricModel(2, 'test3', 'Upload', '1551711512', '1551711535'),
-        new MetricModel(3, 'test1', 'Download', '1551711512', '1551711518'),
-        new MetricModel(4, 'test2', 'Download', '1551711565', '1551711600'),
-        new MetricModel(5, 'test3', 'Download', '1551711488', '1551711572'),
-        new MetricModel(6, 'test1', 'Renaming', '1551711488', '1551711498'),
-        new MetricModel(7, 'test2', 'Renaming', '1551711565', '1551711580'),
-        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535')
+        new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498', null),
+        new MetricModel(1, 'test2', 'Upload', '1551711565', '1551711580', null),
+        new MetricModel(2, 'test3', 'Upload', '1551711512', '1551711535', null),
+        new MetricModel(3, 'test1', 'Download', '1551711512', '1551711518', null),
+        new MetricModel(4, 'test2', 'Download', '1551711565', '1551711600', null),
+        new MetricModel(5, 'test3', 'Download', '1551711488', '1551711572', null),
+        new MetricModel(6, 'test1', 'Renaming', '1551711488', '1551711498', null),
+        new MetricModel(7, 'test2', 'Renaming', '1551711565', '1551711580', null),
+        new MetricModel(7, 'test5', 'Converted', '1551711565', '1551711580', 15),
+        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535', null),
+        new MetricModel(7, 'test2', 'Conversion', '1551711565', '1551711580', null),
       ],
       filteredMetrics: [
-        new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498'),
-        new MetricModel(1, 'test2', 'Upload', '1551711565', '1551711580'),
-        new MetricModel(2, 'test3', 'Upload', '1551711512', '1551711535'),
-        new MetricModel(3, 'test1', 'Download', '1551711512', '1551711518'),
-        new MetricModel(4, 'test2', 'Download', '1551711565', '1551711600'),
-        new MetricModel(5, 'test3', 'Download', '1551711488', '1551711572'),
-        new MetricModel(6, 'test1', 'Renaming', '1551711488', '1551711498'),
-        new MetricModel(7, 'test2', 'Renaming', '1551711565', '1551711580'),
-        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535')
+        new MetricModel(0, 'test1', 'Upload', '1551711488', '1551711498', null),
+        new MetricModel(1, 'test2', 'Upload', '1551711565', '1551711580', null),
+        new MetricModel(2, 'test3', 'Upload', '1551711512', '1551711535', null),
+        new MetricModel(3, 'test1', 'Download', '1551711512', '1551711518', null),
+        new MetricModel(4, 'test2', 'Download', '1551711565', '1551711600', null),
+        new MetricModel(5, 'test3', 'Download', '1551711488', '1551711572', null),
+        new MetricModel(6, 'test1', 'Renaming', '1551711488', '1551711498', null),
+        new MetricModel(7, 'test2', 'Renaming', '1551711565', '1551711580', null),
+        new MetricModel(7, 'test5', 'Converted', '1551711565', '1551711580', 15),
+        new MetricModel(8, 'test3', 'Renaming', '1551711512', '1551711535', null),
+        new MetricModel(7, 'test2', 'Conversion', '1551711565', '1551711580', null),
       ],
       averages: {
         download: [],
         upload: [],
         rename: [],
-        workflow: []
+        workflow: [],
+        conversion: []
       },
       filterValue: moment().unix() - 1551711563
     };
@@ -85,11 +91,12 @@ describe('MetricActions', () => {
     expect(metricStore.setFilteredMetrics).toHaveBeenCalled();
   });
 
-  it('should be able to calculate the correct averages for upload, rename and download', async () => {
+  it('should be able to calculate the correct averages for upload, rename, download, and conversion', async () => {
     await subject.setAverages();
     expect(metricStore.averages.download.length).toBe(3);
     expect(metricStore.averages.upload.length).toBe(3);
     expect(metricStore.averages.rename.length).toBe(3);
+    expect(metricStore.averages.conversion.length).toBe(1);
   });
 
   it('should calculate the average for the filtered metrics', async () => {

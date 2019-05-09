@@ -1,27 +1,21 @@
 import * as React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { Footer } from './Footer';
-import { Provider } from 'mobx-react';
-import { SlidesActions } from '../slides/actions/SlidesActions';
-import { UploadStore } from '../form/upload/UploadStore';
-import { SlidesStore } from '../slides/SlidesStore';
+import { StyledUnicornUploadButton } from '../buttons/UnicornUploadButton';
+import { StyledDownloadButton } from '../buttons/DownloadButton';
 
 describe('Footer', () => {
-  let subject: ReactWrapper;
+  let subject: ShallowWrapper;
 
   beforeEach(() => {
-    subject = mount(
-      <Provider
-        slidesActions={SlidesActions}
-        uploadStore={UploadStore}
-        slidesStore={SlidesStore}
-      >
-        <Footer/>
-      </Provider>
-    );
+    subject = shallow(<Footer/>);
   });
 
   it('should have a download button', () => {
-    expect(subject.find('#downloadbutton').exists()).toBeTruthy();
+    expect(subject.find(StyledDownloadButton).exists()).toBeTruthy();
+  });
+
+  it('should have a unicorn upload button', () => {
+    expect(subject.find(StyledUnicornUploadButton).exists()).toBeTruthy();
   });
 });

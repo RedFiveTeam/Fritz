@@ -19,7 +19,7 @@ public class MetricController {
 
   @PostMapping
   public @ResponseBody Metric create(@Valid @RequestBody MetricJSON metricJSON) {
-    Metric metric = new Metric(metricJSON.getUid(), metricJSON.getAction(), metricJSON.getStartTime(), null);
+    Metric metric = new Metric(metricJSON.getUid(), metricJSON.getAction(), metricJSON.getStartTime(), metricJSON.getEndTime(), metricJSON.getCount());
     return this.metricRepository.save(metric);
   }
 

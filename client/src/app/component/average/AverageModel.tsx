@@ -7,6 +7,7 @@ export class AverageModel {
   @observable private _rename: AverageSubsetModel[] = [];
   @observable private _workflow: AverageSubsetModel[] = [];
   @observable private _upload: AverageSubsetModel[] = [];
+  @observable private _conversion: AverageSubsetModel[] = [];
 
   @computed
   get download(): AverageSubsetModel[] {
@@ -28,6 +29,11 @@ export class AverageModel {
     return this._upload;
   }
 
+  @computed
+  get conversion(): AverageSubsetModel[] {
+    return this._conversion;
+  }
+
   @action.bound
   setRename(value: AverageSubsetModel[]) {
     this._rename = value;
@@ -46,5 +52,10 @@ export class AverageModel {
   @action.bound
   setDownload(value: AverageSubsetModel[]) {
     this._download = value;
+  }
+
+  @action.bound
+  setConversion(value: AverageSubsetModel[]) {
+    this._conversion = value;
   }
 }

@@ -2,10 +2,11 @@ import { action, computed, observable } from 'mobx';
 import { SlideModel } from './SlideModel';
 
 export class SlidesStore {
+
   @observable private _files: string[] = [];
   @observable private _opName: string | null;
   @observable private _asset: string | null;
-  @observable private _classification: string | null;
+  @observable private _classification: string | null = 'Secret';
   @observable private _slides: SlideModel[] = [];
   @observable private _validate: boolean = false;
   @observable private _activity: string | null;
@@ -13,6 +14,21 @@ export class SlidesStore {
   @observable private _month: string | null = 'MON';
   @observable private _year: string | null = 'YY';
   @observable private _day: string | null = 'DD';
+  @observable private _help: boolean = false;
+  @observable private _releasability: string;
+  @observable private _fullDate: string;
+  @observable private _assignedCalloutCount: number;
+  @observable private _differentAsset: boolean = false;
+  
+  @computed
+  get differentAsset(): boolean {
+    return this._differentAsset;
+  }
+
+  @computed
+  get assignedCalloutCount(): number {
+    return this._assignedCalloutCount;
+  }
 
   @computed
   get month(): string | null {
@@ -69,6 +85,41 @@ export class SlidesStore {
     return this._validate;
   }
 
+  @computed
+  get help(): boolean {
+    return this._help;
+  }
+
+  @computed
+  get releasability(): string {
+    return this._releasability;
+  }
+
+  @computed
+  get fullDate(): string {
+    return this._fullDate;
+  }
+
+  @action.bound
+  setDifferentAsset(value: boolean) {
+    this._differentAsset = value;
+  }
+
+  @action.bound
+  setAssignedCalloutCount(value: number) {
+    this._assignedCalloutCount = value;
+  }
+
+  @action.bound
+  setReleasability(value: string) {
+    this._releasability = value;
+  }
+
+  @action.bound
+  setClassification(value: string | null) {
+    this._classification = value;
+  }
+
   @action.bound
   setTime(slide: SlideModel, value: string) {
     this._time = value;
@@ -97,11 +148,6 @@ export class SlidesStore {
   }
 
   @action.bound
-  setClassification(value: string) {
-    this._classification = value;
-  }
-
-  @action.bound
   setSlides(value: SlideModel[]) {
     this._slides = value;
   }
@@ -126,11 +172,20 @@ export class SlidesStore {
     this._day = value;
   }
 
+  @action.bound
+  setHelp(value: boolean) {
+    this._help = value;
+  }
+
+  @action.bound
+  setFullDate(value: string) {
+    this._fullDate = value;
+  }
+
   isValidName(): boolean {
     return (
       (this._opName !== undefined && this._opName!.length > 0) &&
-      (this._asset !== undefined && this._asset!.length > 0) &&
-      (this._classification !== undefined && this._classification!.length > 0)
+      (this._asset !== undefined && this._asset!.length > 0)
     );
   }
 
@@ -163,8 +218,8 @@ export class SlidesStore {
     return (this._asset !== undefined && this._asset!.length > 0);
   }
 
-  isValidClassification(): boolean {
-    return (this._classification !== undefined && this._classification!.length > 0);
+  isValidReleasability(): boolean {
+    return (this._releasability !== undefined);
   }
 
   @computed
@@ -177,7 +232,7 @@ export class SlidesStore {
       (this._opName || 'TGT_NAME') + '_' +
       (this._activity || '_ACTY_') + '_' +
       (this._asset || 'ASSET') + '_' +
-      (this._classification || 'CLASSIFICATION'))
+      (this._releasability || 'RELEASABILITY'))
       .split(' ').join('_')
       .toUpperCase());
   }

@@ -6,9 +6,15 @@ import { StyledToast } from '../../utils/Toast';
 import { StyledFooter } from '../component/footer/Footer';
 import { StyledDeleteModal } from '../component/modals/DeleteModal';
 import { StyledExpandedView } from '../component/modals/ExpandedView';
+import { UnicornStore } from '../component/unicorn/store/UnicornStore';
+import { StyledSelectMissionModal } from '../component/modals/SelectMissionModal';
+import { SlidesStore } from '../component/slides/SlidesStore';
+import { StyledHelpMenu } from '../component/modals/HelpMenu';
 
 interface Props {
   className?: string;
+  unicornStore?: UnicornStore;
+  slidesStore?: SlidesStore;
 }
 
 @observer
@@ -22,6 +28,14 @@ export class HomePage extends React.Component<Props> {
         <StyledToast/>
         <StyledDeleteModal/>
         <StyledExpandedView/>
+        {
+          !this.props.unicornStore!.activeMission &&
+          <StyledSelectMissionModal/>
+        }
+        {
+          this.props.slidesStore!.help &&
+          <StyledHelpMenu/>
+        }
         <div
           className="mainBody"
         >
@@ -33,7 +47,7 @@ export class HomePage extends React.Component<Props> {
   }
 }
 
-export const StyledHomePage = inject('classificationStore', 'classificationActions')(styled(HomePage)`
+export const StyledHomePage = inject('unicornStore', 'slidesStore')(styled(HomePage)`
 height: auto;
 min-height: 1060px;
 overflow-y: hidden;

@@ -9,9 +9,14 @@ describe('SlideCard', () => {
   let slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
   let slidesActions: any;
   let slidesStore: any;
+  let uploadStore: any;
   let metricActions: any;
 
   beforeEach(() => {
+    uploadStore = {
+      hash: 'ljndslkm'
+    };
+
     slideNumber = 2;
 
     slidesStore = {
@@ -28,6 +33,7 @@ describe('SlideCard', () => {
     };
 
     slidesActions = {
+      deleteSlide: jest.fn(),
       setAndUpdateActivity: jest.fn(),
       setAndUpdateTime: jest.fn()
     };
@@ -38,6 +44,7 @@ describe('SlideCard', () => {
 
     subject = mount(
       <SlideCard
+        uploadStore={uploadStore}
         slideNumber={slideNumber}
         slideModel={slideModel}
         slidesActions={slidesActions}
@@ -52,7 +59,7 @@ describe('SlideCard', () => {
   });
 
   it('should render a title for each slide', () => {
-    expect(subject.find('h5').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_CLASSIFICATION');
+    expect(subject.find('h5').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_RELEASABILITY');
   });
 
   it('should have an activity input', () => {
@@ -79,7 +86,6 @@ describe('SlideCard', () => {
 
   it('should flag slide as deleted when the delete icon is clicked and have an undo button', () => {
     expect(subject.find('.deleteIcon').simulate('click'));
-    expect(slideModel.deleted).toBeTruthy();
-    expect(metricActions.createMetric).toHaveBeenCalled();
+    expect(slidesActions.deleteSlide).toHaveBeenCalled();
   });
 });

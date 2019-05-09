@@ -8,7 +8,11 @@ export class StatusSerializer implements Serializer<StatusModel> {
       files: item.files,
       times: item.times,
       progress: item.progress,
-      total: item.total
+      total: item.total,
+      date: item.date,
+      op: item.op,
+      callsign: item.callsign,
+      releasability: item.releasability
     };
   }
 
@@ -18,7 +22,11 @@ export class StatusSerializer implements Serializer<StatusModel> {
       item.files,
       item.times,
       item.progress,
-      item.total
+      item.total,
+      item.date,
+      item.op,
+      item.callsign,
+      item.releasability
     );
   }
 }

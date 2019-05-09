@@ -12,7 +12,7 @@ describe('UploadContainer', () => {
   beforeEach(() => {
     uploadActions = {
       upload: () => {
-        return new UploadModel('chucknorris.jpg');
+        return new UploadModel('chucknorris.pdf');
       }
     };
     uploadStore = new UploadStore();
@@ -29,7 +29,7 @@ describe('UploadContainer', () => {
   });
 
   it('should change the display after file uploaded', () => {
-    const file = new File(['(⌐□_□)'], 'chucknorris.jpg', {type: 'application/vnd.ms-powerpoint'});
+    const file = new File(['(⌐□_□)'], 'chucknorris.pdf', {type: 'application/pdf'});
     subject.find('#uploadButton').simulate(
       'change',
       {
@@ -42,8 +42,8 @@ describe('UploadContainer', () => {
     uploadStore.setFileName(file.name);
     subject.update();
     expect(subject.find('#uploadButton').exists()).toBeFalsy();
-    expect(subject.find('#folderIcon').exists()).toBeTruthy();
-    expect(subject.find('#folderName').text()).toBe(file.name);
+    expect(subject.find('#pdfIcon').exists()).toBeTruthy();
+    expect(subject.find('#pdfName').text()).toBe(file.name);
   });
 
 });

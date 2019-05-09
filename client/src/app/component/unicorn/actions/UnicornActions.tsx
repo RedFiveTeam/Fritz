@@ -64,25 +64,35 @@ export class UnicornActions {
   }
 
   @action.bound
-  async buildUploadModel(slide: SlideModel) {
-    this.unicornStore!.setPendingUpload(true);
-    let unicornUploadModel = new UnicornUploadModel();
-    unicornUploadModel.setFileName(slide.oldName);
-    unicornUploadModel.setEndFilePath('\\Mission\\' + this.unicornStore.activeMission!.id);
-    unicornUploadModel.setProductName(slide.oldName);
-    unicornUploadModel.setClassificationId('a8b17b94-f23a-41a1-822f-96c7ce642006');
-    unicornUploadModel.setTargetEventId(slide.targetEventId);
-    this.setReleasabilityId(this.unicornStore!.releasability);
-    unicornUploadModel.setReleasabilityId(this.unicornStore!.releasabilityId);
-    unicornUploadModel.setMissionId(this.unicornStore.activeMission!.id);
-    unicornUploadModel.setPersonnelId('2a7081f8-7cc9-45f3-a29e-f94a0003b3fe');
-    unicornUploadModel.setIsrRoleId('');
-    await this.unicornRepository.upload(unicornUploadModel, this.increaseCurrentUploadCount);
+  isUploadFinished() {
     if (this.slidesStore!.assignedCalloutCount === this.unicornStore!.currentUploadCount) {
       this.unicornStore!.setUploadComplete(true);
       this.metricActions!.updateMetric('UploadToUnicorn');
       this.unicornStore!.setCurrentUploadCount(0);
     }
+  }
+
+  @action.bound
+  async setUnicornModel(s: SlideModel) {
+    let unicornUploadModel = new UnicornUploadModel();
+    unicornUploadModel.setFileName(s.oldName);
+    unicornUploadModel.setEndFilePath('\\Mission\\' + this.unicornStore.activeMission!.id);
+    unicornUploadModel.setProductName(s.oldName);
+    unicornUploadModel.setClassificationId('a8b17b94-f23a-41a1-822f-96c7ce642006');
+    unicornUploadModel.setTargetEventId(s.targetEventId);
+    this.setReleasabilityId(this.unicornStore!.releasability);
+    unicornUploadModel.setReleasabilityId(this.unicornStore!.releasabilityId);
+    unicornUploadModel.setMissionId(this.unicornStore.activeMission!.id);
+    unicornUploadModel.setPersonnelId('2a7081f8-7cc9-45f3-a29e-f94a0003b3fe');
+    unicornUploadModel.setIsrRoleId('');
+    return unicornUploadModel;
+  }
+
+  @action.bound
+  async buildUploadModel(slide: SlideModel) {
+    this.unicornStore!.setPendingUpload(true);
+    await this.unicornRepository.upload( await this.setUnicornModel(slide), this.increaseCurrentUploadCount );
+    this.isUploadFinished();
   }
 
   @action.bound

@@ -26,7 +26,6 @@ export class MetricActions {
     await this.setAverages();
   }
 
-  @action.bound
   async trackMetric(act: string) {
     let metric = new MetricModel(
       null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null, null
@@ -42,7 +41,6 @@ export class MetricActions {
     await this.metricRepository.update(this.metricStore['pending' + act + 'Metric']);
   }
 
-  @action.bound
   async createMetric(act: string) {
     let metric = new MetricModel(
       null, this.uploadStore.hash, act, Math.round((Date.now() / 1000)).toString(), null, null

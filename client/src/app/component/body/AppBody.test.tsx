@@ -52,8 +52,10 @@ describe('Header', () => {
     expect(subject.find(StyledUploadContainer).exists()).toBeTruthy();
   });
 
-  it('should render a modal on unicorn upload', () => {
+  it('should show/hide a modal on unicorn upload', () => {
     unicornStore.setPendingUpload(true);
     expect(subject.find(StyledUnicornUploadModal).exists()).toBeTruthy();
+    unicornStore.setPendingUpload(false);
+    expect(subject.find(StyledUnicornUploadModal).exists()).toBeFalsy();
   });
 });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Carousel } from './Carousel';
-import { SlideModel } from '../slides/SlideModel';
+import { SlideModel } from '../slides/models/SlideModel';
 import { StyledDropdown } from '../dropdown/Dropdown';
 import { CalloutModel } from '../unicorn/model/CalloutModel';
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
-import { SlidesStore } from '../../slides/SlidesStore';
 import { UnicornStore } from '../store/UnicornStore';
+import { SlidesStore } from '../../slides/store/SlidesStore';
 
 interface Props {
   className?: string;

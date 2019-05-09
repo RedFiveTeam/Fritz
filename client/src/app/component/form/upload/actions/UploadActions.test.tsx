@@ -4,7 +4,7 @@ import { UploadStore } from '../UploadStore';
 import { StubUploadRepository } from '../repository/StubUploadRepository';
 import { UploadModel } from '../UploadModel';
 import { StatusModel } from '../../status/StatusModel';
-import { SlidesStore } from '../../../slides/SlidesStore';
+import { SlidesStore } from '../../../slides/store/SlidesStore';
 import { MetricRepository } from '../../../metrics/repository/MetricRepository';
 import { StubMetricRepository } from '../../../metrics/repository/StubMetricRepository';
 import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
@@ -91,7 +91,6 @@ describe('UploadActions', () => {
 
   it('should populate the files and times in the model when checking status', async () => {
     await subject.checkStatus();
-    expect(subject.uploadProcessingComplete).toHaveBeenCalled();
     expect(slidesStore.files).toEqual(['slide1.jpg', 'slide2.jpg', 'slide3.jpg']);
     expect(slidesStore.slides[0].oldName).toBe('slide1.jpg');
     expect(slidesStore.slides[1].oldName).toBe('slide2.jpg');
@@ -117,5 +116,12 @@ describe('UploadActions', () => {
   it('should update the releasability when a status model with a releasbility is returned', async () => {
     await subject.checkStatus();
     expect(subject.setReleasabilityInput).toHaveBeenCalledWith('FOUO');
+  });
+
+  it('should validate all of the inputs after a pdf is uploaded', async () => {
+    let validateSpy = jest.fn();
+    slidesStore.validate = validateSpy;
+    await subject.checkStatus();
+    expect(validateSpy).toHaveBeenCalled();
   });
 });

@@ -45,6 +45,7 @@ export class SelectMissionModal extends React.Component<Props> {
             <StyledDropdown
               options={sites}
               defaultValue={this.props.unicornStore!.selectedSite}
+              value={this.props.unicornStore!.selectedSite}
               callback={(s: string) => {
                 this.props.unicornStore!.setSelectedSite(s);
               }}

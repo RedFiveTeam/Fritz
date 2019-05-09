@@ -3,7 +3,7 @@ import { MissionModel } from '../model/MissionModel';
 import { UnicornRepository } from '../repositories/UnicornRepository';
 import { CalloutModel } from '../model/CalloutModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
-import { SlideModel } from '../../slides/SlideModel';
+import { SlideModel } from '../../slides/models/SlideModel';
 
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
@@ -19,8 +19,8 @@ export class UnicornStore {
   @observable private _pendingUpload: boolean = false;
   @observable private _uploadComplete: boolean = false;
   @observable private _currentUploadCount: number = 0;
-  @observable private _confirmUploadStatus: boolean = false;
   @observable private _unassignedCallouts: boolean = false;
+  @observable private _isUploading: boolean = false;
   @observable private _loading: boolean;
   @observable private _pendingCallouts: boolean = true;
   @observable private _uploadQueue: SlideModel[] = [];
@@ -32,6 +32,7 @@ export class UnicornStore {
       this._missions.push(new MissionModel(
         'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
       );
+      this._releasabilities.push(new ReleasabilityModel('', 'FOUO'));
     } else {
       this._releasabilities = (await unicornRepository.getReleasabilities());
       this._missions = (await unicornRepository.getMissions())
@@ -53,13 +54,13 @@ export class UnicornStore {
   }
 
   @computed
-  get unassignedCallouts(): boolean {
-    return this._unassignedCallouts;
+  get isModalDisplayed() {
+    return (this._pendingUpload);
   }
 
   @computed
-  get confirmUploadStatus(): boolean {
-    return this._confirmUploadStatus;
+  get unassignedCallouts(): boolean {
+    return this._unassignedCallouts;
   }
 
   @computed
@@ -108,6 +109,11 @@ export class UnicornStore {
   }
 
   @computed
+  get isUploading(): boolean {
+    return this._isUploading;
+  }
+
+  @computed
   get uploadComplete(): boolean {
     return this._uploadComplete;
   }
@@ -125,11 +131,6 @@ export class UnicornStore {
   @action.bound
   setUnassignedCallouts(value: boolean) {
     this._unassignedCallouts = value;
-  }
-
-  @action.bound
-  setConfirmUploadStatus(value: boolean) {
-    this._confirmUploadStatus = value;
   }
 
   @action.bound
@@ -175,11 +176,22 @@ export class UnicornStore {
   @action.bound
   setUploadComplete(value: boolean) {
     this._uploadComplete = value;
+    if (value) {
+      this._isUploading = false;
+    }
   }
 
   @action.bound
   setCurrentUploadCount(value: number) {
     this._currentUploadCount = value;
+  }
+
+  @action.bound
+  setIsUploading(status: boolean) {
+    if (status) {
+      this._uploadComplete = false;
+    }
+    this._isUploading = status;
   }
 
   @action.bound
@@ -192,7 +204,6 @@ export class UnicornStore {
     this._pendingCallouts = value;
   }
 
-  @action.bound
   addToUploadQueue(slide: SlideModel) {
     this._uploadQueue.push(slide);
   }

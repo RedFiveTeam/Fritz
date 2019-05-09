@@ -23,8 +23,8 @@ export class Mission extends React.Component<Props> {
       <div
         className={this.props.className + ' missionRow ' + this.props.mission.id}
         onClick={async () => {
-          this.props.unicornStore!.setActiveMission(this.props.mission);
-          this.props.uploadActions!.checkCallsign(this.props.mission!.callsign);
+          this.props.slidesActions!.updateMission(this.props.mission);
+          this.props.slidesActions!.compareCallsigns();
           this.props.slidesActions!.resetSlides();
           if (navigator.userAgent.toLowerCase().indexOf('electron') === -1) {
             await this.props.unicornActions!.getCallouts(this.props.mission.id);

@@ -6,7 +6,7 @@ import { ClassificationStore } from '../classification/store/ClassificationStore
 import { ClassificationActions } from '../classification/ClassificationActions';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { CSSProperties } from 'react';
-import { SlidesStore } from '../slides/SlidesStore';
+import { SlidesStore } from '../slides/store/SlidesStore';
 
 const Logo = require('../../../icon/FritzLogo.svg');
 

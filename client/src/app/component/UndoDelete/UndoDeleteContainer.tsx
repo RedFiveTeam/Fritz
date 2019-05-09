@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { SlideModel } from '../slides/SlideModel';
+import { SlideModel } from '../slides/models/SlideModel';
 
 interface Props {
   className?: string;

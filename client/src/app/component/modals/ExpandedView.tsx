@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
-import { SlidesStore } from '../slides/SlidesStore';
-import { SlideModel } from '../slides/SlideModel';
+import { SlidesStore } from '../slides/store/SlidesStore';
+import { SlideModel } from '../slides/models/SlideModel';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { StyledCarousel } from './Carousel';
 

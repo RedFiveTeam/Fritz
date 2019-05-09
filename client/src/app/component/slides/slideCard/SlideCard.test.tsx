@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { SlideCard } from './SlideCard';
-import { SlideModel } from '../SlideModel';
 import { Provider } from 'mobx-react';
 import { StyledCallout } from '../../unicorn/Callout/Callout';
 import { CalloutModel } from '../../unicorn/model/CalloutModel';
+import { SlideModel } from '../models/SlideModel';
 
 describe('SlideCard', () => {
   let subject: ReactWrapper;

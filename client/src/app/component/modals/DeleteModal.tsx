@@ -2,7 +2,7 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UploadStore } from '../form/upload/UploadStore';
-import { SlidesStore } from '../slides/SlidesStore';
+import { SlidesStore } from '../slides/store/SlidesStore';
 import { UploadActions } from '../form/upload/actions/UploadActions';
 import { Toast } from '../../../utils/Toast';
 

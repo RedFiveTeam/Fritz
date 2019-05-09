@@ -2,9 +2,9 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UnicornStore } from '../store/UnicornStore';
-import { SlideModel } from '../../slides/SlideModel';
+import { SlideModel } from '../../slides/models/SlideModel';
 import { StyledDropdown } from '../../dropdown/Dropdown';
-import { SlidesStore } from '../../slides/SlidesStore';
+import { SlidesStore } from '../../slides/store/SlidesStore';
 import { CalloutModel } from '../model/CalloutModel';
 import { StyledPseudoDropdown } from '../../dropdown/PseudoDropdown';
 import { UnicornActions } from '../actions/UnicornActions';
@@ -55,8 +55,8 @@ export class Callout extends React.Component<Props> {
                               }
                             }) : []
                       }
-                      defaultValue={this.props.slide.calloutTime ? this.props.slide.calloutTime
-                        : 'Select'}
+                      defaultValue={'Select'}
+                      value={this.props.slide.calloutTime}
                       callback={(s: string) => {
                         let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
                           return f.id === this.props.slide.id;

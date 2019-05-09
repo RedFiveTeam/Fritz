@@ -47,7 +47,7 @@ export class AppBody extends React.Component<Props> {
             <StyledSlidesContainerPlaceholder/>
           }
           {
-            this.props.unicornStore!.pendingUpload &&
+            this.props.unicornStore!.isModalDisplayed &&
             <StyledUnicornUploadModal/>
           }
         </div>
@@ -112,7 +112,7 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
     overflow: hidden;
     position: absolute;
     z-index: -1;
-  }
+  }  
 
   .uploadContainer {
       margin-top: 158px;
@@ -132,10 +132,9 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
     margin-top: 15px;
   }
   
-  #uploadCompleteContainer {
-    top: -120px;
-    position: relative;
-    left: 30px;
+   #uploadCompleteContainer {
+    top: 485px;
+    position: absolute;
   }
   
   #deletePP {

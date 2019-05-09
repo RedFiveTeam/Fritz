@@ -15,7 +15,10 @@ export class StubUnicornRepository implements UnicornRepository {
 
   getCallouts(missionId: string): Promise<CalloutModel[]> {
     return Promise.resolve([
-      new CalloutModel('Callout1', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512521', '1450Z')
+      new CalloutModel('Callout1', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512521', '1450Z'),
+      new CalloutModel('Callout2', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512521', '1450Z'),
+      new CalloutModel('Callout3', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512521', '1450Z'),
+      new CalloutModel('Callout4', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512521', '1450Z')
     ]);
   }
 

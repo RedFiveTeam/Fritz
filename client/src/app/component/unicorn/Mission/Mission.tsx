@@ -5,6 +5,7 @@ import { UnicornStore } from '../store/UnicornStore';
 import { MissionModel } from '../model/MissionModel';
 import { UnicornActions } from '../actions/UnicornActions';
 import { UploadActions } from '../../form/upload/actions/UploadActions';
+import { SlidesActions } from '../../slides/actions/SlidesActions';
 
 interface Props {
   className?: string;
@@ -12,6 +13,7 @@ interface Props {
   unicornActions?: UnicornActions;
   mission: MissionModel;
   uploadActions?: UploadActions;
+  slidesActions?: SlidesActions;
 }
 
 @observer
@@ -23,6 +25,7 @@ export class Mission extends React.Component<Props> {
         onClick={async () => {
           this.props.unicornStore!.setActiveMission(this.props.mission);
           this.props.uploadActions!.checkCallsign(this.props.mission!.callsign);
+          this.props.slidesActions!.resetSlides();
           if (navigator.userAgent.toLowerCase().indexOf('electron') === -1) {
             await this.props.unicornActions!.getCallouts(this.props.mission.id);
           }
@@ -42,7 +45,7 @@ export class Mission extends React.Component<Props> {
   }
 }
 
-export const StyledMission = inject('unicornStore', 'unicornActions', 'uploadActions')(styled(Mission)`
+export const StyledMission = inject('unicornStore', 'unicornActions', 'uploadActions', 'slidesActions')(styled(Mission)`
 width: 100%;
 transition: background-color 200ms;
 

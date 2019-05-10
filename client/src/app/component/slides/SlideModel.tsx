@@ -10,6 +10,7 @@ export class SlideModel {
   @observable private _targetEventId: string = '';
   @observable private _releasabilityId: string = '';
   @observable private _id: number | null = null;
+  @observable private _calloutTime: string | null = null;
 
   constructor(
     oldName: string = '',
@@ -18,7 +19,7 @@ export class SlideModel {
     activity: string = 'ACTY',
     deleted: boolean = false,
     targetEventId: string = '',
-    releasabilityId: string = ''
+    releasabilityId: string = '',
   ) {
     this._oldName = oldName;
     this._time = time;
@@ -27,6 +28,11 @@ export class SlideModel {
     this._deleted = deleted;
     this._targetEventId = targetEventId;
     this._releasabilityId = releasabilityId;
+  }
+
+  @computed
+  get calloutTime(): string | null {
+    return this._calloutTime;
   }
 
   @computed
@@ -107,5 +113,10 @@ export class SlideModel {
   @action.bound
   setId(value: number | null) {
     this._id = value;
+  }
+
+  @action.bound
+  setCalloutTime(value: string | null) {
+    this._calloutTime = value;
   }
 }

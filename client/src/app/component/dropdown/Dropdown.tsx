@@ -35,10 +35,6 @@ export class Dropdown extends React.Component<Props> {
 
   optionSelect = (e: any) => {
     let component = (ReactDOM.findDOMNode(this) as HTMLElement);
-    let btn = component.querySelector('.dropdownBtn') as HTMLButtonElement;
-    if (btn) {
-      btn.innerText = e.target.dataset.option.toUpperCase();
-    }
     let dd = component.querySelector('.dd') as HTMLElement;
     if (dd) {
       dd.style.display = 'none';

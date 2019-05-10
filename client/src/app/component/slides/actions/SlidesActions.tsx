@@ -130,15 +130,24 @@ export class SlidesActions {
     request.send(JSON.stringify(this.slidesStore.slides));
   }
 
-  getAssignedCallouts() {
+  async getAssignedCallouts() {
     let count: number = 0;
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
       if (this.slidesStore.slides[i].targetEventId !== '' && !this.slidesStore.slides[i].deleted) {
         count++;
       } else if (this.slidesStore.slides[i].deleted) {
-        this.metricActions!.createMetric('Delete JPG');
+        await this.metricActions!.createMetric('Delete JPG');
       }
     }
     this.slidesStore.setAssignedCalloutCount(count);
+  }
+
+  @action.bound
+  resetSlides() {
+    this.slidesStore.slides.map((s: SlideModel) => {
+      s.setCalloutTime('Select');
+      s.setTargetEventId('');
+      console.log(s);
+    });
   }
 }

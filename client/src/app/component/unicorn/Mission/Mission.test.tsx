@@ -9,10 +9,15 @@ describe('Mission', () => {
   let unicornActions: any;
   let mission = new MissionModel('testID1', '04-18-19', 'Kirby1', 'testDescr', 'testStatus', 'DGS-1', 'Pred');
   let uploadActions: any;
+  let slidesActions: any;
 
   beforeEach(() => {
     uploadActions = {
       checkCallsign: jest.fn()
+    };
+
+    slidesActions = {
+      resetSlides: jest.fn()
     };
 
     unicornStore = {
@@ -25,6 +30,7 @@ describe('Mission', () => {
 
     subject = shallow(
       <Mission
+        slidesActions={slidesActions}
         uploadActions={uploadActions}
         unicornStore={unicornStore}
         mission={mission}
@@ -43,6 +49,7 @@ describe('Mission', () => {
 
   it('should display a select button that sets the mission and retrieves the callouts', () => {
     subject.simulate('click');
+    expect(slidesActions.resetSlides).toHaveBeenCalled();
     expect(unicornStore.setActiveMission).toHaveBeenCalledWith(mission);
     expect(unicornActions.getCallouts).toHaveBeenCalledWith(mission.id);
   });

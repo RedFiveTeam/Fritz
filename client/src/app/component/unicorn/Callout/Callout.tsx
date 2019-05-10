@@ -19,7 +19,6 @@ interface Props {
 
 @observer
 export class Callout extends React.Component<Props> {
-
   render() {
     return (
       <div
@@ -49,19 +48,13 @@ export class Callout extends React.Component<Props> {
                     }
                   }) : []
             }
-            defaultValue={this.props.slide.targetEventId &&
-            this.props.unicornStore!.callouts &&
-            this.props.unicornStore!.callouts.filter((c) => {
-              return c.eventId === this.props.slide.targetEventId;
-            }).length > 0 ? this.props.unicornStore!.callouts.filter((c) => {
-                return c.eventId === this.props.slide.targetEventId;
-              })[0].time
+            defaultValue={this.props.slide.calloutTime ? this.props.slide.calloutTime
               : 'Select'}
-
             callback={(s: string) => {
-              this.props.slidesStore!.slides.filter((f: SlideModel) => {
+              let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
                 return f.id === this.props.slide.id;
-              })[0].setTargetEventId(
+              })[0];
+              slide.setTargetEventId(
                 this.props.unicornStore!.callouts
                   .filter((c: CalloutModel) => {
                     return c.time !== null;
@@ -73,6 +66,7 @@ export class Callout extends React.Component<Props> {
                     return false;
                   })[0].eventId
               );
+              slide.setCalloutTime(s);
             }}
           />
         </div>

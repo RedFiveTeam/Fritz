@@ -8,6 +8,7 @@ import { SlidesStore } from '../../slides/SlidesStore';
 import { CalloutModel } from '../model/CalloutModel';
 
 const Unicorn = require('../../../../icon/Unicorn.svg');
+const GreenCheckmark = require('../../../../icon/GreenCheckmark.svg');
 
 interface Props {
   className?: string;
@@ -33,40 +34,62 @@ export class Callout extends React.Component<Props> {
             this.props.slide!.targetEventId === '' &&
             <div className="redBox"/>
           }
+          {this.props.slide.uploading === null &&
           <StyledDropdown
-            options={
-              this.props.unicornStore!.callouts ?
-                this.props.unicornStore!.callouts
-                  .filter((c: any) => {
-                    return c.time !== null;
-                  })
-                  .map((c: any) => {
-                    if (c.time && c.time.toString().length > 0) {
-                      return c.time;
-                    }
-                  }) : []
-            }
-            defaultValue={this.props.slide.calloutTime ? this.props.slide.calloutTime
-              : 'Select'}
-            callback={(s: string) => {
-              let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
-                return f.id === this.props.slide.id;
-              })[0];
-              slide.setTargetEventId(
-                this.props.unicornStore!.callouts
-                  .filter((c: CalloutModel) => {
-                    return c.time !== null;
-                  })
-                  .filter((c: CalloutModel) => {
-                    if (c.time && c.time.toString().length > 0) {
-                      return c.time.toString() === s;
-                    }
-                    return false;
-                  })[0].eventId
-              );
-              slide.setCalloutTime(s);
-            }}
+              options={
+                this.props.unicornStore!.callouts ?
+                  this.props.unicornStore!.callouts
+                    .filter((c: any) => {
+                      return c.time !== null;
+                    })
+                    .map((c: any) => {
+                      if (c.time && c.time.toString().length > 0) {
+                        return c.time;
+                      }
+                    }) : []
+              }
+              defaultValue={this.props.slide.calloutTime ? this.props.slide.calloutTime
+                : 'Select'}
+              callback={(s: string) => {
+                let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
+                  return f.id === this.props.slide.id;
+                })[0];
+                slide.setTargetEventId(
+                  this.props.unicornStore!.callouts
+                    .filter((c: CalloutModel) => {
+                      return c.time !== null;
+                    })
+                    .filter((c: CalloutModel) => {
+                      if (c.time && c.time.toString().length > 0) {
+                        return c.time.toString() === s;
+                      }
+                      return false;
+                    })[0].eventId
+                );
+                slide.setCalloutTime(s);
+              }}
           />
+          }
+          {
+            this.props.slide.uploading === false &&
+            <div
+                className="finishedUpload"
+            >
+              <img className="uploadCompleteIcon" src={GreenCheckmark}/>
+                <span className="uploadComplete">Uploaded to {this.props.slide.calloutTime}</span>
+            </div>
+          }
+          {
+            (this.props.slide.uploading) &&
+            <div
+                className="uploading"
+            >
+              <div
+                className="loadingCallout"
+              />
+                <span className="uploadPending">Uploading</span>
+            </div>
+          }
         </div>
       </div>
     );
@@ -157,5 +180,102 @@ export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callou
     border: solid 2px #ae4754;
     border-radius: 4px;
     position: absolute;
+  }
+  
+  .uploadPending {
+    font-weight: 700;
+    position: absolute;
+    display: inline-block;
+    bottom: 15px;
+    left: 54px;
+  }
+  
+  .uploadComplete {
+    font-weight: 700;
+    position: absolute;
+    display: inline-block;
+    bottom: 15px;
+    left: 21px;
+  }
+  
+  .uploadCompleteIcon {
+    position: absolute;
+    left: 63px;
+    top: 52px;
+  }
+  
+  .loadingCallout {
+    color: #fff;
+    border-radius: 50%;
+    display: block;
+    height: .5em;
+    margin: auto;
+    position: absolute;
+    top: 47%;
+    width: .5em;
+    right: 0px;
+    left: 0px;
+  }
+  .loadingCallout {
+    animation: loadingCallout 700ms infinite;
+  }
+  
+  @keyframes loadingCallout {
+    0% {
+      box-shadow: 1.2em 0 0 .2em #15DEEC, 
+                  .5em 1em #EFF6F7,
+                  -0.5em 1em #EFF6F7,
+                  -1.2em 0 #EFF6F7,
+                  -0.5em -1em #DAF6F8,
+                  .5em -1em #8EE4EA;
+    }
+    16.666% {
+      box-shadow: 1.2em 0 #8EE4EA, 
+                  .5em 1em 0 .2em #15DEEC,
+                  -0.5em 1em #EFF6F7,
+                  -1.2em 0 #EFF6F7,
+                  -0.5em -1em #EFF6F7,
+                  .5em -1em #DAF6F8;
+    }
+    33.332% {
+      box-shadow: 1.2em 0 #DAF6F8, 
+                  .5em 1em #8EE4EA,
+                  -0.5em 1em 0 .2em #15DEEC,
+                  -1.2em 0 #EFF6F7,
+                  -0.5em -1em #EFF6F7,
+                  .5em -1em #EFF6F7;
+    }
+    50% {
+      box-shadow: 1.2em 0 #EFF6F7, 
+                  .5em 1em #DAF6F8,
+                  -0.5em 1em #8EE4EA,
+                  -1.2em 0 0 .2em #15DEEC,
+                  -0.5em -1em #EFF6F7,
+                  .5em -1em #EFF6F7;
+    }
+    66.666% {
+      box-shadow: 1.2em 0 #EFF6F7, 
+                  .5em 1em #EFF6F7,
+                  -0.5em 1em #DAF6F8,
+                  -1.2em 0 #8EE4EA,
+                  -0.5em -1em 0 .2em #15DEEC,
+                  .5em -1em #EFF6F7;
+    }
+    83.333% {
+      box-shadow: 1.2em 0 #EFF6F7, 
+                  .5em 1em #EFF6F7,
+                  -0.5em 1em #EFF6F7,
+                  -1.2em 0 #DAF6F8,
+                  -0.5em -1em #8EE4EA,
+                  .5em -1em 0 .2em #15DEEC;
+    }
+    100% {
+      box-shadow: 1.2em 0 0 .2em #15DEEC, 
+                  .5em 1em #EFF6F7,
+                  -0.5em 1em #EFF6F7,
+                  -1.2em 0 #EFF6F7,
+                  -0.5em -1em #DAF6F8,
+                  .5em -1em #8EE4EA;
+    }
   }
 `);

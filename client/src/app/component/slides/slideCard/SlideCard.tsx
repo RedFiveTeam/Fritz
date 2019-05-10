@@ -269,6 +269,7 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
   }
   
   .card-title {
+    width: 400px;
     font-size: 14px;
   }
   

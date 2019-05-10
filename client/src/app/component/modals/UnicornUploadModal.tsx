@@ -8,10 +8,7 @@ import { SlideModel } from '../slides/SlideModel';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { MetricActions } from '../metrics/actions/MetricActions';
 
-const flame = require('../../../icon/FlameIcon.svg');
-const arrow = require('../../../icon/ArrowIcon.svg');
 const unicorn = require('../../../icon/UnicornIcon.svg');
-const complete = require('../../../icon/CompleteIcon.svg');
 const image = require('../../../icon/ImageIcon.svg');
 
 interface Props {
@@ -65,68 +62,13 @@ export class UnicornUploadModal extends React.Component<Props> {
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');
+                          this.props.unicornStore!.setPendingUpload(false);
                           for (let i = 0; i < slides.length; i++) {
                             await this.props.unicornActions!.buildUploadModel(slides[i]);
                           }
                         }}
                     >
                         Yes, upload to UNICORN
-                    </button>
-                </div>
-            </div>
-          }
-          {
-            !this.props.unicornStore!.uploadComplete &&
-            !this.props.unicornStore!.unassignedCallouts &&
-            !this.props.unicornStore!.confirmUploadStatus &&
-            <div>
-                <div className="allIcons">
-                    <img src={flame} id="flameIcon"/>
-                    <div className="arrowGroup">
-                        <img src={arrow}/>
-                        <img src={arrow}/>
-                        <img src={arrow}/>
-                        <img src={arrow}/>
-                        <img src={arrow}/>
-                        <img src={arrow}/>
-                    </div>
-                    <img src={unicorn} id="unicorn"/>
-                </div>
-                <div className="modalText">
-                    One moment please, we're uploading your JPEGs to Unicorn
-                </div>
-            </div>
-          }
-          {
-            this.props.unicornStore!.uploadComplete &&
-            <div className="uploadComplete">
-                <img src={complete} id="checkIcon"/>
-                <div className="uploadStatus">
-                    Upload Complete!
-                </div>
-                <div className="uploadMsg">
-                  {this.props.slidesStore!.assignedCalloutCount}
-                    <span>images successfully uploaded to UNICORN</span>
-                </div>
-                <div className="btnGroup">
-                    <button
-                        className="createNewBtn"
-                        onClick={() => {
-                          location.reload();
-                        }}
-                    >
-                        Create New
-                    </button>
-                    <button
-                        className="returnBtn"
-                        onClick={() => {
-                          this.props.unicornStore!.setPendingUpload(false);
-                          this.props.unicornStore!.setUploadComplete(false);
-                          this.props.unicornStore!.setUnassignedCallouts(false);
-                          this.props.slidesStore!.setAssignedCalloutCount(0);
-                        }}
-                    >
-                        Return To Product
                     </button>
                 </div>
             </div>
@@ -176,6 +118,7 @@ export class UnicornUploadModal extends React.Component<Props> {
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
                           this.props.unicornStore!.setUnassignedCallouts(false);
+                          this.props.unicornStore!.setPendingUpload(false);
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');
                           for (let i = 0; i < slides.length; i++) {
                             await this.props.unicornActions!.buildUploadModel(slides[i]);

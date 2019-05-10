@@ -152,23 +152,24 @@ export class MetricActions {
     );
     await this.setAverages();
     await this.setWorkflowAverage();
+    this.calculateAllAverages();
   }
 
   @action.bound
-  countUploads(metrics: MetricModel[]) {
+  countUploads() {
     let count = 0;
-    metrics.map((m: MetricModel) => {
+    this.metricStore.filteredMetrics.map((m: MetricModel) => {
       if (m.action === 'Upload') {
-       count++;
+        count++;
       }
     });
     return count;
   }
 
   @action.bound
-  countDownloads(metrics: MetricModel[]) {
+  countDownloads() {
     let count = 0;
-    metrics.map((m: MetricModel) => {
+    this.metricStore.filteredMetrics.map((m: MetricModel) => {
       if (m.action === 'Download') {
         count++;
       }
@@ -177,9 +178,9 @@ export class MetricActions {
   }
 
   @action.bound
-  countDeletes(metrics: MetricModel[]) {
+  countDeletes() {
     let count = 0;
-    metrics.map((m: MetricModel) => {
+    this.metricStore.filteredMetrics.map((m: MetricModel) => {
       if (m.action === 'Delete JPG') {
         count++;
       }
@@ -188,8 +189,19 @@ export class MetricActions {
   }
 
   @action.bound
-  countConverted(metrics: MetricModel[]) {
-    let counts = metrics.filter((m) => {
+  countUserAction(metric: string) {
+    let count = 0;
+    this.metricStore.filteredMetrics.map((m: MetricModel) => {
+      if (m.action === metric) {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  @action.bound
+  countConverted() {
+    let counts = this.metricStore.filteredMetrics.filter((m) => {
       return m.action === 'Converted';
     });
     let count = 0;
@@ -200,8 +212,8 @@ export class MetricActions {
   }
 
   @action.bound
-  calculateAverage(average: string, filter: number) {
-    let averages = (this.metricStore.averages[average] as AverageSubsetModel[])
+  calculateAverage(averageArr: AverageSubsetModel[], filter: number) {
+    let averages = averageArr
       .filter((asm: AverageSubsetModel) => {
         return moment().unix() - asm.startTime < filter;
       });
@@ -235,5 +247,28 @@ export class MetricActions {
     }
     let newAverage = Math.round(newTime / newAverages.length);
     return oldAverage - newAverage;
+  }
+
+  @action.bound
+  calculateAllAverages() {
+    this.metricStore.setAverageWorkflow(
+      this.calculateAverage(this.metricStore.averages.workflow, this.metricStore.filterValue)
+    );
+
+    this.metricStore.setAverageUpload(
+      this.calculateAverage(this.metricStore.averages.upload, this.metricStore.filterValue)
+    );
+
+    this.metricStore.setAverageRename(
+      this.calculateAverage(this.metricStore.averages.rename, this.metricStore.filterValue)
+    );
+
+    this.metricStore.setAverageDownload(
+      this.calculateAverage(this.metricStore.averages.download, this.metricStore.filterValue)
+    );
+
+    this.metricStore.setAverageConversion(
+      this.calculateAverage(this.metricStore.averages.conversion, this.metricStore.filterValue)
+    );
   }
 }

@@ -32,11 +32,11 @@ describe('Mission', () => {
 
     subject = shallow(
       <Mission
-        slidesActions={slidesActions}
         uploadActions={uploadActions}
         unicornStore={unicornStore}
         mission={mission}
         unicornActions={unicornActions}
+        slidesActions={slidesActions}
       />
     );
   });

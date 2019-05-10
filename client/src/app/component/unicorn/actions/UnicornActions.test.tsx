@@ -126,6 +126,7 @@ describe('UnicornActions', () => {
 
   it('should upload to unicorn ', async () => {
     let isUploadFinishedSpy = jest.fn();
+    metricRepository.create = jest.fn();
     subject.isUploadFinished = isUploadFinishedSpy;
     unicornRepository.upload = jest.fn(() => {
       return Promise.resolve(
@@ -136,6 +137,9 @@ describe('UnicornActions', () => {
     await subject.buildUploadModel(slide);
     expect(unicornRepository.upload).toHaveBeenCalledTimes(1);
     expect(isUploadFinishedSpy).toHaveBeenCalled();
+    expect(metricRepository.create).toHaveBeenCalledWith(
+      expect.objectContaining({_action: 'Image Uploaded to Unicorn'})
+    );
     expect(slide.failed).toBeFalsy();
 
     unicornRepository.upload = jest.fn(() => {

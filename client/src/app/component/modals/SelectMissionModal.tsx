@@ -5,6 +5,7 @@ import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { StyledMission } from '../unicorn/Mission/Mission';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { StyledDropdown } from '../dropdown/Dropdown';
+import { StyledUnicornMissionLoading } from '../average/loading/UnicornMissionLoading';
 
 interface Props {
   className?: string;
@@ -53,6 +54,10 @@ export class SelectMissionModal extends React.Component<Props> {
             <span>Callsign</span>
             <span>Start Date</span>
           </div>
+          {
+            this.props.unicornStore!.loading &&
+            <StyledUnicornMissionLoading/>
+          }
           <div className="missionRows">
             {
               this.props.unicornStore!.missions

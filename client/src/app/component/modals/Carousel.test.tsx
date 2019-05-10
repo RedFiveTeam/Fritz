@@ -2,6 +2,8 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Carousel } from './Carousel';
 import { SlideModel } from '../slides/SlideModel';
+import { StyledDropdown } from '../dropdown/Dropdown';
+import { CalloutModel } from '../unicorn/model/CalloutModel';
 
 describe('Carousel', () => {
   let subject: ReactWrapper;
@@ -11,6 +13,7 @@ describe('Carousel', () => {
   let slidesStore: any;
   let slidesActions: any;
   let uploadStore: any;
+  let unicornStore: any;
 
   beforeEach(() => {
     uploadStore = {
@@ -20,6 +23,10 @@ describe('Carousel', () => {
     slidesActions = {
       setAndUpdateActivity: jest.fn(),
       setAndUpdateTime: jest.fn()
+    };
+
+    unicornStore = {
+      callouts: [new CalloutModel('', '', '', '', '', '')]
     };
 
     slidesStore = {
@@ -36,6 +43,7 @@ describe('Carousel', () => {
         slideNumber={slideNumber}
         slidesStore={slidesStore}
         slidesActions={slidesActions}
+        unicornStore={unicornStore}
       />
     );
   });
@@ -51,5 +59,9 @@ describe('Carousel', () => {
 
   it('should display the number of slides', () => {
     expect(subject.find('.slideNumber').text()).toBe('1 of 2');
+  });
+
+  it('should contain a callout dropdown on the carousel', () => {
+    expect(subject.find(StyledDropdown).exists()).toBeTruthy();
   });
 });

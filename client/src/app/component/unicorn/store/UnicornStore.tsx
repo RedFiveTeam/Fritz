@@ -20,8 +20,10 @@ export class UnicornStore {
   @observable private _currentUploadCount: number = 0;
   @observable private _confirmUploadStatus: boolean = false;
   @observable private _unassignedCallouts: boolean = false;
+  @observable private _loading: boolean;
 
   async hydrate(unicornRepository: UnicornRepository) {
+    this.setLoading(true);
     if (navigator.userAgent.toLowerCase().indexOf('electron') !== -1) {
       this._missions.push(new MissionModel(
         'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
@@ -32,7 +34,13 @@ export class UnicornStore {
         .filter((m) => {
           return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
         });
+      this.setLoading(false);
     }
+  }
+
+  @computed
+  get loading(): boolean {
+    return this._loading;
   }
 
   @computed
@@ -153,5 +161,10 @@ export class UnicornStore {
   @action.bound
   setCurrentUploadCount(value: number) {
     this._currentUploadCount = value;
+  }
+
+  @action.bound
+  setLoading(value: boolean) {
+    this._loading = value;
   }
 }

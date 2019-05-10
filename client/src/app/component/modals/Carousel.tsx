@@ -5,6 +5,9 @@ import { SlideModel } from '../slides/SlideModel';
 import { SlidesStore } from '../slides/SlidesStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { UploadStore } from '../form/upload/UploadStore';
+import { StyledDropdown } from '../dropdown/Dropdown';
+import { CalloutModel } from '../unicorn/model/CalloutModel';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
 
 interface Props {
   className?: string;
@@ -13,6 +16,7 @@ interface Props {
   slidesStore?: SlidesStore;
   slidesActions?: SlidesActions;
   uploadStore?: UploadStore;
+  unicornStore?: UnicornStore;
 }
 
 @observer
@@ -51,9 +55,43 @@ export class Carousel extends React.Component<Props> {
   render() {
     return (
       <div className={this.props.className + ' carousel-item'}>
+        <StyledDropdown
+          options={
+            this.props.unicornStore!.callouts ?
+              this.props.unicornStore!.callouts
+                .filter((c: any) => {
+                  return c.time !== null;
+                })
+                .map((c: any) => {
+                  if (c.time && c.time.toString().length > 0) {
+                    return c.time;
+                  }
+                }) : []
+          }
+          defaultValue={this.props.slideModel.calloutTime ? this.props.slideModel.calloutTime
+            : 'Select'}
+          callback={(s: string) => {
+            let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
+              return f.id === this.props.slideModel.id;
+            })[0];
+            slide.setTargetEventId(
+              this.props.unicornStore!.callouts
+                .filter((c: CalloutModel) => {
+                  return c.time !== null;
+                })
+                .filter((c: CalloutModel) => {
+                  if (c.time && c.time.toString().length > 0) {
+                    return c.time.toString() === s;
+                  }
+                  return false;
+                })[0].eventId
+            );
+            slide.setCalloutTime(s);
+          }}
+        />
         <img
           src={'/api/image/' + this.props.uploadStore!.hash + '/' + this.props.slideModel.oldName}
-          className="d-block"
+          className="d-block bigImg"
           alt="..."
         />
         <div
@@ -132,7 +170,7 @@ export class Carousel extends React.Component<Props> {
   }
 }
 
-export const StyledCarousel = inject('slidesStore', 'slidesActions', 'uploadStore')(styled(Carousel)`
+export const StyledCarousel = inject('slidesStore', 'slidesActions', 'uploadStore', 'unicornStore')(styled(Carousel)`
 
   input {
     width: 166px;
@@ -162,13 +200,57 @@ export const StyledCarousel = inject('slidesStore', 'slidesActions', 'uploadStor
       margin-right: 6%;
       z-index: 1;
    }
+   
+   .dropdown {
+    position: absolute;
+    right: 182px;
+    z-index: 3;
+    
+    button {
+      color: #15deec;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    
+    .dd {
+      left: 0;
+      width: 118px;
+      overflow-y: auto;
+      max-height: 185px;
+      
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+    
+    /* Track */
+      ::-webkit-scrollbar-track {
+        display: none; 
+      }
+    
+    /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #5C667D; 
+      }
+    
+    /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #5C667D; 
+      }
+    }
+    
+    .ddd {
+      :hover {
+        font-weight: bold;
+    }
+    }
+  }
 
    .activityInputField {
       position: relative;
       display: block;
    }
 
-   img {
+   .bigImg {
       left: 11.3%;
       width: 1280px;
       height: auto;

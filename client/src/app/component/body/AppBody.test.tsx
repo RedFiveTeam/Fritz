@@ -6,7 +6,7 @@ import { StyledFormContainer } from '../form/FormContainer';
 import { StyledSlidesContainer } from '../slides/container/SlidesContainer';
 import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
 import { StyledProgressBar } from '../progressBar/ProgressBar';
-import { InjectedUploadContainer } from '../form/upload/container/UploadContainer';
+import { StyledUploadContainer } from '../form/upload/container/UploadContainer';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { StyledUnicornUploadModal } from '../modals/UnicornUploadModal';
 
@@ -49,7 +49,7 @@ describe('Header', () => {
   });
 
   it('should render the upload container', () => {
-    expect(subject.find(InjectedUploadContainer).exists()).toBeTruthy();
+    expect(subject.find(StyledUploadContainer).exists()).toBeTruthy();
   });
 
   it('should render a modal on unicorn upload', () => {

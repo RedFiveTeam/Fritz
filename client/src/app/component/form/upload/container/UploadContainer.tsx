@@ -4,6 +4,7 @@ import { UploadActions } from '../actions/UploadActions';
 import { UploadStore } from '../UploadStore';
 import { Toast } from '../../../../../utils/Toast';
 import { SlidesStore } from '../../../slides/SlidesStore';
+import styled from 'styled-components';
 
 const pdfIcon = require('../../../../../icon/PDFIcon.svg');
 const paperclipIcon = require('../../../../../icon/PaperclipIcon.svg');
@@ -170,4 +171,11 @@ export class UploadContainer extends React.Component<Props> {
   }
 }
 
-export const InjectedUploadContainer = inject('uploadActions', 'uploadStore', 'slidesStore')(UploadContainer);
+export const StyledUploadContainer = inject('uploadActions', 'uploadStore', 'slidesStore')(styled(UploadContainer)`
+  #pdfFileName {
+    width: 392px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+`);

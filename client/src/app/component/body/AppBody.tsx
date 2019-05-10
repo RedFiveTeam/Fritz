@@ -7,7 +7,7 @@ import { UploadStore } from '../form/upload/UploadStore';
 import { StyledSlidesContainerPlaceholder } from '../slides/container/SlidesContainerPlaceholder';
 import { StyledUploadProgressContainer } from '../slides/container/UploadProgressContainer';
 import { StyledProgressBar } from '../progressBar/ProgressBar';
-import { InjectedUploadContainer } from '../form/upload/container/UploadContainer';
+import { StyledUploadContainer } from '../form/upload/container/UploadContainer';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { StyledUnicornUploadModal } from '../modals/UnicornUploadModal';
 
@@ -29,7 +29,7 @@ export class AppBody extends React.Component<Props> {
             this.props.uploadStore!.uploaded &&
             <StyledFormContainer/>
           }
-          <InjectedUploadContainer/>
+          <StyledUploadContainer/>
         </div>
         <div className="spacer"/>
         <div className="right">

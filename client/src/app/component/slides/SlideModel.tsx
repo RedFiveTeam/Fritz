@@ -11,6 +11,7 @@ export class SlideModel {
   @observable private _releasabilityId: string = '';
   @observable private _id: number | null = null;
   @observable private _calloutTime: string | null = null;
+  @observable private _uploading: boolean | null = null;
 
   constructor(
     oldName: string = '',
@@ -75,6 +76,11 @@ export class SlideModel {
     return this._id;
   }
 
+  @computed
+  get uploading(): boolean | null {
+    return this._uploading;
+  }
+
   @action.bound
   setOldName(value: string) {
     this._oldName = value;
@@ -118,5 +124,10 @@ export class SlideModel {
   @action.bound
   setCalloutTime(value: string | null) {
     this._calloutTime = value;
+  }
+
+  @action.bound
+  setUploading(value: boolean | null) {
+    this._uploading = value;
   }
 }

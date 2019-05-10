@@ -65,8 +65,9 @@ export class UnicornActions {
 
   @action.bound
   async buildUploadModel(slide: SlideModel) {
-    this.unicornStore!.setPendingUpload(true);
-    await this.unicornRepository.upload(await this.setUnicornModel(slide), this.increaseCurrentUploadCount);
+    slide.setUploading(true);
+    await this.unicornRepository.upload( await this.setUnicornModel(slide), this.increaseCurrentUploadCount );
+    slide.setUploading(false);
     this.isUploadFinished();
   }
 

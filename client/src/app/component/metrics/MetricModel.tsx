@@ -1,5 +1,10 @@
 import { action, computed, observable } from 'mobx';
 
+export enum MetricType {
+  UNICORN_UPLOAD_SUCCESS= 'Image Uploaded to Unicorn',
+  UNICORN_UPLOAD_FAILURE= 'Upload to Unicorn Failed'
+}
+
 export class MetricModel {
   @observable private _id: any = null;
   @observable private _uid: string;

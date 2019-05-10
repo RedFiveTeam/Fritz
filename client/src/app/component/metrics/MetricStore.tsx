@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx';
-import { MetricModel } from './MetricModel';
+import { MetricModel, MetricType } from './MetricModel';
 import { MetricRepository } from './repository/MetricRepository';
 import { AverageModel } from '../average/AverageModel';
 
@@ -14,12 +14,75 @@ export class MetricStore {
   @observable private _filterValue: number = 9007199254740991;
   @observable private _averages: AverageModel = new AverageModel();
   @observable private _pendingUploadToUnicornMetric: MetricModel;
+  @observable private _averageWorkflow: any;
+  @observable private _averageUpload: any;
+  @observable private _averageRename: any;
+  @observable private _averageDownload: any;
+  @observable private _averageConversion: any;
 
   async hydrate(metricRepository: MetricRepository) {
     this._metrics = await metricRepository.findAll();
     if (this._filteredMetrics.length === 0) {
       this._filteredMetrics = this._metrics;
     }
+  }
+
+  @computed
+  get averageUpload(): any {
+    return this._averageUpload;
+  }
+
+  @computed
+  get averageRename(): any {
+    return this._averageRename;
+  }
+
+  @computed
+  get averageDownload(): any {
+    return this._averageDownload;
+  }
+
+  @computed
+  get averageConversion(): any {
+    return this._averageConversion;
+  }
+
+  @computed
+  get averageWorkflow() {
+    return this._averageWorkflow;
+  }
+
+  @computed
+  get uploadToUnicornAttempts(): number {
+    return this.failedUploadAttempts + this.successfulUploadAttempts;
+  }
+
+  @computed
+  get failedUploadAttempts(): number {
+    return (
+      this.filteredMetrics.filter((e: MetricModel) => {
+          return e.action === MetricType.UNICORN_UPLOAD_FAILURE;
+        }
+      ).length
+    );
+  }
+
+  @computed
+  get successfulUploadAttempts(): number {
+    return (
+      this.filteredMetrics.filter((e: MetricModel) => {
+          return e.action === MetricType.UNICORN_UPLOAD_SUCCESS;
+        }
+      ).length
+    );
+  }
+
+  @computed
+  get successRate(): number {
+    return (
+      this.successfulUploadAttempts * 100 /
+      (this.successfulUploadAttempts + this.failedUploadAttempts)
+    );
   }
 
   @computed
@@ -125,5 +188,30 @@ export class MetricStore {
   @action.bound
   setFilteredMetrics(value: MetricModel[]) {
     this._filteredMetrics = value;
+  }
+
+  @action.bound
+  setAverageWorkflow(value: number) {
+    this._averageWorkflow = value;
+  }
+
+  @action.bound
+  setAverageUpload(value: any) {
+    this._averageUpload = value;
+  }
+
+  @action.bound
+  setAverageRename(value: any) {
+    this._averageRename = value;
+  }
+
+  @action.bound
+  setAverageDownload(value: any) {
+    this._averageDownload = value;
+  }
+
+  @action.bound
+  setAverageConversion(value: any) {
+    this._averageConversion = value;
   }
 }

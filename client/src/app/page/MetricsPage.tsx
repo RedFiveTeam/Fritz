@@ -3,24 +3,30 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledMetricsTable } from '../component/metrics/table/MetricsTable';
 import { MetricActions } from '../component/metrics/actions/MetricActions';
-import { StyledActionsTimeCard } from '../component/metrics/ActionsTimeCard';
 import { MetricStore } from '../component/metrics/MetricStore';
 import { ClockIcon } from '../../icon/ClockIcon';
-import { StyledUserActionsCard } from '../component/metrics/UserActionsCard';
+import { StyledMetricCard } from '../component/metrics/MetricCard';
+import { StyledMetric } from '../component/metrics/Metric';
+
+const unicornIcon = require('../../icon/UnicornIcon.svg');
+const actionTimesIcon = require('../../icon/ActionTimesIcon.svg');
+const userActionsIcon = require('../../icon/UserActionsIcon.svg');
 
 interface Props {
   className?: string;
   metricActions?: MetricActions;
   metricStore?: MetricStore;
-
 }
 
 @observer
 export class MetricsPage extends React.Component<Props> {
+  async componentDidMount() {
+    await this.props.metricActions!.initializeStores();
+    this.props.metricActions!.calculateAllAverages();
+  }
 
   async sortSelected(e: any) {
     await this.props.metricActions!.filterMetrics(e.target.value);
-
   }
 
   handleToggle(active: string, inactive: string, activeButton: string, inactiveButton: string) {
@@ -100,8 +106,79 @@ export class MetricsPage extends React.Component<Props> {
           </div>
         </nav>
         <div id="tab1">
-          <StyledActionsTimeCard/>
-          <StyledUserActionsCard/>
+          <div className="metricsContainer">
+            <StyledMetricCard
+              title="Action Times"
+              icon={actionTimesIcon}
+            >
+              <StyledMetric
+                title="Avg. Workflow Time"
+                value={this.props.metricStore!.averageWorkflow}
+                difference={this.props.metricActions!.calculateAverageDifference('workflow')}
+                unit="s"
+              />
+              <StyledMetric
+                title="Avg. Upload Time"
+                value={this.props.metricStore!.averageUpload}
+                difference={this.props.metricActions!.calculateAverageDifference('upload')}
+                unit="s"
+              />
+              <StyledMetric
+                title="Avg. Rename Time"
+                value={this.props.metricStore!.averageRename}
+                difference={this.props.metricActions!.calculateAverageDifference('rename')}
+                unit="s"
+              />
+              <StyledMetric
+                title="Avg. Download Time"
+                value={this.props.metricStore!.averageDownload}
+                difference={this.props.metricActions!.calculateAverageDifference('download')}
+                unit="s"
+              />
+              <StyledMetric
+                title="Avg. Conversion Time"
+                value={this.props.metricStore!.averageConversion}
+                difference={this.props.metricActions!.calculateAverageDifference('conversion')}
+                unit="s"
+              />
+            </StyledMetricCard>
+            <StyledMetricCard
+              title="User Actions"
+              icon={userActionsIcon}
+            >
+              <StyledMetric
+                title="Powerpoint Slides Converted"
+                value={this.props.metricActions!.countConverted()}
+              />
+              <StyledMetric
+                title="Zip Files Downloaded"
+                value={this.props.metricActions!.countUserAction('Download')}
+              />
+              <StyledMetric
+                title="Powerpoints Uploaded"
+                value={this.props.metricActions!.countUserAction('Upload')}
+              />
+              <StyledMetric
+                title="JPEGs Deleted"
+                value={this.props.metricActions!.countUserAction('Delete JPG')}
+              />
+            </StyledMetricCard>
+            <StyledMetricCard
+              title="UNICORN Metrics"
+              icon={unicornIcon}
+              className={'verticalCard'}
+            >
+              <StyledMetric
+                title="Upload Success Rate"
+                value={this.props.metricStore!.successRate}
+                unit="%"
+              />
+              <StyledMetric
+                title="Upload Attempts"
+                value={this.props.metricStore!.uploadToUnicornAttempts}
+              />
+            </StyledMetricCard>
+          </div>
         </div>
         <div id="tab2">
           <StyledMetricsTable/>
@@ -114,7 +191,9 @@ export class MetricsPage extends React.Component<Props> {
 export const StyledMetricsPage = inject(
   'metricActions',
   'classificationStore',
-  'classificationActions')
+  'classificationActions',
+  'metricStore'
+)
 (styled(MetricsPage)`
 
 height: 90vh;
@@ -123,13 +202,12 @@ position: relative;
 
   #bannerTitle {
     width: 200px;
-    //margin: 16px 16px 16px 33px;
     display: inline-block;
   }
   
   a {
-  line-height: 1.8;
-  margin-left: 28px;
+    line-height: 1.8;
+    margin-left: 28px;
   }
   
   button {
@@ -188,34 +266,82 @@ position: relative;
   }
 
   #dashBoardButton {
-  background: #0E5F66;
+    background: #0E5F66;
   }
   
   #activityLogButton {
-  background: #00818C;
+    background: #00818C;
   }
   
   .exportMetrics {
-  right: 21px;
-  top: 72px;
-  position: absolute;
-  
+    right: 21px;
+    top: 72px;
+    position: absolute;
   }
  
   #tab2 {
-  display: none;
-  height: 100%;
+    display: none;
+    height: 100%;
   }
   
   #tab1 {
-  margin-top: 100px;
+    margin-top: 100px;
   }
   
   #activityLogButton {
-  border-radius: 0 4px 4px 0;
+    border-radius: 0 4px 4px 0;
   }
   
   #dashBoardButton {
-  border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .metricsContainer {
+    position: relative;
+    height: 560px;
+    width: 1518px;
+    margin-left: 66px;
+
+  }
+  
+  .verticalCard {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 263px;
+    height: 560px;
+    
+    img {
+      width: 55px;
+      height: 64px;
+      display: inline-block;
+      position: relative;
+      bottom: 40px;
+      margin-right: 21px;
+    }
+    
+    .cardTitle {
+      display: inline-block;
+      white-space: normal;
+      font-size: 34px;
+    }
+    
+    .cardLeft {
+      margin-top: 35px;
+      margin-bottom: 0px;
+      margin-left: 18px;
+      width: 263px;
+      white-space: nowrap;
+    }
+    
+    .metricCardSpacer {
+      display: none;
+    }
+    
+    .childrenContainer {
+      right: 230px;
+      display: block;
+      top: 180px;
+    }
   }
 `);

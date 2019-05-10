@@ -8,6 +8,7 @@ import { UnicornUploadModel } from '../model/UnicornUploadModel';
 import { SlidesStore } from '../../slides/store/SlidesStore';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
+import { MetricType } from '../../metrics/MetricModel';
 
 export class UnicornActions {
   public metricActions: MetricActions;
@@ -88,11 +89,12 @@ export class UnicornActions {
       if (status.successfulUpload) {
         this.increaseCurrentUploadCount();
         slide.setUploading(false);
+        this.metricActions.createMetric(MetricType.UNICORN_UPLOAD_SUCCESS);
         break;
       }
       if (i === 2 && !status.successfulUpload) {
         slide.setFailed(true);
-        this.metricActions!.createMetric('Upload to Unicorn Failed');
+        this.metricActions!.createMetric(MetricType.UNICORN_UPLOAD_FAILURE);
         slide.setUploading(null);
       }
     }

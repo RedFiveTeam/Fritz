@@ -9,6 +9,7 @@ import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UploadStore } from '../../form/upload/UploadStore';
 import { observable } from 'mobx';
 import { CSSProperties } from 'react';
+import { StyledCallout } from '../../unicorn/Callout/Callout';
 
 const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
@@ -115,7 +116,7 @@ export class SlideCard extends React.Component<Props> {
               <img
                 src={'api/image/' + this.props.uploadStore!.hash + '/' +
                 this.props.slideModel.oldName.replace('.JPG', '.jpg')}
-                className="card-img"
+                className="card-img calloutImg"
                 onClick={() => {
                   let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);
                   if (expandDisplay !== null) {
@@ -215,6 +216,10 @@ export class SlideCard extends React.Component<Props> {
             </div>
           </div>
         </div>
+        <div className="cardSpacer"/>
+        <StyledCallout
+          slide={this.props.slideModel}
+        />
       </div>
     );
   }
@@ -222,10 +227,12 @@ export class SlideCard extends React.Component<Props> {
 
 export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions', 'uploadStore')(styled(SlideCard)`
   
-  width: 686px;
+  width: 860px;
   display: inline-block;
-  height: 168px;
+  height: 170px;
   margin-right: 17px;
+  position: relative;
+  margin-bottom: 6px;
 
   input {
     width: 166px;
@@ -238,7 +245,7 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     width: 33px;
     background: rgba(43, 48, 60, 0.557886);
     position: absolute;
-    right: 74px;
+    right: 86px;
     text-align: center;
     line-height: 29px;
     vertical-align: middle;
@@ -302,7 +309,7 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     margin-left: -8%;
   }
   
-  img {
+  .calloutImg {
     object-fit: cover;
     width: 70%;
     height: 167px;
@@ -326,13 +333,22 @@ export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricAct
     width: 24px;
     height: 24px;
     position: absolute;
-    right: 0;
+    right: -30px;
     top: 8px;
     cursor: pointer;
   }
   
   .slide {
-    width: 480px;
+    width: 430px;
     white-space: pre-wrap;
+  }
+  
+  .cardSpacer {
+    position: absolute;
+    width: 3px;
+    height: 145px;
+    top: 10px;
+    right: 186px;
+    background-color: rgba(108, 127, 156, 0.5);
   }
 `);

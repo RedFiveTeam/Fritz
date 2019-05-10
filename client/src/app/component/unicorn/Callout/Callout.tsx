@@ -8,7 +8,6 @@ import { SlidesStore } from '../../slides/SlidesStore';
 import { CalloutModel } from '../model/CalloutModel';
 
 const Unicorn = require('../../../../icon/Unicorn.svg');
-const Chain = require('../../../../icon/Chain.svg');
 
 interface Props {
   className?: string;
@@ -29,7 +28,6 @@ export class Callout extends React.Component<Props> {
           <span>UNICORN Callout</span>
         </div>
         <div className="content">
-          <img src={Chain}/>
           {
             this.props.unicornStore!.unassignedCallouts &&
             this.props.slide!.targetEventId === '' &&
@@ -78,20 +76,20 @@ export class Callout extends React.Component<Props> {
 export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callout)`
 
   display: inline-block;
-  position: relative;
-  top: -25px;
-  width: 158px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 188px;
   height: 168px;
-  background-color: #191e2a;
-  border-radius: 2px;
-  box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.5);
+  background-image: linear-gradient(to right, #191e2a, #364054);
   
   .title {
     color: #6c7f9c;
     font-size: 14px;
-    line-height: 19px;
-    height: 19px;
-    padding-top: 12px;
+    top: 11px;
+    position: relative;
+    width: 160px;
+    margin: auto;
   }
   
   .title > img {
@@ -102,8 +100,8 @@ export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callou
   }
   
   .dropdown {
-    top: 49px;
-    left: 20px;
+    top: 44px;
+    left: 34px;
     
     button {
       color: #15deec;

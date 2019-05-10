@@ -55,7 +55,7 @@ export class SelectMissionModal extends React.Component<Props> {
             <span>Start Date</span>
           </div>
           {
-            this.props.unicornStore!.loading &&
+            this.props.unicornStore!.missions.length < 1 && this.props.unicornStore!.loading &&
             <StyledUnicornMissionLoading/>
           }
           <div className="missionRows">

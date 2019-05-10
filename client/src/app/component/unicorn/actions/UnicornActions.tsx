@@ -30,33 +30,7 @@ export class UnicornActions {
   async getCallouts(missionId: string) {
     this.unicornStore.setCallouts([]);
     this.unicornStore.setCallouts(await this.unicornRepository.getCallouts(missionId));
-    if (this.slidesStore.slides.length > 1) {
-      for (let i = 0; i < this.slidesStore.slides.length; i++) {
-        this.unicornStore.callouts.map((c) => {
-          if (this.unicornStore.callouts[i] && this.unicornStore.callouts[i].time &&
-            this.unicornStore.callouts[i].time.length > 1 && this.slidesStore.slides[i] &&
-            this.slidesStore.slides[i].time && this.slidesStore.slides[i].time.length > 1) {
-            if (this.unicornStore.callouts[i].time.toString().indexOf(this.slidesStore.slides[i].time) > -1) {
-              let calloutMatches = this.unicornStore.callouts.filter((f) => {
-                if (f.time && f.time.length > 0) {
-                  return f.time.indexOf(this.slidesStore.slides[i].time) > -1;
-                }
-                return false;
-              });
-              let timeMatches = this.slidesStore.slides.filter((s) => {
-                if (s.time && s.time.length) {
-                  return s.time.indexOf(c.time.replace('Z', ''));
-                }
-                return false;
-              });
-              if (timeMatches.length < 2 && calloutMatches.length < 2) {
-                this.slidesStore.slides[i].setTargetEventId(this.unicornStore.callouts[i].eventId);
-              }
-            }
-          }
-        });
-      }
-    }
+    this.checkForCalloutMatches();
   }
 
   @action.bound
@@ -92,7 +66,7 @@ export class UnicornActions {
   @action.bound
   async buildUploadModel(slide: SlideModel) {
     this.unicornStore!.setPendingUpload(true);
-    await this.unicornRepository.upload( await this.setUnicornModel(slide), this.increaseCurrentUploadCount );
+    await this.unicornRepository.upload(await this.setUnicornModel(slide), this.increaseCurrentUploadCount);
     this.isUploadFinished();
   }
 
@@ -120,6 +94,35 @@ export class UnicornActions {
         break;
       } else {
         this.unicornStore!.setUnassignedCallouts(false);
+      }
+    }
+  }
+
+  @action.bound
+  checkForCalloutMatches() {
+    for (let i = 0; i < this.slidesStore.slides.length; i++) {
+      let slide = this.slidesStore.slides[i];
+      for (let o = 0; o < this.unicornStore.callouts.length; o++) {
+        let callout = this.unicornStore.callouts[o];
+        if (callout.time && callout.time.toString().indexOf(slide.time) > -1) {
+          let calloutMatches = this.unicornStore.callouts.filter((f) => {
+            if (f.time && f.time.length > 0) {
+              return f.time.indexOf(this.slidesStore.slides[i].time) > -1;
+            }
+            return false;
+          });
+          let timeMatches = this.slidesStore.slides.filter((s) => {
+            if (s.time && s.time.length) {
+              let calloutTime = callout.time.toString().replace('Z', '');
+              return s.time.indexOf(calloutTime) > -1;
+            }
+            return false;
+          });
+          if (timeMatches.length < 2 && calloutMatches.length < 2) {
+            slide.setTargetEventId(callout.eventId);
+            slide.setCalloutTime(callout.time);
+          }
+        }
       }
     }
   }

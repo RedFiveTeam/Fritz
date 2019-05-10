@@ -23,7 +23,8 @@ describe('SelectMissionModal', () => {
       ],
       selectedSite: 'DGS 1',
       setLoading: jest.fn(),
-      loading: jest.fn()
+      loading: jest.fn(),
+      setMissions: () => { unicornStore.missions = []; }
     };
 
     subject = shallow(
@@ -44,6 +45,13 @@ describe('SelectMissionModal', () => {
 
   it('should render a loading state when the missions are populating', () => {
     unicornStore.setLoading(true);
+    unicornStore.setMissions([]);
+    subject = shallow(
+      <SelectMissionModal
+        unicornActions={unicornActions}
+        unicornStore={unicornStore}
+      />
+    );
     expect(subject.find(StyledUnicornMissionLoading).exists()).toBeTruthy();
   });
 });

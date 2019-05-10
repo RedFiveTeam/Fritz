@@ -10,6 +10,7 @@ import { SlidesActions } from '../../../slides/actions/SlidesActions';
 import { MetricActions } from '../../../metrics/actions/MetricActions';
 import { UnicornStore } from '../../../unicorn/store/UnicornStore';
 import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
+import { UnicornActions } from '../../../unicorn/actions/UnicornActions';
 
 export class UploadActions {
   public metricActions: MetricActions;
@@ -18,6 +19,7 @@ export class UploadActions {
   private uploadStore: UploadStore;
   private unicornStore: UnicornStore;
   private slidesStore: SlidesStore;
+  private unicornActions: UnicornActions;
   private poll: any;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
@@ -27,6 +29,7 @@ export class UploadActions {
     this.slidesStore = stores.slidesStore!;
     this.slidesActions = new SlidesActions(repositories, stores);
     this.metricActions = new MetricActions(repositories, stores);
+    this.unicornActions = new UnicornActions(repositories, stores);
   }
 
   @action.bound
@@ -159,35 +162,13 @@ export class UploadActions {
       let slide = new SlideModel();
       if (times[idx]) {
         slide.setTime(times[idx]);
-        if (this.unicornStore.callouts.length > 0) {
-          for (let i = 0; i < this.unicornStore.callouts.length; i++) {
-            if (this.unicornStore.callouts[i].time && this.unicornStore.callouts[i].time.length > 0 && times[idx]) {
-              if (this.unicornStore.callouts[i].time.toString().indexOf(times[idx]) > -1) {
-                let timeMatches = times.filter((t) => {
-                  if (t && t.length > 0) {
-                    return t.indexOf(this.unicornStore.callouts[i].time.toString().replace('Z', '')) > -1;
-                  }
-                  return false;
-                });
-                let calloutMatches = this.unicornStore.callouts.filter((f) => {
-                  if (f && f.time && f.time.length > 0) {
-                    return f.time.toString().indexOf(times[idx]) > -1;
-                  }
-                  return false;
-                });
-                if (timeMatches.length < 2 && calloutMatches.length < 2) {
-                  slide.setTargetEventId(this.unicornStore.callouts[i].eventId);
-                }
-              }
-            }
-          }
-        }
       }
       slide.setId(idx);
       slide.setOldName(name);
       temp.push(slide);
     });
     this.slidesStore.setSlides(temp);
+    this.unicornActions.checkForCalloutMatches();
     this.slidesActions.updateNewNames();
   }
 

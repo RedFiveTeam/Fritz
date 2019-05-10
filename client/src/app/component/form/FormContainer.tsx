@@ -9,6 +9,7 @@ import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { StyledDropdown } from '../dropdown/Dropdown';
 import { UploadActions } from './upload/actions/UploadActions';
+import * as ReactDOM from 'react-dom';
 
 interface Props {
   className?: string;
@@ -31,6 +32,13 @@ export class FormContainer extends React.Component<Props> {
   };
 
   goodCSS: CSSProperties = {};
+
+  changeReleasabilityColor() {
+    let dropdownText = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('.default') as HTMLElement;
+    if (dropdownText) {
+      dropdownText.style.opacity = '1';
+    }
+  }
 
   async componentDidMount() {
     await this.props.unicornActions!.getReleasabilities();
@@ -175,9 +183,10 @@ export class FormContainer extends React.Component<Props> {
                 this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
                   return e.releasabilityName;
                 })}
-              defaultValue="Select"
+              defaultValue={this.props.slidesStore!.releasability ? this.props.slidesStore!.releasability : 'Select'}
               callback={(r: string) => {
                 this.props.slidesActions!.setAndUpdateReleasability(r);
+                this.changeReleasabilityColor();
               }}
             />
             {

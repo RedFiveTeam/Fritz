@@ -147,7 +147,6 @@ export class SlidesActions {
     this.slidesStore.slides.map((s: SlideModel) => {
       s.setCalloutTime('Select');
       s.setTargetEventId('');
-      console.log(s);
     });
   }
 }

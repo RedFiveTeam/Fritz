@@ -2,6 +2,8 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { SlideCard } from './SlideCard';
 import { SlideModel } from '../SlideModel';
+import { Provider } from 'mobx-react';
+import { StyledCallout } from '../../unicorn/Callout/Callout';
 
 describe('SlideCard', () => {
   let subject: ReactWrapper;
@@ -11,6 +13,7 @@ describe('SlideCard', () => {
   let slidesStore: any;
   let uploadStore: any;
   let metricActions: any;
+  let unicornStore: any;
 
   beforeEach(() => {
     uploadStore = {
@@ -42,15 +45,22 @@ describe('SlideCard', () => {
       createMetric: jest.fn()
     };
 
+    unicornStore = {};
+
     subject = mount(
-      <SlideCard
-        uploadStore={uploadStore}
-        slideNumber={slideNumber}
-        slideModel={slideModel}
-        slidesActions={slidesActions}
+      <Provider
+        unicornStore={unicornStore}
         slidesStore={slidesStore}
-        metricActions={metricActions}
-      />
+      >
+        <SlideCard
+          uploadStore={uploadStore}
+          slideNumber={slideNumber}
+          slideModel={slideModel}
+          slidesActions={slidesActions}
+          slidesStore={slidesStore}
+          metricActions={metricActions}
+        />
+      </Provider>
     );
   });
 
@@ -87,5 +97,9 @@ describe('SlideCard', () => {
   it('should flag slide as deleted when the delete icon is clicked and have an undo button', () => {
     expect(subject.find('.deleteIcon').simulate('click'));
     expect(slidesActions.deleteSlide).toHaveBeenCalled();
+  });
+
+  it('should contain a callout component', () => {
+    expect(subject.find(StyledCallout).exists()).toBeTruthy();
   });
 });

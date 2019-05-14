@@ -76,7 +76,7 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
   .right {
     scroll-behavior: smooth;
     width: 57vw;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 140px);
     min-height: 500px;
     display: inline-block;
     position: absolute;

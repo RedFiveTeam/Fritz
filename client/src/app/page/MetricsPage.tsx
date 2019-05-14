@@ -118,7 +118,7 @@ export const StyledMetricsPage = inject(
 (styled(MetricsPage)`
 
 height: 90vh;
-top: -12px;
+top: 0px;
 position: relative;
 
   #bannerTitle {

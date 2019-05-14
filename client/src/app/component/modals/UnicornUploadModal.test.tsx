@@ -31,7 +31,8 @@ describe('UnicornUploadModal', () => {
 
     metricActions = {
       trackMetric: jest.fn(),
-      updateMetric: jest.fn()
+      updateMetric: jest.fn(),
+      createMetric: jest.fn()
     };
 
     subject = shallow(

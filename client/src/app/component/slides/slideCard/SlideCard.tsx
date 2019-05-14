@@ -126,7 +126,11 @@ export class SlideCard extends React.Component<Props> {
                     '.carousel-item:nth-of-type(' +
                     (this.props.slideNumber - this.props.deletedCount! + 1) + ')') as HTMLElement);
                   carouselItem.classList.add('active');
-                  (carouselItem.querySelector('#timeInput') as HTMLInputElement).focus();
+                  if ((carouselItem.querySelector('#timeInput') as HTMLInputElement).value.length === 4) {
+                    (carouselItem.querySelector('#activityInput') as HTMLInputElement).focus();
+                  } else {
+                    (carouselItem.querySelector('#timeInput') as HTMLInputElement).focus();
+                  }
                 }}
               />
               <span

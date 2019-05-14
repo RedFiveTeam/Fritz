@@ -114,14 +114,14 @@ export class Carousel extends React.Component<Props> {
             <input
               maxLength={4}
               onChange={(e: any) => {
-                let ele = document.querySelector(
-                  '.slideCardContainer:nth-of-type(' + (this.props.slideNumber + 1) + ')')!
-                  .querySelector('#timeInput') as HTMLInputElement;
-                ele.value = e.target.value;
-                this.props.slidesActions!.setAndUpdateTime(
-                  this.props.slideModel,
-                  e.target.value.toUpperCase()
-                );
+                  let ele = document.querySelector(
+                    '.slideCardContainer:nth-of-type(' + (this.props.slideNumber + 1) + ')')!
+                    .querySelector('#timeInput') as HTMLInputElement;
+                  ele.value = e.target.value;
+                  this.props.slidesActions!.setAndUpdateTime(
+                    this.props.slideModel,
+                    e.target.value.toUpperCase()
+                  );
               }}
               type="text"
               className="form-control"
@@ -141,7 +141,12 @@ export class Carousel extends React.Component<Props> {
                   (document.querySelector('.carousel-control-next') as HTMLElement).click();
                   let nextCarousel = document.querySelector('.active')!.nextSibling as HTMLElement;
                   if (nextCarousel && nextCarousel.classList.contains('carousel-item')) {
-                    (nextCarousel.querySelector('#timeInput') as HTMLElement).focus();
+                    let timeInput = nextCarousel.querySelector('#timeInput') as HTMLInputElement;
+                    if (timeInput.value.length === 4) {
+                      (nextCarousel.querySelector('#activityInput') as HTMLElement).focus();
+                    } else {
+                      timeInput.focus();
+                    }
                   } else {
                     nextCarousel = document.querySelector('.carousel-item:first-of-type') as HTMLElement;
                     (nextCarousel.querySelector('#timeInput') as HTMLElement).focus();

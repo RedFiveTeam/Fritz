@@ -22,7 +22,11 @@ export class HTTPClient {
         credentials: 'include',
       }
     );
-    return await resp.json();
+    if (resp.status === 500) {
+      return [];
+    } else {
+      return await resp.json();
+    }
   }
 
   async postJSON(path: string, body: string) {

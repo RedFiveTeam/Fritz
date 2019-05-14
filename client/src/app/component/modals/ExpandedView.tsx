@@ -18,7 +18,6 @@ interface Props {
 export class ExpandedView extends React.Component<Props> {
 
   componentDidMount() {
-    console.log('expanded view mounted');
     let ele = document.querySelector('.expandedView') as HTMLElement;
     if (ele !== null) {
       ele.onclick = (e: any) => {

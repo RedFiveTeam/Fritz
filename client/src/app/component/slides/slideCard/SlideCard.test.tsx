@@ -4,6 +4,7 @@ import { SlideCard } from './SlideCard';
 import { SlideModel } from '../SlideModel';
 import { Provider } from 'mobx-react';
 import { StyledCallout } from '../../unicorn/Callout/Callout';
+import { CalloutModel } from '../../unicorn/model/CalloutModel';
 
 describe('SlideCard', () => {
   let subject: ReactWrapper;
@@ -45,7 +46,9 @@ describe('SlideCard', () => {
       createMetric: jest.fn()
     };
 
-    unicornStore = {};
+    unicornStore = {
+      callouts: [new CalloutModel('', '', '', '', '', '')]
+    };
 
     subject = mount(
       <Provider

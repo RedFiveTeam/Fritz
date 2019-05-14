@@ -6,6 +6,7 @@ import { SlideModel } from '../../slides/SlideModel';
 import { StyledDropdown } from '../../dropdown/Dropdown';
 import { SlidesStore } from '../../slides/SlidesStore';
 import { CalloutModel } from '../model/CalloutModel';
+import { StyledPseudoDropdown } from '../../dropdown/PseudoDropdown';
 
 const Unicorn = require('../../../../icon/Unicorn.svg');
 const GreenCheckmark = require('../../../../icon/GreenCheckmark.svg');
@@ -34,48 +35,54 @@ export class Callout extends React.Component<Props> {
             this.props.slide!.targetEventId === '' &&
             <div className="redBox"/>
           }
-          {this.props.slide.uploading === null &&
-          <StyledDropdown
-              options={
-                this.props.unicornStore!.callouts ?
-                  this.props.unicornStore!.callouts
-                    .filter((c: any) => {
-                      return c.time !== null;
-                    })
-                    .map((c: any) => {
-                      if (c.time && c.time.toString().length > 0) {
-                        return c.time;
+          {
+            !this.props.unicornStore!.pendingCallouts && this.props.unicornStore!.callouts.length > 0 ?
+              (this.props.slide.uploading === null &&
+                  <StyledDropdown
+                      options={
+                        this.props.unicornStore!.callouts ?
+                          this.props.unicornStore!.callouts
+                            .filter((c: any) => {
+                              return c.time !== null;
+                            })
+                            .map((c: any) => {
+                              if (c.time && c.time.toString().length > 0) {
+                                return c.time;
+                              }
+                            }) : []
                       }
-                    }) : []
-              }
-              defaultValue={this.props.slide.calloutTime ? this.props.slide.calloutTime
-                : 'Select'}
-              callback={(s: string) => {
-                let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
-                  return f.id === this.props.slide.id;
-                })[0];
-                slide.setTargetEventId(
-                  this.props.unicornStore!.callouts
-                    .filter((c: CalloutModel) => {
-                      return c.time !== null;
-                    })
-                    .filter((c: CalloutModel) => {
-                      if (c.time && c.time.toString().length > 0) {
-                        return c.time.toString() === s;
-                      }
-                      return false;
-                    })[0].eventId
-                );
-                slide.setCalloutTime(s);
-              }}
-          />
+                      defaultValue={this.props.slide.calloutTime ? this.props.slide.calloutTime
+                        : 'Select'}
+                      callback={(s: string) => {
+                        let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
+                          return f.id === this.props.slide.id;
+                        })[0];
+                        slide.setTargetEventId(
+                          this.props.unicornStore!.callouts
+                            .filter((c: CalloutModel) => {
+                              return c.time !== null;
+                            })
+                            .filter((c: CalloutModel) => {
+                              if (c.time && c.time.toString().length > 0) {
+                                return c.time.toString() === s;
+                              }
+                              return false;
+                            })[0].eventId
+                        );
+                        slide.setCalloutTime(s);
+                      }}
+                  />)
+              :
+              ( this.props.unicornStore!.callouts.length === 0 &&
+                <StyledPseudoDropdown/>
+              )
           }
           {
             this.props.slide.uploading === false &&
             <div
                 className="finishedUpload"
             >
-              <img className="uploadCompleteIcon" src={GreenCheckmark}/>
+                <img className="uploadCompleteIcon" src={GreenCheckmark}/>
                 <span className="uploadComplete">Uploaded to {this.props.slide.calloutTime}</span>
             </div>
           }
@@ -84,9 +91,9 @@ export class Callout extends React.Component<Props> {
             <div
                 className="uploading"
             >
-              <div
-                className="loadingCallout"
-              />
+                <div
+                    className="loadingCallout"
+                />
                 <span className="uploadPending">Uploading</span>
             </div>
           }

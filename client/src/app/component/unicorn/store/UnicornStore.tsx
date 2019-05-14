@@ -21,6 +21,7 @@ export class UnicornStore {
   @observable private _confirmUploadStatus: boolean = false;
   @observable private _unassignedCallouts: boolean = false;
   @observable private _loading: boolean;
+  @observable private _pendingCallouts: boolean = true;
 
   async hydrate(unicornRepository: UnicornRepository) {
     this.setLoading(true);
@@ -103,6 +104,11 @@ export class UnicornStore {
     return this._uploadComplete;
   }
 
+  @computed
+  get pendingCallouts(): boolean {
+    return this._pendingCallouts;
+  }
+
   @action.bound
   setUnassignedCallouts(value: boolean) {
     this._unassignedCallouts = value;
@@ -166,5 +172,10 @@ export class UnicornStore {
   @action.bound
   setLoading(value: boolean) {
     this._loading = value;
+  }
+
+  @action.bound
+  setPendingCallouts(value: boolean) {
+    this._pendingCallouts = value;
   }
 }

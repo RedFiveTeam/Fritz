@@ -175,8 +175,8 @@ export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callou
   .redBox {
     width: 121px;
     height: 48px;
-    left: 18px;
-    top: 66px;
+    left: 32px;
+    top: 68px;
     border: solid 2px #ae4754;
     border-radius: 4px;
     position: absolute;

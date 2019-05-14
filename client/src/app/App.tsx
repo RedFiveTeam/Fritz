@@ -16,7 +16,7 @@ export class App extends React.Component {
   render() {
     return (
       <div className="ParentAppBody">
-        <div className="ParentHeader" style={{height: 91}}>
+        <div className="ParentHeader" style={{height: 80}}>
           <StyledHeader/>
         </div>
         <div className="ParentWrappedRoutes" style={this.css}>

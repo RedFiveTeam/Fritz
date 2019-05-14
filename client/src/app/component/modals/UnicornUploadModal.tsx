@@ -64,6 +64,7 @@ export class UnicornUploadModal extends React.Component<Props> {
                             return s.targetEventId !== '' && s.deleted !== true;
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
+                          this.props.metricActions!.updateMetric('Renaming');
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');
                           this.props.unicornStore!.setPendingUpload(false);
                           for (let i = 0; i < slides.length; i++) {
@@ -125,6 +126,7 @@ export class UnicornUploadModal extends React.Component<Props> {
                           this.props.unicornStore!.setConfirmUploadStatus(false);
                           this.props.unicornStore!.setUnassignedCallouts(false);
                           this.props.unicornStore!.setPendingUpload(false);
+                          await this.props.metricActions!.updateMetric('Renaming');
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');
                           for (let i = 0; i < slides.length; i++) {
                             await this.props.unicornActions!.buildUploadModel(slides[i]);

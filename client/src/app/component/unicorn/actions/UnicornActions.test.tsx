@@ -20,7 +20,8 @@ describe('UnicornActions', () => {
       releasabilityId: jest.fn(),
       releasabilities: jest.fn(),
       setUploadComplete: jest.fn(),
-      setCurrentUploadCount: jest.fn()
+      setCurrentUploadCount: jest.fn(),
+      setPendingCallouts: jest.fn()
     };
 
     slidesStore = {

@@ -1,0 +1,153 @@
+import * as React from 'react';
+import { observer } from 'mobx-react';
+import styled from 'styled-components';
+import * as ReactDOM from 'react-dom';
+
+const DropdownIcon = require('../../../icon/DropdownIcon.svg');
+
+interface Props {
+  className?: string;
+}
+
+@observer
+export class PseudoDropdown extends React.Component<Props> {
+
+  componentDidMount() {
+    document.addEventListener('click', this.handleClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClick);
+  }
+
+  handleClick = (e: any) => {
+    let dd = document.querySelectorAll('.dd');
+    for (let i = 0; i < dd.length; i++) {
+      if ((dd[i] as HTMLElement).parentNode!.firstChild !== e.target
+      ) {
+        (dd[i] as HTMLElement).style.display = 'none';
+      }
+    }
+  };
+
+  render() {
+    return (
+      <div
+        className={this.props.className + ' dropdown'}
+      >
+        <button
+          className="dropdownBtn"
+          onClick={(e: any) => {
+            let component = (ReactDOM.findDOMNode(this) as HTMLElement);
+            e.preventDefault();
+            let parent = component.parentElement!.parentElement!.parentElement;
+            if (parent && parent.classList.contains('slideCardContainer')) {
+              let options = component.querySelector('.dd') as HTMLElement;
+              if (window.innerHeight - parent.getBoundingClientRect().bottom < 175) {
+                options.style.top = '-189px';
+              } else {
+                options.style.top = '47px';
+              }
+            }
+            (component.querySelector('.dd') as HTMLElement).style.display = 'block';
+          }}
+        >
+          <span className="default">
+            Select
+          </span>
+        </button>
+        <img src={DropdownIcon}/>
+        <div className="dd">
+          <span>There are currently no callouts associated with this mission.</span>
+        </div>
+      </div>
+    );
+  }
+}
+
+export const StyledPseudoDropdown = (styled(PseudoDropdown)`
+  display: inline-block;
+  position: relative;
+  width: 117px;
+  height: 44px;
+  background-color: #151524;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  .dropdownBtn {
+    cursor: pointer;
+    height: 40px;
+    margin: auto;
+    line-height: 44px;
+    white-space: nowrap;
+    vertical-align: middle;
+    position: absolute;
+    top: -2px;
+    left: -11px;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0);
+    outline: none;
+    border: none;
+    color: #fff;
+    width: 100%;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .dd {
+    position: absolute;
+    display: none;
+    text-align: center;
+    white-space: normal;
+    width: 117px;
+    height: 154px;
+    left: -24px;
+    top: 47px;
+    border-radius: 4px;
+    background: #151524;
+    z-index: 125;
+    font-weight: 300;
+    font-size: 16px;
+    font-style: italic;
+    letter-spacing: 0.6px;
+    color: #6c7f9c;
+    
+    span {
+      display: block;
+      position: relative;
+      margin-top: 3px;
+    }
+  }
+  
+  .ddd {
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.5s ease;
+    font-size: 20px;
+    line-height: 36px;
+    vertical-align: middle;
+    height: 36px;
+    color: #fff;
+    letter-spacing: 0.7px;
+    padding-left: 2px;
+        
+    :hover {
+      background-color: #2b303c;
+    }
+  }
+  
+  span {
+    pointer-events: none;
+  }
+  
+  .selected {
+    background-color: #5689F3;
+   }
+   
+  img {
+    pointer-events: none;
+    position: absolute;
+    right: 8px;
+    top: 16px;
+  }
+`);

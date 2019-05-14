@@ -28,8 +28,10 @@ export class UnicornActions {
 
   @action.bound
   async getCallouts(missionId: string) {
+    this.unicornStore.setPendingCallouts(true);
     this.unicornStore.setCallouts([]);
     this.unicornStore.setCallouts(await this.unicornRepository.getCallouts(missionId));
+    this.unicornStore.setPendingCallouts(false);
     this.checkForCalloutMatches();
   }
 

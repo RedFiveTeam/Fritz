@@ -104,6 +104,9 @@ export class SlidesActions {
 
   updateOldNames() {
     this.slidesStore.slides.map((s: SlideModel) => {
+      if (s.deleted) {
+        this.metricActions!.createMetric('Delete JPG');
+      }
       s.setOldName(s.newName);
     });
   }
@@ -135,8 +138,6 @@ export class SlidesActions {
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
       if (this.slidesStore.slides[i].targetEventId !== '' && !this.slidesStore.slides[i].deleted) {
         count++;
-      } else if (this.slidesStore.slides[i].deleted) {
-        await this.metricActions!.createMetric('Delete JPG');
       }
     }
     this.slidesStore.setAssignedCalloutCount(count);

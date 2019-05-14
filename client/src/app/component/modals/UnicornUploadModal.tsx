@@ -58,6 +58,9 @@ export class UnicornUploadModal extends React.Component<Props> {
                         className="confirmBtn"
                         onClick={async () => {
                           let slides = this.props.slidesStore!.slides.filter((s: SlideModel) => {
+                            if (s.deleted) {
+                              this.props.metricActions!.createMetric('Delete JPG');
+                            }
                             return s.targetEventId !== '' && s.deleted !== true;
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);
@@ -114,6 +117,9 @@ export class UnicornUploadModal extends React.Component<Props> {
                         className="confirmBtn"
                         onClick={async () => {
                           let slides = this.props.slidesStore!.slides.filter((s: SlideModel) => {
+                            if (s.deleted) {
+                              this.props.metricActions!.createMetric('Delete JPG');
+                            }
                             return s.targetEventId !== '' && s.deleted !== true;
                           });
                           this.props.unicornStore!.setConfirmUploadStatus(false);

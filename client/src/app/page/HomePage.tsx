@@ -10,11 +10,14 @@ import { UnicornStore } from '../component/unicorn/store/UnicornStore';
 import { StyledSelectMissionModal } from '../component/modals/SelectMissionModal';
 import { SlidesStore } from '../component/slides/SlidesStore';
 import { StyledHelpMenu } from '../component/modals/HelpMenu';
+import { UploadStore } from '../component/form/upload/UploadStore';
+import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
 
 interface Props {
   className?: string;
   unicornStore?: UnicornStore;
   slidesStore?: SlidesStore;
+  uploadStore?: UploadStore;
 }
 
 @observer
@@ -39,15 +42,23 @@ export class HomePage extends React.Component<Props> {
         <div
           className="mainBody"
         >
-          <StyledAppBody/>
-          <StyledFooter/>
+          {
+            (this.props.uploadStore!.uploading || this.props.uploadStore!.processing) ?
+              <StyledLoadingScreen/>
+              :
+              <StyledAppBody/>
+          }
         </div>
+        {
+          (!this.props.uploadStore!.uploading && !this.props.uploadStore!.processing) &&
+          <StyledFooter/>
+        }
       </div>
     );
   }
 }
 
-export const StyledHomePage = inject('unicornStore', 'slidesStore')(styled(HomePage)`
+export const StyledHomePage = inject('unicornStore', 'slidesStore', 'uploadStore')(styled(HomePage)`
 height: auto;
 min-height: 1060px;
 overflow-y: hidden;

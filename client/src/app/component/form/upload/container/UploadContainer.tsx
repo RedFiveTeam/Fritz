@@ -5,6 +5,7 @@ import { UploadStore } from '../UploadStore';
 import { Toast } from '../../../../../utils/Toast';
 import { SlidesStore } from '../../../slides/SlidesStore';
 import styled from 'styled-components';
+import { CSSProperties } from 'react';
 
 const pdfIcon = require('../../../../../icon/PDFIcon.svg');
 const paperclipIcon = require('../../../../../icon/PaperclipIcon.svg');
@@ -21,6 +22,13 @@ interface Props {
 
 @observer
 export class UploadContainer extends React.Component<Props> {
+
+  noBorder: CSSProperties = {
+    border: 'none'
+  };
+
+  goodCSS: CSSProperties = {};
+
   doUpload = async (e: any) => {
     e.preventDefault();
     let formData = new FormData();
@@ -153,6 +161,7 @@ export class UploadContainer extends React.Component<Props> {
     return (
       <div
         className={this.props.className + ' uploadContainer'}
+        style={this.props.uploadStore!.uploaded ? this.noBorder : this.goodCSS}
       >
         <div
           className="container h-100 text-white"

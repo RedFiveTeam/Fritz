@@ -50,25 +50,20 @@ export class ProgressBar extends React.Component<Props> {
             aria-valuemax={100}
           />
         </div>
-        <div
-          id="status"
-        >
-          {this.props.uploadStore!.progress}/{this.props.uploadStore!.total} Images Converted
-        </div>
       </div>
     );
   }
 }
 
 export const StyledProgressBar = inject('uploadStore')(styled(ProgressBar)`
-width: 600px;
+width: 1216px;
+height: 19px;
 position: relative;
-left: 100px;
-top: 325px;
+margin: auto;
+margin-top: 110px;
 
  #status {
   color: #FFF;
   width: 100%;
-  text-align: center;
   }
 `);

@@ -11,10 +11,16 @@ describe('HomePage', () => {
   let subject: ShallowWrapper;
   let unicornStore: any;
   let slidesStore: SlidesStore;
+  let uploadStore: any;
 
   beforeEach(() => {
     unicornStore = {
       activeMission: null,
+    };
+
+    uploadStore = {
+      uploading: false,
+      processing: false
     };
 
     slidesStore = new SlidesStore();
@@ -23,6 +29,7 @@ describe('HomePage', () => {
       <HomePage
         unicornStore={unicornStore}
         slidesStore={slidesStore}
+        uploadStore={uploadStore}
       />
     );
   });

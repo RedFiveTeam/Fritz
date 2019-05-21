@@ -78,6 +78,7 @@ export class UnicornActions {
       }
       if (i === 2 && !status.successfulUpload) {
         slide.setFailed(true);
+        this.metricActions!.createMetric('Upload to Unicorn Failed');
         slide.setUploading(null);
       }
     }

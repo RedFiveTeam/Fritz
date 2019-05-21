@@ -68,8 +68,9 @@ export class UnicornUploadModal extends React.Component<Props> {
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');
                           this.props.unicornStore!.setPendingUpload(false);
                           for (let i = 0; i < slides.length; i++) {
-                            await this.props.unicornActions!.buildUploadModel(slides[i]);
+                            this.props.unicornStore!.addToUploadQueue(slides[i]);
                           }
+                          await this.props.unicornActions!.startUploading();
                         }}
                     >
                         Yes, upload to UNICORN
@@ -129,8 +130,9 @@ export class UnicornUploadModal extends React.Component<Props> {
                           await this.props.metricActions!.updateMetric('Renaming');
                           await this.props.metricActions!.trackMetric('UploadToUnicorn');
                           for (let i = 0; i < slides.length; i++) {
-                            await this.props.unicornActions!.buildUploadModel(slides[i]);
+                            this.props.unicornStore!.addToUploadQueue(slides[i]);
                           }
+                          await this.props.unicornActions!.startUploading();
                         }}
                     >
                         Yes, Upload to UNICORN

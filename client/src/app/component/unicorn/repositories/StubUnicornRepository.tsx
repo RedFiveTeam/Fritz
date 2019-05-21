@@ -3,6 +3,7 @@ import { MissionModel } from '../model/MissionModel';
 import { CalloutModel } from '../model/CalloutModel';
 import { UnicornUploadModel } from '../model/UnicornUploadModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
+import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 
 export class StubUnicornRepository implements UnicornRepository {
 
@@ -18,8 +19,10 @@ export class StubUnicornRepository implements UnicornRepository {
     ]);
   }
 
-  upload(model: UnicornUploadModel): Promise<void> {
-    return Promise.resolve();
+  upload(model: UnicornUploadModel): Promise<UnicornUploadStatusModel> {
+    return Promise.resolve(
+      new UnicornUploadStatusModel(true)
+    );
   }
 
   getReleasabilities(): Promise<ReleasabilityModel[]> {

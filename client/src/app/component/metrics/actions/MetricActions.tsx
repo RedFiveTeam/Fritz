@@ -34,7 +34,6 @@ export class MetricActions {
     this.metricStore['setPending' + act + 'Metric'](await this.metricRepository.create(metric));
   }
 
-  @action.bound
   async updateMetric(act: string) {
     if (act === 'Upload') {
       this.metricStore['pending' + act + 'Metric'].setUid(this.uploadStore.hash);

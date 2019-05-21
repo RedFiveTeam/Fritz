@@ -15,6 +15,7 @@ describe('SlideCard', () => {
   let uploadStore: any;
   let metricActions: any;
   let unicornStore: any;
+  let unicornActions: any;
 
   beforeEach(() => {
     uploadStore = {
@@ -54,6 +55,7 @@ describe('SlideCard', () => {
       <Provider
         unicornStore={unicornStore}
         slidesStore={slidesStore}
+        unicornActions={unicornActions}
       >
         <SlideCard
           uploadStore={uploadStore}

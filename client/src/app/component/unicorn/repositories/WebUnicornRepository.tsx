@@ -8,12 +8,15 @@ import { UnicornUploadModel } from '../model/UnicornUploadModel';
 import { UnicornUploadSerializer } from '../serializers/UnicornUploadSerializer';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { ReleasabilitySerializer } from '../serializers/ReleasabilitySerializer';
+import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
+import { UnicornUploadStatusSerializer } from '../serializers/UnicornUploadStatusSerializer';
 
 export class WebUnicornRepository implements UnicornRepository {
   private missionSerializer = new MissionSerializer();
   private calloutSerializer = new CalloutSerializer();
   private unicornUploadSerializer = new UnicornUploadSerializer();
   private releasabilitySerializer = new ReleasabilitySerializer();
+  private unicornUploadStatusSerializer = new UnicornUploadStatusSerializer();
 
   constructor(private client: HTTPClient) {
   }
@@ -32,14 +35,13 @@ export class WebUnicornRepository implements UnicornRepository {
     });
   }
 
-  async upload(model: UnicornUploadModel, callBack: () => void): Promise<void> {
+  async upload(model: UnicornUploadModel): Promise<UnicornUploadStatusModel> {
     const body = JSON.stringify(this.unicornUploadSerializer.serialize(model));
-    await this.client.postJSONNoParse(
+    const json = await this.client.postJSON(
       '/api/unicorn',
       body
     );
-    callBack();
-    return Promise.resolve();
+    return this.unicornUploadStatusSerializer.deserialize(json);
   }
 
   async getReleasabilities(): Promise<ReleasabilityModel[]> {

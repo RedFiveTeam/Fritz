@@ -7,15 +7,18 @@ import { StyledDropdown } from '../../dropdown/Dropdown';
 import { SlidesStore } from '../../slides/SlidesStore';
 import { CalloutModel } from '../model/CalloutModel';
 import { StyledPseudoDropdown } from '../../dropdown/PseudoDropdown';
+import { UnicornActions } from '../actions/UnicornActions';
 
 const Unicorn = require('../../../../icon/Unicorn.svg');
 const GreenCheckmark = require('../../../../icon/GreenCheckmark.svg');
+const FailedIcon = require('../../../../icon/UploadFailedIcon.svg');
 
 interface Props {
   className?: string;
   unicornStore?: UnicornStore;
   slide: SlideModel;
   slidesStore?: SlidesStore;
+  unicornActions?: UnicornActions;
 }
 
 @observer
@@ -97,13 +100,30 @@ export class Callout extends React.Component<Props> {
                 <span className="uploadPending">Uploading</span>
             </div>
           }
+          {
+            (this.props.slide.failed) &&
+              <div
+                className="failedUpload"
+              >
+                <img className="failedIcon" src={FailedIcon}/>
+                <span className="uploadFailed">Upload Failed
+                    <span
+                      onClick={async () => {
+                        this.props.unicornStore!.addToUploadQueue(this.props.slide);
+                        await this.props.unicornActions!.startUploading();
+                      }}
+                    > Retry
+                    </span>
+                </span>
+              </div>
+          }
         </div>
       </div>
     );
   }
 }
 
-export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callout)`
+export const StyledCallout = inject('unicornStore', 'slidesStore', 'unicornActions')(styled(Callout)`
 
   display: inline-block;
   position: absolute;
@@ -195,6 +215,27 @@ export const StyledCallout = inject('unicornStore', 'slidesStore')(styled(Callou
     display: inline-block;
     bottom: 15px;
     left: 54px;
+  }
+  
+  .uploadFailed {
+    font-weight: 700;
+    position: absolute;
+    display: inline-block;
+    bottom: 15px;
+    left: 23px;
+    
+    span {
+      color: #15deec;
+      font-weight: 300;
+      cursor: pointer;
+    }
+  }
+  
+  .failedIcon {
+    position: absolute;
+    left: 123px;
+    top: 82px;
+    pointer-events: none;
   }
   
   .uploadComplete {

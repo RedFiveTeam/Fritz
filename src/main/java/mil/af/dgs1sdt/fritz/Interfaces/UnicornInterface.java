@@ -3,6 +3,7 @@ package mil.af.dgs1sdt.fritz.Interfaces;
 import mil.af.dgs1sdt.fritz.Models.CalloutModel;
 import mil.af.dgs1sdt.fritz.Models.MissionModel;
 import mil.af.dgs1sdt.fritz.Models.ReleasabilityModel;
+import mil.af.dgs1sdt.fritz.Models.UnicornUploadStatusModel;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -121,14 +122,18 @@ public class UnicornInterface {
     return db.parse(xml);
   }
 
-  public String makePostRequest(String uri, List<NameValuePair> params) throws Exception {
+  public UnicornUploadStatusModel makePostRequest(String uri, List<NameValuePair> params) throws Exception {
     CloseableHttpClient client = HttpClients.createDefault();
     HttpPost httpPost = new HttpPost(uri);
     httpPost.setEntity(new UrlEncodedFormEntity(params));
     CloseableHttpResponse response = client.execute(httpPost);
     String result = EntityUtils.toString(response.getEntity());
     client.close();
-    return result;
+
+    UnicornUploadStatusModel status = new UnicornUploadStatusModel();
+    if (result.contains("true") || response.getStatusLine().getStatusCode() == 200)
+      status.setSuccessfulUpload(true);
+    return status;
   }
 
   public static String convertFileToBase64(File file) throws IOException {

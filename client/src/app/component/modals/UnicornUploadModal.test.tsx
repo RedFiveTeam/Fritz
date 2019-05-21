@@ -22,7 +22,8 @@ describe('UnicornUploadModal', () => {
     };
 
     unicornActions = {
-      buildUploadModel: jest.fn()
+      buildUploadModel: jest.fn(),
+      startUploading: jest.fn()
     };
 
     slidesActions = {
@@ -56,7 +57,7 @@ describe('UnicornUploadModal', () => {
     await subject.find('.confirmBtn').simulate('click');
     expect(metricActions.trackMetric).toHaveBeenCalledWith('UploadToUnicorn');
     expect(unicornStore.confirmUploadStatus).toBeFalsy();
-    expect(unicornActions.buildUploadModel).toHaveBeenCalled();
+    expect(unicornActions.startUploading).toHaveBeenCalled();
   });
 
   it('should display some info if there are unassigned callouts', () => {

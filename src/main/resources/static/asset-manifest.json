@@ -1,8 +1,8 @@
 {
   "main.css": "static/css/main.88bd9f4c.css",
   "main.css.map": "static/css/main.88bd9f4c.css.map",
-  "main.js": "static/js/main.32f80130.js",
-  "main.js.map": "static/js/main.32f80130.js.map",
+  "main.js": "static/js/main.329ca2b0.js",
+  "main.js.map": "static/js/main.329ca2b0.js.map",
   "static/media/ActionTimesIcon.svg": "static/media/ActionTimesIcon.af993332.svg",
   "static/media/Adobe.svg": "static/media/Adobe.442c7c0c.svg",
   "static/media/DeleteIcon.svg": "static/media/DeleteIcon.a91efa52.svg",
@@ -24,6 +24,7 @@
   "static/media/SlidesContainerPlaceholder.svg": "static/media/SlidesContainerPlaceholder.7fc41007.svg",
   "static/media/Unicorn.svg": "static/media/Unicorn.e175faf4.svg",
   "static/media/UnicornIcon.svg": "static/media/UnicornIcon.c24e71b2.svg",
+  "static/media/UploadFailedIcon.svg": "static/media/UploadFailedIcon.8d914e2d.svg",
   "static/media/UploadingIcon.svg": "static/media/UploadingIcon.3fa63f0f.svg",
   "static/media/UserActionsIcon.svg": "static/media/UserActionsIcon.69826966.svg"
 }

@@ -7,6 +7,7 @@ import { SlideModel } from '../../slides/SlideModel';
 import { UnicornUploadModel } from '../model/UnicornUploadModel';
 import { SlidesStore } from '../../slides/SlidesStore';
 import { MetricActions } from '../../metrics/actions/MetricActions';
+import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 
 export class UnicornActions {
   public metricActions: MetricActions;
@@ -40,16 +41,14 @@ export class UnicornActions {
     this.unicornStore.setReleasabilities(await this.unicornRepository.getReleasabilities());
   }
 
-  @action.bound
-  isUploadFinished() {
+  async isUploadFinished() {
     if (this.slidesStore!.assignedCalloutCount === this.unicornStore!.currentUploadCount) {
       this.unicornStore!.setUploadComplete(true);
-      this.metricActions!.updateMetric('UploadToUnicorn');
+      await this.metricActions!.updateMetric('UploadToUnicorn');
       this.unicornStore!.setCurrentUploadCount(0);
     }
   }
 
-  @action.bound
   async setUnicornModel(s: SlideModel) {
     let unicornUploadModel = new UnicornUploadModel();
     unicornUploadModel.setFileName(s.oldName);
@@ -65,11 +64,24 @@ export class UnicornActions {
     return unicornUploadModel;
   }
 
-  @action.bound
   async buildUploadModel(slide: SlideModel) {
     slide.setUploading(true);
-    await this.unicornRepository.upload( await this.setUnicornModel(slide), this.increaseCurrentUploadCount );
-    slide.setUploading(false);
+    slide.setFailed(false);
+    for (let i = 0; i < 3; i++) {
+      let status: UnicornUploadStatusModel = await this.unicornRepository.upload(
+        await this.setUnicornModel(slide)
+      );
+      if (status.successfulUpload) {
+        this.increaseCurrentUploadCount();
+        slide.setUploading(false);
+        break;
+      }
+      if (i === 2 && !status.successfulUpload) {
+        slide.setFailed(true);
+        slide.setUploading(null);
+      }
+    }
+    this.unicornStore.uploadQueue.shift();
     this.isUploadFinished();
   }
 
@@ -88,6 +100,16 @@ export class UnicornActions {
     this.unicornStore!.setCurrentUploadCount(this.unicornStore!.currentUploadCount + 1);
   };
 
+  async startUploading() {
+    if (!this.unicornStore.uploadsInProgress) {
+      while (this.unicornStore.uploadQueue.length > 0) {
+        this.unicornStore.setUploadsInProgress(true);
+        await this.buildUploadModel(this.unicornStore.uploadQueue[0]);
+      }
+      this.unicornStore.setUploadsInProgress(false);
+    }
+  }
+
   @action.bound
   checkForUnassignedCallouts() {
     let slides = this.slidesStore.slides;
@@ -101,7 +123,6 @@ export class UnicornActions {
     }
   }
 
-  @action.bound
   checkForCalloutMatches() {
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
       let slide = this.slidesStore.slides[i];

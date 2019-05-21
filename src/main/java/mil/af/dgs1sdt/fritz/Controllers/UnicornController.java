@@ -1,10 +1,7 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
 import mil.af.dgs1sdt.fritz.Interfaces.UnicornInterface;
-import mil.af.dgs1sdt.fritz.Models.CalloutModel;
-import mil.af.dgs1sdt.fritz.Models.MissionModel;
-import mil.af.dgs1sdt.fritz.Models.ReleasabilityModel;
-import mil.af.dgs1sdt.fritz.Models.UnicornUploadModel;
+import mil.af.dgs1sdt.fritz.Models.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +55,7 @@ public class UnicornController {
 
   @PostMapping(produces = "application/json")
   public @ResponseBody
-  String upload(@CookieValue("id") String id, @RequestBody UnicornUploadModel json) throws Exception {
+  UnicornUploadStatusModel upload(@CookieValue("id") String id, @RequestBody UnicornUploadModel json) throws Exception {
     File convFile = new File("/tmp/complete/" + id + "/" + json.getFileName());
     String image = UnicornInterface.convertFileToBase64(convFile);
     UnicornInterface unicorn = new UnicornInterface();

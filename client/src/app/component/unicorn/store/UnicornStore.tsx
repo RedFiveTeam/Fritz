@@ -3,6 +3,7 @@ import { MissionModel } from '../model/MissionModel';
 import { UnicornRepository } from '../repositories/UnicornRepository';
 import { CalloutModel } from '../model/CalloutModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
+import { SlideModel } from '../../slides/SlideModel';
 
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
@@ -22,6 +23,8 @@ export class UnicornStore {
   @observable private _unassignedCallouts: boolean = false;
   @observable private _loading: boolean;
   @observable private _pendingCallouts: boolean = true;
+  @observable private _uploadQueue: SlideModel[] = [];
+  @observable private _uploadsInProgress: boolean = false;
 
   async hydrate(unicornRepository: UnicornRepository) {
     this.setLoading(true);
@@ -37,6 +40,11 @@ export class UnicornStore {
         });
       this.setLoading(false);
     }
+  }
+
+  @computed
+  get uploadQueue(): SlideModel[] {
+    return this._uploadQueue;
   }
 
   @computed
@@ -109,6 +117,11 @@ export class UnicornStore {
     return this._pendingCallouts;
   }
 
+  @computed
+  get uploadsInProgress(): boolean {
+    return this._uploadsInProgress;
+  }
+
   @action.bound
   setUnassignedCallouts(value: boolean) {
     this._unassignedCallouts = value;
@@ -177,5 +190,15 @@ export class UnicornStore {
   @action.bound
   setPendingCallouts(value: boolean) {
     this._pendingCallouts = value;
+  }
+
+  @action.bound
+  addToUploadQueue(slide: SlideModel) {
+    this._uploadQueue.push(slide);
+  }
+
+  @action.bound
+  setUploadsInProgress(value: boolean) {
+    this._uploadsInProgress = value;
   }
 }

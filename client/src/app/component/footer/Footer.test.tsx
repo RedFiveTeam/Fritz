@@ -6,9 +6,18 @@ import { StyledDownloadButton } from '../buttons/DownloadButton';
 
 describe('Footer', () => {
   let subject: ShallowWrapper;
+  let unicornStore: any;
 
   beforeEach(() => {
-    subject = shallow(<Footer/>);
+    unicornStore = {
+      uploadsInProgress: false
+    };
+
+    subject = shallow(
+      <Footer
+        unicornStore={unicornStore}
+      />
+    );
   });
 
   it('should have a download button', () => {

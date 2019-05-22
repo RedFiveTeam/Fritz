@@ -12,6 +12,7 @@ import { UnicornActions } from '../actions/UnicornActions';
 const Unicorn = require('../../../../icon/Unicorn.svg');
 const GreenCheckmark = require('../../../../icon/GreenCheckmark.svg');
 const FailedIcon = require('../../../../icon/UploadFailedIcon.svg');
+const WaitingIcon = require('../../../../icon/WaitingIcon.svg');
 
 interface Props {
   className?: string;
@@ -76,9 +77,21 @@ export class Callout extends React.Component<Props> {
                       }}
                   />)
               :
-              ( this.props.unicornStore!.callouts.length === 0 &&
-                <StyledPseudoDropdown/>
+              (this.props.unicornStore!.callouts.length === 0 &&
+                  <StyledPseudoDropdown/>
               )
+          }
+          {
+            this.props.slide.uploading === null &&
+            this.props.slide.failed !== true &&
+            this.props.unicornStore!.uploadsInProgress &&
+            this.props.slide.targetEventId !== '' &&
+            <div
+                className="waitingUpload"
+            >
+                <img className="waitingIcon" src={WaitingIcon}/>
+                <span className="uploadWaiting">Waiting to Upload</span>
+            </div>
           }
           {
             this.props.slide.uploading === false &&
@@ -102,20 +115,21 @@ export class Callout extends React.Component<Props> {
           }
           {
             (this.props.slide.failed) &&
-              <div
+            <div
                 className="failedUpload"
-              >
+            >
                 <img className="failedIcon" src={FailedIcon}/>
                 <span className="uploadFailed">Upload Failed
                     <span
-                      onClick={async () => {
-                        this.props.unicornStore!.addToUploadQueue(this.props.slide);
-                        await this.props.unicornActions!.startUploading();
-                      }}
+                        onClick={async () => {
+                          this.props.slide.setFailed(false);
+                          this.props.unicornStore!.addToUploadQueue(this.props.slide);
+                          await this.props.unicornActions!.startUploading();
+                        }}
                     > Retry
                     </span>
                 </span>
-              </div>
+            </div>
           }
         </div>
       </div>
@@ -231,11 +245,26 @@ export const StyledCallout = inject('unicornStore', 'slidesStore', 'unicornActio
     }
   }
   
-  .failedIcon {
+  .failedIcon, .waitingIcon {
     position: absolute;
     left: 123px;
     top: 82px;
     pointer-events: none;
+  }
+  
+  .waitingIcon {
+    width: 16px;
+    left: 127px;
+  }
+  
+  .uploadWaiting {
+    position: absolute;
+    display: inline-block;
+    bottom: 15px;
+    left: 23px;
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0.4px;
   }
   
   .uploadComplete {

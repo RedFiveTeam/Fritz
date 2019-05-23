@@ -30,38 +30,38 @@
               `:+/:-...-/sd:   `ss             `/s.   
                   .-::--.` `.++o/+o:.`      `./+:`   
                                    `-++o::/+/-.  
-2019-05-23 13:14:05.789  INFO 7981 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : Starting FritzApplication v0.0.1-SNAPSHOT on ROBs-iMac.local with PID 7981 (/Users/r.o.b./workspace/fritz/target/fritz-0.0.1-SNAPSHOT.jar started by r.o.b. in /Users/r.o.b./workspace/fritz/scripts)
-2019-05-23 13:14:05.791  INFO 7981 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : No active profile set, falling back to default profiles: default
-2019-05-23 13:14:06.293  INFO 7981 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
-2019-05-23 13:14:06.342  INFO 7981 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43ms. Found 1 repository interfaces.
-2019-05-23 13:14:06.615  INFO 7981 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$fa07a82e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2019-05-23 13:14:06.904  INFO 7981 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
-2019-05-23 13:14:06.930  INFO 7981 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2019-05-23 13:14:06.930  INFO 7981 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
-2019-05-23 13:14:06.940  INFO 7981 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/Users/r.o.b./Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
-2019-05-23 13:14:07.052  INFO 7981 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2019-05-23 13:14:07.052  INFO 7981 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1231 ms
-2019-05-23 13:14:07.170  INFO 7981 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 5.2.4 by Boxfuse
-2019-05-23 13:14:07.178  INFO 7981 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2019-05-23 13:14:07.293  INFO 7981 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2019-05-23 13:14:07.296  INFO 7981 --- [           main] o.f.c.internal.database.DatabaseFactory  : Database: jdbc:mysql://localhost:3306/fritzdev (MySQL 5.7)
-2019-05-23 13:14:07.365  INFO 7981 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.016s)
-2019-05-23 13:14:07.371  INFO 7981 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `fritzdev`: 20190425124351
-2019-05-23 13:14:07.371  INFO 7981 --- [           main] o.f.core.internal.command.DbMigrate      : Schema `fritzdev` is up to date. No migration necessary.
-2019-05-23 13:14:07.454  INFO 7981 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+2019-05-28 09:55:03.263  INFO 65974 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : Starting FritzApplication v0.0.1-SNAPSHOT on Lucas.local with PID 65974 (/Users/engineer/workspace/fritz/target/fritz-0.0.1-SNAPSHOT.jar started by engineer in /Users/engineer/workspace/fritz)
+2019-05-28 09:55:03.266  INFO 65974 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : No active profile set, falling back to default profiles: default
+2019-05-28 09:55:03.853  INFO 65974 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-05-28 09:55:03.914  INFO 65974 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 54ms. Found 1 repository interfaces.
+2019-05-28 09:55:04.257  INFO 65974 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$271fd66b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-05-28 09:55:04.559  INFO 65974 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2019-05-28 09:55:04.584  INFO 65974 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-05-28 09:55:04.584  INFO 65974 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
+2019-05-28 09:55:04.594  INFO 65974 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/Users/engineer/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+2019-05-28 09:55:04.723  INFO 65974 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-05-28 09:55:04.723  INFO 65974 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1420 ms
+2019-05-28 09:55:04.846  INFO 65974 --- [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 5.2.4 by Boxfuse
+2019-05-28 09:55:04.854  INFO 65974 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-05-28 09:55:04.981  INFO 65974 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-05-28 09:55:04.983  INFO 65974 --- [           main] o.f.c.internal.database.DatabaseFactory  : Database: jdbc:mysql://localhost:3306/fritzdev (MySQL 5.7)
+2019-05-28 09:55:05.060  INFO 65974 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.016s)
+2019-05-28 09:55:05.066  INFO 65974 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `fritzdev`: 20190425124351
+2019-05-28 09:55:05.067  INFO 65974 --- [           main] o.f.core.internal.command.DbMigrate      : Schema `fritzdev` is up to date. No migration necessary.
+2019-05-28 09:55:05.157  INFO 65974 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-2019-05-23 13:14:07.495  INFO 7981 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
-2019-05-23 13:14:07.496  INFO 7981 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
-2019-05-23 13:14:07.585  INFO 7981 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
-2019-05-23 13:14:07.777  INFO 7981 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-2019-05-23 13:14:08.136  INFO 7981 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2019-05-23 13:14:08.468  INFO 7981 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2019-05-23 13:14:08.506  WARN 7981 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2019-05-23 13:14:08.572  INFO 7981 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
-2019-05-23 13:14:08.679  INFO 7981 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
-2019-05-23 13:14:08.680  INFO 7981 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : Started FritzApplication in 3.243 seconds (JVM running for 3.554)
-2019-05-23 13:14:09.306  INFO 7981 --- [nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2019-05-23 13:14:09.306  INFO 7981 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2019-05-23 13:14:09.313  INFO 7981 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
-2019-05-23 13:14:41.873  INFO 7981 --- [nio-9090-exec-1] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-05-28 09:55:05.208  INFO 65974 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
+2019-05-28 09:55:05.210  INFO 65974 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-05-28 09:55:05.317  INFO 65974 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-05-28 09:55:05.550  INFO 65974 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2019-05-28 09:55:06.042  INFO 65974 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-05-28 09:55:06.429  INFO 65974 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-05-28 09:55:06.470  WARN 65974 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-05-28 09:55:06.532  INFO 65974 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2019-05-28 09:55:06.736  INFO 65974 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2019-05-28 09:55:06.738  INFO 65974 --- [           main] mil.af.dgs1sdt.fritz.FritzApplication    : Started FritzApplication in 3.869 seconds (JVM running for 4.248)
+2019-05-28 09:55:07.632  INFO 65974 --- [nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-05-28 09:55:07.632  INFO 65974 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-05-28 09:55:07.639  INFO 65974 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2019-05-28 09:55:43.576  INFO 65974 --- [nio-9090-exec-1] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory

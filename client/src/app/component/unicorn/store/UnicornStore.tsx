@@ -25,22 +25,41 @@ export class UnicornStore {
   @observable private _pendingCallouts: boolean = true;
   @observable private _uploadQueue: SlideModel[] = [];
   @observable private _uploadsInProgress: boolean = false;
+  @observable private _offline: boolean = false;
+  @observable private _offlineModal: boolean = false;
 
   async hydrate(unicornRepository: UnicornRepository) {
-    this.setLoading(true);
-    if (navigator.userAgent.toLowerCase().indexOf('electron') !== -1) {
-      this._missions.push(new MissionModel(
-        'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
-      );
-      this._releasabilities.push(new ReleasabilityModel('', 'FOUO'));
+    let code = await unicornRepository.getStatus();
+    if (code === 200) {
+      this.setOffline(false);
+      this.setLoading(true);
+      if (navigator.userAgent.toLowerCase().indexOf('electron') !== -1) {
+        this._missions.push(new MissionModel(
+          'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
+        );
+        this._releasabilities.push(new ReleasabilityModel('', 'FOUO'));
+      } else {
+        this._releasabilities = (await unicornRepository.getReleasabilities());
+        this._missions = (await unicornRepository.getMissions())
+          .filter((m) => {
+            return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
+          });
+        this.setLoading(false);
+      }
     } else {
-      this._releasabilities = (await unicornRepository.getReleasabilities());
-      this._missions = (await unicornRepository.getMissions())
-        .filter((m) => {
-          return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
-        });
-      this.setLoading(false);
+      this.setOffline(true);
+      this.setOfflineModal(true);
     }
+  }
+
+  @computed
+  get offlineModal(): boolean {
+    return this._offlineModal;
+  }
+
+  @computed
+  get offline(): boolean {
+    return this._offline;
   }
 
   @computed
@@ -126,6 +145,16 @@ export class UnicornStore {
   @computed
   get uploadsInProgress(): boolean {
     return this._uploadsInProgress;
+  }
+
+  @action.bound
+  setOfflineModal(value: boolean) {
+    this._offlineModal = value;
+  }
+
+  @action.bound
+  setOffline(value: boolean) {
+    this._offline = value;
   }
 
   @action.bound

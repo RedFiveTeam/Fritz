@@ -88,6 +88,15 @@ export class SlidesActions {
   }
 
   @action.bound
+  setAndUpdateCustomReleasability(e: any) {
+    if (e.target != null) {
+      this.slidesStore.setReleasability(e.target.value);
+      this.unicornStore.setReleasability(e.target.value);
+      this.updateNewNames();
+    }
+  }
+
+  @action.bound
   setAndUpdateClassification(classification: string) {
     this.slidesStore.setClassification(classification);
     this.updateNewNames();
@@ -183,7 +192,7 @@ export class SlidesActions {
   }
 
   compareCallsigns() {
-    if (this.slidesStore.asset !== undefined) {
+    if (this.slidesStore.asset !== undefined && this.unicornStore.offline === false) {
       if (this.slidesStore.asset === '') {
         this.slidesStore.setDifferentAsset(false);
       } else if (this.slidesStore.asset !== '') {

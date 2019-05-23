@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { SlidesActions } from '../slides/actions/SlidesActions';
@@ -22,8 +21,9 @@ interface Props {
 
 @observer
 export class FormContainer extends React.Component<Props> {
-  changeReleasabilityColor() {
-    let dropdownText = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('.default') as HTMLElement;
+
+  static changeReleasabilityColor() {
+    let dropdownText = (document.querySelector('.form-group') as HTMLElement).querySelector('.default') as HTMLElement;
     if (dropdownText) {
       dropdownText.style.opacity = '1';
     }
@@ -84,21 +84,36 @@ export class FormContainer extends React.Component<Props> {
               />
             </div>
             <div className="splitControl sC2">
-              <StyledValidatingDropdown
-                label={'Releasability'}
-                validator={slidesStore!.isValidReleasability}
-                options={this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
-                  return e.releasabilityName;
-                })}
-                defaultValue={'Select'}
-                value={slidesStore!.releasability}
-                id="releasabilityDropdown"
-                callback={(r: string) => {
-                  this.props.slidesActions!.setAndUpdateReleasability(r);
-                  this.changeReleasabilityColor();
-                }}
-                errorMessage={'The releasability field must be chosen'}
-              />
+              {
+                !this.props.unicornStore!.offline &&
+                <StyledValidatingDropdown
+                  label={'Releasability'}
+                  validator={slidesStore!.isValidReleasability}
+                  options={this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
+                    return e.releasabilityName;
+                  })}
+                  defaultValue={'Select'}
+                  value={slidesStore!.releasability}
+                  id="releasabilityDropdown"
+                  callback={(r: string) => {
+                    this.props.slidesActions!.setAndUpdateReleasability(r);
+                    FormContainer.changeReleasabilityColor();
+                  }}
+                  errorMessage={'The releasability field must be chosen'}
+                />
+              }
+              {
+                this.props.unicornStore!.offline &&
+                  <StyledValidatingInput
+                      label={'Releasability'}
+                      placeholder={'e.g. FOUO'}
+                      listener={this.props.slidesActions!.setAndUpdateCustomReleasability}
+                      id={'releasabilityInput'}
+                      validator={slidesStore!.isValidReleasability}
+                      value={slidesStore!.releasability}
+                      errorMessage={'The releasability field must be chosen'}
+                  />
+              }
             </div>
           </div>
         </form>
@@ -176,6 +191,24 @@ export const StyledFormContainer = inject(
     overflow: hidden;
   }
   
+  .clickable {
+      cursor: pointer;
+  }
+  
+  .form-group {
+    margin-bottom: 25px;
+  }
+  
+  .errorText {
+    position: absolute;
+    color: #e46373; 
+  }
+  
+  .offlineRerrorText {
+    position: absolute;
+    color: #e46373; 
+    left: 300px;
+  }
   .header {
     position: relative;
     margin-bottom: 10px;
@@ -207,6 +240,38 @@ export const StyledFormContainer = inject(
     margin-left: 10px;
     padding-bottom: 1px;
     cursor: pointer;
+  }
+  
+  #offlineReleaseLabel {
+    margin-left: 300px;
+    position: relative;
+  }
+  
+  #onlineReleaseLabel {
+    bottom: 20px;
+    position: relative;
+  }
+  
+  #classificationInput {
+    width: 280px;
+  }
+  
+  #onlineReleasabilityForm {
+    position: relative;
+    left: 302px;
+  }
+  
+  #releasabilityInput {
+    width: 280px;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    height: 38px;
+    display: block;
+    padding-left: 0.75rem;
+  }
+  
+  #classGroup {
+    position: absolute;
   }
   
   .dropdown {

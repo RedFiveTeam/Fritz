@@ -30,6 +30,13 @@ public class UnicornController {
   public static final String URI = "/api/unicorn";
 
   @ResponseBody
+  @GetMapping(path = "/status")
+  public int status() throws Exception {
+    UnicornInterface unicorn = new UnicornInterface();
+    return unicorn.checkUnicornStatus();
+  }
+
+  @ResponseBody
   @GetMapping(produces = "application/json", path = "/missions")
   public List<MissionModel> missions() throws Exception {
     UnicornInterface unicorn = new UnicornInterface();

@@ -6,6 +6,9 @@ import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 
 export class StubUnicornRepository implements UnicornRepository {
+  getStatus(): Promise<number> {
+    return Promise.resolve(200);
+  }
 
   getMissions(): Promise<MissionModel[]> {
     return Promise.resolve([

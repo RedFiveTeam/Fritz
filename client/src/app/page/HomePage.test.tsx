@@ -5,6 +5,7 @@ import { StyledFooter } from '../component/footer/Footer';
 import { StyledAppBody } from '../component/body/AppBody';
 import { StyledSelectMissionModal } from '../component/modals/SelectMissionModal';
 import { StyledHelpMenu } from '../component/modals/HelpMenu';
+import { StyledUnicornOfflineModal } from '../component/modals/UnicornOfflineModal';
 import { SlidesStore } from '../component/slides/store/SlidesStore';
 import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
 
@@ -19,6 +20,10 @@ describe('HomePage', () => {
   beforeEach(() => {
     unicornStore = {
       activeMission: null,
+      setOfflineModal: jest.fn(),
+      setOffline: jest.fn(),
+      offline: false,
+      offlineModal: jest.fn(),
       isUploading: jest.fn()
     };
 
@@ -66,6 +71,12 @@ describe('HomePage', () => {
     expect(subject.find(StyledHelpMenu).exists()).toBeFalsy();
     slidesStore.setHelp(true);
     expect(subject.find(StyledHelpMenu).exists()).toBeTruthy();
+  });
+
+  it('should show an offline modal when unicorn is offline', () => {
+    unicornStore.offline = true;
+    subject.instance().forceUpdate();
+    expect(subject.find(StyledUnicornOfflineModal).exists()).toBeTruthy();
   });
 
   it('should pass a hide button status to footer', () => {

@@ -5,6 +5,8 @@ import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 
 export interface UnicornRepository {
+  getStatus(): Promise<number>;
+
   getMissions(): Promise<MissionModel[]>;
 
   getCallouts(missionId: string): Promise<CalloutModel[]>;

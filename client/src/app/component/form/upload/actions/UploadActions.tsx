@@ -11,6 +11,7 @@ import { MetricActions } from '../../../metrics/actions/MetricActions';
 import { UnicornStore } from '../../../unicorn/store/UnicornStore';
 import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
 import { UnicornActions } from '../../../unicorn/actions/UnicornActions';
+import { FormContainer } from '../../FormContainer';
 
 export class UploadActions {
   public metricActions: MetricActions;
@@ -133,6 +134,7 @@ export class UploadActions {
     let releasabilityInput = document.querySelector(
       '.form-group:last-of-type > .dropdown > button'
     ) as HTMLElement;
+    FormContainer.changeReleasabilityColor();
     if (releasabilityInput) {
       releasabilityInput.innerHTML = releasability;
     }

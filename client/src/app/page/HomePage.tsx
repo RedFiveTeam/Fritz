@@ -14,6 +14,7 @@ import { SlidesActions } from '../component/slides/actions/SlidesActions';
 import { UnicornActions } from '../component/unicorn/actions/UnicornActions';
 import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
 import { UploadStore } from '../component/form/upload/UploadStore';
+import { StyledUnicornOfflineModal } from '../component/modals/UnicornOfflineModal';
 
 interface Props {
   className?: string;
@@ -36,7 +37,11 @@ export class HomePage extends React.Component<Props> {
         <StyledDeleteModal/>
         <StyledExpandedView/>
         {
-          !this.props.unicornStore!.activeMission &&
+          this.props.unicornStore!.offlineModal &&
+          <StyledUnicornOfflineModal/>
+        }
+        {
+          !this.props.unicornStore!.activeMission && !this.props.unicornStore!.offline &&
           <StyledSelectMissionModal/>
         }
         {

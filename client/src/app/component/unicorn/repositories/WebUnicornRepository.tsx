@@ -21,6 +21,16 @@ export class WebUnicornRepository implements UnicornRepository {
   constructor(private client: HTTPClient) {
   }
 
+  async getStatus(): Promise<number> {
+    let code: number;
+    if (navigator.userAgent.toLowerCase().indexOf('electron') === -1) {
+      code = await this.client.get('/api/unicorn/status');
+    } else {
+      code = 200;
+    }
+    return code;
+  }
+
   async getMissions(): Promise<MissionModel[]> {
     const json = await this.client.getJSON('/api/unicorn/missions');
     return json.map((obj: any) => {

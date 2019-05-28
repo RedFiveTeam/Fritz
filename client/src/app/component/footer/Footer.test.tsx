@@ -8,16 +8,22 @@ describe('Footer', () => {
   let subject: ShallowWrapper;
   let downloader: any;
   let uploader: any;
+  let unicornStore: any;
 
   beforeEach(() => {
     downloader = jest.fn();
     uploader = jest.fn();
+
+    unicornStore = {
+      offline: false
+    };
 
     subject = shallow(
       <Footer
         downloader={downloader}
         uploader={uploader}
         hideButtons={false}
+        unicornStore={unicornStore}
       />
     );
   });
@@ -32,6 +38,12 @@ describe('Footer', () => {
     expect(subject.find(StyledActionButton).at(1).exists()).toBeTruthy();
     expect(subject.find(StyledActionButton).at(1)
       .prop('clickAction')).toBe(uploader);
+  });
+
+  it('should not have a unicorn upload button when offline', () => {
+    unicornStore.offline = true;
+    subject.instance().forceUpdate();
+    expect(subject.find(StyledActionButton).at(1).exists()).toBeFalsy();
   });
 
   it('should hide buttons', () => {

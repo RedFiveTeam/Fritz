@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledActionButton } from '../button/ActionButton';
 import { StyledUnicornUploadProgress } from '../unicorn/components/UnicornUploadProgress';
+import { UnicornStore } from '../unicorn/store/UnicornStore';
 
 interface Props {
   downloader: () => {};
   uploader: () => {};
   hideButtons: boolean;
   className?: string;
+  unicornStore?: UnicornStore;
 }
 
 @observer
@@ -32,12 +34,14 @@ export class Footer extends React.Component<Props> {
                   id={'downloadButton'}
                   disabled={false}
                 />
-                < StyledActionButton
-                  clickAction={this.props.uploader}
-                  text={'Upload to UNICORN'}
-                  id={'uploadButton'}
-                  disabled={false}
-                />
+                { !this.props.unicornStore!.offline &&
+                  < StyledActionButton
+                    clickAction={this.props.uploader}
+                    text={'Upload to UNICORN'}
+                    id={'uploadButton'}
+                    disabled={false}
+                  />
+                }
               </div>
               :
               <StyledUnicornUploadProgress/>
@@ -48,7 +52,7 @@ export class Footer extends React.Component<Props> {
   }
 }
 
-export const StyledFooter = styled(Footer)`
+export const StyledFooter = inject('unicornStore')(styled(Footer)`
   position: fixed;
   background: #1E232B;
   bottom: 0;
@@ -73,4 +77,4 @@ export const StyledFooter = styled(Footer)`
       background-color: #3BB7C1;
     }
   }  
-`;
+`);

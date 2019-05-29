@@ -59,6 +59,7 @@ describe('ValidatingInput', () => {
     expect(subject.find('label').exists()).toBeTruthy();
     expect(subject.text()).toContain('label');
   });
+
   it('should change styles if invalidated', () => {
     expect(subject.find('label').props().style).toEqual(goodCSS);
     expect(subject.find('input').props().style).toEqual(goodCSS);

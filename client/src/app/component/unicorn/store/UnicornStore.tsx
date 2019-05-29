@@ -27,6 +27,7 @@ export class UnicornStore {
   @observable private _uploadsInProgress: boolean = false;
   @observable private _offline: boolean = false;
   @observable private _offlineModal: boolean = false;
+  @observable private _isRefreshing: boolean = false;
 
   async hydrate(unicornRepository: UnicornRepository) {
     let code = await unicornRepository.getStatus();
@@ -147,6 +148,11 @@ export class UnicornStore {
     return this._uploadsInProgress;
   }
 
+  @computed
+  get isRefreshing(): boolean {
+    return this._isRefreshing;
+  }
+
   @action.bound
   setOfflineModal(value: boolean) {
     this._offlineModal = value;
@@ -240,5 +246,10 @@ export class UnicornStore {
   @action.bound
   setUploadsInProgress(value: boolean) {
     this._uploadsInProgress = value;
+  }
+
+  @action.bound
+  setRefreshing(value: boolean) {
+    this._isRefreshing = value;
   }
 }

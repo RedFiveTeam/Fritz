@@ -25,15 +25,18 @@ describe('UnicornActions', () => {
   beforeEach(() => {
     unicornStore = new UnicornStore();
     uploadStore = new UploadStore();
+    unicornStore.setActiveMission(new MissionModel('1', '', '', '', '', '', ''));
     metricRepository = new StubMetricRepository();
     slide = new SlideModel();
     slide.setId(1);
     slidesStore = new SlidesStore();
     slides = [
-      new SlideModel('on1', 'nn1', 't1', 'a1', false, 'id1', 'r1'),
-      new SlideModel('on2', 'nn2', 't2', 'a2', false, 'id2', 'r2'),
+      new SlideModel('on1', 'nn1', '1450Z', 'a1', false, '78282-sd-23512520', 'r1'),
+      new SlideModel('on2', 'nn2', '1451Z', 'a2', false, 'id2', 'r2'),
       new SlideModel('on3', 'nn3', 't3', 'a3', false, '', 'r3'),
       new SlideModel('on4', 'nn4', 't4', 'a4', true, 'id4', 'r4'),
+      new SlideModel('', '', '1454Z', 'a5'),
+      new SlideModel('', '', '1455Z', 'a6'),
     ];
 
     slidesStore.setSlides(slides);
@@ -75,7 +78,6 @@ describe('UnicornActions', () => {
   });
 
   it('should set the unicorn model with some stuff from the slide model', async () => {
-    unicornStore.setActiveMission(new MissionModel('1', '', '', '', '', '', ''));
     let returnValue = await subject.setUnicornModel(new SlideModel('TestName', '', '', '', false, 'eventId', ''));
     expect(returnValue.fileName).toBe('TestName');
     expect(returnValue.productName).toBe('TestName');
@@ -123,7 +125,6 @@ describe('UnicornActions', () => {
   });
 
   it('should upload to unicorn ', async () => {
-    unicornStore.setActiveMission(new MissionModel('1', '', '', '', '', '', ''));
     let isUploadFinishedSpy = jest.fn();
     subject.isUploadFinished = isUploadFinishedSpy;
     unicornRepository.upload = jest.fn(() => {
@@ -178,7 +179,6 @@ describe('UnicornActions', () => {
   it('should upload to unicorn on modal confirmation', async () => {
     unicornStore.setPendingUpload(true);
     expect(unicornStore.isModalDisplayed).toBeTruthy();
-    unicornStore.setActiveMission(new MissionModel('1', '', '', '', '', '', ''));
     subject.metricActions.trackMetric = jest.fn();
     subject.metricActions.updateMetric = jest.fn();
     let addToQueueSpy = jest.spyOn(unicornStore, 'addToUploadQueue');
@@ -209,6 +209,45 @@ describe('UnicornActions', () => {
     expect(unicornStore.uploadComplete).toBeFalsy();
     expect(unicornStore.unassignedCallouts).toBeFalsy();
     expect(slidesStore.assignedCalloutCount).toBe(0);
+  });
+
+  it('should reset active mission to null', () => {
+    subject.resetActiveMission();
+    expect(unicornStore.activeMission).toBeNull();
+  });
+
+  it('should refresh the callouts from UNICORN without altering previously matched slides', async () => {
+    let firstSlideOriginalCalloutId = '78282-sd-23512520';
+    let firstSlideOriginalTime = '1450Z';
+    let secondSlideOriginalTime = '1451Z';
+    let fifthSlideAutomatchedCallout = '78282-sd-23512524';
+    let sixthSlideAutomatchedCallout = '78282-sd-23512525';
+    let secondSlideRefreshedCalloutId = '78282-sd-23512521';
+
+    let refreshedCallouts = [
+      new CalloutModel('Callout1', 'c', 'r', 'a', firstSlideOriginalCalloutId, firstSlideOriginalTime),
+      new CalloutModel('Callout2', 'c', 'r', 'a', secondSlideRefreshedCalloutId, secondSlideOriginalTime),
+      new CalloutModel('Callout3', 'c', 'r', 'a', '78282-sd-23512522', '1452Z'),
+      new CalloutModel('Callout4', 'c', 'r', 'a', '78282-sd-23512523', '1453Z'),
+      new CalloutModel('Callout5', 'c', 'r', 'a', fifthSlideAutomatchedCallout, '1454Z'),
+      new CalloutModel('Callout6', 'c', 'r', 'a', sixthSlideAutomatchedCallout, '1455Z'),
+    ];
+    let getRefreshedCallouts = (missionId: string): Promise<CalloutModel[]> => {
+      return Promise.resolve(refreshedCallouts);
+    };
+    unicornRepository.getCallouts = getRefreshedCallouts;
+    unicornStore.setRefreshing(true);
+
+    await subject.refreshCallouts();
+
+    expect(unicornStore.callouts).toEqual(refreshedCallouts);
+    expect(slidesStore.slides[0].targetEventId).toBe(firstSlideOriginalCalloutId);
+    expect(slidesStore.slides[0].time).toBe(firstSlideOriginalTime);
+    expect(slidesStore.slides[1].targetEventId).toBe(secondSlideRefreshedCalloutId);
+    expect(slidesStore.slides[1].time).toBe(secondSlideOriginalTime);
+    expect(slidesStore.slides[4].targetEventId).toBe(fifthSlideAutomatchedCallout);
+    expect(slidesStore.slides[5].targetEventId).toBe(sixthSlideAutomatchedCallout);
+    expect(unicornStore.isRefreshing).toBeFalsy();
   });
 
 });

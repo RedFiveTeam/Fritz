@@ -38,6 +38,19 @@ export class UnicornActions {
   }
 
   @action.bound
+  async refreshCallouts() {
+    this.unicornStore.setRefreshing(true);
+    this.unicornStore.setCallouts(
+      await this.unicornRepository.getCallouts(
+        this.unicornStore.activeMission!.id
+      )
+    );
+
+    this.checkForCalloutMatches();
+    this.unicornStore.setRefreshing(false);
+  }
+
+  @action.bound
   async getReleasabilities() {
     this.unicornStore.setReleasabilities(await this.unicornRepository.getReleasabilities());
   }
@@ -195,5 +208,10 @@ export class UnicornActions {
         }
       }
     }
+  }
+
+  @action.bound
+  resetActiveMission() {
+    this.unicornStore.setActiveMission(null);
   }
 }

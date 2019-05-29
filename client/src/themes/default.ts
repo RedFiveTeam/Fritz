@@ -10,3 +10,8 @@ export const badInputCSS: CSSProperties = {
 
 export const goodCSS: CSSProperties = {
 };
+
+export const badCallsignCSS: CSSProperties = {
+  border: '1px solid #ae4754',
+  borderRadius: '7px'
+};

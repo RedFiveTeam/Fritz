@@ -40,7 +40,8 @@ describe('SlideCard', () => {
     slidesActions = {
       deleteSlide: jest.fn(),
       setAndUpdateActivity: jest.fn(),
-      setAndUpdateTime: jest.fn()
+      setAndUpdateTime: jest.fn(),
+      isEditable: true
     };
 
     metricActions = {
@@ -127,5 +128,12 @@ describe('SlideCard', () => {
 
   it('should contain a callout component', () => {
     expect(subject.find(StyledCallout).exists()).toBeTruthy();
+  });
+
+  it('should display the uploading style when Fritz is uploading to unicorn', () => {
+    expect(subject.find('.whileUploading').exists()).toBeFalsy();
+    slideModel.setUploading(true);
+    subject.update();
+    expect(subject.find('.whileUploading').exists()).toBeTruthy();
   });
 });

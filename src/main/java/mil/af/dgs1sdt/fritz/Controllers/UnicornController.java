@@ -67,7 +67,7 @@ public class UnicornController {
     String image = UnicornInterface.convertFileToBase64(convFile);
     UnicornInterface unicorn = new UnicornInterface();
     List<NameValuePair> params = new ArrayList<org.apache.http.NameValuePair>();
-    params.add(new BasicNameValuePair("productName", json.getFileName()));
+    params.add(new BasicNameValuePair("productName", json.getProductName() + ".jpg"));
     params.add(new BasicNameValuePair("missionId", json.getMissionId()));
     params.add(new BasicNameValuePair("targetEventId", json.getTargetEventId()));
     params.add(new BasicNameValuePair("classificationId", classificationId));

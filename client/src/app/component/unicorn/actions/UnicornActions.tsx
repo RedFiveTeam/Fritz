@@ -68,7 +68,7 @@ export class UnicornActions {
     let unicornUploadModel = new UnicornUploadModel();
     unicornUploadModel.setFileName(s.oldName);
     unicornUploadModel.setEndFilePath('\\Mission\\' + this.unicornStore.activeMission!.id);
-    unicornUploadModel.setProductName(s.oldName);
+    unicornUploadModel.setProductName(s.newName);
     unicornUploadModel.setClassificationId('a8b17b94-f23a-41a1-822f-96c7ce642006');
     unicornUploadModel.setTargetEventId(s.targetEventId);
     this.setReleasabilityId(this.unicornStore!.releasability);

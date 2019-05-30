@@ -78,9 +78,11 @@ describe('UnicornActions', () => {
   });
 
   it('should set the unicorn model with some stuff from the slide model', async () => {
-    let returnValue = await subject.setUnicornModel(new SlideModel('TestName', '', '', '', false, 'eventId', ''));
+    let returnValue = await subject.setUnicornModel(new SlideModel(
+      'TestName', 'New Test Name', '', '', false, 'eventId', ''
+    ));
     expect(returnValue.fileName).toBe('TestName');
-    expect(returnValue.productName).toBe('TestName');
+    expect(returnValue.productName).toBe('New Test Name');
     expect(returnValue.targetEventId).toBe('eventId');
   });
 

@@ -116,14 +116,14 @@ export const StyledDropdown = (styled(Dropdown)`
   
   .dropdownBtn {
     cursor: pointer;
-    height: 40px;
+    height: 46px;
     margin: auto;
     line-height: 44px;
     white-space: nowrap;
     vertical-align: middle;
     position: absolute;
     top: -2px;
-    left: -11px;
+    left: -20px;
     display: inline-block;
     background-color: rgba(0, 0, 0, 0);
     outline: none;

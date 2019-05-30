@@ -13,7 +13,8 @@ describe('Callout', () => {
 
   beforeEach(() => {
     unicornStore = {
-      callouts: [new CalloutModel('', '', '', '', '', '')]
+      callouts: [new CalloutModel('', '', '', '', '', '')],
+      offline: false
     };
 
     slide = new SlideModel();
@@ -43,4 +44,10 @@ describe('Callout', () => {
     expect(subject.find(StyledPseudoDropdown).exists()).toBeTruthy();
   });
 
+  it('should load a false offline dropdown if UNICORN is offline', () => {
+    expect(subject.find(StyledPseudoDropdown).exists()).toBeFalsy();
+    unicornStore.offline = true;
+    subject.instance().forceUpdate();
+    expect(subject.find(StyledPseudoDropdown).exists()).toBeTruthy();
+  });
 });

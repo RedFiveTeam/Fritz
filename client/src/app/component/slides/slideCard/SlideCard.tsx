@@ -10,6 +10,7 @@ import { UploadStore } from '../../form/upload/UploadStore';
 import { observable } from 'mobx';
 import { CSSProperties } from 'react';
 import { StyledCallout } from '../../unicorn/Callout/Callout';
+import { UnicornStore } from '../../unicorn/store/UnicornStore';
 
 const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
@@ -23,6 +24,7 @@ interface Props {
   uploadStore?: UploadStore;
   metricActions?: MetricActions;
   deletedCount?: number;
+  unicornStore?: UnicornStore;
 }
 
 @observer
@@ -143,6 +145,7 @@ export class SlideCard extends React.Component<Props> {
               </span>
             </div>
             <div className="col-md-8">
+              { !this.props.unicornStore!.uploadsInProgress &&
               <img
                 className="deleteIcon"
                 onClick={async () => {
@@ -150,6 +153,7 @@ export class SlideCard extends React.Component<Props> {
                 }}
                 src={DeleteIcon}
               />
+              }
               <div className="card-body">
                 <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
               </div>
@@ -229,7 +233,9 @@ export class SlideCard extends React.Component<Props> {
   }
 }
 
-export const StyledSlideCard = inject('slidesActions', 'slidesStore', 'metricActions', 'uploadStore')(styled(SlideCard)`
+export const StyledSlideCard = inject(
+  'slidesActions', 'slidesStore', 'metricActions', 'uploadStore', 'unicornStore'
+)(styled(SlideCard)`
   
   width: 860px;
   display: inline-block;

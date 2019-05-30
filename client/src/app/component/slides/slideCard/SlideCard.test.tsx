@@ -48,7 +48,9 @@ describe('SlideCard', () => {
     };
 
     unicornStore = {
-      callouts: [new CalloutModel('', '', '', '', '', '')]
+      callouts: [new CalloutModel('', '', '', '', '', '')],
+      setUploadsInProgress: jest.fn(),
+      uploadsInProgress: false
     };
 
     subject = mount(
@@ -64,6 +66,7 @@ describe('SlideCard', () => {
           slidesActions={slidesActions}
           slidesStore={slidesStore}
           metricActions={metricActions}
+          unicornStore={unicornStore}
         />
       </Provider>
     );
@@ -95,8 +98,26 @@ describe('SlideCard', () => {
     expect(subject.find('.slideCounter').text()).toBe('3 of 5');
   });
 
-  it('should render a delete icon', () => {
+  it('should render a delete icon only while fritz is not uploading to unicorn', () => {
     expect(subject.find('.deleteIcon').exists()).toBeTruthy();
+    unicornStore.uploadsInProgress = true;
+    subject = mount(
+      <Provider
+        unicornStore={unicornStore}
+        slidesStore={slidesStore}
+        unicornActions={unicornActions}
+      >
+        <SlideCard
+          uploadStore={uploadStore}
+          slideNumber={slideNumber}
+          slideModel={slideModel}
+          slidesActions={slidesActions}
+          slidesStore={slidesStore}
+          metricActions={metricActions}
+          unicornStore={unicornStore}
+        />
+      </Provider>);
+    expect(subject.find('.deleteIcon').exists()).toBeFalsy();
   });
 
   it('should flag slide as deleted when the delete icon is clicked and have an undo button', () => {

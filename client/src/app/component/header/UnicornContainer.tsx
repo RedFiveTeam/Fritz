@@ -17,18 +17,17 @@ interface Props {
 
 @observer
 export class UnicornContainer extends React.Component<Props> {
-  render() {
+  displayMissionInfo() {
     let {unicornActions, unicornStore, slidesStore} = this.props;
 
     return (
-      <div
-        className={this.props.className}
-      >
+      <div>
         <div
           className={'refreshContainer'}
           onClick={unicornActions!.refreshCallouts}
         >
           <img
+            alt={''}
             src={refreshIcon}
             className={
               unicornStore!.isRefreshing
@@ -43,7 +42,7 @@ export class UnicornContainer extends React.Component<Props> {
           </span>
         </div>
         <div
-          className="missionContainer"
+          className={'missionContainer'}
           onClick={unicornActions!.resetActiveMission}
           style={
             slidesStore!.differentAsset
@@ -70,6 +69,24 @@ export class UnicornContainer extends React.Component<Props> {
       </div>
     );
   }
+
+  displayOfflineStatus() {
+    return <div>UNICORN is offline</div>;
+  }
+
+  render() {
+    return (
+      <div
+        className={this.props.className}
+      >
+        {
+          this.props.unicornStore!.offline
+            ? this.displayOfflineStatus()
+            : this.displayMissionInfo()
+        }
+      </div>
+    );
+  }
 }
 
 export const StyledUnicornContainer = inject(
@@ -81,12 +98,14 @@ export const StyledUnicornContainer = inject(
   flex-direction: row;
 
   div {
-    cursor: pointer;
+    color: #fff;
     display: flex;
     margin: auto;
+    margin-right: 27px;
   }
 
   .refreshContainer {
+    cursor: pointer;
     color: #15deec;
     margin-right: 16px;
     font-weight: bold;
@@ -97,7 +116,8 @@ export const StyledUnicornContainer = inject(
   }
   
   .missionContainer {
-    margin-right: 27px;
+    margin: auto;
+    cursor: pointer;
     color: #fff; 
     
     .changeMissionBtn {

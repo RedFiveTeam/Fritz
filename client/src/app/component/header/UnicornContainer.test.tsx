@@ -16,6 +16,7 @@ describe('UnicornContainer', () => {
 
     unicornStore = {
       activeMission: activeMission,
+      offline: false
     };
 
     unicornActions = {
@@ -72,5 +73,14 @@ describe('UnicornContainer', () => {
     unicornStore.isRefreshing = true;
     subject.instance().forceUpdate();
     expect(subject.find('img').props().className).toBe('rotating');
+  });
+
+  it('should display a UNICORN status message and omit mission information when offline', () => {
+    unicornStore.offline = true;
+    subject.instance().forceUpdate();
+    expect(subject.text()).toContain('UNICORN is offline');
+    expect(subject.text()).not.toContain('Refresh Callouts');
+    expect(subject.text()).not.toContain('Mission: Kirby1');
+    expect(subject.text()).not.toContain('Change');
   });
 });

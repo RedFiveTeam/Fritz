@@ -50,11 +50,11 @@ width: 100%;
 transition: background-color 200ms;
 
 :hover {
-  background-color: #1F1F2C;
+  background-color:  #1F1F2C;
 }
 
 .content {
-  cursor: pointer;
+  cursor:  pointer;
   margin: auto;
   width: 807px;
   height: 66px;
@@ -73,7 +73,7 @@ transition: background-color 200ms;
 }
 
 span:first-of-type {
-  display: inline-block;
+  display:  inline-block;
   white-space: nowrap;
   margin-left: 5px;
   width: 70px;
@@ -81,7 +81,7 @@ span:first-of-type {
 }
 
 span:nth-of-type(2) {
-  margin-left: 125px;
+  margin-left:  125px;
 }
 
 `);

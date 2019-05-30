@@ -104,15 +104,15 @@ export class FormContainer extends React.Component<Props> {
               }
               {
                 this.props.unicornStore!.offline &&
-                  <StyledValidatingInput
-                      label={'Releasability'}
-                      placeholder={'e.g. FOUO'}
-                      listener={this.props.slidesActions!.setAndUpdateCustomReleasability}
-                      id={'releasabilityInput'}
-                      validator={slidesStore!.isValidReleasability}
-                      value={slidesStore!.releasability}
-                      errorMessage={'The releasability field must be chosen'}
-                  />
+                <StyledValidatingInput
+                  label={'Releasability'}
+                  placeholder={'e.g. FOUO'}
+                  listener={this.props.slidesActions!.setAndUpdateCustomReleasability}
+                  id={'releasabilityInput'}
+                  validator={slidesStore!.isValidReleasability}
+                  value={slidesStore!.releasability}
+                  errorMessage={'The releasability field must be chosen'}
+                />
               }
             </div>
           </div>
@@ -284,7 +284,7 @@ export const StyledFormContainer = inject(
     font-weight: normal;
     font-size: 1rem;
       .dropdownBtn {
-        width: 100%;
+        width: 115%;
         position: relative;
         font-weight: normal;
         font-size: 1rem;
@@ -294,6 +294,8 @@ export const StyledFormContainer = inject(
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        top: -4px;
+        left: -11px;
       }
     
       .dd {

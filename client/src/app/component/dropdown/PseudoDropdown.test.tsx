@@ -6,11 +6,20 @@ describe('PseudoDropdown', () => {
   let subject: ShallowWrapper;
 
   beforeEach(() => {
-    subject = shallow(<PseudoDropdown/>);
+    subject = shallow(
+      <PseudoDropdown
+        label={'button text'}
+        message={'given message'}
+      />
+    );
   });
 
-  it('should contain a default message', () => {
-    expect(subject.find('span').at(1).text()).toContain('no callouts');
+  it('should display a button with given text', () => {
+    expect(subject.find('button').text()).toContain('button text');
+  });
+
+  it('should display a given message on click', () => {
+    expect(subject.text()).toContain('given message');
   });
 
 });

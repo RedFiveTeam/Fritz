@@ -16,14 +16,76 @@ const WaitingIcon = require('../../../../icon/WaitingIcon.svg');
 
 interface Props {
   className?: string;
-  unicornStore?: UnicornStore;
   slide: SlideModel;
   slidesStore?: SlidesStore;
+  unicornStore?: UnicornStore;
   unicornActions?: UnicornActions;
 }
 
 @observer
 export class Callout extends React.Component<Props> {
+  chooseWhichDropdownToRender() {
+    let {unicornStore} = this.props;
+
+    if (unicornStore!.offline) {
+      return (
+        <StyledPseudoDropdown
+          label={'Offline'}
+          message={'Refresh UNICORN and select a mission to view a list of callouts.'}
+        />
+      );
+    } else if (unicornStore!.callouts.length === 0) {
+      return (
+        <StyledPseudoDropdown
+          label={'Select'}
+          message={'There are currently no callouts associated with this mission.'}
+        />
+      );
+    } else {
+      return (
+        (
+          this.props.slide.uploading === null &&
+          (
+            <StyledDropdown
+              options={
+                unicornStore!.callouts ?
+                  unicornStore!.callouts
+                    .filter((c: any) => {
+                      return c.time !== null;
+                    })
+                    .map((c: any) => {
+                      if (c.time && c.time.toString().length > 0) {
+                        return c.time;
+                      }
+                    }) : []
+              }
+              defaultValue={'Select'}
+              value={this.props.slide.calloutTime}
+              callback={(s: string) => {
+                let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
+                  return f.id === this.props.slide.id;
+                })[0];
+                slide.setTargetEventId(
+                  unicornStore!.callouts
+                    .filter((c: CalloutModel) => {
+                      return c.time !== null;
+                    })
+                    .filter((c: CalloutModel) => {
+                      if (c.time && c.time.toString().length > 0) {
+                        return c.time.toString() === s;
+                      }
+                      return false;
+                    })[0].eventId
+                );
+                slide.setCalloutTime(s);
+              }}
+            />
+          )
+        )
+      );
+    }
+  }
+
   render() {
     return (
       <div
@@ -39,93 +101,52 @@ export class Callout extends React.Component<Props> {
             this.props.slide!.targetEventId === '' &&
             <div className="redBox"/>
           }
-          {
-            !this.props.unicornStore!.pendingCallouts && this.props.unicornStore!.callouts.length > 0 ?
-              (this.props.slide.uploading === null &&
-                  <StyledDropdown
-                      options={
-                        this.props.unicornStore!.callouts ?
-                          this.props.unicornStore!.callouts
-                            .filter((c: any) => {
-                              return c.time !== null;
-                            })
-                            .map((c: any) => {
-                              if (c.time && c.time.toString().length > 0) {
-                                return c.time;
-                              }
-                            }) : []
-                      }
-                      defaultValue={'Select'}
-                      value={this.props.slide.calloutTime}
-                      callback={(s: string) => {
-                        let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
-                          return f.id === this.props.slide.id;
-                        })[0];
-                        slide.setTargetEventId(
-                          this.props.unicornStore!.callouts
-                            .filter((c: CalloutModel) => {
-                              return c.time !== null;
-                            })
-                            .filter((c: CalloutModel) => {
-                              if (c.time && c.time.toString().length > 0) {
-                                return c.time.toString() === s;
-                              }
-                              return false;
-                            })[0].eventId
-                        );
-                        slide.setCalloutTime(s);
-                      }}
-                  />)
-              :
-              (this.props.unicornStore!.callouts.length === 0 &&
-                  <StyledPseudoDropdown/>
-              )
-          }
+          {this.chooseWhichDropdownToRender()}
           {
             this.props.slide.uploading === null &&
             this.props.slide.failed !== true &&
             this.props.unicornStore!.uploadsInProgress &&
             this.props.slide.targetEventId !== '' &&
             <div
-                className="waitingUpload"
+              className="waitingUpload"
             >
-                <img className="waitingIcon" src={WaitingIcon}/>
-                <span className="uploadWaiting">Waiting to Upload</span>
+              <img className="waitingIcon" src={WaitingIcon}/>
+              <span className="uploadWaiting">Waiting to Upload</span>
             </div>
           }
           {
             this.props.slide.uploading === false &&
             <div
-                className="finishedUpload"
+              className="finishedUpload"
             >
-                <img className="uploadCompleteIcon" src={GreenCheckmark}/>
-                <span className="uploadComplete">Uploaded to {this.props.slide.calloutTime}</span>
+              <img className="uploadCompleteIcon" src={GreenCheckmark}/>
+              <span className="uploadComplete">Uploaded to {this.props.slide.calloutTime}</span>
             </div>
           }
           {
             (this.props.slide.uploading) &&
             <div
-                className="uploading"
+              className="uploading"
             >
-                <div
-                    className="loadingCallout"
-                />
-                <span className="uploadPending">Uploading</span>
+              <div
+                className="loadingCallout"
+              />
+              <span className="uploadPending">Uploading</span>
             </div>
           }
           {
             (this.props.slide.failed) &&
             <div
-                className="failedUpload"
+              className="failedUpload"
             >
-                <img className="failedIcon" src={FailedIcon}/>
-                <span className="uploadFailed">Upload Failed
+              <img className="failedIcon" src={FailedIcon}/>
+              <span className="uploadFailed">Upload Failed
                     <span
-                        onClick={async () => {
-                          this.props.slide.setFailed(false);
-                          this.props.unicornStore!.addToUploadQueue(this.props.slide);
-                          await this.props.unicornActions!.startUploading();
-                        }}
+                      onClick={async () => {
+                        this.props.slide.setFailed(false);
+                        this.props.unicornStore!.addToUploadQueue(this.props.slide);
+                        await this.props.unicornActions!.startUploading();
+                      }}
                     > Retry
                     </span>
                 </span>
@@ -171,10 +192,14 @@ export const StyledCallout = inject('unicornStore', 'slidesStore', 'unicornActio
       color: #15deec;
       font-size: 20px;
       font-weight: bold;
+      top: -2px;
+      left: -20px;
+      width: 115%;
     }
     
     .dd {
       left: 0;
+      display: none;
       width: 118px;
       overflow-y: auto;
       max-height: 185px;

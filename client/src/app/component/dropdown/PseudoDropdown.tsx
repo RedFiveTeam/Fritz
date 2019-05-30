@@ -6,30 +6,13 @@ import * as ReactDOM from 'react-dom';
 const DropdownIcon = require('../../../icon/DropdownIcon.svg');
 
 interface Props {
+  label: string;
+  message: string;
   className?: string;
 }
 
 @observer
 export class PseudoDropdown extends React.Component<Props> {
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleClick);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleClick);
-  }
-
-  handleClick = (e: any) => {
-    let dd = document.querySelectorAll('.dd');
-    for (let i = 0; i < dd.length; i++) {
-      if ((dd[i] as HTMLElement).parentNode!.firstChild !== e.target
-      ) {
-        (dd[i] as HTMLElement).style.display = 'none';
-      }
-    }
-  };
-
   render() {
     return (
       <div
@@ -49,16 +32,21 @@ export class PseudoDropdown extends React.Component<Props> {
                 options.style.top = '47px';
               }
             }
-            (component.querySelector('.dd') as HTMLElement).style.display = 'block';
+            (
+              ((component.querySelector('.dd') as HTMLElement).style.display === 'none' ||
+                (component.querySelector('.dd') as HTMLElement).style.display === ''
+                ? (component.querySelector('.dd') as HTMLElement).style.display = 'block'
+                : (component.querySelector('.dd') as HTMLElement).style.display = 'none'
+          ));
           }}
         >
           <span className="default">
-            Select
+            {this.props.label}
           </span>
         </button>
         <img src={DropdownIcon}/>
         <div className="dd">
-          <span>There are currently no callouts associated with this mission.</span>
+          <span>{this.props.message}</span>
         </div>
       </div>
     );
@@ -98,6 +86,7 @@ export const StyledPseudoDropdown = (styled(PseudoDropdown)`
     position: absolute;
     display: none;
     text-align: center;
+    justify-content: center;
     white-space: normal;
     width: 117px;
     height: 154px;

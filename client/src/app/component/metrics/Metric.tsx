@@ -12,17 +12,6 @@ interface Props {
 
 @observer
 export class Metric extends React.Component<Props> {
-
-  // calculateAverage(flow: string) {
-  //   return (
-  //     <span className={value > 0 ? 'red' : 'green'}>
-  //       {
-  //         '(' +  (value === 0 || Number.isNaN(value) ? '' : (value > -1 ? '+' : '')) + value + ' Seconds)'
-  //       }
-  //     </span>
-  //   );
-  // }
-
   render() {
     return (
       <div

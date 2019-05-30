@@ -145,7 +145,7 @@ export class SlideCard extends React.Component<Props> {
               </span>
             </div>
             <div className="col-md-8">
-              { !this.props.unicornStore!.uploadsInProgress &&
+              {!this.props.unicornStore!.uploadsInProgress &&
               <img
                 className="deleteIcon"
                 onClick={async () => {
@@ -154,73 +154,87 @@ export class SlideCard extends React.Component<Props> {
                 src={DeleteIcon}
               />
               }
-              <div className="card-body">
-                <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
-              </div>
-              <div className="slidesInputs">
-                <div className="timeInputField">
-                  <label
-                    style={this.valid ? this.goodCSS : this.badLabelCSS}
-                  >
-                    Time
-                  </label>
-                  <input
-                    maxLength={4}
-                    style={this.valid ? this.goodCSS : this.badCSS}
-                    onChange={(e: any) => {
-                      if (e.target.value.length === 4) {
-                        this.isValidTime(e.target.value);
+              {this.props.slideModel.uploading === null || this.props.slideModel.failed ?
+                <div>
+                  <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
+                  <div className="slidesInputs">
+                    <div className="timeInputField">
+                      <label
+                        style={this.valid ? this.goodCSS : this.badLabelCSS}
+                      >
+                        Time
+                      </label>
+                      <input
+                        maxLength={4}
+                        style={this.valid ? this.goodCSS : this.badCSS}
+                        onChange={(e: any) => {
+                          if (e.target.value.length === 4) {
+                            this.isValidTime(e.target.value);
+                          }
+                          let carouselItem = document.querySelector(
+                            '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
+                          if (carouselItem) {
+                            let input = carouselItem.querySelector('#timeInput') as HTMLInputElement;
+                            if (input) {
+                              input.value = e.target.value;
+                            }
+                          }
+                          this.props.slidesActions!.setAndUpdateTime(
+                            this.props.slideModel,
+                            e.target.value.toUpperCase()
+                          );
+                        }}
+                        onBlur={(e: any) => {
+                          this.isValidTime(e.target.value);
+                        }}
+                        type="text"
+                        className="form-control"
+                        id="timeInput"
+                        placeholder="e.g. 0830"
+                      />
+                      {
+                        !this.valid &&
+                        <div className="wrongTime">Invalid Time</div>
                       }
-                      let carouselItem = document.querySelector(
-                        '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
-                      if (carouselItem) {
-                        let input = carouselItem.querySelector('#timeInput') as HTMLInputElement;
-                        if (input) {
-                          input.value = e.target.value;
-                        }
-                      }
-                      this.props.slidesActions!.setAndUpdateTime(this.props.slideModel, e.target.value.toUpperCase());
-                    }}
-                    onBlur={(e: any) => {
-                      this.isValidTime(e.target.value);
-                    }}
-                    type="text"
-                    className="form-control"
-                    id="timeInput"
-                    placeholder="e.g. 0830"
-                  />
-                  {
-                    !this.valid &&
-                    <div className="wrongTime">Invalid Time</div>
-                  }
+                    </div>
+                    <div className="activityInputField">
+                      <label>
+                        Activity
+                      </label>
+                      <input
+                        maxLength={64}
+                        onChange={(e: any) => {
+                          this.props.slidesActions!.setAndUpdateActivity(
+                            this.props.slideModel,
+                            e.target.value.toUpperCase()
+                          );
+                          let carouselItem = document.querySelector(
+                            '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
+                          if (carouselItem) {
+                            let input = carouselItem.querySelector('#activityInput') as HTMLInputElement;
+                            if (input) {
+                              input.value = this.props.slideModel.activity!;
+                            }
+                          }
+                        }}
+                        type="text"
+                        className="form-control"
+                        id="activityInput"
+                        placeholder="e.g. OV"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="activityInputField">
-                  <label>
-                    Activity
-                  </label>
-                  <input
-                    maxLength={64}
-                    onChange={(e: any) => {
-                      this.props.slidesActions!.setAndUpdateActivity(
-                        this.props.slideModel,
-                        e.target.value.toUpperCase()
-                      );
-                      let carouselItem = document.querySelector(
-                        '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
-                      if (carouselItem) {
-                        let input = carouselItem.querySelector('#activityInput') as HTMLInputElement;
-                        if (input) {
-                          input.value = this.props.slideModel.activity!;
-                        }
-                      }
-                    }}
-                    type="text"
-                    className="form-control"
-                    id="activityInput"
-                    placeholder="e.g. OV"
-                  />
+                :
+                <div className="whileUploading">
+                  <span className="whileUploadingTitle">
+                    JPEG Name
+                  </span>
+                  <span>
+                    {this.props.slideModel.newName}
+                  </span>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>
@@ -281,6 +295,9 @@ export const StyledSlideCard = inject(
   .card-title {
     width: 400px;
     font-size: 14px;
+    right: 60px;
+    top: 14px;
+    position: relative;
   }
   
   .expandImg {
@@ -316,8 +333,8 @@ export const StyledSlideCard = inject(
   .slidesInputs {
     position: relative;
     display: block;
-    bottom: 10px;
-    margin-left: -8%;
+    bottom: -15px;
+    margin-left: -10%;
   }
   
   .calloutImg {
@@ -361,5 +378,23 @@ export const StyledSlideCard = inject(
     top: 10px;
     right: 186px;
     background-color: rgba(108, 127, 156, 0.5);
+  }
+  
+  .whileUploading {
+    position: absolute;
+    display: inline-block;
+    right: 200px;
+    top: 38px;
+    width: 440px;
+    white-space: pre-wrap;
+    
+    span {
+      display: block;
+    }
+  }
+  
+  .whileUploadingTitle {
+    font-size: 14px;
+    color: #6c7f9c;
   }
 `);

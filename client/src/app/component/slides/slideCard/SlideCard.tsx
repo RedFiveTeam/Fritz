@@ -145,7 +145,7 @@ export class SlideCard extends React.Component<Props> {
               </span>
             </div>
             <div className="col-md-8">
-              {!this.props.unicornStore!.uploadsInProgress &&
+              {!this.props.unicornStore!.uploadsInProgress && this.props.slideModel.uploading !== false &&
               <img
                 className="deleteIcon"
                 onClick={async () => {

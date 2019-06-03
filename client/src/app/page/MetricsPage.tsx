@@ -170,7 +170,7 @@ export class MetricsPage extends React.Component<Props> {
             >
               <StyledMetric
                 title="Upload Success Rate"
-                value={this.props.metricStore!.successRate}
+                value={Math.round(this.props.metricStore!.successRate)}
                 unit="%"
               />
               <StyledMetric

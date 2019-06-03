@@ -118,7 +118,8 @@ export const StyledUnicornContainer = inject(
   .missionContainer {
     margin: auto;
     cursor: pointer;
-    color: #fff; 
+    color: #fff;
+    padding: 4px;
     
     .changeMissionBtn {
       color: #15deec;

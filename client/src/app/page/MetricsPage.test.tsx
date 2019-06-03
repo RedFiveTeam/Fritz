@@ -68,7 +68,7 @@ describe('MetricsPage', () => {
     };
 
     metricStore = {
-      successRate: () => 57,
+      successRate: 57,
       averages: {workflow: new AverageSubsetModel(1, 5)},
       filterValue: jest.fn(),
       averageWorkflow: 50,

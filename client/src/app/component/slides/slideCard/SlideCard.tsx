@@ -298,6 +298,7 @@ export const StyledSlideCard = inject(
     right: 60px;
     top: 14px;
     position: relative;
+    font-weight: bold;
   }
   
   .expandImg {
@@ -390,6 +391,10 @@ export const StyledSlideCard = inject(
     
     span {
       display: block;
+    }
+    
+    span:nth-of-type(2) {
+      font-weight: bold;
     }
   }
   

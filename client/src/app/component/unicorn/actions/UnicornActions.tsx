@@ -125,6 +125,7 @@ export class UnicornActions {
   };
 
   uploadToUnicorn = async () => {
+    this.unicornStore!.setCurrentUploadCount(0);
     if (this.slidesStore.slides.length === 0) {
       this.triggerMustUploadFirstToast();
     }
@@ -140,7 +141,7 @@ export class UnicornActions {
       if (s.deleted) {
         this.metricActions!.createMetric('Delete JPG');
       }
-      return s.targetEventId !== '' && s.deleted !== true;
+      return s.targetEventId !== '' && s.deleted !== true && s.uploading !== false;
     });
   }
 
@@ -235,5 +236,12 @@ export class UnicornActions {
     this.unicornStore!.setRefreshing(true);
     await this.unicornStore!.hydrate(this.unicornRepository);
     this.unicornStore!.setRefreshing(false);
+  }
+
+  @action.bound
+  cancelUpload() {
+    Toast.create(5000, 'deleteToast', 'Upload Cancelled');
+    this.unicornStore!.setUploadsInProgress(false);
+    this.unicornStore!.setUploadQueue([]);
   }
 }

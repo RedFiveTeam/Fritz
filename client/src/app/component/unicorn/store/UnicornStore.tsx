@@ -252,4 +252,9 @@ export class UnicornStore {
   setRefreshing(value: boolean) {
     this._isRefreshing = value;
   }
+
+  @action.bound
+  setUploadQueue(value: SlideModel[]) {
+    this._uploadQueue = value;
+  }
 }

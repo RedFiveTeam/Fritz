@@ -164,7 +164,9 @@ export class SlidesActions {
   getAssignedCallouts() {
     let count: number = 0;
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
-      if (this.slidesStore.slides[i].targetEventId !== '' && !this.slidesStore.slides[i].deleted) {
+      if (this.slidesStore.slides[i].targetEventId !== '' &&
+        !this.slidesStore.slides[i].deleted &&
+        this.slidesStore.slides[i].uploading !== false) {
         count++;
       }
     }

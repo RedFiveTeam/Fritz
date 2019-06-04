@@ -71,7 +71,25 @@ export class UnicornContainer extends React.Component<Props> {
   }
 
   displayOfflineStatus() {
-    return <div>UNICORN is offline</div>;
+    return (
+      <div
+        className="refreshBtn"
+        onClick={async () => {
+          await this.props.unicornActions!.refreshUnicorn();
+        }}
+      >
+        <img
+          alt={''}
+          src={refreshIcon}
+          className={
+            this.props.unicornStore!.isRefreshing
+              ? 'rotating'
+              : 'stationary'
+          }
+        />
+        Refresh UNICORN
+      </div>
+    );
   }
 
   render() {
@@ -150,5 +168,15 @@ export const StyledUnicornContainer = inject(
     -ms-animation: rotating .5s linear infinite;
     -o-animation: rotating .5s linear infinite;
     animation: rotating .5s linear infinite;
+  }
+  
+  .refreshBtn {
+    color: #15deec;
+    margin-left: 8px;
+    cursor: pointer;
+    
+     img {
+      margin-right: 17px;
+     }
   }
 `);

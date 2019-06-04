@@ -35,7 +35,7 @@ export class Footer extends React.Component<Props> {
                   disabled={false}
                 />
                 { !this.props.unicornStore!.offline &&
-                  < StyledActionButton
+                  <StyledActionButton
                     clickAction={this.props.uploader}
                     text={'Upload to UNICORN'}
                     id={'uploadButton'}

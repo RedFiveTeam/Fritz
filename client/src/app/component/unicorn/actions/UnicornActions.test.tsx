@@ -11,6 +11,7 @@ import { StubMetricRepository } from '../../metrics/repository/StubMetricReposit
 import { MetricRepository } from '../../metrics/repository/MetricRepository';
 import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
+import { Toast } from '../../../../utils/Toast';
 
 describe('UnicornActions', () => {
   let subject: UnicornActions;
@@ -268,5 +269,14 @@ describe('UnicornActions', () => {
     unicornStore.hydrate = hydrateMock;
     await subject.refreshUnicorn();
     expect(hydrateMock).toHaveBeenCalled();
+  });
+
+  it('should empty the upload queue and display a toast when cancel is called', () => {
+    let toastSpy = jest.fn();
+    Toast.create = toastSpy;
+    unicornStore.setUploadQueue([new SlideModel(), new SlideModel()]);
+    subject.cancelUpload();
+    expect(toastSpy).toHaveBeenCalledWith(5000, 'deleteToast', 'Upload Cancelled');
+    expect(unicornStore.uploadQueue).toEqual([]);
   });
 });

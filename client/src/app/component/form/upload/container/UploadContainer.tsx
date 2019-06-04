@@ -275,4 +275,8 @@ export const StyledUploadContainer = inject('uploadActions', 'uploadStore', 'sli
       background-color: #00818C;
     }
   }
+  
+  #uploadLabel {
+    cursor: pointer;
+  }
 `);

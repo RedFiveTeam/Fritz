@@ -21,7 +21,8 @@ describe('UnicornContainer', () => {
 
     unicornActions = {
       resetActiveMission: jest.fn(),
-      refreshCallouts: jest.fn()
+      refreshCallouts: jest.fn(),
+      refreshUnicorn: jest.fn()
     };
 
     slidesStore = {
@@ -78,9 +79,13 @@ describe('UnicornContainer', () => {
   it('should display a UNICORN status message and omit mission information when offline', () => {
     unicornStore.offline = true;
     subject.instance().forceUpdate();
-    expect(subject.text()).toContain('UNICORN is offline');
+    expect(subject.text()).toContain('Refresh UNICORN');
     expect(subject.text()).not.toContain('Refresh Callouts');
     expect(subject.text()).not.toContain('Mission: Kirby1');
     expect(subject.text()).not.toContain('Change');
+
+    subject.find('.refreshBtn').simulate('click');
+    expect(unicornActions.refreshUnicorn).toHaveBeenCalled();
   });
+
 });

@@ -63,7 +63,8 @@ public class UnicornController {
   @PostMapping(produces = "application/json")
   public @ResponseBody
   UnicornUploadStatusModel upload(@CookieValue("id") String id, @RequestBody UnicornUploadModel json) throws Exception {
-    File convFile = new File("/tmp/complete/" + id + "/" + json.getFileName());
+    File convFile = new File("/tmp/complete/" + id + "/" + json.getFileName() + (
+      json.getFileName().contains("jpg") ? "" : ".jpg"));
     String image = UnicornInterface.convertFileToBase64(convFile);
     UnicornInterface unicorn = new UnicornInterface();
     List<NameValuePair> params = new ArrayList<org.apache.http.NameValuePair>();
@@ -78,7 +79,6 @@ public class UnicornController {
     params.add(new BasicNameValuePair("uploadType", "targetevent"));
     params.add(new BasicNameValuePair("uploadedFile", image));
     String URL = unicornBaseURL + "/WebServices/PowerPointUploadServices.asmx/UploadFile";
-    // unicorn.makePostRequest(URL, params);
     return unicorn.makePostRequest(URL, params);
   }
 }

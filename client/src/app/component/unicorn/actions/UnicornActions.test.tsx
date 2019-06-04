@@ -162,6 +162,13 @@ describe('UnicornActions', () => {
     expect(slidesStore.hasInitiallyValidated).toBeTruthy();
   });
 
+  it('should check the status of Unicorn when upload button is clicked', () => {
+    let hydrateSpy = jest.fn();
+    unicornStore.hydrate = hydrateSpy;
+    subject.uploadToUnicorn();
+    expect(hydrateSpy).toHaveBeenCalled();
+  });
+
   it('should validate input fields on upload button click and before modal is rendered', async () => {
     let modalSpy = jest.fn();
     subject.renderUploadModal = modalSpy;
@@ -256,4 +263,10 @@ describe('UnicornActions', () => {
     expect(unicornStore.isRefreshing).toBeFalsy();
   });
 
+  it('should call hydrate when refresh unicorn is called', async () => {
+    let hydrateMock = jest.fn();
+    unicornStore.hydrate = hydrateMock;
+    await subject.refreshUnicorn();
+    expect(hydrateMock).toHaveBeenCalled();
+  });
 });

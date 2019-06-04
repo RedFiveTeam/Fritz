@@ -125,7 +125,8 @@ export class UnicornActions {
 
   uploadToUnicorn = async () => {
     this.slidesStore.initialValidation();
-    if (this.slidesStore.validate()) {
+    await this.unicornStore!.hydrate(this.unicornRepository);
+    if (!this.unicornStore.offline && this.slidesStore.validate()) {
       this.renderUploadModal();
     }
   };
@@ -215,5 +216,12 @@ export class UnicornActions {
   @action.bound
   resetActiveMission() {
     this.unicornStore.setActiveMission(null);
+  }
+
+  @action.bound
+  async refreshUnicorn() {
+    this.unicornStore!.setRefreshing(true);
+    await this.unicornStore!.hydrate(this.unicornRepository);
+    this.unicornStore!.setRefreshing(false);
   }
 }

@@ -24,33 +24,40 @@ export class AppBody extends React.Component<Props> {
       <div
         className={this.props.className}
       >
-        <div className="left">
-          {
-            this.props.uploadStore!.uploaded &&
-            <StyledFormContainer/>
-          }
-          <StyledUploadContainer/>
-        </div>
-        <div className="spacer"/>
-        <div className="right">
-          <StyledSlidesContainer/>
-          {
-            this.props.uploadStore!.uploading &&
-            <StyledUploadProgressContainer/>
-          }
-          {
-            this.props.uploadStore!.processing &&
-            <StyledProgressBar/>
-          }
-          {
-            this.props.uploadStore!.placeholder && !this.props.uploadStore!.uploading &&
-            <StyledSlidesContainerPlaceholder/>
-          }
-          {
-            this.props.unicornStore!.isModalDisplayed &&
-            <StyledUnicornUploadModal/>
-          }
-        </div>
+        {
+          this.props.uploadStore!.uploaded ?
+            <div>
+              <div className="left">
+                {
+                  this.props.uploadStore!.uploaded &&
+                  <StyledFormContainer/>
+                }
+                <StyledUploadContainer/>
+              </div>
+              <div className="spacer"/>
+              <div className="right">
+                <StyledSlidesContainer/>
+                {
+                  this.props.uploadStore!.uploading &&
+                  <StyledUploadProgressContainer/>
+                }
+                {
+                  this.props.uploadStore!.processing &&
+                  <StyledProgressBar/>
+                }
+                {
+                  this.props.uploadStore!.placeholder && !this.props.uploadStore!.uploading &&
+                  <StyledSlidesContainerPlaceholder/>
+                }
+                {
+                  this.props.unicornStore!.isModalDisplayed &&
+                  <StyledUnicornUploadModal/>
+                }
+              </div>
+            </div>
+            :
+            <StyledUploadContainer/>
+        }
       </div>
     );
   }
@@ -114,15 +121,15 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
     z-index: -1;
   }  
 
-  .uploadContainer {
-      margin-top: 158px;
-      box-sizing: border-box;
-      border: 1px dashed #d4d6db;
-      border-radius: 4px;
-      width: 580px;
-      height: 548px;
-      margin-left: 40px;
-  }
+  //.uploadContainer {
+  //    margin-top: 158px;
+  //    box-sizing: border-box;
+  //    border: 1px dashed #d4d6db;
+  //    border-radius: 4px;
+  //    width: 580px;
+  //    height: 548px;
+  //    margin-left: 40px;
+  //}
   
   .browse {
     color: #15deec;
@@ -156,14 +163,14 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
       }
   }
   
-  .helpMenuIcon {
-    cursor: pointer;
-    margin-left: 8px;
-    margin-bottom: 5px;
-    position: absolute;
-    top: 123px;
-    left: 240px;
-  }
+  //.helpMenuIcon {
+  //  cursor: pointer;
+  //  margin-left: 8px;
+  //  margin-bottom: 5px;
+  //  position: absolute;
+  //  top: 123px;
+  //  left: 240px;
+  //}
   
   .step1 {
     font-size: 20px;

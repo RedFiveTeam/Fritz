@@ -60,7 +60,7 @@ width: 1216px;
 height: 19px;
 position: relative;
 margin: auto;
-margin-top: 110px;
+margin-top: 86px;
 
  #status {
   color: #FFF;

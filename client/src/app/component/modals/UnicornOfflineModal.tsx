@@ -96,7 +96,6 @@ export const StyledUnicornOfflineModal = inject('unicornStore')(styled(UnicornOf
     width: 157px;
     height: 38px;
     border-radius: 4px;
-    border: solid 1px #0275d8;
     background-color: #00818C;
     font-size: 16px;
     color: #FFF;

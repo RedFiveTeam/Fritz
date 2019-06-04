@@ -9,6 +9,7 @@ import { SlidesStore } from '../../slides/store/SlidesStore';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 import { MetricType } from '../../metrics/MetricModel';
+import { Toast } from '../../../../utils/Toast';
 
 export class UnicornActions {
   public metricActions: MetricActions;
@@ -124,6 +125,9 @@ export class UnicornActions {
   };
 
   uploadToUnicorn = async () => {
+    if (this.slidesStore.slides.length === 0) {
+      this.triggerMustUploadFirstToast();
+    }
     this.slidesStore.initialValidation();
     await this.unicornStore!.hydrate(this.unicornRepository);
     if (!this.unicornStore.offline && this.slidesStore.validate()) {
@@ -138,6 +142,14 @@ export class UnicornActions {
       }
       return s.targetEventId !== '' && s.deleted !== true;
     });
+  }
+
+  triggerMustUploadFirstToast() {
+    Toast.create(
+      5000,
+      'errorToast',
+      '<b>Error:</b> You must upload a PDF file before you can upload JPEGS to UNICORN'
+    );
   }
 
   renderUploadModal() {

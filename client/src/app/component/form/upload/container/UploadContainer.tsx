@@ -73,63 +73,61 @@ export class UploadContainer extends React.Component<Props> {
 
   displayUploadRequest() {
     return (
-      <div className="uploadBox">
-        <div className="converterTitle">
-          <h2>JPEG Converter - Details</h2>
-          <span>Complete the fields below to view and download JPEGs</span>
-        </div>
-        <img
-          onClick={() => {
-            this.props.slidesStore!.setHelp(true);
-          }}
-          className="helpMenuIcon"
-          src={helpMenuIcon}
-        />
-        <label
-          id="uploadLabel"
-          htmlFor="uploadButton"
-          className="pdfUploadButton"
-        >
-          <div
-            id="clickable"
-            onDragEnter={(e: any) => {
-              let evt = e as Event;
-              evt.preventDefault();
-            }}
-            onDragOver={(e: any) => {
-              let evt = e as Event;
-              evt.preventDefault();
-            }}
-            onDrop={this.doUpload}
-            className="row align-items-center h-100 text-center"
-          >
-        <span
-          className="step1"
-        >
-          Step 1: Upload a PDF
-        </span>
+      <div
+        className="bigUploadBox"
+        onDragEnter={(e: any) => {
+          let evt = e as Event;
+          evt.preventDefault();
+        }}
+        onDragOver={(e: any) => {
+          let evt = e as Event;
+          evt.preventDefault();
+        }}
+        onDrop={this.doUpload}
+      >
+        <div>
+          <div className="bigConverterTitle">
+          <span>
+            Upload a PDF
             <img
-              id="adobe"
+              onClick={() => {
+                this.props.slidesStore!.setHelp(true);
+              }}
+              className="bigHelpMenuIcon"
+              src={helpMenuIcon}
+            />
+          </span>
+            <span>Upload a mission storyboard as a .pdf file to view, rename, and upload images</span>
+          </div>
+          <label
+            id="uploadLabel"
+            htmlFor="uploadButton"
+            className="bigPdfUploadButton"
+          >
+            <img
+              id="bigAdobe"
               src={adobe}
             />
-            <p
-              id="dragMessage"
+            <div
+              id="bigClickable"
             >
-              Drag and drop Mission Storyboard saved as PDF
-              <span className="dragMessage2"> or
-            <span className="browse">&nbsp; Browse &nbsp;</span>
-              for your file
-            </span>
-            </p>
-            <input
-              name="uploadButton"
-              id="uploadButton"
-              className="uploadButton"
-              type="file"
-              onChange={this.doUpload}
-            />
-          </div>
-        </label>
+              <span
+                id="bigDragMessage"
+              >
+                Drag and drop Mission Storyboard saved as PDF
+              </span>
+              <span className="bigDragMessage2"> or </span>
+              <label htmlFor="uploadButton" className="bigBrowseBtn">Browse</label>
+              <input
+                name="uploadButton"
+                id="uploadButton"
+                className="uploadButton"
+                type="file"
+                onChange={this.doUpload}
+              />
+            </div>
+          </label>
+        </div>
       </div>
     );
   }
@@ -186,5 +184,95 @@ export const StyledUploadContainer = inject('uploadActions', 'uploadStore', 'sli
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  
+  .bigUploadBox {
+    width: 1028px;
+    position: absolute;
+    left: 50%;
+    top: 32px;
+    transform: translate(-50%, 0%);
+  }
+  
+  .bigConverterTitle {
+    height: 73px;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    margin-bottom: 40px;
+    
+    span:nth-of-type(1) {
+      display: block;
+    }
+    
+    span:nth-of-type(2) {
+      position: relative;
+      bottom: 16px;
+      font-size: 20px;
+      font-weight: 300;
+      color: #88a6d6;
+    }
+  }
+  
+  .bigHelpMenuIcon {
+    position: relative;
+    margin-left: 8px;
+    bottom: 2px;
+    cursor: pointer;
+  }
+  
+  .bigPdfUploadButton {
+    width: 1000px;
+    height: 566px;
+    border: 1px dashed #d4d6db;
+  }
+  
+  #bigAdobe {
+    position: relative;
+    left: 361px;
+    top: 43px;
+    margin-bottom: 68px;
+  }
+  
+  #bigClickable {
+    text-align: center;
+    
+     span {
+      display: block;
+     }
+  }
+  
+  #bigDragMessage {
+    font-size: 24px;
+    color: #d4d6db;
+    margin-bottom: 32px;
+  }
+  
+  .bigDragMessage2 {
+    font-weight: 300;
+    font-size: 18px;
+    color: #d4d6db;
+    margin-bottom: 32px;
+  }
+  
+  .bigBrowseBtn {
+    outline: none;
+    width: 157px;
+    height: 38px;
+    border-radius: 4px;
+    border: solid 1px #00818C;
+    color: #FFF;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 250ms;
+    cursor: pointer;
+    font-size: 16px;
+    overflow-wrap: normal;
+    line-height: 34px;
+    vertical-align: middle;
+
+    :hover {
+      background-color: #00818C;
+    }
   }
 `);

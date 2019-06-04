@@ -28,6 +28,9 @@ export const StyledUnicornUploadProgress = inject('slidesStore', 'unicornStore')
   color: #fff;
   font-style: italic;
   letter-spacing: 0.4px;
+  top: 19px;
+  right: 51px;
+  position: absolute;
 
   span {
     color: #15DEEC;

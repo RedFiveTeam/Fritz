@@ -30,6 +30,7 @@ export class ActionButton extends React.Component<Props> {
 export const StyledActionButton = styled(ActionButton)`
   button {
     float: right;
+    outline: none;
     width: 170px;
     height: 38px;
     border-radius: 4px;

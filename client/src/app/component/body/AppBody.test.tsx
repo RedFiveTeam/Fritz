@@ -20,6 +20,8 @@ describe('Header', () => {
     uploadStore = new UploadStore();
     unicornStore = new UnicornStore();
 
+    uploadStore.setUploaded(true);
+
     subject = shallow(
       <AppBody
         uploadStore={uploadStore}

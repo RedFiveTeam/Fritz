@@ -60,6 +60,7 @@ export const StyledFooter = inject('unicornStore')(styled(Footer)`
   box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.5);
   width: 100%;
   z-index: 3;
+  height: 64px;
 
   .container-fluid {
     justify-content: flex-end;

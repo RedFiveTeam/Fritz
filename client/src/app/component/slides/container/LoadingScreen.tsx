@@ -35,7 +35,8 @@ export const StyledLoadingScreen = styled(LoadingScreen)`
 
 .loadingMessage {
   position: relative;
-  width: 1200px;
+  width: 1650px;
+  text-align: center;
   margin: auto;
   margin-top: 58px;
 }

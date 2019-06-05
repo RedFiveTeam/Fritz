@@ -5,6 +5,12 @@ describe('SlidesStore', () => {
 
   beforeEach(() => {
     subject = new SlidesStore();
+    subject.initialValidation();
+  });
+
+  it('should not validate on the first time', () => {
+    subject = new SlidesStore();
+    expect(subject.validate()).toBeFalsy();
   });
 
   it('should report that all fields are valid', () => {

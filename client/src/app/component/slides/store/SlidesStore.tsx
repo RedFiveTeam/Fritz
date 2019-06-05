@@ -283,11 +283,13 @@ export class SlidesStore {
   }
 
   validate(): boolean {
-    this.validateDate();
-    this.validateOpName();
-    this.validateAsset();
-    this.validateReleasability();
-    this.validateDifferentAsset();
+    if (this.hasInitiallyValidated) {
+      this.validateDate();
+      this.validateOpName();
+      this.validateAsset();
+      this.validateReleasability();
+      this.validateDifferentAsset();
+    }
     return this.areAllFieldsValid();
   }
 
@@ -316,12 +318,15 @@ export class SlidesStore {
   }
 
   private areAllFieldsValid(): boolean {
-    return (
-      this.isValidDate &&
-      this.isValidOpName &&
-      this.isValidAsset &&
-      this.isValidReleasability
-    );
+    if (this.hasInitiallyValidated) {
+      return (
+        this.isValidDate &&
+        this.isValidOpName &&
+        this.isValidAsset &&
+        this.isValidReleasability
+      );
+    }
+    return false;
   }
 
   private validateDate() {

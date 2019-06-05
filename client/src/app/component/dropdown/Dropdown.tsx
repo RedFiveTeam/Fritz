@@ -12,6 +12,7 @@ interface Props {
   value: string | null;
   callback: (s: any) => void;
   id?: string;
+  validator?: any;
 }
 
 @observer
@@ -62,6 +63,7 @@ export class Dropdown extends React.Component<Props> {
     return (
       <div
         className={this.props.className + ' dropdown'}
+        style={this.props.validator}
       >
         <button
           className="dropdownBtn"

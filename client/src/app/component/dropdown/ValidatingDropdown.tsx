@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { badLabelCSS, goodCSS } from '../../../themes/default';
+import { badLabelCSS, badReleasabilityCSS, goodCSS } from '../../../themes/default';
 import { StyledDropdown } from './Dropdown';
 import classNames = require('classnames');
 
 interface Props {
-  label: string;
   validator: boolean;
   options: string[];
   defaultValue: string;
   value: string;
   callback: (s: any) => void;
+  id?: string;
+  label?: string;
   errorMessage?: string;
   className?: string;
-  id?: string;
 }
 
 @observer
@@ -38,6 +38,7 @@ export class ValidatingDropdown extends React.Component<Props> {
           value={this.props.value}
           callback={this.props.callback}
           id={this.props.id ? this.props.id : ''}
+          validator={this.props.validator ? goodCSS : badReleasabilityCSS}
         />
         {
           !this.props.validator &&

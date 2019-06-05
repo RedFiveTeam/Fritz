@@ -9,6 +9,7 @@ import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { UploadActions } from './upload/actions/UploadActions';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
+import { badClassificationCSS, badReleasabilityCSS, goodCSS } from '../../../themes/default';
 
 interface Props {
   className?: string;
@@ -27,6 +28,41 @@ export class FormContainer extends React.Component<Props> {
     if (dropdownText) {
       dropdownText.style.opacity = '1';
     }
+  }
+
+  renderReleasabilityInput() {
+    let {slidesStore} = this.props;
+    if (this.props.unicornStore!.offline) {
+      return (
+        <StyledValidatingInput
+          label="Classification & Releasability"
+          placeholder={'e.g. FOUO'}
+          listener={this.props.slidesActions!.setAndUpdateCustomReleasability}
+          id={'releasabilityInput'}
+          validator={slidesStore!.isValidReleasability}
+          value={slidesStore!.releasability}
+          errorMessage={'The releasability field must be chosen'}
+          badStyle={badReleasabilityCSS}
+        />
+      );
+    }
+    return (
+      <StyledValidatingDropdown
+        label="Classification & Releasability"
+        validator={slidesStore!.isValidReleasability}
+        options={this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
+          return e.releasabilityName;
+        })}
+        defaultValue={'Select'}
+        value={slidesStore!.releasability}
+        id="releasabilityDropdown"
+        callback={(r: string) => {
+          this.props.slidesActions!.setAndUpdateReleasability(r);
+          FormContainer.changeReleasabilityColor();
+        }}
+        errorMessage={'The releasability field must be chosen'}
+      />
+    );
   }
 
   render() {
@@ -73,48 +109,13 @@ export class FormContainer extends React.Component<Props> {
               validator={slidesStore!.isValidAsset}
               value={slidesStore!.asset}
             />
-            <div className="splitControl sC1">
-              <StyledValidatingInput
-                label={'Classification'}
-                placeholder={'e.g. Secret'}
-                listener={this.props.slidesActions!.setAndUpdateClassification}
-                id={'classificationInput'}
-                validator={true}
-                value={'Secret'}
-              />
-            </div>
-            <div className="splitControl sC2">
-              {
-                !this.props.unicornStore!.offline &&
-                <StyledValidatingDropdown
-                  label={'Releasability'}
-                  validator={slidesStore!.isValidReleasability}
-                  options={this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
-                    return e.releasabilityName;
-                  })}
-                  defaultValue={'Select'}
-                  value={slidesStore!.releasability}
-                  id="releasabilityDropdown"
-                  callback={(r: string) => {
-                    this.props.slidesActions!.setAndUpdateReleasability(r);
-                    FormContainer.changeReleasabilityColor();
-                  }}
-                  errorMessage={'The releasability field must be chosen'}
-                />
-              }
-              {
-                this.props.unicornStore!.offline &&
-                <StyledValidatingInput
-                  label={'Releasability'}
-                  placeholder={'e.g. FOUO'}
-                  listener={this.props.slidesActions!.setAndUpdateCustomReleasability}
-                  id={'releasabilityInput'}
-                  validator={slidesStore!.isValidReleasability}
-                  value={slidesStore!.releasability}
-                  errorMessage={'The releasability field must be chosen'}
-                />
-              }
-            </div>
+            <span
+              className="classification"
+              style={this.props.slidesStore!.isValidReleasability ? goodCSS : badClassificationCSS}
+            >
+              SECRET//
+            </span>
+            {this.renderReleasabilityInput()}
           </div>
         </form>
       </div>
@@ -136,6 +137,12 @@ export const StyledFormContainer = inject(
   
   .controlUnit:nth-child(1) {
   padding-top: 0px;
+  }
+  
+  .controlUnit:nth-of-type(4) {
+    padding-top: 0;
+    bottom: 10px;
+    position: relative;
   }
   
   .form-group {
@@ -262,9 +269,13 @@ export const StyledFormContainer = inject(
   }
   
   #releasabilityInput {
-    width: 280px;
-    border: 1px solid #ced4da;
-    border-radius: .25rem;
+    left: 104px;
+    width: 496px;
+    position: relative;
+    border-width: 1px 1px 1px 0;
+    border-radius: 0 4px 4px 0;
+    border-style: solid;
+    border-color: #ced4da;
     height: 38px;
     display: block;
     padding-left: 0.75rem;
@@ -275,16 +286,20 @@ export const StyledFormContainer = inject(
   }
   
   .dropdown {
+    border-width: 1px 1px 1px 0;
+    border-radius: 0 4px 4px 0;
+    border-style: solid;
+    border-color: #ced4da;
     display: block;
-    width: 100%;
+    width: 83%;
     color: #fff;
     background-color:rgba(0, 0, 0, 0);
     height: 38px;
-    border: 1px solid #ced4da;
     font-weight: normal;
     font-size: 1rem;
+    left: 104px;
       .dropdownBtn {
-        width: 115%;
+        width: 100%;
         position: relative;
         font-weight: normal;
         font-size: 1rem;
@@ -299,7 +314,7 @@ export const StyledFormContainer = inject(
       }
     
       .dd {
-        width: 280px;
+        width: 497px;
         left: 0;
         overflow: auto;
         max-height: 250px;
@@ -317,5 +332,27 @@ export const StyledFormContainer = inject(
   .default {
     color: #FFF;
     opacity: 0.4;
+  }
+  
+  .classification {
+    top: 60px;
+    width: 104px;
+    height: 38px;
+    border-radius: 4px 0 0 4px;
+    background-color: #1f1f2c;
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 36px;
+    border-color: #cccccc;
+    border-style: solid;
+    border-width: 1px 0 1px 1px;
+  }
+  
+  .classification-and-releasability {
+    position: relative;
+    bottom: 50px;
   }
 `);

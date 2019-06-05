@@ -5,16 +5,17 @@ import { badInputCSS, badLabelCSS, goodCSS } from '../../../themes/default';
 import classNames = require('classnames');
 
 interface Props {
-  label: string;
   placeholder: string;
   listener: (e: any) => void;
   id: string;
   validator: boolean;
   value?: string | null;
+  label?: string;
   errorMessage?: string;
   defaultValue?: string;
-  className?: string;
   type?: string;
+  className?: string;
+  badStyle?: any;
 }
 
 @observer
@@ -41,7 +42,7 @@ export class ValidatingInput extends React.Component<Props> {
           style={
             this.props.validator
               ? goodCSS
-              : badInputCSS
+              : this.props.badStyle || badInputCSS
           }
           defaultValue={this.props.defaultValue}
           value={this.props.value ? this.props.value : ''}

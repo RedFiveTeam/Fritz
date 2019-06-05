@@ -15,3 +15,17 @@ export const badCallsignCSS: CSSProperties = {
   border: '1px solid #ae4754',
   borderRadius: '7px'
 };
+
+export const badReleasabilityCSS: CSSProperties = {
+  borderWidth: '1px 1px 1px 0',
+  borderRadius: '0 4px 4px 0',
+  borderStyle: 'solid',
+  borderColor: '#ae4754'
+};
+
+export const badClassificationCSS: CSSProperties = {
+  borderWidth: '1px 0px 1px 1px',
+  borderRadius: '4px 0 0 4px',
+  borderStyle: 'solid',
+  borderColor: '#ae4754'
+};

@@ -15,7 +15,9 @@ describe('FormContainer', () => {
 
   beforeEach(() => {
     unicornStore = {
-      releasabilities: []
+      releasabilities: [],
+      setOffline: jest.fn(),
+      offline: jest.fn()
     };
 
     unicornActions = {
@@ -26,7 +28,8 @@ describe('FormContainer', () => {
       setDateFromInput: jest.fn(),
       setAndUpdateOpName: jest.fn(),
       setAndUpdateAsset: jest.fn(),
-      setAndUpdateReleasability: jest.fn()
+      setAndUpdateReleasability: jest.fn(),
+      setAndUpdateCustomReleasability: jest.fn()
     };
 
     slidesStore = new SlidesStore();
@@ -48,7 +51,20 @@ describe('FormContainer', () => {
   });
 
   it('should contain fields for Date, Op Name, Callsign, Classification, and Releasability', () => {
-    expect(subject.find(StyledValidatingInput).length).toBe(4);
+    unicornStore.offline = false;
+    subject.instance().forceUpdate();
+    expect(subject.find(StyledValidatingInput).length).toBe(3);
+    expect(subject.find('.classification').exists()).toBeTruthy();
     expect(subject.find(StyledValidatingDropdown).length).toBe(1);
+  });
+
+  it('should display a different releasability input when offline ', () => {
+    unicornStore.offline = true;
+    expect(subject.find('#releasabilityInput').exists()).toBeTruthy();
+    expect(subject.find('#releasabilityDropdown').exists()).toBeFalsy();
+    unicornStore.offline = false;
+    subject.instance().forceUpdate();
+    expect(subject.find('#releasabilityInput').exists()).toBeFalsy();
+    expect(subject.find('#releasabilityDropdown').exists()).toBeTruthy();
   });
 });

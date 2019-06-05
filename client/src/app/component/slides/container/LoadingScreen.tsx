@@ -17,7 +17,7 @@ export class LoadingScreen extends React.Component<Props> {
         className={this.props.className}
       >
         <div className="loadingMessage">
-          <span>One moment, Fritz is uploading and converting your mission storyboard</span>
+          <span>One moment, Fritz is uploading and converting your mission storyboard...</span>
         </div>
         <div className="loadingImage">
           <img src={FritzLoadingLogo}/>

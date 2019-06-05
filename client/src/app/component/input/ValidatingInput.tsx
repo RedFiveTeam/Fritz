@@ -8,7 +8,7 @@ interface Props {
   placeholder: string;
   listener: (e: any) => void;
   id: string;
-  validator: boolean;
+  validator?: boolean;
   value?: string | null;
   label?: string;
   errorMessage?: string;

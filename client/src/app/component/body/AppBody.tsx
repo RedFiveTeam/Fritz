@@ -120,16 +120,6 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
     position: absolute;
     z-index: -1;
   }  
-
-  //.uploadContainer {
-  //    margin-top: 158px;
-  //    box-sizing: border-box;
-  //    border: 1px dashed #d4d6db;
-  //    border-radius: 4px;
-  //    width: 580px;
-  //    height: 548px;
-  //    margin-left: 40px;
-  //}
   
   .browse {
     color: #15deec;
@@ -162,15 +152,6 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
         color: #d8e5ff;
       }
   }
-  
-  //.helpMenuIcon {
-  //  cursor: pointer;
-  //  margin-left: 8px;
-  //  margin-bottom: 5px;
-  //  position: absolute;
-  //  top: 123px;
-  //  left: 240px;
-  //}
   
   .step1 {
     font-size: 20px;

@@ -4,10 +4,12 @@ import { SlidesStore } from '../store/SlidesStore';
 import styled from 'styled-components';
 import { StyledSlideCard } from '../slideCard/SlideCard';
 import { StyledUndoDeleteContainer } from '../../UndoDelete/UndoDeleteContainer';
+import { CarouselActions } from '../../carousel/CarouselActions';
 
 interface Props {
-  className?: string;
+  carouselActions?: CarouselActions;
   slidesStore?: SlidesStore;
+  className?: string;
 }
 
 @observer
@@ -37,6 +39,7 @@ export class SlidesContainer extends React.Component<Props> {
                         slideModel={s}
                         slideNumber={idx}
                         deletedCount={this.count}
+                        thumbnailClick={this.props.carouselActions!.show}
                         first={idx === 0}
                     />
                   }
@@ -55,9 +58,11 @@ export class SlidesContainer extends React.Component<Props> {
   }
 }
 
-export const StyledSlidesContainer = inject('slidesStore')(styled(SlidesContainer)`
-max-width: 860px;
-color: white;
-margin-left: 32px;
-white-space: nowrap;
+export const StyledSlidesContainer = inject(
+  'slidesStore', 'carouselActions'
+)(styled(SlidesContainer)`
+  max-width: 860px;
+  color: white;
+  margin-left: 32px;
+  white-space: nowrap;
 `);

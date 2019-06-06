@@ -49,7 +49,7 @@ describe('SlidesActions', () => {
     expect(slidesStore.initialValidation).toBeTruthy();
   });
 
-  it('should update the date and validate on date change after initial validation', () => {
+  it('should update the date and validateInput on date change after initial validation', () => {
     slidesStore.validate = jest.fn();
     subject.setDateFromInput({target: {value: '2019-05-21'}});
     expect(slidesStore.validate).not.toHaveBeenCalled();
@@ -60,7 +60,7 @@ describe('SlidesActions', () => {
     expect(slidesStore.validate).toHaveBeenCalled();
   });
 
-  it('should update the op name and validate on change after initial validation', () => {
+  it('should update the op name and validateInput on change after initial validation', () => {
     slidesStore.validate = jest.fn();
     subject.setAndUpdateOpName({target: {value: 'operation'}});
     expect(slidesStore.validate).not.toHaveBeenCalled();
@@ -78,7 +78,7 @@ describe('SlidesActions', () => {
 
   it('update the slide model name when called', () => {
 
-    subject.setAndUpdateActivity(slidesStore.slides[0], 'Test activity');
+    subject.setAndUpdateActivity(slidesStore.slides[0], {target: {value: 'Test activity'}});
     expect(slidesStore.slides[0].newName).toBe('DDTTTTZMONYY_TGT_NAME_TEST_ACTIVITY_ASSET_RELEASABILITY');
 
     subject.setDateFromInput({target: {value: '2019-01-20'}});
@@ -93,7 +93,7 @@ describe('SlidesActions', () => {
     subject.setAndUpdateReleasability('fvey');
     expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_FVEY3');
 
-    subject.setAndUpdateTime(slidesStore.slides[5], '1234');
+    subject.setAndUpdateTime(slidesStore.slides[5], {target: {value: '1234'}});
     expect(slidesStore.slides[5].newName).toBe('201234ZJAN19_OP_HELLO_ACTY_ASSET_FVEY');
   });
 
@@ -179,7 +179,7 @@ describe('SlidesActions', () => {
     expect(subject.compareCallsigns).toHaveBeenCalled();
   });
 
-  it('should determine mismatch callsign always but only validate empty callsign after initial validation', () => {
+  it('should determine mismatch callsign always but only validateInput empty callsign after initial validation', () => {
     slidesStore.validate = jest.fn();
 
     subject.setAndUpdateAsset({target: {value: 'asset'}});
@@ -192,9 +192,14 @@ describe('SlidesActions', () => {
     expect(slidesStore.differentAsset).toBeFalsy();
   });
 
-  it('should validate releasability always on change', () => {
+  it('should validateInput releasability always on change', () => {
     expect(slidesStore.isValidReleasability).toBeFalsy();
     subject.setAndUpdateReleasability('releaseMe');
     expect(slidesStore.isValidReleasability).toBeTruthy();
+  });
+
+  it('should set and update time', () => {
+    subject.setAndUpdateTime(slidesStore.slides[0], {target: {value: '1234'}});
+    expect(slidesStore.slides[0].time).toBe('1234');
   });
 });

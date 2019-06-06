@@ -5,7 +5,6 @@ import { StyledAppBody } from '../component/body/AppBody';
 import { StyledToast } from '../../utils/Toast';
 import { StyledFooter } from '../component/footer/Footer';
 import { StyledDeleteModal } from '../component/modals/DeleteModal';
-import { StyledExpandedView } from '../component/modals/ExpandedView';
 import { UnicornStore } from '../component/unicorn/store/UnicornStore';
 import { StyledSelectMissionModal } from '../component/modals/SelectMissionModal';
 import { SlidesStore } from '../component/slides/store/SlidesStore';
@@ -15,6 +14,8 @@ import { UnicornActions } from '../component/unicorn/actions/UnicornActions';
 import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
 import { UploadStore } from '../component/form/upload/UploadStore';
 import { StyledUnicornOfflineModal } from '../component/modals/UnicornOfflineModal';
+import { CarouselStore } from '../component/carousel/CarouselStore';
+import { StyledCarousel } from '../component/carousel/Carousel';
 
 interface Props {
   className?: string;
@@ -23,6 +24,7 @@ interface Props {
   slidesActions?: SlidesActions;
   unicornActions?: UnicornActions;
   uploadStore?: UploadStore;
+  carouselStore?: CarouselStore;
 }
 
 @observer
@@ -35,7 +37,12 @@ export class HomePage extends React.Component<Props> {
       >
         <StyledToast/>
         <StyledDeleteModal/>
-        <StyledExpandedView/>
+        {
+          this.props.carouselStore!.isVisible &&
+            <StyledCarousel
+              slides={this.props.slidesStore!.undeletedSlides}
+            />
+        }
         {
           this.props.unicornStore!.offlineModal &&
           <StyledUnicornOfflineModal/>
@@ -73,7 +80,8 @@ export const StyledHomePage = inject(
   'slidesStore',
   'slidesActions',
   'unicornActions',
-  'uploadStore'
+  'uploadStore',
+  'carouselStore'
 )(styled(HomePage)`
   height: auto;
   min-height: 1060px;

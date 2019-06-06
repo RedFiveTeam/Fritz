@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SlideModel } from '../models/SlideModel';
 import { SlidesActions } from '../actions/SlidesActions';
@@ -7,29 +8,31 @@ import styled from 'styled-components';
 import * as ReactDOM from 'react-dom';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UploadStore } from '../../form/upload/UploadStore';
-import { observable } from 'mobx';
-import { CSSProperties } from 'react';
 import { StyledCallout } from '../../unicorn/Callout/Callout';
 import { UnicornStore } from '../../unicorn/store/UnicornStore';
+import { StyledValidatingInput } from '../../input/ValidatingInput';
 
 const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
 
 interface Props {
-  className?: string;
   slideNumber: number;
   slideModel: SlideModel;
+  thumbnailClick: (i: number) => void;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
   uploadStore?: UploadStore;
   metricActions?: MetricActions;
   deletedCount?: number;
   unicornStore?: UnicornStore;
+  first?: boolean;
+  className?: string;
 }
 
 @observer
 export class SlideCard extends React.Component<Props> {
-
+  timeBox: any;
+  activityBox: any;
   goodCSS: CSSProperties = {};
 
   badCSS: CSSProperties = {
@@ -40,7 +43,11 @@ export class SlideCard extends React.Component<Props> {
     color: '#e46373'
   };
 
-  @observable private valid: boolean = true;
+  constructor(props: Props) {
+    super(props);
+    this.timeBox = React.createRef();
+    this.activityBox = React.createRef();
+  }
 
   componentDidUpdate() {
     let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
@@ -54,6 +61,7 @@ export class SlideCard extends React.Component<Props> {
   }
 
   componentDidMount() {
+    this.setFocus();
     let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
     let timeInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#timeInput') as HTMLInputElement;
     if (activityInput) {
@@ -64,6 +72,16 @@ export class SlideCard extends React.Component<Props> {
     }
   }
 
+  setFocus() {
+    if (this.props.first) {
+      if (!this.props.slideModel.isValidTime) {
+        this.timeBox.current.focus();
+      } else {
+        this.activityBox.current.focus();
+      }
+    }
+  }
+
   getSlideName = (s: SlideModel, idx: number) => {
     return (
       <div key={idx} className="slide">
@@ -71,9 +89,8 @@ export class SlideCard extends React.Component<Props> {
           this.props.slidesStore!.day
         }
         {
-          s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> : <span>
-            {s.time}Z
-          </span>}
+          s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> :
+            !s.isValidTime ? <span className="text-info font-italic">TTTTZ</span> : <span>{s.time}Z</span>}
         {
           this.props.slidesStore!.month
         }
@@ -95,18 +112,6 @@ export class SlideCard extends React.Component<Props> {
     );
   };
 
-  isValidTime = (militaryTime: string) => {
-    if (militaryTime.length !== 4) {
-      this.valid = false;
-      return;
-    }
-    if (militaryTime.search(/^([0-1]?[0-9]|2[0-3])([0-5][0-9])(:[0-5][0-9])?$/)) {
-      this.valid = false;
-      return;
-    }
-    this.valid = true;
-  };
-
   render() {
     return (
       <div
@@ -120,21 +125,17 @@ export class SlideCard extends React.Component<Props> {
                 this.props.slideModel.oldName.replace('.JPG', '.jpg')}
                 className="card-img calloutImg"
                 onClick={() => {
-                  let expandDisplay = (document.querySelector('.expandedView') as HTMLElement);
-                  if (expandDisplay !== null) {
-                    expandDisplay.style.display = 'block';
-                  }
-                  let carouselItem = (document.querySelector(
-                    '.carousel-item:nth-of-type(' +
-                    (this.props.slideNumber - this.props.deletedCount! + 1) + ')') as HTMLElement);
-                  carouselItem.classList.add('active');
-                  if ((carouselItem.querySelector('#timeInput') as HTMLInputElement).value.length === 4) {
-                    (carouselItem.querySelector('#activityInput') as HTMLInputElement).focus();
-                  } else {
-                    (carouselItem.querySelector('#timeInput') as HTMLInputElement).focus();
-                  }
+                  this.props.thumbnailClick(this.props.slideNumber - this.props.deletedCount!);
                 }}
               />
+              <div
+                className="expandText"
+                onClick={() => {
+                  this.props.thumbnailClick(this.props.slideNumber - this.props.deletedCount!);
+                }}
+              >
+                <span>Click to Expand</span>
+              </div>
               <span
                 className="slideCounter"
               >
@@ -158,45 +159,19 @@ export class SlideCard extends React.Component<Props> {
                 <div>
                   <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
                   <div className="slidesInputs">
-                    <div className="timeInputField">
-                      <label
-                        style={this.valid ? this.goodCSS : this.badLabelCSS}
-                      >
-                        Time
-                      </label>
-                      <input
-                        maxLength={4}
-                        style={this.valid ? this.goodCSS : this.badCSS}
-                        onChange={(e: any) => {
-                          if (e.target.value.length === 4) {
-                            this.isValidTime(e.target.value);
-                          }
-                          let carouselItem = document.querySelector(
-                            '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
-                          if (carouselItem) {
-                            let input = carouselItem.querySelector('#timeInput') as HTMLInputElement;
-                            if (input) {
-                              input.value = e.target.value;
-                            }
-                          }
-                          this.props.slidesActions!.setAndUpdateTime(
-                            this.props.slideModel,
-                            e.target.value.toUpperCase()
-                          );
-                        }}
-                        onBlur={(e: any) => {
-                          this.isValidTime(e.target.value);
-                        }}
-                        type="text"
-                        className="form-control"
-                        id="timeInput"
-                        placeholder="e.g. 0830"
-                      />
-                      {
-                        !this.valid &&
-                        <div className="wrongTime">Invalid Time</div>
-                      }
-                    </div>
+                    <StyledValidatingInput
+                      label={'Time'}
+                      placeholder={'e.g. 0830'}
+                      listener={(e: any) => {
+                        this.props.slidesActions!.setAndUpdateTime(this.props.slideModel, e);
+                      }}
+                      id={'timeInput'}
+                      validator={this.props.slideModel.isValidTime}
+                      value={this.props.slideModel.time}
+                      errorMessage={'Invalid time'}
+                      onlyValidateOnExit={true}
+                      reference={this.timeBox}
+                    />
                     <div className="activityInputField">
                       <label>
                         Activity
@@ -205,8 +180,7 @@ export class SlideCard extends React.Component<Props> {
                         maxLength={64}
                         onChange={(e: any) => {
                           this.props.slidesActions!.setAndUpdateActivity(
-                            this.props.slideModel,
-                            e.target.value.toUpperCase()
+                            this.props.slideModel, e
                           );
                           let carouselItem = document.querySelector(
                             '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
@@ -221,6 +195,7 @@ export class SlideCard extends React.Component<Props> {
                         className="form-control"
                         id="activityInput"
                         placeholder="e.g. OV"
+                        ref={this.activityBox}
                       />
                     </div>
                   </div>
@@ -356,6 +331,8 @@ export const StyledSlideCard = inject(
   .activityInputField {
     position: relative;
     display: block;
+    left: 225px;
+    bottom: 70px;
   }
   
   .deleteIcon {
@@ -401,5 +378,35 @@ export const StyledSlideCard = inject(
   .whileUploadingTitle {
     font-size: 14px;
     color: #6c7f9c;
+  }
+  
+  .expandText {
+    width: 200.19px;
+    height: 167px;
+    top: 0px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.5s;
+    cursor: pointer;
+    
+    span {
+      display: none;
+    }
+    
+    :hover {
+      background-color: rgba(0, 0, 0, 0.6);
+      
+      span {
+        display: block;
+        color: #fff;
+        left: 50%;
+        top: 50%;
+        font-weight: 600;
+        font-size: 14px;
+        text-align: center;
+        position: relative;
+        transform: translate(-50%, -50%);
+      }
+    }
   }
 `);

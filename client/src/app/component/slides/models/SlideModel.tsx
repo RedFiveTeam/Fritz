@@ -13,6 +13,7 @@ export class SlideModel {
   @observable private _calloutTime: string | null = null;
   @observable private _uploading: boolean | null = null;
   @observable private _failed: boolean | null = null;
+  @observable private _hash: string;
 
   constructor(
     oldName: string = '',
@@ -87,6 +88,11 @@ export class SlideModel {
     return this._failed;
   }
 
+  @computed
+  get hash(): string {
+    return this._hash;
+  }
+
   @action.bound
   setOldName(value: string) {
     this._oldName = value;
@@ -140,5 +146,21 @@ export class SlideModel {
   @action.bound
   setFailed(value: boolean | null) {
     this._failed = value;
+  }
+
+  @action.bound
+  setHash(hash: string) {
+    this._hash = hash;
+  }
+
+  @computed
+  get isValidTime(): boolean {
+    if (this.time.length !== 4) {
+      return false;
+    }
+    if (this.time.search(/^([0-1]?[0-9]|2[0-3])([0-5][0-9])(:[0-5][0-9])?$/)) {
+      return false;
+    }
+    return true;
   }
 }

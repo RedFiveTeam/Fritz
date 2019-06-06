@@ -141,4 +141,15 @@ export class SlideModel {
   setFailed(value: boolean | null) {
     this._failed = value;
   }
+
+  @computed
+  get isValidTime(): boolean {
+    if (this.time.length !== 4) {
+      return false;
+    }
+    if (this.time.search(/^([0-1]?[0-9]|2[0-3])([0-5][0-9])(:[0-5][0-9])?$/)) {
+      return false;
+    }
+    return true;
+  }
 }

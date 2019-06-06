@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
 import { SlideModel } from '../models/SlideModel';
 import { SlidesActions } from '../actions/SlidesActions';
@@ -8,7 +9,6 @@ import * as ReactDOM from 'react-dom';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UploadStore } from '../../form/upload/UploadStore';
 import { observable } from 'mobx';
-import { CSSProperties } from 'react';
 import { StyledCallout } from '../../unicorn/Callout/Callout';
 import { UnicornStore } from '../../unicorn/store/UnicornStore';
 
@@ -16,20 +16,22 @@ const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
 
 interface Props {
-  className?: string;
   slideNumber: number;
   slideModel: SlideModel;
+  className?: string;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
   uploadStore?: UploadStore;
   metricActions?: MetricActions;
   deletedCount?: number;
   unicornStore?: UnicornStore;
+  first?: boolean;
 }
 
 @observer
 export class SlideCard extends React.Component<Props> {
-
+  timeBox: any;
+  activityBox: any;
   goodCSS: CSSProperties = {};
 
   badCSS: CSSProperties = {
@@ -41,6 +43,12 @@ export class SlideCard extends React.Component<Props> {
   };
 
   @observable private valid: boolean = true;
+
+  constructor(props: Props) {
+    super(props);
+    this.timeBox = React.createRef();
+    this.activityBox = React.createRef();
+  }
 
   componentDidUpdate() {
     let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
@@ -54,6 +62,7 @@ export class SlideCard extends React.Component<Props> {
   }
 
   componentDidMount() {
+    this.setFocus();
     let activityInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#activityInput') as HTMLInputElement;
     let timeInput = (ReactDOM.findDOMNode(this) as HTMLElement).querySelector('#timeInput') as HTMLInputElement;
     if (activityInput) {
@@ -61,6 +70,16 @@ export class SlideCard extends React.Component<Props> {
     }
     if (timeInput) {
       timeInput.value = this.props.slideModel.time === 'TTTT' ? '' : this.props.slideModel.time;
+    }
+  }
+
+  setFocus() {
+    if (this.props.first) {
+      if (!this.props.slideModel.isValidTime) {
+        this.timeBox.current.focus();
+      } else {
+        this.activityBox.current.focus();
+      }
     }
   }
 
@@ -106,6 +125,51 @@ export class SlideCard extends React.Component<Props> {
     }
     this.valid = true;
   };
+
+  renderTimeInput() {
+    return (
+      <div className="timeInputField">
+        <label
+          style={this.valid ? this.goodCSS : this.badLabelCSS}
+        >
+          Time
+        </label>
+        <input
+          maxLength={4}
+          style={this.valid ? this.goodCSS : this.badCSS}
+          onChange={(e: any) => {
+            if (e.target.value.length === 4) {
+              this.isValidTime(e.target.value);
+            }
+            let carouselItem = document.querySelector(
+              '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
+            if (carouselItem) {
+              let input = carouselItem.querySelector('#timeInput') as HTMLInputElement;
+              if (input) {
+                input.value = e.target.value;
+              }
+            }
+            this.props.slidesActions!.setAndUpdateTime(
+              this.props.slideModel,
+              e.target.value.toUpperCase()
+            );
+          }}
+          onBlur={(e: any) => {
+            this.isValidTime(e.target.value);
+          }}
+          type="text"
+          className="form-control"
+          id="timeInput"
+          placeholder="e.g. 0830"
+          ref={this.timeBox}
+        />
+        {
+          !this.valid &&
+          <div className="wrongTime">Invalid Time</div>
+        }
+      </div>
+    );
+  }
 
   render() {
     return (
@@ -158,45 +222,7 @@ export class SlideCard extends React.Component<Props> {
                 <div>
                   <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
                   <div className="slidesInputs">
-                    <div className="timeInputField">
-                      <label
-                        style={this.valid ? this.goodCSS : this.badLabelCSS}
-                      >
-                        Time
-                      </label>
-                      <input
-                        maxLength={4}
-                        style={this.valid ? this.goodCSS : this.badCSS}
-                        onChange={(e: any) => {
-                          if (e.target.value.length === 4) {
-                            this.isValidTime(e.target.value);
-                          }
-                          let carouselItem = document.querySelector(
-                            '.carousel-item:nth-of-type(' + (this.props.slideNumber + 1) + ')');
-                          if (carouselItem) {
-                            let input = carouselItem.querySelector('#timeInput') as HTMLInputElement;
-                            if (input) {
-                              input.value = e.target.value;
-                            }
-                          }
-                          this.props.slidesActions!.setAndUpdateTime(
-                            this.props.slideModel,
-                            e.target.value.toUpperCase()
-                          );
-                        }}
-                        onBlur={(e: any) => {
-                          this.isValidTime(e.target.value);
-                        }}
-                        type="text"
-                        className="form-control"
-                        id="timeInput"
-                        placeholder="e.g. 0830"
-                      />
-                      {
-                        !this.valid &&
-                        <div className="wrongTime">Invalid Time</div>
-                      }
-                    </div>
+                    {this.renderTimeInput()}
                     <div className="activityInputField">
                       <label>
                         Activity
@@ -221,6 +247,7 @@ export class SlideCard extends React.Component<Props> {
                         className="form-control"
                         id="activityInput"
                         placeholder="e.g. OV"
+                        ref={this.activityBox}
                       />
                     </div>
                   </div>

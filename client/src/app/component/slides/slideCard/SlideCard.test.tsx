@@ -9,7 +9,7 @@ import { SlideModel } from '../models/SlideModel';
 describe('SlideCard', () => {
   let subject: ReactWrapper;
   let slideNumber: any;
-  let slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
+  let slideModel: SlideModel;
   let slidesActions: any;
   let slidesStore: any;
   let uploadStore: any;
@@ -17,7 +17,28 @@ describe('SlideCard', () => {
   let unicornStore: any;
   let unicornActions: any;
 
+  let mountFirst = () => {
+    subject = mount(
+      <Provider
+        unicornStore={unicornStore}
+        slidesStore={slidesStore}
+        unicornActions={unicornActions}
+      >
+        <SlideCard
+          uploadStore={uploadStore}
+          slideNumber={slideNumber}
+          slideModel={slideModel}
+          slidesActions={slidesActions}
+          slidesStore={slidesStore}
+          metricActions={metricActions}
+          unicornStore={unicornStore}
+          first={true}
+        />
+      </Provider>);
+  };
+
   beforeEach(() => {
+    slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
     uploadStore = {
       hash: 'ljndslkm'
     };
@@ -135,5 +156,29 @@ describe('SlideCard', () => {
     slideModel.setUploading(true);
     subject.update();
     expect(subject.find('.whileUploading').exists()).toBeTruthy();
+  });
+
+  it('should focus on the time box when it is the first slide card and empty or invalid', () => {
+    slideModel.setTime('');
+    mountFirst();
+    let timeInput = subject.find('input').at(0).instance();
+    expect(timeInput).toBe(document.activeElement);
+
+    slideModel.setTime('aaa');
+    mountFirst();
+    timeInput = subject.find('input').at(0).instance();
+    expect(timeInput).toBe(document.activeElement);
+
+    slideModel.setTime('1234');
+    mountFirst();
+    timeInput = subject.find('input').at(0).instance();
+    expect(timeInput).not.toBe(document.activeElement);
+  });
+
+  it('should focus on the first activity box if the time box is full', () => {
+    slideModel.setTime('1234');
+    mountFirst();
+    let activityInput = subject.find('input').at(1).instance();
+    expect(activityInput).toBe(document.activeElement);
   });
 });

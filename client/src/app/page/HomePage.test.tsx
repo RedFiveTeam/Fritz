@@ -8,6 +8,7 @@ import { StyledHelpMenu } from '../component/modals/HelpMenu';
 import { StyledUnicornOfflineModal } from '../component/modals/UnicornOfflineModal';
 import { SlidesStore } from '../component/slides/store/SlidesStore';
 import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
+import { StyledCarousel } from '../component/carousel/Carousel';
 
 describe('HomePage', () => {
   let subject: ShallowWrapper;
@@ -16,8 +17,13 @@ describe('HomePage', () => {
   let slideActions: any;
   let unicornActions: any;
   let uploadStore: any;
+  let carouselStore: any;
 
   beforeEach(() => {
+    carouselStore = {
+      isVisible: false
+    };
+
     unicornStore = {
       activeMission: null,
       setOfflineModal: jest.fn(),
@@ -49,6 +55,7 @@ describe('HomePage', () => {
         slidesActions={slideActions}
         unicornActions={unicornActions}
         uploadStore={uploadStore}
+        carouselStore={carouselStore}
       />
     );
   });
@@ -96,5 +103,11 @@ describe('HomePage', () => {
     expect(subject.find(StyledAppBody).exists()).toBeFalsy();
     expect(subject.find(StyledFooter).exists()).toBeFalsy();
     expect(subject.find(StyledLoadingScreen).exists()).toBeTruthy();
+  });
+
+  it('should display carousel when triggered', () => {
+    carouselStore.isVisible = true;
+    subject.instance().forceUpdate();
+    expect(subject.find(StyledCarousel).exists()).toBeTruthy();
   });
 });

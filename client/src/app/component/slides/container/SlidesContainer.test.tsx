@@ -12,13 +12,20 @@ describe('SlidesContainer', () => {
   let slideModel1 = new SlideModel('oldName1', 'newName1');
   let slideModel2 = new SlideModel('oldName2', 'newName2');
   let slideModel3 = new SlideModel('oldName3', 'newName3');
+  let carouselActions: any;
 
+  slideModel1.setTime('');
   slidesStore.setSlides([slideModel1, slideModel2, slideModel3]);
 
   beforeEach(() => {
+    carouselActions = {
+      show: true
+    };
+
     subject = shallow(
       <SlidesContainer
         slidesStore={slidesStore}
+        carouselActions={carouselActions}
       />
     );
   });
@@ -29,7 +36,11 @@ describe('SlidesContainer', () => {
 
   it('should render the undo container when a slide is deleted', () => {
     expect(subject.find(StyledUndoDeleteContainer).length).toBe(0);
-    slideModel1.setDeleted(true);
+    slideModel2.setDeleted(true);
     expect(subject.find(StyledUndoDeleteContainer).length).toBe(1);
+  });
+
+  it('should tag the first slide card', () => {
+    expect(subject.find(StyledSlideCard).at(0).prop('first')).toBeTruthy();
   });
 });

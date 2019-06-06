@@ -5,6 +5,8 @@ import { Provider } from 'mobx-react';
 import { StyledCallout } from '../../unicorn/Callout/Callout';
 import { CalloutModel } from '../../unicorn/model/CalloutModel';
 import { SlideModel } from '../models/SlideModel';
+import Mock = jest.Mock;
+import { StyledValidatingInput } from '../../input/ValidatingInput';
 
 describe('SlideCard', () => {
   let subject: ReactWrapper;
@@ -16,6 +18,7 @@ describe('SlideCard', () => {
   let metricActions: any;
   let unicornStore: any;
   let unicornActions: any;
+  let thumbnailClickSpy: Mock;
 
   let mountFirst = () => {
     subject = mount(
@@ -32,12 +35,15 @@ describe('SlideCard', () => {
           slidesStore={slidesStore}
           metricActions={metricActions}
           unicornStore={unicornStore}
+          thumbnailClick={thumbnailClickSpy}
           first={true}
         />
       </Provider>);
   };
 
   beforeEach(() => {
+    thumbnailClickSpy = jest.fn();
+
     slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
     uploadStore = {
       hash: 'ljndslkm'
@@ -89,6 +95,7 @@ describe('SlideCard', () => {
           slidesStore={slidesStore}
           metricActions={metricActions}
           unicornStore={unicornStore}
+          thumbnailClick={thumbnailClickSpy}
         />
       </Provider>
     );
@@ -108,8 +115,7 @@ describe('SlideCard', () => {
   });
 
   it('should render an input for the time', () => {
-    subject.find('#timeInput').at(0).simulate('change', {target: {value: '1425'}});
-    expect(slidesActions.setAndUpdateTime).toHaveBeenCalled();
+    expect(subject.find(StyledValidatingInput).exists()).toBeTruthy();
   });
 
   it('should render the correct title', async () => {
@@ -137,6 +143,7 @@ describe('SlideCard', () => {
           slidesStore={slidesStore}
           metricActions={metricActions}
           unicornStore={unicornStore}
+          thumbnailClick={thumbnailClickSpy}
         />
       </Provider>);
     expect(subject.find('.deleteIcon').exists()).toBeFalsy();
@@ -156,6 +163,11 @@ describe('SlideCard', () => {
     slideModel.setUploading(true);
     subject.update();
     expect(subject.find('.whileUploading').exists()).toBeTruthy();
+  });
+
+  it('should display the carousel on thumbnail click', () => {
+    subject.find('.calloutImg').simulate('click');
+    expect(thumbnailClickSpy).toHaveBeenCalled();
   });
 
   it('should focus on the time box when it is the first slide card and empty or invalid', () => {

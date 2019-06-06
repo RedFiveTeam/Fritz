@@ -8,14 +8,19 @@ import { StyledUndoDeleteContainer } from '../../UndoDelete/UndoDeleteContainer'
 
 describe('SlidesContainer', () => {
   let subject: ShallowWrapper;
-  let slidesStore = new SlidesStore();
-  let slideModel1 = new SlideModel('oldName1', 'newName1');
-  let slideModel2 = new SlideModel('oldName2', 'newName2');
-  let slideModel3 = new SlideModel('oldName3', 'newName3');
-
-  slidesStore.setSlides([slideModel1, slideModel2, slideModel3]);
+  let slidesStore: SlidesStore;
+  let slideModel1: SlideModel;
+  let slideModel2: SlideModel;
+  let slideModel3: SlideModel;
 
   beforeEach(() => {
+    slidesStore = new SlidesStore();
+    slideModel1 = new SlideModel('oldName1', 'newName1');
+    slideModel2 = new SlideModel('oldName2', 'newName2');
+    slideModel3 = new SlideModel('oldName3', 'newName3');
+    slideModel1.setTime('');
+    slidesStore.setSlides([slideModel1, slideModel2, slideModel3]);
+
     subject = shallow(
       <SlidesContainer
         slidesStore={slidesStore}
@@ -31,5 +36,9 @@ describe('SlidesContainer', () => {
     expect(subject.find(StyledUndoDeleteContainer).length).toBe(0);
     slideModel1.setDeleted(true);
     expect(subject.find(StyledUndoDeleteContainer).length).toBe(1);
+  });
+
+  it('should tag the first slide card', () => {
+    expect(subject.find(StyledSlideCard).at(0).prop('first')).toBeTruthy();
   });
 });

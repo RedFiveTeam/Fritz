@@ -12,13 +12,13 @@ Scenario('should allow you to edit the activity and time of a image and view ima
   I.attachFile('#uploadButton', 'data/AcceptanceMission.pdf');
   I.wait(5);
   I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY', 10);
-  I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > ' +
-    '.row > .col-md-8 > .slidesInputs > .activityInputField > input', 'activity test');
-  I.fillField('.slideCardContainer:first-of-type > .slideCard > .card > ' +
-    '.row > .col-md-8 > .slidesInputs > .timeInputField > input', '1234');
-  I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY', 10);
+  I.fillField('.slideCard > .card > .row > .col-md-8 > div > .slidesInputs > .activityInputField > input', 'activity test');
+  I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
+  I.clearField('.slideCard > .card > .row > .col-md-8 > div > .slidesInputs > .timeInputField > input');
+  I.fillField('.slideCard > .card > .row > .col-md-8 > div > .slidesInputs > .timeInputField > input', '1234');
+  I.waitForText('291234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
   I.click('.slideCard:first-of-type > .card > .row > .col-md-4 > img');
-  I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY', 10);
+  I.waitForText('291234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
   I.fillField('.carousel-item:first-of-type > .slidesInputs > .activityInputField > input', 'new activity test');
   I.fillField('.carousel-item:first-of-type > .slidesInputs > .timeInputField > input', '5678');
   I.waitForText('295678ZAPR19_OP_LEPRECHAUN_PHASE_8_NEW_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);

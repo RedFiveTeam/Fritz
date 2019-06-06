@@ -37,6 +37,7 @@ export class SlidesContainer extends React.Component<Props> {
                         slideModel={s}
                         slideNumber={idx}
                         deletedCount={this.count}
+                        first={idx === 0}
                     />
                   }
                   {

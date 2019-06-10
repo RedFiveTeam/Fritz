@@ -157,7 +157,7 @@ describe('UnicornActions', () => {
     expect(slide.failed).toBeTruthy();
   });
 
-  it('should start without any validation until upload button clicks then validate on change', async () => {
+  it('should start without any validation until upload button clicks then validateInput on change', async () => {
     expect(slidesStore.hasInitiallyValidated).toBeFalsy();
     await subject.uploadToUnicorn();
     expect(slidesStore.hasInitiallyValidated).toBeTruthy();
@@ -170,7 +170,7 @@ describe('UnicornActions', () => {
     expect(hydrateSpy).toHaveBeenCalled();
   });
 
-  it('should validate input fields on upload button click and before modal is rendered', async () => {
+  it('should validateInput input fields on upload button click and before modal is rendered', async () => {
     let modalSpy = jest.fn();
     subject.renderUploadModal = modalSpy;
 

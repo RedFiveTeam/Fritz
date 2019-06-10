@@ -155,6 +155,7 @@ export class UploadActions {
       }
       slide.setId(idx);
       slide.setOldName(name);
+      slide.setHash(this.uploadStore.hash);
       temp.push(slide);
     });
     this.slidesStore.setSlides(temp);

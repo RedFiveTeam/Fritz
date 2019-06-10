@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { badInputCSS, badLabelCSS, goodCSS } from '../../../themes/default';
+import { observable } from 'mobx';
 import classNames = require('classnames');
 
 interface Props {
@@ -14,22 +15,62 @@ interface Props {
   errorMessage?: string;
   defaultValue?: string;
   type?: string;
+  onlyValidateOnExit?: boolean;
   className?: string;
+  tabIndex?: number;
   badStyle?: any;
+  reference?: any;
 }
 
 @observer
 export class ValidatingInput extends React.Component<Props> {
+  @observable private exited: boolean = false;
+
+  shouldDisplayValidation(): boolean {
+    if (
+      !this.props.onlyValidateOnExit
+      && !this.props.validator
+    ) {
+      return true;
+    } else if (
+      this.props.onlyValidateOnExit
+      && this.exited
+      && !this.props.validator
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  validateInput() {
+    return this.shouldDisplayValidation()
+      ? badInputCSS
+      : goodCSS;
+  }
+
+  validateLabel() {
+    return this.shouldDisplayValidation()
+      ? badLabelCSS
+      : goodCSS;
+  }
+
+  renderErrorMessage() {
+    if (this.shouldDisplayValidation()) {
+      return (
+        <div className="errorMessage">
+          {this.props.errorMessage}
+        </div>
+      );
+    }
+    return;
+  }
+
   render() {
     return (
       <div className={classNames(this.props.className, 'controlUnit')}>
         <label
           className="Label"
-          style={
-            this.props.validator
-              ? goodCSS
-              : badLabelCSS
-          }
+          style={this.validateLabel()}
         >
           {this.props.label}
         </label>
@@ -39,26 +80,22 @@ export class ValidatingInput extends React.Component<Props> {
           placeholder={this.props.placeholder}
           onChange={this.props.listener}
           className="form-control"
-          style={
-            this.props.validator
-              ? goodCSS
-              : this.props.badStyle || badInputCSS
-          }
+          style={this.validateInput()}
           defaultValue={this.props.defaultValue}
           value={this.props.value ? this.props.value : ''}
+          onBlur={() => this.exited = true}
+          onFocus={() => this.exited = false}
+          tabIndex={this.props.tabIndex ? this.props.tabIndex : 0}
+          ref={this.props.reference}
         />
-        {
-          !this.props.validator &&
-          <div className="errorMessage">
-            {this.props.errorMessage}
-          </div>
-        }
+        {this.renderErrorMessage()}
       </div>
     );
   }
 }
 
-export const StyledValidatingInput = styled(ValidatingInput)`
+export const
+  StyledValidatingInput = styled(ValidatingInput)`
   
   label {
     color: #fff;
@@ -80,6 +117,4 @@ export const StyledValidatingInput = styled(ValidatingInput)`
   position: absolute;
   color: #e46373;
   }
-
-
 `;

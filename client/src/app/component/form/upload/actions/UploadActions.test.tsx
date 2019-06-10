@@ -118,7 +118,7 @@ describe('UploadActions', () => {
     expect(subject.setReleasabilityInput).toHaveBeenCalledWith('FOUO');
   });
 
-  it('should validate all of the inputs after a pdf is uploaded', async () => {
+  it('should validateInput all of the inputs after a pdf is uploaded', async () => {
     let validateSpy = jest.fn();
     slidesStore.validate = validateSpy;
     await subject.checkStatus();

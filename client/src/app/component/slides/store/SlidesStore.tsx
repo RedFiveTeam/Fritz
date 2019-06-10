@@ -362,4 +362,11 @@ export class SlidesStore {
   private validateDifferentAsset() {
     return this._differentAsset;
   }
+
+  @computed
+  get undeletedSlides(): SlideModel[] {
+    return this._slides.filter((s: SlideModel) => {
+      return !s.deleted;
+    });
+  }
 }

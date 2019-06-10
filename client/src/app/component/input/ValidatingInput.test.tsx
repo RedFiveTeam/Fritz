@@ -86,4 +86,21 @@ describe('ValidatingInput', () => {
     );
     expect(subject.find('input').props().type).toEqual('date');
   });
+
+  it('should change exited to true when the onBlur event is fired', () => {
+    subject = shallow(
+      <ValidatingInput
+        id={'myId'}
+        label={'label'}
+        placeholder={'placeholder'}
+        listener={onChangeSpy}
+        validator={false}
+        errorMessage={'my error message'}
+        onlyValidateOnExit={true}
+      />
+    );
+    expect(subject.find('.errorMessage').exists()).toBeFalsy();
+    subject.find('input').simulate('blur');
+    expect(subject.find('.errorMessage').exists()).toBeTruthy();
+  });
 });

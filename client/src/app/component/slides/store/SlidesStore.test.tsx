@@ -1,4 +1,5 @@
 import { SlidesStore } from './SlidesStore';
+import { SlideModel } from '../models/SlideModel';
 
 describe('SlidesStore', () => {
   let subject: SlidesStore;
@@ -24,7 +25,7 @@ describe('SlidesStore', () => {
     expect(subject.validate()).toBeTruthy();
   });
 
-  it('should validate a date', () => {
+  it('should validateInput a date', () => {
     subject.setMonth('MAY');
     subject.setDay('09');
     subject.setYear('19');
@@ -118,5 +119,15 @@ describe('SlidesStore', () => {
     expect(subject.day).toBe('DD');
     expect(subject.month).toBe('MON');
     expect(subject.year).toBe('YY');
+  });
+
+  it('should return undeleted slides', () => {
+    let undeletedSlide = new SlideModel('', '', '', '', false, '', '');
+    subject.setSlides([
+      new SlideModel('', '', '', '', true, '', ''),
+      new SlideModel('', '', '', '', true, '', ''),
+      undeletedSlide,
+    ]);
+    expect(subject.undeletedSlides).toEqual([undeletedSlide]);
   });
 });

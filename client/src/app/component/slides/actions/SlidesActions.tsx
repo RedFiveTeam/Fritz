@@ -25,7 +25,8 @@ export class SlidesActions {
   }
 
   @action.bound
-  setAndUpdateActivity(slide: SlideModel, activity: string) {
+  setAndUpdateActivity(slide: SlideModel, activity: any) {
+    activity = activity.target.value.toUpperCase();
     if (activity === '') {
       activity = 'ACTY';
     }
@@ -34,10 +35,8 @@ export class SlidesActions {
   }
 
   @action.bound
-  setAndUpdateTime(slide: SlideModel, time: string) {
-    if (time === '') {
-      time = 'TTTT';
-    }
+  setAndUpdateTime(slide: SlideModel, e: any) {
+    let time = e.target.value;
     this.slidesStore.setTime(slide, time);
     this.updateNewNames();
   }

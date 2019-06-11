@@ -5,6 +5,7 @@ import { SlideModel } from '../slides/models/SlideModel';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import Mock = jest.Mock;
 import { SlidesStore } from '../slides/store/SlidesStore';
+import { StyledDatePicker } from '../date/DatePicker';
 
 describe('CarouselItem', () => {
   let subject: ShallowWrapper;
@@ -32,7 +33,7 @@ describe('CarouselItem', () => {
   });
 
   it('should display slide image', () => {
-    expect(subject.find('img').prop('src')).toBe('api/image/hash/imagePath.jpg');
+    expect(subject.find('img').prop('src')).toBe('api/image/hash/imagePath');
   });
 
   it('should display a time input', () => {
@@ -53,5 +54,9 @@ describe('CarouselItem', () => {
 
   it('should display the current slide number out of the total slide count', () => {
     expect(subject.find('.slideCount').exists()).toBeTruthy();
+  });
+
+  it('should display a date picker that increments or decrements the date', () => {
+    expect(subject.find(StyledDatePicker).exists()).toBeTruthy();
   });
 });

@@ -67,7 +67,6 @@ export class UploadActions {
           this.metricActions.updateMetric('Conversion');
           this.metricActions.trackMetric('Renaming');
           this.metricActions.trackConversion(status.files.length);
-          this.uploadProcessingComplete();
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files, status.times);
           if (status.date && status.date !== '') {
@@ -93,6 +92,8 @@ export class UploadActions {
               this.unicornStore.setReleasability(status.releasability);
             }
           }
+          this.slidesActions.updateNewNames();
+          this.uploadProcessingComplete();
           this.slidesActions!.compareCallsigns();
           this.slidesStore!.validate();
         }
@@ -160,7 +161,6 @@ export class UploadActions {
     });
     this.slidesStore.setSlides(temp);
     this.unicornActions.checkForCalloutMatches();
-    this.slidesActions.updateNewNames();
   }
 
   uploadProcessingComplete() {

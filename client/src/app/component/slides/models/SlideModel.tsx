@@ -14,6 +14,9 @@ export class SlideModel {
   @observable private _uploading: boolean | null = null;
   @observable private _failed: boolean | null = null;
   @observable private _hash: string;
+  @observable private _date: Date | null;
+  @observable private _dateEdited: boolean = false;
+  private _months: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   constructor(
     oldName: string = '',
@@ -31,6 +34,34 @@ export class SlideModel {
     this._deleted = deleted;
     this._targetEventId = targetEventId;
     this._releasabilityId = releasabilityId;
+  }
+
+  @computed
+  get dateEdited(): boolean {
+    return this._dateEdited;
+  }
+
+  get months(): any {
+    return this._months;
+  }
+
+  set months(value: any) {
+    this._months = value;
+  }
+
+  @computed
+  get day(): string | null {
+    if (this._date!.getDate() < 10) {
+      let day = 0 + '' + this._date!.getDate();
+      return day;
+    } else {
+      return this._date!.getDate().toString();
+    }
+  }
+
+  @computed
+  get month(): string | null {
+    return this._months[this._date!.getMonth()];
   }
 
   @computed
@@ -93,6 +124,11 @@ export class SlideModel {
     return this._hash;
   }
 
+  @computed
+  get date(): Date | null {
+    return this._date;
+  }
+
   @action.bound
   setOldName(value: string) {
     this._oldName = value;
@@ -151,6 +187,26 @@ export class SlideModel {
   @action.bound
   setHash(hash: string) {
     this._hash = hash;
+  }
+
+  @action.bound
+  setDate(value: Date | null) {
+    this._date = value;
+  }
+
+  @action.bound
+  setDateEdited(value: boolean) {
+    this._dateEdited = value;
+  }
+
+  @action.bound
+  incrementDay() {
+    this.setDate(new Date(this.date!.getFullYear(), this.date!.getMonth(), this.date!.getDate() + 1));
+  }
+
+  @action.bound
+  decrementDay() {
+    this.setDate(new Date(this.date!.getFullYear(), this.date!.getMonth(), this.date!.getDate() - 1));
   }
 
   @computed

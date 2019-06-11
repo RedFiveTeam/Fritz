@@ -11,6 +11,7 @@ import { UploadStore } from '../../form/upload/UploadStore';
 import { StyledCallout } from '../../unicorn/Callout/Callout';
 import { UnicornStore } from '../../unicorn/store/UnicornStore';
 import { StyledValidatingInput } from '../../input/ValidatingInput';
+import { StyledDatePicker } from '../../date/DatePicker';
 
 const expandIcon = require('../../../../icon/ExpandIcon.svg');
 const DeleteIcon = require('../../../../icon/DeleteIcon.svg');
@@ -86,13 +87,17 @@ export class SlideCard extends React.Component<Props> {
     return (
       <div key={idx} className="slide">
         {
-          this.props.slidesStore!.day
+          this.props.slideModel.dateEdited ?
+            this.props.slideModel.day :
+            this.props.slidesStore!.day
         }
         {
           s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> :
             !s.isValidTime ? <span className="text-info font-italic">TTTTZ</span> : <span>{s.time}Z</span>}
         {
-          this.props.slidesStore!.month
+          this.props.slideModel.dateEdited ?
+            this.props.slideModel.month!.toUpperCase() :
+            this.props.slidesStore!.month
         }
         {
           this.props.slidesStore!.year
@@ -159,6 +164,9 @@ export class SlideCard extends React.Component<Props> {
                 <div>
                   <h5 className="card-title">{this.getSlideName(this.props.slideModel, this.props.slideNumber)}</h5>
                   <div className="slidesInputs">
+                    <StyledDatePicker
+                      slide={this.props.slideModel}
+                    />
                     <StyledValidatingInput
                       label={'Time'}
                       placeholder={'e.g. 0830'}
@@ -234,7 +242,7 @@ export const StyledSlideCard = inject(
   margin-bottom: 6px;
 
   input {
-    width: 166px;
+    width: 132px;
     color: #fff;
     background-color:rgba(0, 0, 0, 0);
   }
@@ -320,7 +328,7 @@ export const StyledSlideCard = inject(
     cursor: pointer;
   }
   
-  .timeInputField {
+  #timeInput {
     position: relative;
     display: block;
     float: left;
@@ -331,8 +339,8 @@ export const StyledSlideCard = inject(
   .activityInputField {
     position: relative;
     display: block;
-    left: 225px;
-    bottom: 70px;
+    left: 277px;
+    bottom: 102px;
   }
   
   .deleteIcon {
@@ -408,5 +416,17 @@ export const StyledSlideCard = inject(
         transform: translate(-50%, -50%);
       }
     }
+  }
+  
+  .controlUnit {
+    display: inline-block;
+    position: relative;
+    left: 118px;
+    bottom: 32px;
+  }
+  
+  .errorMessage {
+    top: 70px;
+    left: 3px;
   }
 `);

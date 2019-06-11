@@ -52,6 +52,7 @@ export class SlidesActions {
 
   @action.bound
   setDateFromStatus(date: string) {
+    this.setSlidesDate(date);
     this.slidesStore.setFullDate(date);
   }
 
@@ -113,9 +114,13 @@ export class SlidesActions {
       this.slidesStore.setActivity(this.slidesStore.slides[i], slide.activity);
       this.slidesStore.setTime(this.slidesStore.slides[i], slide.time);
       let duplicates = this.slidesStore.slides.filter((s, idx) => {
-        return s.newName.replace(/\d+\b/, '') === this.slidesStore.nameFormat && idx < i;
+        return s.newName.replace(/\d+\b/, '') === this.slidesStore.nameFormat(slide) && idx < i;
       }).length;
-      newName = this.slidesStore.nameFormat + (duplicates > 0 ? duplicates : '');
+      if (slide.dateEdited) {
+        newName = this.slidesStore.nameFormat(slide) + (duplicates > 0 ? duplicates : '');
+      } else {
+        newName = this.slidesStore.formInputNameFormat + (duplicates > 0 ? duplicates : '');
+      }
       this.slidesStore.slides[i].setNewName(newName);
     }
   }
@@ -216,6 +221,18 @@ export class SlidesActions {
       s.setCalloutTime('Select');
       s.setTargetEventId('');
       s.setUploading(null);
+    });
+  }
+
+  @action.bound
+  setSlidesDate(date: string) {
+    let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    let day = parseInt(date.substr(0, 2), 10);
+    let month = months.indexOf(date.substr(2, 3));
+    let year = parseInt('20' + date.substr(5, 2), 10);
+
+    this.slidesStore.slides.map((s: SlideModel) => {
+      s.setDate(new Date(year, month, day));
     });
   }
 }

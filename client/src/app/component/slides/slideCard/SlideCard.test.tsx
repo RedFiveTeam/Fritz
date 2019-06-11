@@ -45,6 +45,7 @@ describe('SlideCard', () => {
     thumbnailClickSpy = jest.fn();
 
     slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
+    slideModel.setDate(new Date(2019, 6, 11));
     uploadStore = {
       hash: 'ljndslkm'
     };

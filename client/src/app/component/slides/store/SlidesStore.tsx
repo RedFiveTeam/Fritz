@@ -2,7 +2,6 @@ import { action, computed, observable } from 'mobx';
 import { SlideModel } from '../models/SlideModel';
 
 export class SlidesStore {
-
   @observable private _files: string[] = [];
   @observable private _opName: string | null;
   @observable private _asset: string | null;
@@ -126,8 +125,22 @@ export class SlidesStore {
     return this._isValidReleasability;
   }
 
+  nameFormat(slide: SlideModel): string {
+    return ((
+      (slide.day || 'DD') +
+      (this._time || 'TTTT') + 'Z' +
+      (slide.month || 'MON') +
+      (this._year || 'YY') + '_' +
+      (this._opName || 'TGT_NAME') + '_' +
+      (this._activity || '_ACTY_') + '_' +
+      (this._asset || 'ASSET') + '_' +
+      (this._releasability || 'RELEASABILITY'))
+      .split(' ').join('_')
+      .toUpperCase());
+  }
+
   @computed
-  get nameFormat(): string {
+  get formInputNameFormat(): string {
     return ((
       (this._day || 'DD') +
       (this._time || 'TTTT') + 'Z' +

@@ -31,13 +31,17 @@ export class CarouselItem extends React.Component<Props> {
     return (
       <div key={idx} className="slide">
         {
-          this.props.slidesStore!.day
+          s.dateEdited ?
+            s.day :
+            this.props.slidesStore!.day
         }
         {
           s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> :
             !s.isValidTime ? <span className="text-info font-italic">TTTTZ</span> : <span>{s.time}Z</span>}
         {
-          this.props.slidesStore!.month
+          s.dateEdited ?
+            s.month!.toUpperCase() :
+            this.props.slidesStore!.month
         }
         {
           this.props.slidesStore!.year

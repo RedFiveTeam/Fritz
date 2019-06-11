@@ -21,8 +21,8 @@ Scenario('should allow you to edit the activity and time of a image and view ima
   I.waitForText('301234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
   I.click('.slideCard:first-of-type > .card > .row > .col-md-4 > img');
   I.waitForText('301234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
-  I.fillField('.currentSlide > div > .carouselInputs > div:nth-of-type(2) > input', 'new activity test');
-  I.fillField('.currentSlide > div > .carouselInputs > div:first-of-type > input', '1234');
+  I.fillField('.currentSlide > div > .carouselInputs > div:nth-of-type(3) > input', 'new activity test');
+  I.fillField('.currentSlide > div > .carouselInputs > div:nth-of-type(2) > input', '1234');
   I.waitForText('301234ZAPR19_OP_LEPRECHAUN_PHASE_8_NEW_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
   I.click('.exitIcon');
   I.waitForText('JPEG Renamer - Details', 10);

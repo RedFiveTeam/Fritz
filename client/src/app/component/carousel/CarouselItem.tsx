@@ -5,6 +5,7 @@ import { SlideModel } from '../slides/models/SlideModel';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { CarouselActions } from './CarouselActions';
+import { StyledDatePicker } from '../date/DatePicker';
 
 interface Props {
   slide: SlideModel;
@@ -23,7 +24,7 @@ export class CarouselItem extends React.Component<Props> {
 
   imagePath(): string {
     return (
-      `api/image/${this.props.slide.hash}/${this.props.slide.oldName}.jpg`
+      `api/image/${this.props.slide.hash}/${this.props.slide.oldName}`
     );
   }
 
@@ -82,8 +83,10 @@ export class CarouselItem extends React.Component<Props> {
           </div>
         </div>
         <div className={'carouselInputs'}>
+          <StyledDatePicker
+            slide={this.props.slide}
+          />
           <StyledValidatingInput
-            label={'Time'}
             placeholder={'e.g. 0830'}
             listener={(e: any) => {
               if (e.keyCode === 9 && e.shiftKey) {
@@ -99,11 +102,7 @@ export class CarouselItem extends React.Component<Props> {
             onlyValidateOnExit={true}
             tabIndex={this.props.tabIndex}
           />
-          <label className={'activityLabel'}>
-            Activity
-          </label>
           <StyledValidatingInput
-            label={'Activity'}
             placeholder={'Activity'}
             listener={(e: any) => {
               if (e.keyCode === 9) {
@@ -201,4 +200,16 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions')(style
     left: 36%;
   }
   
+  .datePicker {
+    top: 24px;
+    right: 16px;
+  }
+  
+  .datePicker > label {
+    display: none;
+  }
+  
+  .controlUnit:nth-child(2) {
+    margin-right: 24px;
+  }
 `);

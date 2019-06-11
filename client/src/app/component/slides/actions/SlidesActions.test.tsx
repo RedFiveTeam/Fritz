@@ -35,6 +35,10 @@ describe('SlidesActions', () => {
       new SlideModel('test6', 'test6')
     ]);
 
+    slidesStore.slides.map((s: SlideModel) => {
+      s.setDate(new Date(2019, 6, 10));
+    });
+
     metricActions.trackMetric = jest.fn();
     unicornStore = new UnicornStore();
     unicornStore.setActiveMission(new MissionModel('', '', 'Stephen 14', '', '', '', ''));
@@ -85,13 +89,13 @@ describe('SlidesActions', () => {
     expect(slidesStore.slides[1].newName).toBe('20TTTTZJAN19_TGT_NAME_ACTY_ASSET_RELEASABILITY');
 
     subject.setAndUpdateOpName({target: {value: 'op hello'}});
-    expect(slidesStore.slides[2].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY1');
+    expect(slidesStore.slides[2].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY');
 
     subject.setAndUpdateAsset({target: {value: 'asset'}});
-    expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY2');
+    expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY');
 
     subject.setAndUpdateReleasability('fvey');
-    expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_FVEY3');
+    expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_FVEY');
 
     subject.setAndUpdateTime(slidesStore.slides[5], {target: {value: '1234'}});
     expect(slidesStore.slides[5].newName).toBe('201234ZJAN19_OP_HELLO_ACTY_ASSET_FVEY');
@@ -201,5 +205,15 @@ describe('SlidesActions', () => {
   it('should set and update time', () => {
     subject.setAndUpdateTime(slidesStore.slides[0], {target: {value: '1234'}});
     expect(slidesStore.slides[0].time).toBe('1234');
+  });
+
+  it('should change the name using the slide when the slide date has been edited', () => {
+    slidesStore.slides[0].setDateEdited(true);
+    slidesStore.slides[0].setDate(new Date(2019, 1, 1));
+    slidesStore.slides[1].setDateEdited(true);
+    slidesStore.slides[1].setDate(new Date(2019, 2, 2));
+    subject.updateNewNames();
+    expect(slidesStore.slides[0].newName).toBe('01TTTTZFEBYY_TGT_NAME_ACTY_ASSET_RELEASABILITY');
+    expect(slidesStore.slides[1].newName).toBe('02TTTTZMARYY_TGT_NAME_ACTY_ASSET_RELEASABILITY');
   });
 });

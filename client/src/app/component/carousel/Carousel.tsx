@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { CarouselActions } from './CarouselActions';
@@ -6,11 +7,10 @@ import { StyledCarouselItem } from './CarouselItem';
 import { SlideModel } from '../slides/models/SlideModel';
 import { CarouselStore } from './CarouselStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
-import { StyledDropdown } from '../dropdown/Dropdown';
-import { CalloutModel } from '../unicorn/model/CalloutModel';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { SlidesStore } from '../slides/store/SlidesStore';
-import { CSSProperties } from 'react';
+import { DropdownOption, StyledDropdown } from '../dropdown/Dropdown';
+import { StyledStaticMessageDropdown } from '../dropdown/StaticMessageDropdown';
 
 const exitIconPath = require('../../../icon/ExpandedCloseIcon.svg');
 const arrowIcon = require('../../../icon/ArrowIcon.svg');
@@ -47,43 +47,32 @@ export class Carousel extends React.Component<Props> {
   }
 
   buildDropdown(activeSlide: SlideModel) {
-    return (
-      <StyledDropdown
-        options={
-          this.props.unicornStore!.callouts ?
-            this.props.unicornStore!.callouts
-              .filter((c: any) => {
-                return c.time !== null;
-              })
-              .map((c: any) => {
-                if (c.time && c.time.toString().length > 0) {
-                  return c.time;
-                }
-              }) : []
-        }
-        defaultValue={'Select'}
-        value={activeSlide.calloutTime}
-        callback={(s: string) => {
-          let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
-            return f.id === activeSlide.id;
-          })[0];
-          slide.setTargetEventId(
-            this.props.unicornStore!.callouts
-              .filter((c: CalloutModel) => {
-                return c.time !== null;
-              })
-              .filter((c: CalloutModel) => {
-                if (c.time && c.time.toString().length > 0) {
-                  return c.time.toString() === s;
-                }
-                return false;
-              })[0].eventId
-          );
-          slide.setCalloutTime(s);
-        }}
-      />
-    );
-
+    if (this.props.unicornStore!.offline) {
+      return (
+        <StyledStaticMessageDropdown
+          label={'Offline'}
+          message={'Refresh UNICORN and select a mission to view a list of callouts.'}
+        />
+      );
+    } else if (this.props.unicornStore!.callouts.length === 0) {
+      return (
+        <StyledStaticMessageDropdown
+          label={'Select'}
+          message={'There are currently no callouts associated with this mission.'}
+        />
+      );
+    } else {
+      return (
+        <StyledDropdown
+          options={this.props.unicornStore!.calloutOptions}
+          defaultValue={'Select'}
+          value={activeSlide.calloutTime}
+          callback={(option: DropdownOption) => {
+            this.props.slidesActions!.changeCalloutOnSlide(activeSlide, option);
+          }}
+        />
+      );
+    }
   }
 
   render() {
@@ -276,6 +265,14 @@ export const StyledCarousel = inject(
     left: 200%;
     .carouselInputs {
       left: 31.8%;
+    }
+  }
+  
+  .dropdown {
+    width: 117px;
+    
+    span {
+      margin: 0;
     }
   }
 `);

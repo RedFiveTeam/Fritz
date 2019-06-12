@@ -26,7 +26,10 @@ describe('ValidatingDropdown', () => {
         callback={jest.fn()}
         validator={true}
         errorMessage={'errormess'}
-        options={['FOUO', 'Test']}
+        options={[
+          {id: '1', display: 'FOUO'},
+          {id: '2', display: 'Test'}
+        ]}
         defaultValue={'default'}
         value={''}
         label={'lableme'}

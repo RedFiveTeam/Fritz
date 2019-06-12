@@ -1,58 +1,56 @@
+import { shallow, ShallowWrapper } from 'enzyme';
+import { Dropdown, DropdownOption } from './Dropdown';
 import * as React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
-import { StyledDropdown } from './Dropdown';
+import Mock = jest.Mock;
 
 describe('Dropdown', () => {
-  let subject: ReactWrapper;
-  let fakeFunction: any;
+  let subject: ShallowWrapper;
+  let options: DropdownOption[];
+  let callbackSpy: Mock;
 
   beforeEach(() => {
-    fakeFunction = jest.fn();
+    options = [
+      {id: '1', display: 'opt' + Math.random()},
+      {id: '2', display: 'opt' + Math.random()},
+      {id: '3', display: 'opt' + Math.random()},
+    ];
+    callbackSpy = jest.fn();
 
-    subject = mount(
-      <StyledDropdown
-        options={['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5']}
-        defaultValue="defaultValue"
+    subject = shallow(
+      <Dropdown
+        options={options}
+        callback={callbackSpy}
+        defaultValue={'Default Test'}
         value={''}
-        callback={(s: any) => {
-          fakeFunction(s);
-        }}
       />
     );
   });
 
-  it('should contain a list of options', () => {
-    expect(subject.find('.ddd').length).toBe(5);
+  it('should contain a list of given options', () => {
+    expect(subject.find('.dropdown-item').length).toBe(3);
+    expect(subject.find('.dropdown-item').at(0).text()).toBe(options[0].display);
+    expect(subject.find('.dropdown-item').at(1).text()).toBe(options[1].display);
+    expect(subject.find('.dropdown-item').at(2).text()).toBe(options[2].display);
   });
 
-  it('should execute a callback on selecting an option', () => {
-    subject.find('.ddd').at(3).simulate(
-      'click',
-      {
-        target: {
-          classList: {
-            add: () => {
-              return;
-            }
-          }, dataset: {option: 'DGS 3'}
-        }
-      });
-    expect(fakeFunction).toHaveBeenCalledWith('DGS 3');
+  it('should fire a callback for each option', () => {
+    subject.find('.dropdown-item').at(0).simulate('click');
+    expect(callbackSpy).toHaveBeenCalledWith(options[0]);
   });
 
-  it('should render a selection in the button', () => {
-    expect(subject.find('.default')).toBeTruthy();
-    expect(subject.find('.default').text()).toBe('defaultValue');
-    subject = mount(
-      <StyledDropdown
-        options={['DGS 1', 'DGS 2', 'DGS 3', 'DGS 4', 'DGS 5']}
-        defaultValue="defaultValue"
-        value={'testValue'}
-        callback={(s: any) => {
-          fakeFunction(s);
-        }}
+  it('should display the default value when not given a preselected value', () => {
+    expect(subject.find('button').at(0).text()).toBe('Default Test');
+  });
+
+  it('should display the given value', () => {
+    subject = shallow(
+      <Dropdown
+        options={options}
+        callback={callbackSpy}
+        defaultValue={'Default Test'}
+        value={options[0].display}
       />
     );
-    expect(subject.find('.default').text()).toBe('testValue');
+    expect(subject.find('button').at(0).text()).toBe(options[0].display);
   });
 });

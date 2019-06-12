@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Callout } from './Callout';
-import { StyledDropdown } from '../../dropdown/Dropdown';
 import { CalloutModel } from '../model/CalloutModel';
-import { StyledPseudoDropdown } from '../../dropdown/PseudoDropdown';
+import { StyledStaticMessageDropdown } from '../../dropdown/StaticMessageDropdown';
 import { SlideModel } from '../../slides/models/SlideModel';
+import { StyledDropdown } from '../../dropdown/Dropdown';
 
 describe('Callout', () => {
   let subject: ShallowWrapper;
@@ -41,13 +41,13 @@ describe('Callout', () => {
   it('should load a pseudo dropdown if there are no callouts', () => {
     unicornStore.callouts = [];
     subject.instance().forceUpdate();
-    expect(subject.find(StyledPseudoDropdown).exists()).toBeTruthy();
+    expect(subject.find(StyledStaticMessageDropdown).exists()).toBeTruthy();
   });
 
   it('should load a false offline dropdown if UNICORN is offline', () => {
-    expect(subject.find(StyledPseudoDropdown).exists()).toBeFalsy();
+    expect(subject.find(StyledStaticMessageDropdown).exists()).toBeFalsy();
     unicornStore.offline = true;
     subject.instance().forceUpdate();
-    expect(subject.find(StyledPseudoDropdown).exists()).toBeTruthy();
+    expect(subject.find(StyledStaticMessageDropdown).exists()).toBeTruthy();
   });
 });

@@ -12,7 +12,7 @@ interface Props {
 }
 
 @observer
-export class PseudoDropdown extends React.Component<Props> {
+export class StaticMessageDropdown extends React.Component<Props> {
   render() {
     return (
       <div
@@ -53,14 +53,18 @@ export class PseudoDropdown extends React.Component<Props> {
   }
 }
 
-export const StyledPseudoDropdown = (styled(PseudoDropdown)`
+export const StyledStaticMessageDropdown = (styled(StaticMessageDropdown)`
   display: inline-block;
   position: relative;
-  width: 117px;
+  width: 125px;
   height: 44px;
   background-color: #151524;
   border-radius: 4px;
   cursor: pointer;
+  
+  span {
+   margin-right: 10px;
+  }
   
   .dropdownBtn {
     cursor: pointer;
@@ -70,16 +74,16 @@ export const StyledPseudoDropdown = (styled(PseudoDropdown)`
     white-space: nowrap;
     vertical-align: middle;
     position: absolute;
-    top: -2px;
-    left: -11px;
+    top: 0;
+    width: 125px;
     display: inline-block;
     background-color: rgba(0, 0, 0, 0);
     outline: none;
     border: none;
-    color: #fff;
-    width: 100%;
+    color: #15DEEC;
     font-size: 20px;
     font-weight: bold;
+    z-index: 2;
   }
   
   .dd {
@@ -88,9 +92,8 @@ export const StyledPseudoDropdown = (styled(PseudoDropdown)`
     text-align: center;
     justify-content: center;
     white-space: normal;
-    width: 117px;
+    width: 125px;
     height: 154px;
-    left: -24px;
     top: 47px;
     border-radius: 4px;
     background: #151524;

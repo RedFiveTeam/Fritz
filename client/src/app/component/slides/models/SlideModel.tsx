@@ -10,7 +10,7 @@ export class SlideModel {
   @observable private _targetEventId: string = '';
   @observable private _releasabilityId: string = '';
   @observable private _id: number | null = null;
-  @observable private _calloutTime: string | null = null;
+  @observable private _calloutTime: string;
   @observable private _uploading: boolean | null = null;
   @observable private _failed: boolean | null = null;
   @observable private _hash: string;
@@ -65,7 +65,7 @@ export class SlideModel {
   }
 
   @computed
-  get calloutTime(): string | null {
+  get calloutTime(): string {
     return this._calloutTime;
   }
 
@@ -170,7 +170,7 @@ export class SlideModel {
   }
 
   @action.bound
-  setCalloutTime(value: string | null) {
+  setCalloutTime(value: string) {
     this._calloutTime = value;
   }
 

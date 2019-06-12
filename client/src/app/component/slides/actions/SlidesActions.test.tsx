@@ -4,6 +4,7 @@ import { SlideModel } from '../models/SlideModel';
 import { UploadStore } from '../../form/upload/UploadStore';
 import { UnicornStore } from '../../unicorn/store/UnicornStore';
 import { MissionModel } from '../../unicorn/model/MissionModel';
+import { DropdownOption } from '../../dropdown/Dropdown';
 
 describe('SlidesActions', () => {
   let subject: SlidesActions;
@@ -215,5 +216,12 @@ describe('SlidesActions', () => {
     subject.updateNewNames();
     expect(slidesStore.slides[0].newName).toBe('01TTTTZFEBYY_TGT_NAME_ACTY_ASSET_RELEASABILITY');
     expect(slidesStore.slides[1].newName).toBe('02TTTTZMARYY_TGT_NAME_ACTY_ASSET_RELEASABILITY');
+  });
+
+  it('should change a slide\'s callout', () => {
+    let slide = slidesStore.slides[0];
+    subject.changeCalloutOnSlide(slide, new DropdownOption('eid1234', '1234'));
+    expect(slide.calloutTime).toEqual('1234');
+    expect(slide.targetEventId).toEqual('eid1234');
   });
 });

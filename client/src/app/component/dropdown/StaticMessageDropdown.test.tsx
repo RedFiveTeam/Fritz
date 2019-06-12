@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { PseudoDropdown } from './PseudoDropdown';
+import { StaticMessageDropdown } from './StaticMessageDropdown';
 
-describe('PseudoDropdown', () => {
+describe('StaticMessageDropdown', () => {
   let subject: ShallowWrapper;
 
   beforeEach(() => {
     subject = shallow(
-      <PseudoDropdown
+      <StaticMessageDropdown
         label={'button text'}
         message={'given message'}
       />

@@ -4,6 +4,7 @@ import { UnicornRepository } from '../repositories/UnicornRepository';
 import { CalloutModel } from '../model/CalloutModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { SlideModel } from '../../slides/models/SlideModel';
+import { DropdownOption } from '../../dropdown/Dropdown';
 
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
@@ -151,6 +152,28 @@ export class UnicornStore {
   @computed
   get isRefreshing(): boolean {
     return this._isRefreshing;
+  }
+
+  @computed
+  get releasabilityOptions(): DropdownOption[] {
+    return this.releasabilities
+      ? this.releasabilities.map((r) => {
+        return new DropdownOption(r.releasabilityId, r.releasabilityName);
+      })
+      : [];
+  }
+
+  @computed
+  get calloutOptions(): DropdownOption[] {
+    return this.callouts
+      ? this.callouts
+        .filter((c: CalloutModel) => {
+          return (c.time && c.time.toString().length > 0);
+        })
+        .map((c: CalloutModel) => {
+          return {id: c.eventId, display: c.time};
+        })
+      : [];
   }
 
   @action.bound

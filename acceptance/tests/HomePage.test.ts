@@ -101,6 +101,6 @@ Scenario('should validateInput fields before download', (I) => {
   I.dontSee('The callsign does not match selected mission');
   I.waitForText('The releasability field must be chosen', 5);
 
-  I.click('div[data-option="FOUO"]');
+  I.click('FOUO');
   I.dontSee('The releasability field must be chosen');
 });

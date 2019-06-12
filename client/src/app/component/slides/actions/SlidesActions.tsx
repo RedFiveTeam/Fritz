@@ -88,6 +88,12 @@ export class SlidesActions {
   }
 
   @action.bound
+  changeCalloutOnSlide(slide: SlideModel, option: any) {
+    slide.setTargetEventId(option.id);
+    slide.setCalloutTime(option.display);
+  }
+
+  @action.bound
   setAndUpdateCustomReleasability(e: any) {
     if (e.target != null) {
       this.slidesStore.setReleasability(e.target.value);

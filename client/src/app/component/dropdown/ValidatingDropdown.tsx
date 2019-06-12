@@ -2,12 +2,12 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { badLabelCSS, badReleasabilityCSS, goodCSS } from '../../../themes/default';
-import { StyledDropdown } from './Dropdown';
+import { DropdownOption, StyledDropdown } from './Dropdown';
 import classNames = require('classnames');
 
 interface Props {
   validator: boolean;
-  options: string[];
+  options: DropdownOption[];
   defaultValue: string;
   value: string;
   callback: (s: any) => void;
@@ -34,11 +34,10 @@ export class ValidatingDropdown extends React.Component<Props> {
         </label>
         <StyledDropdown
           options={this.props.options}
-          defaultValue={this.props.defaultValue}
           value={this.props.value}
+          defaultValue={this.props.defaultValue}
           callback={this.props.callback}
-          id={this.props.id ? this.props.id : ''}
-          validator={this.props.validator ? goodCSS : badReleasabilityCSS}
+          style={this.props.validator ? goodCSS : badReleasabilityCSS}
         />
         {
           !this.props.validator &&

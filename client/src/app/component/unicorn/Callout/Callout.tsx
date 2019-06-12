@@ -3,11 +3,11 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { UnicornStore } from '../store/UnicornStore';
 import { SlideModel } from '../../slides/models/SlideModel';
-import { StyledDropdown } from '../../dropdown/Dropdown';
 import { SlidesStore } from '../../slides/store/SlidesStore';
-import { CalloutModel } from '../model/CalloutModel';
-import { StyledPseudoDropdown } from '../../dropdown/PseudoDropdown';
+import { StyledStaticMessageDropdown } from '../../dropdown/StaticMessageDropdown';
 import { UnicornActions } from '../actions/UnicornActions';
+import { StyledDropdown } from '../../dropdown/Dropdown';
+import { SlidesActions } from '../../slides/actions/SlidesActions';
 
 const Unicorn = require('../../../../icon/Unicorn.svg');
 const GreenCheckmark = require('../../../../icon/GreenCheckmark.svg');
@@ -15,11 +15,12 @@ const FailedIcon = require('../../../../icon/UploadFailedIcon.svg');
 const WaitingIcon = require('../../../../icon/WaitingIcon.svg');
 
 interface Props {
-  className?: string;
   slide: SlideModel;
+  className?: string;
   slidesStore?: SlidesStore;
   unicornStore?: UnicornStore;
   unicornActions?: UnicornActions;
+  slidesActions?: SlidesActions;
 }
 
 @observer
@@ -29,14 +30,14 @@ export class Callout extends React.Component<Props> {
 
     if (unicornStore!.offline) {
       return (
-        <StyledPseudoDropdown
+        <StyledStaticMessageDropdown
           label={'Offline'}
           message={'Refresh UNICORN and select a mission to view a list of callouts.'}
         />
       );
     } else if (unicornStore!.callouts.length === 0) {
       return (
-        <StyledPseudoDropdown
+        <StyledStaticMessageDropdown
           label={'Select'}
           message={'There are currently no callouts associated with this mission.'}
         />
@@ -47,37 +48,11 @@ export class Callout extends React.Component<Props> {
           this.props.slide.uploading === null &&
           (
             <StyledDropdown
-              options={
-                unicornStore!.callouts ?
-                  unicornStore!.callouts
-                    .filter((c: any) => {
-                      return c.time !== null;
-                    })
-                    .map((c: any) => {
-                      if (c.time && c.time.toString().length > 0) {
-                        return c.time;
-                      }
-                    }) : []
-              }
-              defaultValue={'Select'}
               value={this.props.slide.calloutTime}
-              callback={(s: string) => {
-                let slide = this.props.slidesStore!.slides.filter((f: SlideModel) => {
-                  return f.id === this.props.slide.id;
-                })[0];
-                slide.setTargetEventId(
-                  unicornStore!.callouts
-                    .filter((c: CalloutModel) => {
-                      return c.time !== null;
-                    })
-                    .filter((c: CalloutModel) => {
-                      if (c.time && c.time.toString().length > 0) {
-                        return c.time.toString() === s;
-                      }
-                      return false;
-                    })[0].eventId
-                );
-                slide.setCalloutTime(s);
+              defaultValue={'Select'}
+              options={this.props.unicornStore!.calloutOptions}
+              callback={(option: any) => {
+                this.props.slidesActions!.changeCalloutOnSlide(this.props.slide, option);
               }}
             />
           )
@@ -158,7 +133,7 @@ export class Callout extends React.Component<Props> {
   }
 }
 
-export const StyledCallout = inject('unicornStore', 'slidesStore', 'unicornActions')(styled(Callout)`
+export const StyledCallout = inject('unicornStore', 'slidesStore', 'unicornActions', 'slidesActions')(styled(Callout)`
 
   display: inline-block;
   position: absolute;
@@ -184,25 +159,33 @@ export const StyledCallout = inject('unicornStore', 'slidesStore', 'unicornActio
     margin-bottom: 6px;
   }
   
+  .li-label {
+    color: #15DEEC;
+    opacity: 1 !important;
+    margin-left: 6px;
+  }
+  
+  .dropdown-item {
+    padding: 0;
+    justify-content: center;
+  }
+  
+  ul {
+   width: 117px;
+  }
+  
   .dropdown {
     top: 44px;
     left: 34px;
     
-    button {
+    #dropdownBtn {
       color: #15deec;
       font-size: 20px;
       font-weight: bold;
       top: -2px;
       left: -20px;
-      width: 115%;
+      width: 117px;
     }
-    
-    .dd {
-      left: 0;
-      display: none;
-      width: 118px;
-      overflow-y: auto;
-      max-height: 185px;
       
       ::-webkit-scrollbar {
         width: 10px;
@@ -229,6 +212,15 @@ export const StyledCallout = inject('unicornStore', 'slidesStore', 'unicornActio
         font-weight: bold;
     }
     }
+  }
+  
+  .content {
+    width: 117px;
+    height: 44px;
+  }
+  
+  button::after {
+    color: #FFF;
   }
   
   .content > img {

@@ -26,6 +26,8 @@ describe('SlideCard', () => {
         unicornStore={unicornStore}
         slidesStore={slidesStore}
         unicornActions={unicornActions}
+        slidesActions={slidesActions}
+        uploadStore={uploadStore}
       >
         <SlideCard
           uploadStore={uploadStore}
@@ -87,6 +89,7 @@ describe('SlideCard', () => {
         unicornStore={unicornStore}
         slidesStore={slidesStore}
         unicornActions={unicornActions}
+        slidesActions={slidesActions}
       >
         <SlideCard
           uploadStore={uploadStore}
@@ -135,6 +138,8 @@ describe('SlideCard', () => {
         unicornStore={unicornStore}
         slidesStore={slidesStore}
         unicornActions={unicornActions}
+        slidesActions={slidesActions}
+        uploadStore={uploadStore}
       >
         <SlideCard
           uploadStore={uploadStore}

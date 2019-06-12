@@ -190,6 +190,24 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions')(style
     position: relative;
     bottom: 720px;
     left: 1165px;
+    width: 117px;
+    height: 44px;
+    
+    .li-label {
+      color: #15DEEC;
+      opacity: 1 !important;
+    }
+    
+    .dropdown-item {
+      padding: 0;
+      justify-content: center;
+      color: #15deec;
+      font-weight: bold;
+    }
+  
+    ul {
+     width: 117px;
+    }
   }
   
   .activityInput {

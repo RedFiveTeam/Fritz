@@ -3,13 +3,13 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/store/SlidesStore';
-import { ReleasabilityModel } from '../unicorn/model/ReleasabilityModel';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { UploadActions } from './upload/actions/UploadActions';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
 import { badClassificationCSS, badReleasabilityCSS, goodCSS } from '../../../themes/default';
+import { DropdownOption } from '../dropdown/Dropdown';
 
 interface Props {
   className?: string;
@@ -50,14 +50,12 @@ export class FormContainer extends React.Component<Props> {
       <StyledValidatingDropdown
         label="Classification & Releasability"
         validator={slidesStore!.isValidReleasability}
-        options={this.props.unicornStore!.releasabilities.map((e: ReleasabilityModel) => {
-          return e.releasabilityName;
-        })}
+        options={this.props.unicornStore!.releasabilityOptions}
         defaultValue={'Select'}
         value={slidesStore!.releasability}
         id="releasabilityDropdown"
-        callback={(r: string) => {
-          this.props.slidesActions!.setAndUpdateReleasability(r);
+        callback={(option: DropdownOption) => {
+          this.props.slidesActions!.setAndUpdateReleasability(option.display);
           FormContainer.changeReleasabilityColor();
         }}
         errorMessage={'The releasability field must be chosen'}
@@ -109,13 +107,15 @@ export class FormContainer extends React.Component<Props> {
               validator={slidesStore!.isValidAsset}
               value={slidesStore!.asset}
             />
-            <span
-              className="classification"
-              style={this.props.slidesStore!.isValidReleasability ? goodCSS : badClassificationCSS}
-            >
-              SECRET//
-            </span>
-            {this.renderReleasabilityInput()}
+            <div className={'classification-and-releasability'}>
+              <span
+                className={'classification'}
+                style={this.props.slidesStore!.isValidReleasability ? goodCSS : badClassificationCSS}
+              >
+                SECRET//
+              </span>
+              {this.renderReleasabilityInput()}
+            </div>
           </div>
         </form>
       </div>
@@ -250,7 +250,6 @@ export const StyledFormContainer = inject(
   }
   
   #offlineReleaseLabel {
-    margin-left: 300px;
     position: relative;
   }
   
@@ -269,14 +268,13 @@ export const StyledFormContainer = inject(
   }
   
   #releasabilityInput {
-    left: 104px;
     width: 496px;
     position: relative;
     border-width: 1px 1px 1px 0;
     border-radius: 0 4px 4px 0;
     border-style: solid;
     border-color: #ced4da;
-    height: 38px;
+    height: 40px;
     display: block;
     padding-left: 0.75rem;
   }
@@ -285,74 +283,67 @@ export const StyledFormContainer = inject(
     position: absolute;
   }
   
-  .dropdown {
-    border-width: 1px 1px 1px 0;
-    border-radius: 0 4px 4px 0;
-    border-style: solid;
-    border-color: #ced4da;
-    display: block;
-    width: 83%;
-    color: #fff;
-    background-color:rgba(0, 0, 0, 0);
-    height: 38px;
-    font-weight: normal;
-    font-size: 1rem;
-    left: 104px;
-      .dropdownBtn {
-        width: 100%;
-        position: relative;
-        font-weight: normal;
-        font-size: 1rem;
-        text-align: left;
-        padding-left: 24px;
-        line-height: 40px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        top: -4px;
-        left: -11px;
-      }
+  .classification-and-releasability {
+    display: flex;
+    align-items: flex-end;
     
-      .dd {
-        width: 497px;
-        left: 0;
-        overflow: auto;
-        max-height: 250px;
+    .controlUnit {
+      width: calc(100% - 104px);
+    }
+    
+    .classification {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 104px;
+      height: 40px;
+      border-radius: 4px 0 0 4px;
+      background-color: #1f1f2c;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+      border-color: #cccccc;
+      border-style: solid;
+      border-width: 1px 0 1px 1px;
+    }
+    
+    .bootstrap-dropdown {
+      font-weight: normal;
+      height: 40px;
+      border-width: 1px 1px 1px 0;
+      border-radius: 0 4px 4px 0;
+      border-style: solid;
+      border-color: #ced4da;
+      .dropdown {
+        background-color: rgba(0,0,0,0);
+        font-weight: normal;
       }
       
-      .ddd {
-        text-align: left;
-        padding-left: 8px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
+      button {
+        span {
+          font-weight: normal;
+        }
       }
+      
+      li.button {
+        justify-content: left;
+        font-weight: normal;
+        
+        span {
+          font-weight: normal;
+        }
+      }
+    }
+    
+    label, .errorMessage {
+      transform: translate3d(-104px, 0, 0);
+    }
+ 
   }
   
   .default {
     color: #FFF;
     opacity: 0.4;
-  }
-  
-  .classification {
-    top: 60px;
-    width: 104px;
-    height: 38px;
-    border-radius: 4px 0 0 4px;
-    background-color: #1f1f2c;
-    position: relative;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: center;
-    line-height: 36px;
-    border-color: #cccccc;
-    border-style: solid;
-    border-width: 1px 0 1px 1px;
-  }
-  
-  .classification-and-releasability {
-    position: relative;
-    bottom: 50px;
+    font-weight: normal;
   }
 `);

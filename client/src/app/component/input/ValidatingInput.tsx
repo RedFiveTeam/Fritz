@@ -44,7 +44,7 @@ export class ValidatingInput extends React.Component<Props> {
 
   validateInput() {
     return this.shouldDisplayValidation()
-      ? badInputCSS
+      ? this.props.badStyle || badInputCSS
       : goodCSS;
   }
 

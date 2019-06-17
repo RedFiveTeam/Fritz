@@ -188,6 +188,23 @@ describe('SlideCard', () => {
     expect(timeInput).not.toBe(document.activeElement);
   });
 
+  it('should focus on the time box when it is the first slide card and empty or invalid', () => {
+    slideModel.setTime('');
+    mountFirst();
+    let timeInput = subject.find('input').at(0).instance();
+    expect(timeInput).toBe(document.activeElement);
+
+    slideModel.setTime('aaa');
+    mountFirst();
+    timeInput = subject.find('input').at(0).instance();
+    expect(timeInput).toBe(document.activeElement);
+
+    slideModel.setTime('1234');
+    mountFirst();
+    timeInput = subject.find('input').at(0).instance();
+    expect(timeInput).not.toBe(document.activeElement);
+  });
+
   it('should focus on the first activity box if the time box is full', () => {
     slideModel.setTime('1234');
     mountFirst();

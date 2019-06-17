@@ -17,10 +17,33 @@ interface Props {
   callout?: any;
   count?: any;
   tabIndex?: number;
+  active?: boolean;
 }
 
 @observer
 export class CarouselItem extends React.Component<Props> {
+  carouselTimeBox: any;
+  carouselActivityBox: any;
+
+  constructor(props: Props) {
+    super(props);
+    this.carouselTimeBox = React.createRef();
+    this.carouselActivityBox = React.createRef();
+  }
+
+  componentDidMount(): void {
+    this.setFocus();
+  }
+
+  setFocus() {
+    if (this.props.active) {
+      if (!this.props.slide.isValidTime) {
+        this.carouselTimeBox.current.focus();
+      } else {
+        this.carouselActivityBox.current.focus();
+      }
+    }
+  }
 
   imagePath(): string {
     return (
@@ -101,6 +124,7 @@ export class CarouselItem extends React.Component<Props> {
             errorMessage={'Invalid time'}
             onlyValidateOnExit={true}
             tabIndex={this.props.tabIndex}
+            reference={this.carouselTimeBox}
           />
           <StyledValidatingInput
             placeholder={'Activity'}
@@ -114,6 +138,7 @@ export class CarouselItem extends React.Component<Props> {
             id={'activityInput'}
             validator={true}
             tabIndex={this.props.tabIndex! + 1}
+            reference={this.carouselActivityBox}
           />
         </div>
       </div>

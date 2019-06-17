@@ -150,6 +150,7 @@ export class Carousel extends React.Component<Props> {
             }
           >
             <StyledCarouselItem
+              active={true}
               slide={this.props.slides[activeSlide]}
               changeTime={this.props.slidesActions!.setAndUpdateTime}
               changeActivity={this.props.slidesActions!.setAndUpdateActivity}

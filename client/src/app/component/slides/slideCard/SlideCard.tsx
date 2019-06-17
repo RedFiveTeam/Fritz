@@ -36,14 +36,6 @@ export class SlideCard extends React.Component<Props> {
   activityBox: any;
   goodCSS: CSSProperties = {};
 
-  badCSS: CSSProperties = {
-    border: '1px solid #e46373'
-  };
-
-  badLabelCSS: CSSProperties = {
-    color: '#e46373'
-  };
-
   constructor(props: Props) {
     super(props);
     this.timeBox = React.createRef();

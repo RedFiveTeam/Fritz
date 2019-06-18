@@ -4,8 +4,7 @@ export class CarouselStore {
   @observable private _isVisible: boolean = false;
   @observable private _activeItemIndex: number = 0;
   @observable private _animating: string = '';
-
-  private _itemCount: number = 0;
+  @observable private _itemCount: number = 0;
 
   @computed
   get isVisible() {
@@ -62,6 +61,11 @@ export class CarouselStore {
     } else {
       this._activeItemIndex--;
     }
+  }
+
+  @action.bound
+  decreaseItemCount() {
+    this.setItemCount(this._itemCount - 1);
   }
 
   @computed

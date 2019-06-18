@@ -56,7 +56,7 @@ export const StyledToast = styled(Toast)`
   left: 50%;
   transform: translate(-50%, 0%);
   display: block;
-  z-index: 5;
+  z-index: 1000;
   width: 50%;
   height: auto;
   max-height: 800px;

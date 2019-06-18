@@ -5,6 +5,7 @@ import { UploadStore } from '../../form/upload/UploadStore';
 import { UnicornStore } from '../../unicorn/store/UnicornStore';
 import { MissionModel } from '../../unicorn/model/MissionModel';
 import { DropdownOption } from '../../dropdown/Dropdown';
+import { Toast } from '../../../../utils/Toast';
 
 describe('SlidesActions', () => {
   let subject: SlidesActions;
@@ -223,5 +224,15 @@ describe('SlidesActions', () => {
     subject.changeCalloutOnSlide(slide, new DropdownOption('eid1234', '1234'));
     expect(slide.calloutTime).toEqual('1234');
     expect(slide.targetEventId).toEqual('eid1234');
+  });
+
+  it('should delete a slide and display a toast', async () => {
+    let toastSpy = jest.fn();
+    Toast.create = toastSpy;
+
+    let slide = slidesStore.slides[0];
+    subject.deleteSlide(slide, true);
+    expect(slide.deleted).toBeTruthy();
+    expect(toastSpy).toHaveBeenCalled();
   });
 });

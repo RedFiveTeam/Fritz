@@ -112,10 +112,6 @@ export class CarouselItem extends React.Component<Props> {
           <StyledValidatingInput
             placeholder={'e.g. 0830'}
             listener={(e: any) => {
-              if (e.keyCode === 9 && e.shiftKey) {
-                e.preventDefault();
-                this.props.carouselActions!.previous();
-              }
               this.props.changeTime(this.props.slide, e);
             }}
             id={'time-input'}
@@ -125,13 +121,16 @@ export class CarouselItem extends React.Component<Props> {
             onlyValidateOnExit={true}
             tabIndex={this.props.tabIndex}
             reference={this.carouselTimeBox}
+            keyDown={(e: any) => {
+              if (e.keyCode === 9 && e.shiftKey) {
+                e.preventDefault();
+                this.props.carouselActions!.previous();
+              }
+            }}
           />
           <StyledValidatingInput
             placeholder={'Activity'}
             listener={(e: any) => {
-              if (e.keyCode === 9) {
-                this.props.carouselActions!.next();
-              }
               this.props.changeActivity(this.props.slide, e);
             }}
             value={this.props.slide.activity === 'ACTY' ? '' : this.props.slide.activity}
@@ -139,6 +138,12 @@ export class CarouselItem extends React.Component<Props> {
             validator={true}
             tabIndex={this.props.tabIndex! + 1}
             reference={this.carouselActivityBox}
+            keyDown={(e: any) => {
+              if (e.keyCode === 9) {
+                e.preventDefault();
+                this.props.carouselActions!.next();
+              }
+            }}
           />
         </div>
       </div>

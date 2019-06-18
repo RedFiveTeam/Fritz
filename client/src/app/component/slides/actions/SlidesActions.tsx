@@ -109,8 +109,11 @@ export class SlidesActions {
   }
 
   @action.bound
-  deleteSlide = async (s: SlideModel) => {
+  deleteSlide = async (s: SlideModel, carousel?: boolean) => {
     s.setDeleted(true);
+    if (carousel) {
+      Toast.create(5000, 'deleteToast', 'JPEG Deleted');
+    }
   };
 
   updateNewNames() {

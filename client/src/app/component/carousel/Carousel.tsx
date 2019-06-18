@@ -43,7 +43,7 @@ export class Carousel extends React.Component<Props> {
   }
 
   componentWillMount(): void {
-    this.props.carouselActions!.initialize(this.props.slides.length);
+    this.props.carouselActions!.initialize(this.props.slidesStore!.undeletedSlides.length);
   }
 
   buildDropdown(activeSlide: SlideModel) {
@@ -112,13 +112,12 @@ export class Carousel extends React.Component<Props> {
               {left: '11.5vw'} : {transition: 'none', left: '-200%'}
             }
           >
-
             <StyledCarouselItem
               slide={this.props.slides[prevSlide]}
               changeTime={this.props.slidesActions!.setAndUpdateTime}
               changeActivity={this.props.slidesActions!.setAndUpdateActivity}
               callout={
-                this.buildDropdown(this.props.slides[prevSlide])
+                this.buildDropdown(this.props.slidesStore!.undeletedSlides[prevSlide])
               }
               count={(prevSlide + 1) + ' of ' + this.props.slidesStore!.undeletedSlides.length}
               tabIndex={6}
@@ -144,7 +143,7 @@ export class Carousel extends React.Component<Props> {
               changeTime={this.props.slidesActions!.setAndUpdateTime}
               changeActivity={this.props.slidesActions!.setAndUpdateActivity}
               callout={
-                this.buildDropdown(this.props.slides[activeSlide])
+                this.buildDropdown(this.props.slidesStore!.undeletedSlides[activeSlide])
               }
               count={(activeSlide + 1) + ' of ' + this.props.slidesStore!.undeletedSlides.length}
               tabIndex={1}
@@ -168,7 +167,7 @@ export class Carousel extends React.Component<Props> {
               changeTime={this.props.slidesActions!.setAndUpdateTime}
               changeActivity={this.props.slidesActions!.setAndUpdateActivity}
               callout={
-                this.buildDropdown(this.props.slides[nextSlide])
+                this.buildDropdown(this.props.slidesStore!.undeletedSlides[nextSlide])
               }
               count={(nextSlide + 1) + ' of ' + this.props.slidesStore!.undeletedSlides.length}
               tabIndex={3}

@@ -36,17 +36,18 @@ export class SlidesContainer extends React.Component<Props> {
                   {
                     !s.deleted &&
                     <StyledSlideCard
-                        slideModel={s}
-                        slideNumber={idx}
-                        deletedCount={this.count}
-                        thumbnailClick={this.props.carouselActions!.show}
-                        first={idx === 0}
+                      slideModel={s}
+                      slideNumber={idx - this.count}
+                      thumbnailClick={(index: number) => {
+                        this.props.carouselActions!.show(index);
+                      }}
+                      first={idx === 0}
                     />
                   }
                   {
                     s.deleted &&
                     <StyledUndoDeleteContainer
-                        slideModel={s}
+                      slideModel={s}
                     />
                   }
                 </div>

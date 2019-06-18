@@ -20,6 +20,7 @@ interface Props {
   tabIndex?: number;
   badStyle?: any;
   reference?: any;
+  keyDown?: (e: any) => void;
 }
 
 @observer
@@ -87,6 +88,7 @@ export class ValidatingInput extends React.Component<Props> {
           onFocus={() => this.exited = false}
           tabIndex={this.props.tabIndex ? this.props.tabIndex : 0}
           ref={this.props.reference}
+          onKeyDown={this.props.keyDown}
         />
         {this.renderErrorMessage()}
       </div>

@@ -24,7 +24,6 @@ interface Props {
   slidesStore?: SlidesStore;
   uploadStore?: UploadStore;
   metricActions?: MetricActions;
-  deletedCount?: number;
   unicornStore?: UnicornStore;
   first?: boolean;
   className?: string;
@@ -122,13 +121,13 @@ export class SlideCard extends React.Component<Props> {
                 this.props.slideModel.oldName.replace('.JPG', '.jpg')}
                 className="card-img calloutImg"
                 onClick={() => {
-                  this.props.thumbnailClick(this.props.slideNumber - this.props.deletedCount!);
+                  this.props.thumbnailClick(this.props.slideNumber);
                 }}
               />
               <div
                 className="expandText"
                 onClick={() => {
-                  this.props.thumbnailClick(this.props.slideNumber - this.props.deletedCount!);
+                  this.props.thumbnailClick(this.props.slideNumber);
                 }}
               >
                 <span>Click to Expand</span>
@@ -136,7 +135,9 @@ export class SlideCard extends React.Component<Props> {
               <span
                 className="slideCounter"
               >
-                {(this.props.slideNumber + 1) + ' of ' + this.props.slidesStore!.slides.length}
+                {(this.props.slideNumber + 1) +
+                ' of ' + this.props.slidesStore!.undeletedSlides.length
+                }
               </span>
               <span className="expandBackground">
                 <img className="expandImg" src={expandIcon}/>

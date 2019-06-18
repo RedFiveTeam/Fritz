@@ -115,7 +115,7 @@ export class CarouselItem extends React.Component<Props> {
                 src={DeleteIcon}
                 onClick={async () => {
                   this.props.carouselStore!.decreaseItemCount();
-                  await this.props.slidesActions!.deleteSlide(this.props.slide);
+                  await this.props.slidesActions!.deleteSlide(this.props.slide, true);
                 }}
               />
             </div>
@@ -289,6 +289,4 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions', 'caro
   .controlUnit:nth-child(2) {
     margin-right: 24px;
   }
-  
-  
 `);

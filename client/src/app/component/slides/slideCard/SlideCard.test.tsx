@@ -64,6 +64,13 @@ describe('SlideCard', () => {
         new SlideModel('test', 'test', 'test', 'test', false),
         new SlideModel('test', 'test', 'test', 'test', false),
         new SlideModel('test', 'test', 'test', 'test', false)
+      ],
+      undeletedSlides: [
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false),
+        new SlideModel('test', 'test', 'test', 'test', false)
       ]
     };
 

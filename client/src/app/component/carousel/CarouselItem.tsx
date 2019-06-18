@@ -6,11 +6,17 @@ import { StyledValidatingInput } from '../input/ValidatingInput';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { CarouselActions } from './CarouselActions';
 import { StyledDatePicker } from '../date/DatePicker';
+import { SlidesActions } from '../slides/actions/SlidesActions';
+import { CarouselStore } from './CarouselStore';
+
+const DeleteIcon = require('../../../icon/DeleteIcon.svg');
 
 interface Props {
   slide: SlideModel;
   slidesStore?: SlidesStore;
+  slidesActions?: SlidesActions;
   carouselActions?: CarouselActions;
+  carouselStore?: CarouselStore;
   changeTime: (slide: SlideModel, e: any) => any;
   changeActivity: (slide: SlideModel, e: any) => any;
   className?: string;
@@ -103,6 +109,16 @@ export class CarouselItem extends React.Component<Props> {
           </div>
           <div className={'slideTitle'}>
             {this.getSlideName(this.props.slide, 0)}
+            <div>
+              <img
+                className={'delete'}
+                src={DeleteIcon}
+                onClick={async () => {
+                  this.props.carouselStore!.decreaseItemCount();
+                  await this.props.slidesActions!.deleteSlide(this.props.slide);
+                }}
+              />
+            </div>
           </div>
         </div>
         <div className={'carouselInputs'}>
@@ -151,7 +167,8 @@ export class CarouselItem extends React.Component<Props> {
   }
 }
 
-export const StyledCarouselItem = inject('slidesStore', 'carouselActions')(styled(CarouselItem)`
+export const StyledCarouselItem = inject('slidesStore', 'carouselActions', 'carouselStore', 'slidesActions')
+(styled(CarouselItem)`
 
   .imgContainer {
     position: relative;
@@ -230,6 +247,18 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions')(style
   .slideTitle {
     color: #FFF;
     font-size: 22px;
+    display: inline-block;
+    
+    > div {
+      display: inline-block;
+      
+      > img {
+        display: inline-block;
+        margin-left: 16px;
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
+    }
   }
   
   .slideCount {
@@ -260,4 +289,6 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions')(style
   .controlUnit:nth-child(2) {
     margin-right: 24px;
   }
+  
+  
 `);

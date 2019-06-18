@@ -14,6 +14,8 @@ describe('CarouselItem', () => {
   let changeActivitySpy: Mock;
   let slidesStore: SlidesStore;
   let carouselActions: any;
+  let carouselStore: any;
+  let slidesActions: any;
 
   let mountFirst = () => {
     subject = mount(
@@ -37,6 +39,14 @@ describe('CarouselItem', () => {
     slidesStore = new SlidesStore();
     slide.setDate(new Date(Date.now()));
 
+    slidesActions = {
+      deleteSlide: jest.fn()
+    };
+
+    carouselStore = {
+      decreaseItemCount: jest.fn()
+    };
+
     subject = mount(
       <CarouselItem
         slide={slide}
@@ -44,6 +54,8 @@ describe('CarouselItem', () => {
         changeActivity={changeActivitySpy}
         slidesStore={slidesStore}
         carouselActions={carouselActions}
+        slidesActions={slidesActions}
+        carouselStore={carouselStore}
       />
     );
   });
@@ -88,5 +100,11 @@ describe('CarouselItem', () => {
     mountFirst();
     let activityInput = subject.find('input').at(1).instance();
     expect(activityInput).toBe(document.activeElement);
+  });
+
+  it('should have a delete button that deletes the slide', () => {
+    expect(subject.find('.delete').exists()).toBeTruthy();
+    subject.find('.delete').simulate('click');
+    expect(slidesActions.deleteSlide).toHaveBeenCalled();
   });
 });

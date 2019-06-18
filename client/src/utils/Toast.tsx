@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
+import { SlideModel } from '../app/component/slides/models/SlideModel';
 
 interface Props {
   className?: string;
@@ -8,10 +9,17 @@ interface Props {
 
 @observer
 export class Toast extends React.Component<Props> {
-
   static count: number = 0;
 
-  static create = (duration: number, className: string, content: string) => {
+  static create = (duration: number, className: string, content: string, slide?: SlideModel) => {
+    let f = (e: any) => {
+      if (e.target.classList.contains('undo')) {
+        slide!.setDeleted(false);
+      }
+    };
+
+    document.addEventListener('click', f);
+
     let ele = document.querySelector('.customToast') as HTMLElement;
     let count = Toast.count;
     Toast.count++;
@@ -19,7 +27,7 @@ export class Toast extends React.Component<Props> {
       ele.insertAdjacentHTML(
         'beforeend',
         '<div class="alert alert-danger ' + className + ' ' + className + count + '" role="alert">' +
-        content +
+        content + (slide ? '<span class="undo">Undo</span>' : '') +
         '</div>'
       );
     }
@@ -35,6 +43,7 @@ export class Toast extends React.Component<Props> {
           () => {
             let toast = document.querySelector('.customToast > ' + '.' + className + count) as HTMLElement;
             ele.removeChild(toast);
+            document.removeEventListener('click', f);
           },
           1000);
       },
@@ -62,6 +71,13 @@ export const StyledToast = styled(Toast)`
   max-height: 800px;
   transition: max-height 1s;
   
+  .undo {
+    margin-left: 23px;
+    color: #15deec;
+    cursor: pointer;
+    font-weight: normal;
+  }
+  
   .errorToast {
     margin: auto;
     opacity: 0;
@@ -77,6 +93,7 @@ export const StyledToast = styled(Toast)`
   .deleteToast{
     margin: auto;
     opacity: 0;
+    font-weight: 700;
     text-align: center;
     border: none;
     color: #FFF;

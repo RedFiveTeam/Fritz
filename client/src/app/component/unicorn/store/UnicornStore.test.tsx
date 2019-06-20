@@ -29,9 +29,9 @@ describe('UnicornStore', () => {
 
   it('should return releasability dropdown options', () => {
     subject.setReleasabilities([
-      new ReleasabilityModel('id1', 'name1'),
-      new ReleasabilityModel('id2', 'name2'),
-      new ReleasabilityModel('id3', 'name3')
+      new ReleasabilityModel('id1', 'name1', 0),
+      new ReleasabilityModel('id2', 'name2', 0),
+      new ReleasabilityModel('id3', 'name3', 0)
     ]);
     expect(subject.releasabilityOptions).toEqual(
       [

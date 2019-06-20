@@ -6,6 +6,7 @@ import lombok.Data;
 public class ReleasabilityModel {
   private String releasabilityId;
   private String releasabilityName;
+  private Long timesClicked;
 
   public String getReleasabilityId() {
     return releasabilityId;
@@ -21,5 +22,13 @@ public class ReleasabilityModel {
 
   public void setReleasabilityName(String releasabilityName) {
     this.releasabilityName = releasabilityName;
+  }
+
+  public Long getTimesClicked() {
+    return timesClicked;
+  }
+
+  public void setTimesClicked(Long timesClicked) {
+    this.timesClicked = timesClicked;
   }
 }

@@ -4,6 +4,7 @@ import { MetricStore } from '../app/component/metrics/MetricStore';
 import { ClassificationStore } from '../app/component/classification/store/ClassificationStore';
 import { UnicornStore } from '../app/component/unicorn/store/UnicornStore';
 import { CarouselStore } from '../app/component/carousel/CarouselStore';
+import { StatisticStore } from '../app/component/metrics/StatisticStore';
 
 const uploadStore = new UploadStore();
 const slidesStore = new SlidesStore();
@@ -11,6 +12,7 @@ const metricStore = new MetricStore();
 const classificationStore = new ClassificationStore();
 const unicornStore = new UnicornStore();
 const carouselStore = new CarouselStore();
+const statisticStore = new StatisticStore();
 
 export interface Stores {
   uploadStore: UploadStore;
@@ -19,6 +21,7 @@ export interface Stores {
   classificationStore: ClassificationStore;
   unicornStore: UnicornStore;
   carouselStore: CarouselStore;
+  statisticStore: StatisticStore;
 }
 
 export const stores = {
@@ -27,5 +30,6 @@ export const stores = {
   metricStore,
   classificationStore,
   unicornStore,
-  carouselStore
+  carouselStore,
+  statisticStore
 };

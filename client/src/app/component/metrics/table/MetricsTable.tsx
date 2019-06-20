@@ -60,4 +60,12 @@ margin-left: 83px;
 margin-top: 52px;
 height: 100%;
 overflow: auto;
+
+  td {
+    max-width: 300px;
+    width: 500px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `);

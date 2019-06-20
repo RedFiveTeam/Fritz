@@ -1,9 +1,12 @@
 package mil.af.dgs1sdt.fritz.Controllers;
 
 import mil.af.dgs1sdt.fritz.Interfaces.UnicornInterface;
+import mil.af.dgs1sdt.fritz.Metrics.Statistic;
+import mil.af.dgs1sdt.fritz.Metrics.StatisticRepository;
 import mil.af.dgs1sdt.fritz.Models.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,9 @@ public class UnicornController {
 
   @Value("${CLASSIFICATION_ID}")
   private String classificationId;
+
+  @Autowired
+  StatisticRepository statisticRepository;
 
   public static final String URI = "/api/unicorn";
 
@@ -57,7 +63,18 @@ public class UnicornController {
   @GetMapping(produces = "application/json", path = "/releasabilities")
   public List<ReleasabilityModel> releasabilities() throws Exception {
     UnicornInterface unicorn = new UnicornInterface();
-    return unicorn.getReleasabilities();
+    List<ReleasabilityModel> releasabilities = unicorn.getReleasabilities();
+    List<Statistic> statistics = statisticRepository.findAll();
+
+    for (ReleasabilityModel r: releasabilities) {
+      for (Statistic s: statistics) {
+        if (r.getReleasabilityId().equals(s.getUid())) {
+          r.setTimesClicked(s.getTimesUsed());
+          break;
+        }
+      }
+    }
+    return releasabilities;
   }
 
   @PostMapping(produces = "application/json")

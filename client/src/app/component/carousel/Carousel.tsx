@@ -78,7 +78,7 @@ export class Carousel extends React.Component<Props> {
         <StyledDropdown
           options={this.props.unicornStore!.calloutOptions}
           defaultValue={'Select'}
-          value={activeSlide.calloutTime}
+          value={activeSlide.calloutTimeForDisplay}
           callback={(option: DropdownOption) => {
             this.props.slidesActions!.changeCalloutOnSlide(activeSlide, option);
           }}

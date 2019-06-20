@@ -134,18 +134,17 @@ export class UploadContainer extends React.Component<Props> {
 
   displayUploadedInfo() {
     return (
-      <div className="row align-items-center text-center" id="uploadCompleteContainer">
-        <div className="col-8 mx-auto" id="pdfIcon">
+      <div id="uploadCompleteContainer">
+        <div id="pdfIcon">
           <img src={pdfIcon}/>
         </div>
-        <div className="p-2 text-uppercase w-100 col-9 mx-auto border-top border-bottom" id="pdfName">
-          <img className="float-left" src={paperclipIcon}/>
-          <div id="pdfFileName" className="float-left pl-2">
+        <div id="pdfName">
+          <img src={paperclipIcon}/>
+          <div id="pdfFileName">
             {this.props.uploadStore!.fileName}
           </div>
           <img
             id="deletePP"
-            className="float-right pt-1 clickable"
             data-toggle="modal"
             data-target="#deleteModal"
             src={resetUploadIcon}
@@ -161,9 +160,7 @@ export class UploadContainer extends React.Component<Props> {
         className={this.props.className + ' uploadContainer'}
         style={this.props.uploadStore!.uploaded ? this.noBorder : this.goodCSS}
       >
-        <div
-          className="container h-100 text-white"
-        >
+        <div>
           {
             !this.props.uploadStore!.uploaded &&
             this.displayUploadRequest()
@@ -180,10 +177,40 @@ export class UploadContainer extends React.Component<Props> {
 
 export const StyledUploadContainer = inject('uploadActions', 'uploadStore', 'slidesStore')(styled(UploadContainer)`
   #pdfFileName {
-    width: 392px;
+    width: 450px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: #FFF;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    line-height: 40px;
+    text-align: center;
+    padding-left: 24px;
+    padding-right: 24px;
+   }
+   
+   #deletePP {
+    position: relative;
+    right: 20px;
+   }
+  
+  #pdfName {
+    display: flex;
+    
+    
+  img:first-of-type {
+    position: absolute;
+    padding-top: 10px;
+    padding-left: 10px;
+    }
+  }
+  
+  #uploadCompleteContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
   }
   
   .bigUploadBox {
@@ -201,6 +228,7 @@ export const StyledUploadContainer = inject('uploadActions', 'uploadStore', 'sli
     text-align: center;
     position: relative;
     margin-bottom: 40px;
+    color: #FFF;
     
     span:nth-of-type(1) {
       display: block;

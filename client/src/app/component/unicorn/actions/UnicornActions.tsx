@@ -12,6 +12,8 @@ import { MetricType } from '../../metrics/MetricModel';
 import { Toast } from '../../../../utils/Toast';
 import { StatisticActions } from '../../metrics/actions/StatisticActions';
 import { StatisticModel } from '../../metrics/StatisticModel';
+import { CalloutModel } from '../model/CalloutModel';
+import * as moment from 'moment';
 
 export class UnicornActions {
   public metricActions: MetricActions;
@@ -205,31 +207,33 @@ export class UnicornActions {
   }
 
   checkForCalloutMatches() {
-    for (let i = 0; i < this.slidesStore.slides.length; i++) {
-      let slide = this.slidesStore.slides[i];
-      for (let o = 0; o < this.unicornStore.callouts.length; o++) {
-        let callout = this.unicornStore.callouts[o];
-        if (callout.time && callout.time.toString().indexOf(slide.time) > -1) {
-          let calloutMatches = this.unicornStore.callouts.filter((f) => {
-            if (f.time && f.time.length > 0) {
-              return f.time.indexOf(this.slidesStore.slides[i].time) > -1;
-            }
-            return false;
-          });
-          let timeMatches = this.slidesStore.slides.filter((s) => {
-            if (s.time && s.time.length) {
-              let calloutTime = callout.time.toString().replace('Z', '');
-              return s.time.indexOf(calloutTime) > -1;
-            }
-            return false;
-          });
-          if (timeMatches.length < 2 && calloutMatches.length < 2) {
-            slide.setTargetEventId(callout.eventId);
-            slide.setCalloutTime(callout.time);
+    this.slidesStore.slides.map((slide) => {
+      let callout = this.matchingCalloutFromSlideTime(
+        this.unicornStore.callouts,
+        slide
+      );
+      if (callout) {
+        slide.setTargetEventId(callout.eventId);
+        slide.setCalloutTime(callout.time ? callout.time : '');
+        slide.setDate(callout.date ? callout.date : moment().utc());
+      }
+    });
+  }
+
+  matchingCalloutFromSlideTime(
+    callouts: CalloutModel[],
+    slide: SlideModel
+  ): CalloutModel | null {
+    let matchingCallouts =
+      callouts.filter((callout) => {
+          if (callout.time) {
+            return callout.time === slide.time;
+          } else {
+            return;
           }
         }
-      }
-    }
+      );
+    return matchingCallouts.length > 0 ? matchingCallouts[0] : null;
   }
 
   @action.bound

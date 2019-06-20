@@ -25,7 +25,6 @@ describe('FormContainer', () => {
     };
 
     slidesActions = {
-      setDateFromInput: jest.fn(),
       setAndUpdateOpName: jest.fn(),
       setAndUpdateAsset: jest.fn(),
       setAndUpdateReleasability: jest.fn(),
@@ -44,16 +43,10 @@ describe('FormContainer', () => {
       />);
   });
 
-  it('should display a date after store change', () => {
-    expect(subject.find(StyledValidatingInput).at(0).props().value).toBe('mm/dd/yyyy');
-    slidesStore.setFullDate('2000-02-02');
-    expect(subject.find(StyledValidatingInput).at(0).props().value).toBe('2000-02-02');
-  });
-
-  it('should contain fields for Date, Op Name, Callsign, Classification, and Releasability', () => {
+  it('should contain fields for Op Name, Callsign, Classification, and Releasability', () => {
     unicornStore.offline = false;
     subject.instance().forceUpdate();
-    expect(subject.find(StyledValidatingInput).length).toBe(3);
+    expect(subject.find(StyledValidatingInput).length).toBe(2);
     expect(subject.find('.classification').exists()).toBeTruthy();
     expect(subject.find(StyledValidatingDropdown).length).toBe(1);
   });

@@ -6,6 +6,8 @@ import { StyledValidatingInput } from '../input/ValidatingInput';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { StyledDatePicker } from '../date/DatePicker';
 import Mock = jest.Mock;
+import { StyledSlideName } from '../slides/SlideTitle';
+import * as moment from 'moment';
 
 describe('CarouselItem', () => {
   let subject: ReactWrapper;
@@ -31,13 +33,12 @@ describe('CarouselItem', () => {
   };
 
   beforeEach(() => {
-    slide = new SlideModel('imagePath', 'test Slide', '1234', 'TESTACTY', false, '', '');
+    slide = new SlideModel('imagePath', 'test Slide', '1234', 'TESTACTY', false, '', '', moment('2019-04-05'));
     slide.setHash('hash');
     changeTimeSpy = jest.fn();
     changeActivitySpy = jest.fn();
 
     slidesStore = new SlidesStore();
-    slide.setDate(new Date(Date.now()));
 
     slidesActions = {
       deleteSlide: jest.fn()
@@ -77,7 +78,7 @@ describe('CarouselItem', () => {
   });
 
   it('should display the image name', () => {
-    expect(subject.find('.slideTitle').text()).toBe('DD1234ZMONYY_TGT_NAME_TESTACTY_ASSET_RELEASABILITY');
+    expect(subject.find(StyledSlideName).exists()).toBeTruthy();
   });
 
   it('should display the current slide number out of the total slide count', () => {

@@ -6,44 +6,37 @@ import { SlideModel } from '../slides/models/SlideModel';
 const ArrowIcon = require('../../../icon/DatePickerArrow.svg');
 
 interface Props {
-  className?: string;
   slide: SlideModel;
+  className?: string;
 }
 
 @observer
 export class DatePicker extends React.Component<Props> {
-
-  displayDate() {
-    let slide = this.props.slide;
-    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return slide.date!.getDate() + ' ' + months[slide.date!.getMonth()];
-  }
-
   render() {
     return (
       <div className={this.props.className + ' datePicker'}>
         <label>Date</label>
-        <div className={'selectedDate'}>
-          <span>{this.displayDate()}</span>
-        </div>
-        <div className={'buttons'}>
-          <div
-            className={'upArrow'}
-            onClick={() => {
-              this.props.slide.incrementDay();
-              this.props.slide.setDateEdited(true);
-            }}
-          >
-            <img src={ArrowIcon}/>
+        <div className={'dateBox'}>
+          <div className={'selectedDate'}>
+            <span>{this.props.slide.displayDate}</span>
           </div>
-          <div
-            className={'downArrow'}
-            onClick={() => {
-              this.props.slide.decrementDay();
-              this.props.slide.setDateEdited(true);
-            }}
-          >
-            <img src={ArrowIcon}/>
+          <div className={'arrows'}>
+            <div
+              className={'upArrow'}
+              onClick={() => {
+                this.props.slide.incrementDay();
+              }}
+            >
+              <img src={ArrowIcon}/>
+            </div>
+            <div
+              className={'downArrow'}
+              onClick={() => {
+                this.props.slide.decrementDay();
+              }}
+            >
+              <img src={ArrowIcon}/>
+            </div>
           </div>
         </div>
       </div>
@@ -52,46 +45,44 @@ export class DatePicker extends React.Component<Props> {
 }
 
 export const StyledDatePicker = inject()(styled(DatePicker)`
-  
-  position: relative;
-  top: 38px;
   width: 88px;
-  height: 38px;
-  border-radius: 4px;
-  border: solid 1px #ccc;
   font-size: 16px;
   
-  .upArrow, .downArrow {
-    background-color: #00818c;
-    height: 17px;
-    width: 23px;
-    position: relative;
-    text-align: center;
+  .dateBox {
+    height: 38px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 1px #ccc;
+    border-radius: 4px;
+    color: #eaf3ff;
   }
   
-  .selectedDate, .buttons {
-    position: relative;
-    display: inline-block;
-    color: #eaf3ff;
+  .arrows {
+    height: 36px;
+    width: 23px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
   }
   
   .selectedDate {
     width: 63px;
-    bottom: 13px;
     text-align: center;
   }
   
-  .buttons {
-    width: 23px;
-    height: 38px;
-    cursor: pointer;
+  label {
+    color: #fff;
+    margin-bottom: 8px;
   }
   
-  label {
-    position: absolute;
-    color: #fff;
-    bottom: 30px;
-    left: 2px;
+  .upArrow, .downArrow {
+    background-color: #00818c;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
   }
   
   .upArrow {
@@ -106,10 +97,4 @@ export const StyledDatePicker = inject()(styled(DatePicker)`
       transform: rotateX(180deg);
     }
   }
-  
-  img {
-    position: relative;
-    bottom: 4px;
-  }
-
 `);

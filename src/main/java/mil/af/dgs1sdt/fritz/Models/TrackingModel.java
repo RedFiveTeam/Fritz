@@ -3,7 +3,6 @@ package mil.af.dgs1sdt.fritz.Models;
 import lombok.Data;
 import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class TrackingModel {
   @NonNull
   private int totalSlides = 1;
 
-  private Thread th;
+  private Thread thread;
 
   private List<String> fileList = new ArrayList<>();
 
@@ -45,9 +44,7 @@ public class TrackingModel {
     return status;
   }
 
-  public void setStatus(String status) {
-    this.status = status;
-  }
+  public void setStatus(String status) { this.status = status; }
 
   @NonNull
   public int getCompletedSlides() {
@@ -67,12 +64,12 @@ public class TrackingModel {
     this.totalSlides = totalSlides;
   }
 
-  public Thread getTh() {
-    return th;
+  public Thread getThread() {
+    return thread;
   }
 
-  public void setTh(Thread th) {
-    this.th = th;
+  public void setThread(Thread thread) {
+    this.thread = thread;
   }
 
   public String[] getTimes() { return times; }

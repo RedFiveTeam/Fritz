@@ -4,6 +4,9 @@
 /client/build/
 /src/main/resources/static/
 !.mvn/wrapper/maven-wrapper.jar
+acceptance/yarn.lock
+artifacts/fritz.jar
+tmp/acceptance.log
 
 ### STS ###
 .apt_generated

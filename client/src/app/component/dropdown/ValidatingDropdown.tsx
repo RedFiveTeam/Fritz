@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { badLabelCSS, badReleasabilityCSS, goodCSS } from '../../../themes/default';
 import { DropdownOption, StyledDropdown } from './Dropdown';
-import classNames = require('classnames');
+import * as classNames from 'classnames';
 
 interface Props {
   validator: boolean;

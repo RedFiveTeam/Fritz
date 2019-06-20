@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CSSProperties } from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import classNames = require('classnames');
+import * as classNames from 'classnames';
 
 interface Props {
   options: DropdownOption[];
@@ -16,7 +16,8 @@ interface Props {
 export class DropdownOption {
   constructor(
     public id: string,
-    public display: string) {
+    public display: string
+  ) {
   }
 }
 

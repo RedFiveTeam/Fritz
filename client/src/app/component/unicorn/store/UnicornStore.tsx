@@ -5,7 +5,7 @@ import { CalloutModel } from '../model/CalloutModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { SlideModel } from '../../slides/models/SlideModel';
 import { DropdownOption } from '../../dropdown/Dropdown';
-import Fuse = require('fuse.js');
+import * as Fuse from 'fuse.js';
 
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
@@ -199,7 +199,7 @@ export class UnicornStore {
           return (c.time && c.time.toString().length > 0);
         })
         .map((c: CalloutModel) => {
-          return {id: c.eventId, display: c.time};
+          return {id: c.eventId, display: c.time ? `${c.time}Z` : ''};
         })
       : [];
   }

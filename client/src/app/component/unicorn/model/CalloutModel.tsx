@@ -1,4 +1,6 @@
 import { action, computed, observable } from 'mobx';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 export class CalloutModel {
 
@@ -7,17 +9,29 @@ export class CalloutModel {
   @observable private _releasability: string;
   @observable private _activity: string;
   @observable private _eventId: string;
-  @observable private _time: string;
+  @observable private _time: string | null = null;
+  @observable private _date: Moment | null = null;
 
   constructor(
-    name: string, classification: string, releasability: string, activity: string, eventId: string, time: string
+    name: string,
+    classification: string,
+    releasability: string,
+    activity: string,
+    eventId: string,
+    time: string | null,
+    date: Moment | number | null
   ) {
     this._name = name;
     this._classification = classification;
     this._releasability = releasability;
     this._activity = activity;
     this._eventId = eventId;
-    this._time = time;
+    this.setTime(time);
+    if (typeof date === 'number') {
+      this._date = moment.unix(date).utc();
+    } else {
+      this._date = date;
+    }
   }
 
   @computed
@@ -71,12 +85,34 @@ export class CalloutModel {
   }
 
   @computed
-  get time(): string {
+  get time(): string | null {
     return this._time;
   }
 
   @action.bound
-  setTime(value: string) {
-    this._time = value;
+  setTime(time: string | null) {
+    if (time) {
+      time = time.toString().replace('Z', '');
+      if (
+        time.length === 4
+        && parseInt(time, 10)
+        && parseInt(time, 10) <= 2359
+        && parseInt(time.slice(2), 10) <= 59
+      ) {
+        this._time = time;
+      } else {
+        this._time = null;
+      }
+    }
+  }
+
+  @computed
+  get date(): Moment | null {
+    return this._date;
+  }
+
+  @action.bound
+  setDate(value: Moment | null) {
+    this._date = value;
   }
 }

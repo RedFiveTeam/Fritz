@@ -18,10 +18,42 @@ export class StubUnicornRepository implements UnicornRepository {
 
   getCallouts(missionId: string): Promise<CalloutModel[]> {
     return Promise.resolve([
-      new CalloutModel('Callout1', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512521', '1450Z'),
-      new CalloutModel('Callout2', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512522', '1451Z'),
-      new CalloutModel('Callout3', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512523', '1452Z'),
-      new CalloutModel('Callout4', '2351-ei-235223', 'sas-232-1293821', 'Stuff here', '78282-sd-23512524', '1453Z')
+      new CalloutModel(
+        'Callout1',
+        '2351-ei-235223',
+        'sas-232-1293821',
+        'Stuff here',
+        '78282-sd-23512521',
+        '1450Z',
+        null
+      ),
+      new CalloutModel(
+        'Callout2',
+        '2351-ei-235223',
+        'sas-232-1293821',
+        'Stuff here',
+        '78282-sd-23512522',
+        '1451Z',
+        null
+      ),
+      new CalloutModel(
+        'Callout3',
+        '2351-ei-235223',
+        'sas-232-1293821',
+        'Stuff here',
+        '78282-sd-23512523',
+        '1452Z',
+        null
+      ),
+      new CalloutModel(
+        'Callout4',
+        '2351-ei-235223',
+        'sas-232-1293821',
+        'Stuff here',
+        '78282-sd-23512524',
+        '1453Z',
+        null
+      )
     ]);
   }
 

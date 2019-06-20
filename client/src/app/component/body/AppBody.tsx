@@ -26,7 +26,7 @@ export class AppBody extends React.Component<Props> {
       >
         {
           this.props.uploadStore!.uploaded ?
-            <div>
+            <div className={'formAndCardsContainer'}>
               <div className="left">
                 {
                   this.props.uploadStore!.uploaded &&
@@ -64,29 +64,31 @@ export class AppBody extends React.Component<Props> {
 }
 
 export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBody)`
+  .formAndCardsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
   .spacer {
     width: 5px;
     overflow: hidden;
-    position: absolute;
-    top: 72px;
     display: inline-block;
     height: 625px;
     border-left: 1px solid #6C7F9C;
   }
   
   .left {
-    width: 44vw;
-    min-width: 700px;
+    min-width: 688px;
     display: inline-block;
   }
   
   .right {
     scroll-behavior: smooth;
-    width: 57vw;
     height: calc(100vh - 140px);
     min-height: 500px;
     display: inline-block;
-    position: absolute;
     padding-top: 16px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -112,7 +114,7 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
     }
   }
   
-    .uploadButton {
+  .uploadButton {
     width: .1px;
     height: .1px;
     opacity: 0;
@@ -127,11 +129,6 @@ export const StyledAppBody = inject('uploadStore', 'unicornStore')(styled(AppBod
   
   #pdfName {
     margin-top: 15px;
-  }
-  
-   #uploadCompleteContainer {
-    top: 485px;
-    position: absolute;
   }
   
   #deletePP {

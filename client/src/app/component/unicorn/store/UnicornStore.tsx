@@ -39,7 +39,7 @@ export class UnicornStore {
         this._missions.push(new MissionModel(
           'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
         );
-        this._releasabilities.push(new ReleasabilityModel('', 'FOUO'));
+        this._releasabilities.push(new ReleasabilityModel('', 'FOUO', 0));
       } else {
         this._releasabilities = (await unicornRepository.getReleasabilities());
         this._missions = (await unicornRepository.getMissions())
@@ -157,7 +157,9 @@ export class UnicornStore {
   @computed
   get releasabilityOptions(): DropdownOption[] {
     return this.releasabilities
-      ? this.releasabilities.map((r) => {
+      ? this.releasabilities.sort((a, b) => {
+        return b.timesClicked - a.timesClicked;
+      }).map((r) => {
         return new DropdownOption(r.releasabilityId, r.releasabilityName);
       })
       : [];

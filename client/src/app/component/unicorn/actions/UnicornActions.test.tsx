@@ -48,6 +48,7 @@ describe('UnicornActions', () => {
     );
 
     subject.metricActions.updateMetric = jest.fn();
+    subject.statisticActions.createOrUpdate = jest.fn();
   });
 
   it('should hydrate the unicorn store', async () => {
@@ -75,7 +76,7 @@ describe('UnicornActions', () => {
 
   it('should get releasabilities from unicorn', async () => {
     await subject.getReleasabilities();
-    expect(unicornStore.releasabilities).toEqual([new ReleasabilityModel('1', 'Unclass')]);
+    expect(unicornStore.releasabilities).toEqual([new ReleasabilityModel('1', 'Unclass', 0)]);
   });
 
   it('should set the unicorn model with some stuff from the slide model', async () => {

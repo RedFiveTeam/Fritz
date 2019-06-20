@@ -188,6 +188,7 @@ export class UnicornActions {
     this.slidesForUpload = this.filterSlides(this.slidesStore.slides);
     this.unicornStore.setIsUploading(true);
     await this.metricActions.trackMetric('UploadToUnicorn');
+    await this.metricActions.createMetric('Releasability: ' + this.unicornStore.releasability);
     await this.metricActions.updateMetric('Renaming');
 
     for (let i = 0; i < this.slidesForUpload.length; i++) {

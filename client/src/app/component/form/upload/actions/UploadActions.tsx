@@ -134,7 +134,6 @@ export class UploadActions {
     let releasabilityInput = document.querySelector(
       '.form-group:last-of-type > .dropdown > button'
     ) as HTMLElement;
-    // FormContainer.changeReleasabilityColor();
     if (releasabilityInput) {
       releasabilityInput.innerHTML = releasability;
     }

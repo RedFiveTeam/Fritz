@@ -195,11 +195,13 @@ describe('UnicornActions', () => {
     expect(unicornStore.isModalDisplayed).toBeTruthy();
     subject.metricActions.trackMetric = jest.fn();
     subject.metricActions.updateMetric = jest.fn();
+    subject.metricActions.createMetric = jest.fn();
     let addToQueueSpy = jest.spyOn(unicornStore, 'addToUploadQueue');
 
     await subject.confirmUpload();
     expect(subject.slidesForUpload.length).toBe(2);
     expect(subject.metricActions.trackMetric).toHaveBeenCalledWith('UploadToUnicorn');
+    expect(subject.metricActions.createMetric).toHaveBeenCalled();
     expect(subject.metricActions.updateMetric).toHaveBeenCalledWith('Renaming');
     expect(unicornStore.isModalDisplayed).toBeFalsy();
     expect(unicornStore.isUploading).toBeFalsy();

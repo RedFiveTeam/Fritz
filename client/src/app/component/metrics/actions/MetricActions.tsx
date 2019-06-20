@@ -7,8 +7,8 @@ import { MetricModel } from '../MetricModel';
 import { UploadStore } from '../../form/upload/UploadStore';
 import { AverageSubsetModel } from '../../average/AverageSubsetModel';
 import { AverageModel } from '../../average/AverageModel';
-import moment = require('moment');
-import math = require('mathjs');
+import * as moment from 'moment';
+import * as math from 'mathjs';
 
 export class MetricActions {
   private metricStore: MetricStore;

@@ -6,6 +6,8 @@ import { UnicornStore } from '../../unicorn/store/UnicornStore';
 import { MissionModel } from '../../unicorn/model/MissionModel';
 import { DropdownOption } from '../../dropdown/Dropdown';
 import { Toast } from '../../../../utils/Toast';
+import * as moment from 'moment';
+import { CalloutModel } from '../../unicorn/model/CalloutModel';
 
 describe('SlidesActions', () => {
   let subject: SlidesActions;
@@ -37,10 +39,6 @@ describe('SlidesActions', () => {
       new SlideModel('test6', 'test6')
     ]);
 
-    slidesStore.slides.map((s: SlideModel) => {
-      s.setDate(new Date(2019, 6, 10));
-    });
-
     metricActions.trackMetric = jest.fn();
     unicornStore = new UnicornStore();
     unicornStore.setActiveMission(new MissionModel('', '', 'Stephen 14', '', '', '', ''));
@@ -55,17 +53,6 @@ describe('SlidesActions', () => {
     expect(slidesStore.initialValidation).toBeTruthy();
   });
 
-  it('should update the date and validateInput on date change after initial validation', () => {
-    slidesStore.validate = jest.fn();
-    subject.setDateFromInput({target: {value: '2019-05-21'}});
-    expect(slidesStore.validate).not.toHaveBeenCalled();
-
-    slidesStore.initialValidation();
-    subject.setDateFromInput({target: {value: '2019-05-21'}});
-    expect(slidesStore.fullDate).toBe('2019-05-21');
-    expect(slidesStore.validate).toHaveBeenCalled();
-  });
-
   it('should update the op name and validateInput on change after initial validation', () => {
     slidesStore.validate = jest.fn();
     subject.setAndUpdateOpName({target: {value: 'operation'}});
@@ -78,29 +65,54 @@ describe('SlidesActions', () => {
   });
 
   it('should update the date after extraction', () => {
-    subject.setDateFromStatus('21MAY19');
-    expect(slidesStore.fullDate).toBe('2019-05-21');
+    slidesStore.slides.map((slide) => {
+      expect(slide.date.toISOString().slice(0, 16)).toBe(moment().toISOString().slice(0, 16));
+    });
+  });
+
+  it('should add numbers at the end of duplicate slide names to facilitate saving unique filenames', () => {
+    slidesStore.setSlides([
+      new SlideModel(),
+      new SlideModel(),
+      new SlideModel(),
+      new SlideModel(),
+      new SlideModel()
+    ]);
+    slidesStore.slides.map((slide) => {
+      slide.setDate(moment('2019-05-01'));
+    });
+    slidesStore.slides[0].setActivity('not duplicate');
+    subject.updateNewNames();
+    expect(slidesStore.slides[0].newName).toBe('01TTTTZMAY19_TGT_NAME_NOT_DUPLICATE_ASSET_RELEASABILITY');
+    expect(slidesStore.slides[1].newName).toBe('01TTTTZMAY19_TGT_NAME_ACTY_ASSET_RELEASABILITY1');
+    expect(slidesStore.slides[2].newName).toBe('01TTTTZMAY19_TGT_NAME_ACTY_ASSET_RELEASABILITY2');
+
+    slidesStore.slides[3].setActivity('bouncing kangaroos');
+    slidesStore.slides[4].setActivity('bouncing kangaroos');
+    subject.updateNewNames();
+    expect(slidesStore.slides[3].newName).toBe('01TTTTZMAY19_TGT_NAME_BOUNCING_KANGAROOS_ASSET_RELEASABILITY1');
+    expect(slidesStore.slides[4].newName).toBe('01TTTTZMAY19_TGT_NAME_BOUNCING_KANGAROOS_ASSET_RELEASABILITY2');
   });
 
   it('update the slide model name when called', () => {
+    slidesStore.slides.map((s: SlideModel) => {
+      s.setDate(moment('2019-06-10'));
+    });
 
     subject.setAndUpdateActivity(slidesStore.slides[0], {target: {value: 'Test activity'}});
-    expect(slidesStore.slides[0].newName).toBe('DDTTTTZMONYY_TGT_NAME_TEST_ACTIVITY_ASSET_RELEASABILITY');
-
-    subject.setDateFromInput({target: {value: '2019-01-20'}});
-    expect(slidesStore.slides[1].newName).toBe('20TTTTZJAN19_TGT_NAME_ACTY_ASSET_RELEASABILITY');
+    expect(slidesStore.slides[0].newName).toBe('10TTTTZJUN19_TGT_NAME_TEST_ACTIVITY_ASSET_RELEASABILITY');
 
     subject.setAndUpdateOpName({target: {value: 'op hello'}});
-    expect(slidesStore.slides[2].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY');
+    expect(slidesStore.slides[2].newName).toBe('10TTTTZJUN19_OP_HELLO_ACTY_ASSET_RELEASABILITY2');
 
     subject.setAndUpdateAsset({target: {value: 'asset'}});
-    expect(slidesStore.slides[3].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_RELEASABILITY');
+    expect(slidesStore.slides[3].newName).toBe('10TTTTZJUN19_OP_HELLO_ACTY_ASSET_RELEASABILITY3');
 
     subject.setAndUpdateReleasability('fvey');
-    expect(slidesStore.slides[4].newName).toBe('20TTTTZJAN19_OP_HELLO_ACTY_ASSET_FVEY');
+    expect(slidesStore.slides[4].newName).toBe('10TTTTZJUN19_OP_HELLO_ACTY_ASSET_FVEY4');
 
     subject.setAndUpdateTime(slidesStore.slides[5], {target: {value: '1234'}});
-    expect(slidesStore.slides[5].newName).toBe('201234ZJAN19_OP_HELLO_ACTY_ASSET_FVEY');
+    expect(slidesStore.slides[5].newName).toBe('101234ZJUN19_OP_HELLO_ACTY_ASSET_FVEY');
   });
 
   it('should log metrics on download if form is valid & slides were uploaded', async () => {
@@ -137,13 +149,6 @@ describe('SlidesActions', () => {
     expect(downloadSpy).toHaveBeenCalled();
   });
 
-  it('should keep placeholder text if any date values are not selected', () => {
-    subject.setDateFromInput({target: {value: '20'}});
-    expect(slidesStore.month).toBe('MON');
-    expect(slidesStore.day).toBe('DD');
-    expect(slidesStore.year).toBe('YY');
-  });
-
   it('should trigger toast when trying to download without an upload', async () => {
     let triggerUploadToastSpy = jest.fn();
     subject.triggerMustUploadFirstToast = triggerUploadToastSpy;
@@ -164,9 +169,9 @@ describe('SlidesActions', () => {
 
   it('should update slides store with a pre-made date from Status', () => {
     subject.setDateFromStatus('10MAY19');
-    expect(slidesStore.year).toBe('19');
-    expect(slidesStore.month).toBe('MAY');
-    expect(slidesStore.day).toBe('10');
+    slidesStore.slides.map((slide) => {
+      expect(slide.date.toISOString().slice(0, 16)).toBe(moment('2019-05-10').toISOString().slice(0, 16));
+    });
   });
 
   it('should compare Callsign & selected Mission', () => {
@@ -209,19 +214,21 @@ describe('SlidesActions', () => {
     expect(slidesStore.slides[0].time).toBe('1234');
   });
 
-  it('should change the name using the slide when the slide date has been edited', () => {
-    slidesStore.slides[0].setDateEdited(true);
-    slidesStore.slides[0].setDate(new Date(2019, 1, 1));
-    slidesStore.slides[1].setDateEdited(true);
-    slidesStore.slides[1].setDate(new Date(2019, 2, 2));
+  it('should change the name using the slide when the slide date changes', () => {
+    slidesStore.slides[0].setDate(moment('2019-01-01'));
+    slidesStore.slides[1].setDate(moment('2019-02-02'));
+    slidesStore.slides[1].setDate(moment('2019-03-03'));
     subject.updateNewNames();
-    expect(slidesStore.slides[0].newName).toBe('01TTTTZFEBYY_TGT_NAME_ACTY_ASSET_RELEASABILITY');
-    expect(slidesStore.slides[1].newName).toBe('02TTTTZMARYY_TGT_NAME_ACTY_ASSET_RELEASABILITY');
+    expect(slidesStore.slides[0].newName).toBe('01TTTTZJAN19_TGT_NAME_ACTY_ASSET_RELEASABILITY');
+    expect(slidesStore.slides[1].newName).toBe('03TTTTZMAR19_TGT_NAME_ACTY_ASSET_RELEASABILITY');
   });
 
   it('should change a slide\'s callout', () => {
+    unicornStore.setCallouts([
+      new CalloutModel('name', 'class', 'release', 'activity', 'eid1234', '1234', null)
+    ]);
     let slide = slidesStore.slides[0];
-    subject.changeCalloutOnSlide(slide, new DropdownOption('eid1234', '1234'));
+    subject.changeCalloutOnSlide(slide, new DropdownOption('eid1234', '1234Z'));
     expect(slide.calloutTime).toEqual('1234');
     expect(slide.targetEventId).toEqual('eid1234');
   });

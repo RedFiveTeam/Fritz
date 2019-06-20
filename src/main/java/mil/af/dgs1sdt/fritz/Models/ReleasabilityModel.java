@@ -1,7 +1,11 @@
 package mil.af.dgs1sdt.fritz.Models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class ReleasabilityModel {
   private String releasabilityId;

@@ -27,16 +27,16 @@ export class SlidesContainer extends React.Component<Props> {
       >
         {
           this.props.slidesStore!.slides
-            .map((s, idx) => {
-              if (s.deleted) {
+            .map((slide, idx) => {
+              if (slide.deleted) {
                 this.count++;
               }
               return (
                 <div className="slideCardContainer" key={idx}>
                   {
-                    !s.deleted &&
+                    !slide.deleted &&
                     <StyledSlideCard
-                      slideModel={s}
+                      slide={slide}
                       slideNumber={idx - this.count}
                       thumbnailClick={(index: number) => {
                         this.props.carouselActions!.show(index);
@@ -45,9 +45,9 @@ export class SlidesContainer extends React.Component<Props> {
                     />
                   }
                   {
-                    s.deleted &&
+                    slide.deleted &&
                     <StyledUndoDeleteContainer
-                      slideModel={s}
+                      slideModel={slide}
                     />
                   }
                 </div>
@@ -64,6 +64,9 @@ export const StyledSlidesContainer = inject(
 )(styled(SlidesContainer)`
   max-width: 860px;
   color: white;
-  margin-left: 32px;
+  margin-left: 46px;
+  margin-right: 40px;
   white-space: nowrap;
+  display: flex;
+  flex-direction: column;
 `);

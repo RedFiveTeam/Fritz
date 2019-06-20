@@ -64,9 +64,9 @@ public class UploadController {
       dir.mkdirs();
     file.transferTo(new File("/tmp/working/" + hash + "/" + file.getOriginalFilename()));
 
-    if (tracking.getTh() != null && tracking.getTh().isAlive())
-      tracking.getTh().interrupt();
-    tracking.setTh(new Thread() {
+    if (tracking.getThread() != null && tracking.getThread().isAlive())
+      tracking.getThread().interrupt();
+    tracking.setThread(new Thread() {
       @Override
       public void run() {
         try {
@@ -75,7 +75,7 @@ public class UploadController {
         }
       }
     });
-    tracking.getTh().start();
+    tracking.getThread().start();
     tracking.setHash(hash);
     TrackingStore.addToList(tracking);
 

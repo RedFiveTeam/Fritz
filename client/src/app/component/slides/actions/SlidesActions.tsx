@@ -9,6 +9,7 @@ import { UnicornStore } from '../../unicorn/store/UnicornStore';
 import { Toast } from '../../../../utils/Toast';
 import { SlidesStore } from '../store/SlidesStore';
 import { MissionModel } from '../../unicorn/model/MissionModel';
+import { CalloutModel } from '../../unicorn/model/CalloutModel';
 
 export class SlidesActions {
   public metricActions: MetricActions;
@@ -41,19 +42,8 @@ export class SlidesActions {
     this.updateNewNames();
   }
 
-  @action.bound
-  setDateFromInput(e: any) {
-    this.slidesStore!.setFullDate(e.target.value);
-    if (this.slidesStore.hasInitiallyValidated) {
-      this.slidesStore.validate();
-    }
-    this.updateNewNames();
-  }
-
-  @action.bound
   setDateFromStatus(date: string) {
-    this.setSlidesDate(date);
-    this.slidesStore.setFullDate(date);
+    this.slidesStore.setAllSlidesDates(date);
   }
 
   @action.bound
@@ -90,7 +80,12 @@ export class SlidesActions {
   @action.bound
   changeCalloutOnSlide(slide: SlideModel, option: any) {
     slide.setTargetEventId(option.id);
-    slide.setCalloutTime(option.display);
+    let selectedCallout = this.unicornStore.callouts.filter((callout: CalloutModel) => {
+      return callout.eventId === option.id;
+    });
+    if (selectedCallout[0].time) {
+      slide.setCalloutTime(selectedCallout[0].time);
+    }
   }
 
   @action.bound
@@ -117,21 +112,19 @@ export class SlidesActions {
   };
 
   updateNewNames() {
-    for (let i = 0; i < this.slidesStore.slides.length; i++) {
-      let newName: string = '';
-      let slide = this.slidesStore.slides[i];
-      this.slidesStore.setActivity(this.slidesStore.slides[i], slide.activity);
-      this.slidesStore.setTime(this.slidesStore.slides[i], slide.time);
-      let duplicates = this.slidesStore.slides.filter((s, idx) => {
-        return s.newName.replace(/\d+\b/, '') === this.slidesStore.nameFormat(slide) && idx < i;
-      }).length;
-      if (slide.dateEdited) {
-        newName = this.slidesStore.nameFormat(slide) + (duplicates > 0 ? duplicates : '');
-      } else {
-        newName = this.slidesStore.formInputNameFormat + (duplicates > 0 ? duplicates : '');
+    this.slidesStore.slides.map((slide) => {
+      slide.setNewName(this.slidesStore.nameFormat(slide));
+    });
+    this.slidesStore.slides.map((slide) => {
+      let dupes = this.slidesStore.slides.filter((possibleDuplicate) => {
+        return possibleDuplicate.newName === slide.newName;
+      });
+      if (dupes.length > 1) {
+        dupes.map((dupe, index) => {
+          dupe.setNewName(dupe.newName + (index + 1));
+        });
       }
-      this.slidesStore.slides[i].setNewName(newName);
-    }
+    });
   }
 
   updateOldNames() {
@@ -230,18 +223,6 @@ export class SlidesActions {
       s.setCalloutTime('Select');
       s.setTargetEventId('');
       s.setUploading(null);
-    });
-  }
-
-  @action.bound
-  setSlidesDate(date: string) {
-    let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    let day = parseInt(date.substr(0, 2), 10);
-    let month = months.indexOf(date.substr(2, 3));
-    let year = parseInt('20' + date.substr(5, 2), 10);
-
-    this.slidesStore.slides.map((s: SlideModel) => {
-      s.setDate(new Date(year, month, day));
     });
   }
 }

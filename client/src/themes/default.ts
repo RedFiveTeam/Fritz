@@ -1,5 +1,13 @@
 import { CSSProperties } from 'react';
 
+export const Theme = Object.freeze({
+  fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
+  fontWeight: '300',
+  fontSize: '16',
+  fontColor: '#fff',
+  background: 'linear-gradient(360deg,#1E222A 0%,#39414E 100%)'
+});
+
 export const badLabelCSS: CSSProperties = {
   color: '#e46373'
 };

@@ -65,7 +65,6 @@ export class FormContainer extends React.Component<Props> {
 
   render() {
     let {slidesStore} = this.props;
-
     return (
       <div
         className={this.props.className}
@@ -76,22 +75,12 @@ export class FormContainer extends React.Component<Props> {
           <span>Complete the fields below to view and download JPEGs</span>
         </div>
         <form>
-          <div className="form-group">
-            <StyledValidatingInput
-              label={'Date'}
-              placeholder={'Select Date'}
-              listener={this.props.slidesActions!.setDateFromInput}
-              errorMessage={slidesStore!.errorMessages[0]}
-              id={'dateInput'}
-              validator={slidesStore!.isValidDate}
-              type={'date'}
-              value={slidesStore!.fullDate ? slidesStore!.fullDate : 'mm/dd/yyyy'}
-            />
+          <div className={'formInputs'}>
             <StyledValidatingInput
               label={'Operation Name'}
               placeholder={'e.g. Op Jumpshot'}
               listener={this.props.slidesActions!.setAndUpdateOpName}
-              errorMessage={slidesStore!.errorMessages[1]}
+              errorMessage={slidesStore!.errorMessages[0]}
               id={'opInput'}
               validator={slidesStore!.isValidOpName}
               value={slidesStore!.opName}
@@ -101,7 +90,7 @@ export class FormContainer extends React.Component<Props> {
               placeholder={'Callsign'}
               listener={this.props.slidesActions!.setAndUpdateAsset}
               errorMessage={
-                slidesStore!.differentAsset ? slidesStore!.errorMessages[3] : slidesStore!.errorMessages[2]
+                slidesStore!.differentAsset ? slidesStore!.errorMessages[2] : slidesStore!.errorMessages[1]
               }
               id={'assetInput'}
               validator={slidesStore!.isValidAsset}
@@ -128,16 +117,8 @@ export const StyledFormContainer = inject(
 )
 (styled(FormContainer)`
   color: #fff;
-  margin-top: 20px;
+  padding-bottom: 64px;
   margin-left: 50px;
-  
-  .controlUnit {
-  padding-top: 30px;
-  }
-  
-  .controlUnit:nth-child(1) {
-  padding-top: 0px;
-  }
   
   .controlUnit:nth-of-type(4) {
     padding-top: 0;
@@ -145,10 +126,12 @@ export const StyledFormContainer = inject(
     position: relative;
   }
   
-  .form-group {
-  width: 600px;
+  .formInputs {
+    width: 600px;
+    > * {
+      margin-bottom: 32px;
+    }
   }
-  
   
   .splitControl {
   width: 280px;
@@ -173,11 +156,6 @@ export const StyledFormContainer = inject(
   span {
     font-size: 16px;
     color: #D8E5FF;
-  }
-  
-  form {
-    position: relative;
-    bottom: 2px;
   }
   
   .leftText {
@@ -206,19 +184,15 @@ export const StyledFormContainer = inject(
     margin-bottom: 25px;
   }
   
-  .errorText {
-    position: absolute;
-    color: #e46373; 
-  }
-  
   .offlineRerrorText {
     position: absolute;
     color: #e46373; 
     left: 300px;
   }
+  
   .header {
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: 32px;
   }
   
   .header > span {

@@ -14,7 +14,7 @@ import { UnicornActions } from '../../../unicorn/actions/UnicornActions';
 
 export class UploadActions {
   public metricActions: MetricActions;
-  private slidesActions: SlidesActions;
+  public slidesActions: SlidesActions;
   private uploadRepository: UploadRepository;
   private uploadStore: UploadStore;
   private unicornStore: UnicornStore;
@@ -69,8 +69,7 @@ export class UploadActions {
           this.slidesStore.setFiles(status.files);
           this.setSlides(status.files, status.times);
           if (status.date && status.date !== '') {
-            this.slidesActions.setDateFromStatus(status.date);
-            this.setDateInput(status.date);
+            this.slidesStore.setAllSlidesDates(status.date);
           }
           if (status.op && status.op !== '') {
             this.slidesActions.setAndUpdateOpName(status.op);
@@ -92,6 +91,7 @@ export class UploadActions {
             }
             this.unicornStore.setPendingReleasability(status.releasability);
           }
+          this.unicornActions.checkForCalloutMatches();
           this.slidesActions.updateNewNames();
           this.uploadProcessingComplete();
           this.slidesActions!.compareCallsigns();
@@ -99,18 +99,6 @@ export class UploadActions {
         }
       });
     return;
-  }
-
-  setDateInput(date: string) {
-    let months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    let monthStr = date.substr(2, 3);
-    let monthInt = ('0' + (months.indexOf(monthStr) + 1)).slice(-2);
-    let day = date.substr(0, 2);
-    let year = date.substr(-2);
-    let dateInput = document.querySelector('#dateInput') as HTMLInputElement;
-    if (dateInput) {
-      dateInput.value = '20' + year + '-' + monthInt + '-' + day;
-    }
   }
 
   setOpInput(op: string) {
@@ -159,7 +147,6 @@ export class UploadActions {
       temp.push(slide);
     });
     this.slidesStore.setSlides(temp);
-    this.unicornActions.checkForCalloutMatches();
   }
 
   uploadProcessingComplete() {

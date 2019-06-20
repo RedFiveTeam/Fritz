@@ -12,6 +12,7 @@ import { MetricRepository } from '../../metrics/repository/MetricRepository';
 import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { Toast } from '../../../../utils/Toast';
+import * as moment from 'moment';
 
 describe('UnicornActions', () => {
   let subject: UnicornActions;
@@ -32,12 +33,12 @@ describe('UnicornActions', () => {
     slide.setId(1);
     slidesStore = new SlidesStore();
     slides = [
-      new SlideModel('on1', 'nn1', '1450Z', 'a1', false, '78282-sd-23512520', 'r1'),
-      new SlideModel('on2', 'nn2', '1451Z', 'a2', false, 'id2', 'r2'),
+      new SlideModel('on1', 'nn1', '1450', 'a1', false, '78282-sd-23512520', 'r1'),
+      new SlideModel('on2', 'nn2', '1451', 'a2', false, 'id2', 'r2'),
       new SlideModel('on3', 'nn3', 't3', 'a3', false, '', 'r3'),
       new SlideModel('on4', 'nn4', 't4', 'a4', true, 'id4', 'r4'),
-      new SlideModel('', '', '1454Z', 'a5'),
-      new SlideModel('', '', '1455Z', 'a6'),
+      new SlideModel('', '', '1454', 'a5'),
+      new SlideModel('', '', '1455', 'a6'),
     ];
 
     slidesStore.setSlides(slides);
@@ -58,7 +59,7 @@ describe('UnicornActions', () => {
     expect(hydrateSpy).toHaveBeenCalled();
   });
 
-  it('should set the callouts when getCallouts is called', async () => {
+  it('should match the callouts when getCallouts is called', async () => {
     subject.checkForCalloutMatches = jest.fn();
 
     await subject.getCallouts('test');
@@ -68,10 +69,90 @@ describe('UnicornActions', () => {
       '_eventId': '78282-sd-23512521',
       '_name': 'Callout1',
       '_releasability': 'sas-232-1293821',
-      '_time': '1450Z'
+      '_time': '1450',
+      '_date': null
     });
     expect(unicornStore.pendingCallouts).toBeFalsy();
     expect(subject.checkForCalloutMatches).toHaveBeenCalled();
+  });
+
+  it('should check for callout matches and matches dates & times to slides', () => {
+    let calloutDate = (moment('2019-03-17'));
+    let callout2Date = (moment('2019-03-18'));
+    slidesStore.setSlides([
+      new SlideModel('', '', '1234', '', false, 'eventId', '', null),
+      new SlideModel('', '', '2345', '', false, '', '', moment('2001-01-01')),
+      new SlideModel('', '', '0123', '', false, '', '', null)
+    ]);
+
+    unicornStore.setCallouts([
+      new CalloutModel('name', 'class', 'rel', 'acty', 'evntid', '1234', calloutDate),
+      new CalloutModel('name', 'class', 'rel', 'acty', 'evntid2', '2345', null),
+      new CalloutModel('name', 'class', 'rel', 'acty', 'evntid3', '0123', callout2Date)
+    ]);
+    subject.checkForCalloutMatches();
+
+    expect(slidesStore.slides[0].targetEventId).toBe('evntid');
+    expect(slidesStore.slides[0].date).toBe(calloutDate);
+    expect(slidesStore.slides[1].targetEventId).toBe('evntid2');
+
+    let today = moment();
+    expect(slidesStore.slides[1].yearTwoDigit).toEqual(today.year().toString().slice(-2));
+    expect(slidesStore.slides[1].monthThreeLetter).toEqual(moment.monthsShort('-MMM-', today.month()));
+    expect(slidesStore.slides[1].date.toISOString().slice(0, 16)).toEqual(today.toISOString().slice(0, 16));
+
+    expect(slidesStore.slides[2].targetEventId).toBe('evntid3');
+    expect(slidesStore.slides[2].date).toBe(callout2Date);
+  });
+
+  it('should refresh the callouts from UNICORN without altering previously matched slides', async () => {
+    let firstSlideOriginalCalloutId = '78282-sd-23512520';
+    let firstSlideOriginalTime = '1450';
+    let secondSlideOriginalTime = '1451';
+    let fifthSlideAutomatchedCallout = '78282-sd-23512524';
+    let sixthSlideAutomatchedCallout = '78282-sd-23512525';
+    let secondSlideRefreshedCalloutId = '78282-sd-23512521';
+
+    let refreshedCallouts = [
+      new CalloutModel('Callout1', 'c', 'r', 'a', firstSlideOriginalCalloutId, firstSlideOriginalTime, moment()),
+      new CalloutModel('Callout2', 'c', 'r', 'a', secondSlideRefreshedCalloutId, secondSlideOriginalTime, moment()),
+      new CalloutModel('Callout3', 'c', 'r', 'a', '78282-sd-23512522', '1452Z', moment()),
+      new CalloutModel('Callout4', 'c', 'r', 'a', '78282-sd-23512523', '1453Z', moment()),
+      new CalloutModel('Callout5', 'c', 'r', 'a', fifthSlideAutomatchedCallout, '1454Z', moment()),
+      new CalloutModel('Callout6', 'c', 'r', 'a', sixthSlideAutomatchedCallout, '1455Z', moment()),
+    ];
+    let getRefreshedCallouts = (missionId: string): Promise<CalloutModel[]> => {
+      return Promise.resolve(refreshedCallouts);
+    };
+    unicornRepository.getCallouts = getRefreshedCallouts;
+    unicornStore.setRefreshing(true);
+
+    await subject.refreshCallouts();
+
+    expect(unicornStore.callouts).toEqual(refreshedCallouts);
+    expect(slidesStore.slides[0].targetEventId).toBe(firstSlideOriginalCalloutId);
+    expect(slidesStore.slides[0].time).toBe(firstSlideOriginalTime);
+    expect(slidesStore.slides[1].targetEventId).toBe(secondSlideRefreshedCalloutId);
+    expect(slidesStore.slides[1].time).toBe(secondSlideOriginalTime);
+    expect(slidesStore.slides[4].targetEventId).toBe(fifthSlideAutomatchedCallout);
+    expect(slidesStore.slides[5].targetEventId).toBe(sixthSlideAutomatchedCallout);
+    expect(unicornStore.isRefreshing).toBeFalsy();
+  });
+
+  it('should return a callout that matches a slide by time', () => {
+    let callouts = [
+      new CalloutModel('Callout1', 'c', 'r', 'a', 'eid', '1234Z', moment()),
+      new CalloutModel('Callout1', 'c', 'r', 'a', 'eid', '0123', moment())
+    ];
+    let slideModel = new SlideModel();
+    slideModel.setTime('1234');
+    expect(subject.matchingCalloutFromSlideTime(callouts, slideModel)).toEqual(callouts[0]);
+    slideModel.setTime('2345');
+    expect(subject.matchingCalloutFromSlideTime(callouts, slideModel)).toEqual(null);
+    slideModel.setTime('0123');
+    expect(subject.matchingCalloutFromSlideTime(callouts, slideModel)).toEqual(callouts[1]);
+    slideModel.setTime('');
+    expect(subject.matchingCalloutFromSlideTime(callouts, slideModel)).toEqual(null);
   });
 
   it('should get releasabilities from unicorn', async () => {
@@ -107,25 +188,6 @@ describe('UnicornActions', () => {
 
     subject.checkForUnassignedCallouts();
     expect(unicornStore.unassignedCallouts).toBeTruthy();
-  });
-
-  it('should check for callout matches and match them', () => {
-    slidesStore.setSlides([
-      new SlideModel('', '', '1234', '', false, 'eventId', ''),
-      new SlideModel('', '', '2345', '', false, '', ''),
-      new SlideModel('', '', '3456', '', false, '', '')
-    ]);
-
-    unicornStore.setCallouts([
-      new CalloutModel('name', 'class', 'rel', 'acty', 'evntid', '1234'),
-      new CalloutModel('name', 'class', 'rel', 'acty', 'evntid2', '2345'),
-      new CalloutModel('name', 'class', 'rel', 'acty', 'evntid3', '3456')
-    ]);
-    subject.checkForCalloutMatches();
-
-    expect(slidesStore.slides[0].targetEventId).toBe('evntid');
-    expect(slidesStore.slides[1].targetEventId).toBe('evntid2');
-    expect(slidesStore.slides[2].targetEventId).toBe('evntid3');
   });
 
   it('should upload to unicorn ', async () => {
@@ -231,40 +293,6 @@ describe('UnicornActions', () => {
   it('should reset active mission to null', () => {
     subject.resetActiveMission();
     expect(unicornStore.activeMission).toBeNull();
-  });
-
-  it('should refresh the callouts from UNICORN without altering previously matched slides', async () => {
-    let firstSlideOriginalCalloutId = '78282-sd-23512520';
-    let firstSlideOriginalTime = '1450Z';
-    let secondSlideOriginalTime = '1451Z';
-    let fifthSlideAutomatchedCallout = '78282-sd-23512524';
-    let sixthSlideAutomatchedCallout = '78282-sd-23512525';
-    let secondSlideRefreshedCalloutId = '78282-sd-23512521';
-
-    let refreshedCallouts = [
-      new CalloutModel('Callout1', 'c', 'r', 'a', firstSlideOriginalCalloutId, firstSlideOriginalTime),
-      new CalloutModel('Callout2', 'c', 'r', 'a', secondSlideRefreshedCalloutId, secondSlideOriginalTime),
-      new CalloutModel('Callout3', 'c', 'r', 'a', '78282-sd-23512522', '1452Z'),
-      new CalloutModel('Callout4', 'c', 'r', 'a', '78282-sd-23512523', '1453Z'),
-      new CalloutModel('Callout5', 'c', 'r', 'a', fifthSlideAutomatchedCallout, '1454Z'),
-      new CalloutModel('Callout6', 'c', 'r', 'a', sixthSlideAutomatchedCallout, '1455Z'),
-    ];
-    let getRefreshedCallouts = (missionId: string): Promise<CalloutModel[]> => {
-      return Promise.resolve(refreshedCallouts);
-    };
-    unicornRepository.getCallouts = getRefreshedCallouts;
-    unicornStore.setRefreshing(true);
-
-    await subject.refreshCallouts();
-
-    expect(unicornStore.callouts).toEqual(refreshedCallouts);
-    expect(slidesStore.slides[0].targetEventId).toBe(firstSlideOriginalCalloutId);
-    expect(slidesStore.slides[0].time).toBe(firstSlideOriginalTime);
-    expect(slidesStore.slides[1].targetEventId).toBe(secondSlideRefreshedCalloutId);
-    expect(slidesStore.slides[1].time).toBe(secondSlideOriginalTime);
-    expect(slidesStore.slides[4].targetEventId).toBe(fifthSlideAutomatchedCallout);
-    expect(slidesStore.slides[5].targetEventId).toBe(sixthSlideAutomatchedCallout);
-    expect(unicornStore.isRefreshing).toBeFalsy();
   });
 
   it('should call hydrate when refresh unicorn is called', async () => {

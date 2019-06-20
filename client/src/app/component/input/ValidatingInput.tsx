@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { badInputCSS, badLabelCSS, goodCSS } from '../../../themes/default';
 import { observable } from 'mobx';
-import classNames = require('classnames');
+import * as classNames from 'classnames';
 
 interface Props {
   placeholder: string;
@@ -62,25 +62,30 @@ export class ValidatingInput extends React.Component<Props> {
           {this.props.errorMessage}
         </div>
       );
+    } else {
+      return (
+        <div className={'spacerWithoutErrorMessage'}/>
+      );
     }
-    return;
   }
 
   render() {
     return (
-      <div className={classNames(this.props.className, 'controlUnit')}>
-        <label
-          className="Label"
-          style={this.validateLabel()}
-        >
-          {this.props.label}
-        </label>
+      <div className={classNames(this.props.className, 'validatingInput')}>
+        {
+          this.props.label &&
+            <label
+              className={'validatingInputLabel'}
+              style={this.validateLabel()}
+            >
+              {this.props.label}
+            </label>
+        }
         <input
           id={this.props.id}
           type={this.props.type ? this.props.type : 'text'}
           placeholder={this.props.placeholder}
           onChange={this.props.listener}
-          className="form-control"
           style={this.validateInput()}
           defaultValue={this.props.defaultValue}
           value={this.props.value ? this.props.value : ''}
@@ -98,25 +103,40 @@ export class ValidatingInput extends React.Component<Props> {
 
 export const
   StyledValidatingInput = styled(ValidatingInput)`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  font-family: "Helvetica Neue";
   
   label {
     color: #fff;
+    margin-bottom: 8px;
+  }
+  
+  input::placeholder {
+    font-size: 16px;
   }
   
   input {
+    padding-left: 16px;
     width: 100%;
-    color: #fff;
+    color: #eaf3ff;
     background-color:rgba(0, 0, 0, 0);
+    height: 38px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;    
   }
   
   input:focus {
     background-color:rgba(0, 0, 0, 0);
     color: #fff;
-    border: #15deec solid 1px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(21, 222, 236);
   }
   
-  .errorMessage {
-  position: absolute;
-  color: #e46373;
+  .errorMessage, .spacerWithoutErrorMessage {
+    height: 16px;
+    color: #e46373;
   }
 `;

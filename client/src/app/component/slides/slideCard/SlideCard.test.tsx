@@ -2,11 +2,13 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { SlideCard } from './SlideCard';
 import { Provider } from 'mobx-react';
-import { StyledCallout } from '../../unicorn/Callout/Callout';
+import { StyledCalloutDropdown } from '../../unicorn/Callout/CalloutDropdown';
 import { CalloutModel } from '../../unicorn/model/CalloutModel';
 import { SlideModel } from '../models/SlideModel';
 import Mock = jest.Mock;
 import { StyledValidatingInput } from '../../input/ValidatingInput';
+import { StyledSlideName } from '../SlideTitle';
+import * as moment from 'moment';
 
 describe('SlideCard', () => {
   let subject: ReactWrapper;
@@ -32,7 +34,7 @@ describe('SlideCard', () => {
         <SlideCard
           uploadStore={uploadStore}
           slideNumber={slideNumber}
-          slideModel={slideModel}
+          slide={slideModel}
           slidesActions={slidesActions}
           slidesStore={slidesStore}
           metricActions={metricActions}
@@ -47,7 +49,7 @@ describe('SlideCard', () => {
     thumbnailClickSpy = jest.fn();
 
     slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
-    slideModel.setDate(new Date(2019, 6, 11));
+    slideModel.setDate(moment('2019-06-14'));
     uploadStore = {
       hash: 'ljndslkm'
     };
@@ -55,9 +57,6 @@ describe('SlideCard', () => {
     slideNumber = 2;
 
     slidesStore = {
-      day: 'DD',
-      month: 'MON',
-      year: 'YY',
       slides: [
         new SlideModel('test', 'test', 'test', 'test', false),
         new SlideModel('test', 'test', 'test', 'test', false),
@@ -86,7 +85,7 @@ describe('SlideCard', () => {
     };
 
     unicornStore = {
-      callouts: [new CalloutModel('', '', '', '', '', '')],
+      callouts: [new CalloutModel('', '', '', '', '', '', null)],
       setUploadsInProgress: jest.fn(),
       uploadsInProgress: false
     };
@@ -101,7 +100,7 @@ describe('SlideCard', () => {
         <SlideCard
           uploadStore={uploadStore}
           slideNumber={slideNumber}
-          slideModel={slideModel}
+          slide={slideModel}
           slidesActions={slidesActions}
           slidesStore={slidesStore}
           metricActions={metricActions}
@@ -117,20 +116,16 @@ describe('SlideCard', () => {
   });
 
   it('should render a title for each slide', () => {
-    expect(subject.find('h5').text()).toBe('DD1234ZMONYY_TGT_NAME_NewActivity_ASSET_RELEASABILITY');
+    expect(subject.find(StyledSlideName).exists()).toBeTruthy();
   });
 
   it('should have an activity input', () => {
-    subject.find('#activityInput').at(0).simulate('change', {target: {value: 'test Activity'}});
+    subject.find('.activityInput').find('input').at(0).simulate('change', {target: {value: 'test Activity'}});
     expect(slidesActions.setAndUpdateActivity).toHaveBeenCalled();
   });
 
   it('should render an input for the time', () => {
     expect(subject.find(StyledValidatingInput).exists()).toBeTruthy();
-  });
-
-  it('should render the correct title', async () => {
-    expect(subject.find('.card-title').text()).toContain('NewActivity');
   });
 
   it('should render a counter for each thumbnail', () => {
@@ -151,7 +146,7 @@ describe('SlideCard', () => {
         <SlideCard
           uploadStore={uploadStore}
           slideNumber={slideNumber}
-          slideModel={slideModel}
+          slide={slideModel}
           slidesActions={slidesActions}
           slidesStore={slidesStore}
           metricActions={metricActions}
@@ -168,7 +163,7 @@ describe('SlideCard', () => {
   });
 
   it('should contain a callout component', () => {
-    expect(subject.find(StyledCallout).exists()).toBeTruthy();
+    expect(subject.find(StyledCalloutDropdown).exists()).toBeTruthy();
   });
 
   it('should display the uploading style when Fritz is uploading to unicorn', () => {
@@ -179,7 +174,7 @@ describe('SlideCard', () => {
   });
 
   it('should display the carousel on thumbnail click', () => {
-    subject.find('.calloutImg').simulate('click');
+    subject.find('.calloutImage').simulate('click');
     expect(thumbnailClickSpy).toHaveBeenCalled();
   });
 

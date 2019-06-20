@@ -54,11 +54,11 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void uploadFileTest() throws Exception {
     given()
       .port(port)
-      .multiPart(new File("./PDFExample.pdf"))
+      .multiPart(new File("./PDFExampleForUnixDate.pdf"))
       .when()
       .post(UploadController.URI)
       .then()
       .statusCode(200)
-      .body("file", equalTo("PDFExample.pdf"));
+      .body("file", equalTo("PDFExampleForUnixDate.pdf"));
   }
 }

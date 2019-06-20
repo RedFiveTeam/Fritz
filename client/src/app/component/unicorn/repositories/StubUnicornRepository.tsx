@@ -33,7 +33,7 @@ export class StubUnicornRepository implements UnicornRepository {
 
   getReleasabilities(): Promise<ReleasabilityModel[]> {
     return Promise.resolve([
-      new ReleasabilityModel('1', 'Unclass')
+      new ReleasabilityModel('1', 'Unclass', 0)
     ]);
   }
 }

@@ -36,7 +36,7 @@ describe('UploadActions', () => {
     unicornStore = {
       callouts: [],
       releasabilities: [
-        new ReleasabilityModel('1', 'FOUO')
+        new ReleasabilityModel('1', 'FOUO', 0)
       ],
       setReleasability: jest.fn()
     };

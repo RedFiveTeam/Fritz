@@ -10,9 +10,12 @@ import { MetricActions } from '../../metrics/actions/MetricActions';
 import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 import { MetricType } from '../../metrics/MetricModel';
 import { Toast } from '../../../../utils/Toast';
+import { StatisticActions } from '../../metrics/actions/StatisticActions';
+import { StatisticModel } from '../../metrics/StatisticModel';
 
 export class UnicornActions {
   public metricActions: MetricActions;
+  public statisticActions: StatisticActions;
   slidesForUpload: SlideModel[];
   private unicornStore: UnicornStore;
   private slidesStore: SlidesStore;
@@ -23,6 +26,7 @@ export class UnicornActions {
     this.slidesStore = stores.slidesStore!;
     this.unicornRepository = repositories.unicornRepository!;
     this.metricActions = new MetricActions(repositories, stores);
+    this.statisticActions = new StatisticActions(repositories, stores);
   }
 
   @action.bound
@@ -72,7 +76,6 @@ export class UnicornActions {
     unicornUploadModel.setProductName(s.newName);
     unicornUploadModel.setClassificationId('a8b17b94-f23a-41a1-822f-96c7ce642006');
     unicornUploadModel.setTargetEventId(s.targetEventId);
-    this.setReleasabilityId(this.unicornStore!.releasability);
     unicornUploadModel.setReleasabilityId(this.unicornStore!.releasabilityId);
     unicornUploadModel.setMissionId(this.unicornStore.activeMission!.id);
     unicornUploadModel.setPersonnelId('2a7081f8-7cc9-45f3-a29e-f94a0003b3fe');
@@ -187,10 +190,11 @@ export class UnicornActions {
     this.unicornStore.setPendingUpload(false);
     this.slidesForUpload = this.filterSlides(this.slidesStore.slides);
     this.unicornStore.setIsUploading(true);
+    this.setReleasabilityId(this.unicornStore!.releasability);
+    await this.statisticActions.createOrUpdate(new StatisticModel(this.unicornStore.releasabilityId, 1));
     await this.metricActions.trackMetric('UploadToUnicorn');
     await this.metricActions.createMetric('Releasability: ' + this.unicornStore.releasability);
     await this.metricActions.updateMetric('Renaming');
-
     for (let i = 0; i < this.slidesForUpload.length; i++) {
       await this.unicornStore.addToUploadQueue(this.slidesForUpload[i]);
     }

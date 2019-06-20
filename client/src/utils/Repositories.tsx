@@ -16,6 +16,9 @@ import { StubClassificationRepository } from
 import { UnicornRepository } from '../app/component/unicorn/repositories/UnicornRepository';
 import { WebUnicornRepository } from '../app/component/unicorn/repositories/WebUnicornRepository';
 import { StubUnicornRepository } from '../app/component/unicorn/repositories/StubUnicornRepository';
+import { StatisticRepository } from '../app/component/metrics/repository/StatisticRepository';
+import { WebStatisticRepository } from '../app/component/metrics/repository/WebStatisticRepository';
+import { StubStatisticRepository } from '../app/component/metrics/repository/StubStatisticRepository';
 
 export interface Repositories {
   uploadRepository: UploadRepository;
@@ -23,6 +26,7 @@ export interface Repositories {
   metricRepository: MetricRepository;
   classificationRepository: ClassificationRepository;
   unicornRepository: UnicornRepository;
+  statisticRepository: StatisticRepository;
 }
 
 const client = new HTTPClient();
@@ -32,7 +36,8 @@ export const WebRepositories: Repositories = Object.freeze({
   renameRepository: new WebRenameRepository(client),
   metricRepository: new WebMetricRepository(client),
   classificationRepository: new WebClassificationRepository(client),
-  unicornRepository: new WebUnicornRepository(client)
+  unicornRepository: new WebUnicornRepository(client),
+  statisticRepository: new WebStatisticRepository(client)
 });
 
 export const StubRepositories: Repositories = {
@@ -40,5 +45,6 @@ export const StubRepositories: Repositories = {
   renameRepository: new StubRenameRepository(),
   metricRepository: new StubMetricRepository(),
   classificationRepository: new StubClassificationRepository(),
-  unicornRepository: new StubUnicornRepository()
+  unicornRepository: new StubUnicornRepository(),
+  statisticRepository: new StubStatisticRepository()
 };

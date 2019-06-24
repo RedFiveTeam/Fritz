@@ -38,7 +38,9 @@ describe('UploadActions', () => {
       releasabilities: [
         new ReleasabilityModel('1', 'FOUO', 0)
       ],
-      setReleasability: jest.fn()
+      pendingReleasability: 'rel',
+      setReleasability: jest.fn(),
+      setPendingReleasability: jest.fn()
     };
 
     uploadRepository.upload = jest.fn(() => {

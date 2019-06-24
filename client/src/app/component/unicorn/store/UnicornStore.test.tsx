@@ -27,17 +27,22 @@ describe('UnicornStore', () => {
     );
   });
 
-  it('should return releasability dropdown options', () => {
+  it('should return releasability dropdown options sorted correctly', () => {
     subject.setReleasabilities([
-      new ReleasabilityModel('id1', 'name1', 0),
-      new ReleasabilityModel('id2', 'name2', 0),
-      new ReleasabilityModel('id3', 'name3', 0)
+      new ReleasabilityModel('id1', 'name1', 1),
+      new ReleasabilityModel('id2', 'name2', 2),
+      new ReleasabilityModel('id3', 'name3', 3),
+      new ReleasabilityModel('id5', 'NOFORN', 0),
+      new ReleasabilityModel('id4', 'FOUO', 0)
     ]);
+    subject.setPendingReleasability('FOUO TEST');
     expect(subject.releasabilityOptions).toEqual(
       [
-        new DropdownOption('id1', 'name1'),
+        new DropdownOption('id3', 'name3'),
         new DropdownOption('id2', 'name2'),
-        new DropdownOption('id3', 'name3')
+        new DropdownOption('id1', 'name1'),
+        new DropdownOption('id4', 'FOUO'),
+        new DropdownOption('id5', 'NOFORN')
       ]
     );
   });

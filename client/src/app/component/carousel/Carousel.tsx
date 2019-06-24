@@ -35,12 +35,24 @@ export class Carousel extends React.Component<Props> {
   };
 
   componentDidMount(): void {
-    document.addEventListener('keydown', (e: any) => {
-      if (e.keyCode === 27) {
-        this.props.carouselActions!.hide();
-      }
-    });
+    document.addEventListener('keydown', this.handleKeyPresses);
   }
+
+  componentWillUnmount(): void {
+    document.removeEventListener('keydown', this.handleKeyPresses);
+  }
+
+  handleKeyPresses = (e: any) => {
+    if (e.keyCode === 27) {
+      this.props.carouselActions!.hide();
+    }
+    if (e.keyCode === 37) {
+      this.props.carouselActions!.previous();
+    }
+    if (e.keyCode === 39) {
+      this.props.carouselActions!.next();
+    }
+  };
 
   componentWillMount(): void {
     this.props.carouselActions!.initialize(this.props.slidesStore!.undeletedSlides.length);

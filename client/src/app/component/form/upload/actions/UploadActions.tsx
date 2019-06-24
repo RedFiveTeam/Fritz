@@ -90,6 +90,7 @@ export class UploadActions {
               this.setReleasabilityInput(status.releasability);
               this.unicornStore.setReleasability(status.releasability);
             }
+            this.unicornStore.setPendingReleasability(status.releasability);
           }
           this.slidesActions.updateNewNames();
           this.uploadProcessingComplete();

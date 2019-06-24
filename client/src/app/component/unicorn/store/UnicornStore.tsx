@@ -5,6 +5,7 @@ import { CalloutModel } from '../model/CalloutModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { SlideModel } from '../../slides/models/SlideModel';
 import { DropdownOption } from '../../dropdown/Dropdown';
+import Fuse = require('fuse.js');
 
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
@@ -29,6 +30,7 @@ export class UnicornStore {
   @observable private _offline: boolean = false;
   @observable private _offlineModal: boolean = false;
   @observable private _isRefreshing: boolean = false;
+  @observable private _pendingReleasability: string | null = null;
 
   async hydrate(unicornRepository: UnicornRepository) {
     let code = await unicornRepository.getStatus();
@@ -52,6 +54,11 @@ export class UnicornStore {
       this.setOffline(true);
       this.setOfflineModal(true);
     }
+  }
+
+  @computed
+  get pendingReleasability(): string | null {
+    return this._pendingReleasability;
   }
 
   @computed
@@ -156,13 +163,32 @@ export class UnicornStore {
 
   @computed
   get releasabilityOptions(): DropdownOption[] {
-    return this.releasabilities
-      ? this.releasabilities.sort((a, b) => {
+    if (this.releasabilities) {
+      let popularRel = this.releasabilities.sort((a, b) => {
         return b.timesClicked - a.timesClicked;
       }).map((r) => {
         return new DropdownOption(r.releasabilityId, r.releasabilityName);
-      })
-      : [];
+      });
+      if (popularRel.length > 3) {
+        let otherRel = popularRel.slice(3);
+        if (this.pendingReleasability) {
+          let fuse = new Fuse(otherRel, {
+            shouldSort: true,
+            threshold: 1,
+            keys: [
+              'display'
+            ],
+          });
+          let fuzzyResults = fuse.search(this.pendingReleasability);
+          return popularRel.slice(0, 3).concat(fuzzyResults);
+        }
+        return popularRel;
+      } else {
+        return popularRel;
+      }
+    } else {
+      return [];
+    }
   }
 
   @computed
@@ -176,6 +202,11 @@ export class UnicornStore {
           return {id: c.eventId, display: c.time};
         })
       : [];
+  }
+
+  @action.bound
+  setPendingReleasability(value: string | null) {
+    this._pendingReleasability = value;
   }
 
   @action.bound

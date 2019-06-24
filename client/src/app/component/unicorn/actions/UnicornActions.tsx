@@ -94,6 +94,7 @@ export class UnicornActions {
         this.increaseCurrentUploadCount();
         slide.setUploading(false);
         this.metricActions.createMetric(MetricType.UNICORN_UPLOAD_SUCCESS);
+        this.metricActions.createMetric(this.slidesStore.opName + ' / ' + slide.calloutTime + ' | ' + slide.activity);
         break;
       }
       if (i === 2 && !status.successfulUpload) {

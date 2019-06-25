@@ -5,8 +5,10 @@ import { Repositories } from '../../../../utils/Repositories';
 import { action } from 'mobx';
 import { MetricModel } from '../MetricModel';
 import { UploadStore } from '../../form/upload/UploadStore';
-import moment = require('moment');
 import { AverageSubsetModel } from '../../average/AverageSubsetModel';
+import { AverageModel } from '../../average/AverageModel';
+import moment = require('moment');
+import math = require('mathjs');
 
 export class MetricActions {
   private metricStore: MetricStore;
@@ -251,6 +253,7 @@ export class MetricActions {
 
   @action.bound
   calculateAllAverages() {
+    this.removeOutliers();
     this.metricStore.setAverageWorkflow(
       this.calculateAverage(this.metricStore.averages.workflow, this.metricStore.filterValue)
     );
@@ -270,5 +273,26 @@ export class MetricActions {
     this.metricStore.setAverageConversion(
       this.calculateAverage(this.metricStore.averages.conversion, this.metricStore.filterValue)
     );
+  }
+
+  removeOutliers() {
+    let newAverages: AverageModel = new AverageModel();
+    for (let key in this.metricStore.averages) {
+      if (this.metricStore.averages.hasOwnProperty(key)) {
+        let averages = this.metricStore.averages[key].map((a: AverageSubsetModel) => {
+          return a.timeTaken;
+        });
+        if (averages.length > 0) {
+          let stdd = math.std(averages);
+          let avg = math.mean(averages);
+          let newValues = this.metricStore.averages[key].filter((a: AverageSubsetModel) => {
+            return a.timeTaken >= (avg - (stdd * 2)) && a.timeTaken <= (avg + (stdd * 2));
+          });
+          newAverages[key] = [];
+          newAverages[key] = newValues;
+        }
+      }
+    }
+    this.metricStore.setAverage(newAverages);
   }
 }

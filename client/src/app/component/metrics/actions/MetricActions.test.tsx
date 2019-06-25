@@ -50,21 +50,21 @@ describe('MetricActions', () => {
 
   it('should be able to push the data for averages for upload, rename, download, and conversion', async () => {
     await subject.initializeStores();
-    expect(metricStore.averages.download.length).toBe(2);
-    expect(metricStore.averages.upload.length).toBe(1);
-    expect(metricStore.averages.rename.length).toBe(1);
-    expect(metricStore.averages.conversion.length).toBe(1);
+    expect(metricStore.averages.download.length).toBe(12);
+    expect(metricStore.averages.upload.length).toBe(12);
+    expect(metricStore.averages.rename.length).toBe(6);
+    expect(metricStore.averages.conversion.length).toBe(5);
   });
 
   it('should calculate the average for the filtered metrics', async () => {
     await subject.initializeStores();
-    expect(subject.calculateAverage(metricStore.averages.download, 60 * 60 * 24 * 10000000)).toBe(6);
+    expect(subject.calculateAverage(metricStore.averages.download, 60 * 60 * 24 * 10000000)).toBe(854);
   });
 
   it('should calculate the average difference for the filtered metrics', async () => {
     await subject.initializeStores();
     metricStore.setFilterValue(4);
-    expect(subject.calculateAverageDifference('download')).toBe(-2);
+    expect(subject.calculateAverageDifference('download')).toBe(1098);
   });
 
   it('should calculate and set all of the metrics', async () => {
@@ -72,10 +72,19 @@ describe('MetricActions', () => {
     await subject.setWorkflowAverage();
     await subject.setAverages();
     subject.calculateAllAverages();
-    expect(metricStore.averageWorkflow).toBe(5);
-    expect(metricStore.averageUpload).toBe(5);
-    expect(metricStore.averageRename).toBe(5);
-    expect(metricStore.averageDownload).toBe(6);
-    expect(metricStore.averageConversion).toBe(5);
+    expect(metricStore.averageWorkflow).toBe(13);
+    expect(metricStore.averageUpload).toBe(0);
+    expect(metricStore.averageRename).toBe(6);
+    expect(metricStore.averageDownload).toBe(22);
+    expect(metricStore.averageConversion).toBe(34);
+  });
+
+  it('should remove the outliers using the standard deviation of an array', async () => {
+    metricStore.setFilteredMetrics(await metricRepository.findAll());
+    await subject.setWorkflowAverage();
+    await subject.setAverages();
+    expect(metricStore.averages.download.length).toBe(12);
+    subject.removeOutliers();
+    expect(metricStore.averages.download.length).toBe(11);
   });
 });

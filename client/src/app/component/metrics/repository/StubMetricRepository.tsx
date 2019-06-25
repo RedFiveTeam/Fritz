@@ -8,10 +8,234 @@ export class StubMetricRepository implements MetricRepository {
     return Promise.resolve([
       new MetricModel(
         '1',
-        'e223sdfs23523sdfs',
+        'e223sdfs23523sdfs1',
         'Upload',
         moment().unix().toString(),
-        (moment().unix() + 5).toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs2',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix() + 10000).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs4',
+        'Upload',
+        moment().unix().toString(),
+        (moment().unix()).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs1',
+        'Download',
+        moment().unix().toString(),
+        (moment().unix() + 10000).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs2',
+        'Download',
+        (moment().unix() - 7).toString(),
+        (moment().unix() + 15).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'ee223sdfs23523sdfs3',
+        'Download',
+        (moment().unix() - 100).toString(),
+        (moment().unix() + 15).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs4',
+        'Download',
+        (moment().unix() - 10).toString(),
+        (moment().unix() + 15).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs12',
+        'Renaming',
+        moment().unix().toString(),
+        (moment().unix() + 6).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs13',
+        'Renaming',
+        moment().unix().toString(),
+        (moment().unix() + 8).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs14',
+        'Renaming',
+        moment().unix().toString(),
+        (moment().unix() + 1).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs14',
+        'Renaming',
+        moment().unix().toString(),
+        (moment().unix() + 10000).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs16',
+        'Renaming',
+        moment().unix().toString(),
+        (moment().unix() + 9).toString(),
         null
       ),
       new MetricModel(
@@ -19,7 +243,7 @@ export class StubMetricRepository implements MetricRepository {
         'e223sdfs23523sdfs',
         'Renaming',
         moment().unix().toString(),
-        (moment().unix() + 5).toString(),
+        (moment().unix() + 6).toString(),
         null
       ),
       new MetricModel(
@@ -64,7 +288,7 @@ export class StubMetricRepository implements MetricRepository {
       ),
       new MetricModel(
         '1',
-        'e223sdfs23523sdfs',
+        'e223sdfs23523sdfs34252',
         'Conversion',
         moment().unix().toString(),
         (moment().unix() + 5).toString(),
@@ -72,18 +296,34 @@ export class StubMetricRepository implements MetricRepository {
       ),
       new MetricModel(
         '1',
-        'e223sdfs23523sdfs',
-        'Download',
+        'e223sdfs23523sdfs314634',
+        'Conversion',
         moment().unix().toString(),
-        (moment().unix() + 5).toString(),
+        (moment().unix() + 3).toString(),
         null
       ),
       new MetricModel(
         '1',
-        'e223sdfs23523sdfs',
-        'Download',
-        (moment().unix() - 7).toString(),
+        'e223sdfs23523sdfs21435536',
+        'Conversion',
         moment().unix().toString(),
+        (moment().unix() + 56).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs231434165',
+        'Conversion',
+        moment().unix().toString(),
+        (moment().unix() + 8).toString(),
+        null
+      ),
+      new MetricModel(
+        '1',
+        'e223sdfs23523sdfs3146542',
+        'Conversion',
+        moment().unix().toString(),
+        (moment().unix() + 100).toString(),
         null
       )
     ]);

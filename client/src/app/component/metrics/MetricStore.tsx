@@ -78,6 +78,16 @@ export class MetricStore {
   }
 
   @computed
+  get successFulUniqueProductUploads(): number {
+    return [...new Set(this.filteredMetrics.filter((m: MetricModel) => {
+      return m.action === MetricType.UNICORN_UPLOAD_SUCCESS;
+    })
+      .map((m: MetricModel) => {
+        return m.uid;
+      }))].length;
+  }
+
+  @computed
   get successRate(): number {
     return (
       this.successfulUploadAttempts * 100 /

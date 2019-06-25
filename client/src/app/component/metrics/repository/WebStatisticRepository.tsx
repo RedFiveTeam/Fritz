@@ -17,7 +17,6 @@ export class WebStatisticRepository implements StatisticRepository {
   }
 
   async createOrUpdate(stat: StatisticModel): Promise<void> {
-    console.log(stat);
     const body = JSON.stringify(this.statisticSerializer.serialize(stat));
     await this.client.postJSON('/api/statistics', body);
     return Promise.resolve();

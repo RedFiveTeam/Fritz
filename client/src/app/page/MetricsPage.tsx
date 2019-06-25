@@ -177,6 +177,10 @@ export class MetricsPage extends React.Component<Props> {
                 title="Upload Attempts"
                 value={this.props.metricStore!.uploadToUnicornAttempts}
               />
+              <StyledMetric
+                title="Products Uploaded"
+                value={this.props.metricStore!.successFulUniqueProductUploads}
+              />
             </StyledMetricCard>
           </div>
         </div>
@@ -327,7 +331,7 @@ position: relative;
     }
     
     .cardLeft {
-      margin-top: 35px;
+      margin-top: 17px;
       margin-bottom: 0px;
       margin-left: 18px;
       width: 263px;
@@ -339,9 +343,25 @@ position: relative;
     }
     
     .childrenContainer {
-      right: 230px;
+      right: 245px;
       display: block;
-      top: 180px;
+      top: 170px;
+      width: 205px;
+      
+      > div {
+        margin-bottom: 15px;
+      }
+      
+      .value {
+        font-size: 48px;
+      }
+      
+      .title {
+        font-size: 20px;
+        width: 205px;
+        position: relative;
+        right: 10px;
+      }
     }
   }
 `);

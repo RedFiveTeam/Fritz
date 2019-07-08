@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { StyledMetricsTable } from '../component/metrics/table/MetricsTable';
 import { MetricActions } from '../component/metrics/actions/MetricActions';
 import { MetricStore } from '../component/metrics/MetricStore';
 import { ClockIcon } from '../../icon/ClockIcon';
 import { StyledMetricCard } from '../component/metrics/MetricCard';
 import { StyledMetric } from '../component/metrics/Metric';
+import { styled } from '../../themes/default';
 
 const unicornIcon = require('../../icon/UnicornIcon.svg');
 const actionTimesIcon = require('../../icon/ActionTimesIcon.svg');

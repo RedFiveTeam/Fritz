@@ -28,7 +28,7 @@ Scenario('should allow you to edit the activity and time of a image and view ima
 Scenario('should edit slide information in the carousel', (I) => {
   navigateHomeAndUploadPDF(I);
 
-  I.click('.expandText');
+  I.click('.thumbnailClickOverlay');
   assert(
     I.grabTextFrom('.currentSlide > .slideTitle'),
     '301234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY'
@@ -52,13 +52,12 @@ Scenario('should edit slide information in the carousel', (I) => {
   I.waitForText('JPEG Renamer - Details', 10);
 });
 
-Scenario('should prevent download before file upload, restrict uploads to PDFs, and delete uploads', (I) => {
+Scenario('should restrict uploads to PDFs and delete uploads', (I) => {
   navigateHomeAndSelectMission(I);
-  I.click('#downloadButton');
-  I.waitForText('You must upload a PDF', 10);
-  I.attachFile('#uploadButton', 'data/blank.txt');
+
+  I.attachFile('#browseInput', 'data/blank.txt');
   I.waitForText('File must be a PDF', 10);
-  I.attachFile('#uploadButton', 'data/AcceptanceMission.pdf');
+  I.attachFile('#browseInput', 'data/AcceptanceMission.pdf');
   I.waitForText('AcceptanceMission.pdf', 10);
 
   assert(
@@ -122,7 +121,7 @@ function navigateHomeAndSelectMission(I) {
 // @ts-ignore
 function navigateHomeAndUploadPDF(I) {
   navigateHomeAndSelectMission(I);
-  I.attachFile('#uploadButton', 'data/AcceptanceMission.pdf');
+  I.attachFile('#browseInput', 'data/AcceptanceMission.pdf');
   I.waitForText('AcceptanceMission.pdf', 10);
   assert(
     I.grabTextFrom('.slideTitle'),

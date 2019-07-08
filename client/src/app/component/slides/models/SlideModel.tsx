@@ -2,8 +2,15 @@ import { action, computed, observable } from 'mobx';
 import { Moment } from 'moment';
 import * as moment from 'moment';
 
-export class SlideModel {
+export enum SlideUploadStatus {
+  NOT_STARTED,
+  PENDING,
+  IN_PROGRESS,
+  FAILED,
+  SUCCEEDED
+}
 
+export class SlideModel {
   @observable private _oldName: string;
   @observable private _time: string = 'TTTT';
   @observable private _activity: string = 'ACTY';
@@ -13,13 +20,12 @@ export class SlideModel {
   @observable private _releasabilityId: string = '';
   @observable private _id: number | null = null;
   @observable private _calloutTime: string;
-  @observable private _uploading: boolean | null = null;
-  @observable private _failed: boolean | null = null;
   @observable private _hash: string;
   @observable private _date: Moment;
   @observable private _displayDate: string = '';
   @observable private _monthThreeLetter: string = '';
   @observable private _dayWithLeadingZero: string = '';
+  @observable private _uploadStatus: SlideUploadStatus = SlideUploadStatus.NOT_STARTED;
 
   constructor(
     oldName: string = '',
@@ -44,6 +50,11 @@ export class SlideModel {
       this._date = date;
     }
     this.setDisplayDate();
+  }
+
+  @computed
+  get uploadStatus(): SlideUploadStatus {
+    return this._uploadStatus;
   }
 
   @computed
@@ -112,16 +123,6 @@ export class SlideModel {
   }
 
   @computed
-  get uploading(): boolean | null {
-    return this._uploading;
-  }
-
-  @computed
-  get failed(): boolean | null {
-    return this._failed;
-  }
-
-  @computed
   get hash(): string {
     return this._hash;
   }
@@ -129,6 +130,22 @@ export class SlideModel {
   @computed
   get date(): Moment {
     return this._date;
+  }
+
+  @computed
+  get displayDate() {
+    return this._displayDate;
+  }
+
+  @computed
+  get isValidTime(): boolean {
+    if (this.time.length !== 4) {
+      return false;
+    }
+    if (this.time.search(/^([0-1]?[0-9]|2[0-3])([0-5][0-9])(:[0-5][0-9])?$/)) {
+      return false;
+    }
+    return true;
   }
 
   @action.bound
@@ -177,16 +194,6 @@ export class SlideModel {
   }
 
   @action.bound
-  setUploading(value: boolean | null) {
-    this._uploading = value;
-  }
-
-  @action.bound
-  setFailed(value: boolean | null) {
-    this._failed = value;
-  }
-
-  @action.bound
   setHash(hash: string) {
     this._hash = hash;
   }
@@ -215,20 +222,17 @@ export class SlideModel {
     this.setDisplayDate();
   }
 
-  @computed
-  get displayDate() {
-    return this._displayDate;
+  @action.bound
+  setUploadStatus(status: SlideUploadStatus) {
+    this._uploadStatus = status;
   }
 
-  @computed
-  get isValidTime(): boolean {
-    if (this.time.length !== 4) {
-      return false;
-    }
-    if (this.time.search(/^([0-1]?[0-9]|2[0-3])([0-5][0-9])(:[0-5][0-9])?$/)) {
-      return false;
-    }
-    return true;
+  isReadyForUpload() {
+    return (
+      this.targetEventId !== '' &&
+      !this.deleted &&
+      this.uploadStatus === SlideUploadStatus.NOT_STARTED
+    );
   }
 
   private setMonthThreeLetter() {

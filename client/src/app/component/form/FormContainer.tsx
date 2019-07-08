@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
@@ -8,10 +7,12 @@ import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { UploadActions } from './upload/actions/UploadActions';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
-import { badClassificationCSS, badReleasabilityCSS, goodCSS } from '../../../themes/default';
+import { badClassificationCSS, badReleasabilityCSS, goodCSS, styled } from '../../../themes/default';
 import { DropdownOption } from '../dropdown/Dropdown';
+import { StyledDeletePDF } from './DeletePDF';
 
 interface Props {
+  fileName: string;
   className?: string;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
@@ -22,12 +23,16 @@ interface Props {
 
 @observer
 export class FormContainer extends React.Component<Props> {
+  render() {
 
-  static changeReleasabilityColor() {
-    let dropdownText = (document.querySelector('.form-group') as HTMLElement).querySelector('.default') as HTMLElement;
-    if (dropdownText) {
-      dropdownText.style.opacity = '1';
-    }
+    return (
+      <div
+        className={this.props.className}
+      >
+        {this.displayFormWithHeader()}
+        {this.displayDeletePDF()}
+      </div>
+    );
   }
 
   renderReleasabilityInput() {
@@ -56,58 +61,76 @@ export class FormContainer extends React.Component<Props> {
         id="releasabilityDropdown"
         callback={(option: DropdownOption) => {
           this.props.slidesActions!.setAndUpdateReleasability(option.display);
-          FormContainer.changeReleasabilityColor();
         }}
         errorMessage={'The releasability field must be chosen'}
       />
     );
   }
 
-  render() {
+  private displayFormWithHeader() {
+    return (
+      <div className={'formWithHeader'}>
+        {this.displayHeader()}
+        {this.displayForm()}
+      </div>
+    );
+  }
+
+  private displayForm() {
     let {slidesStore} = this.props;
     return (
-      <div
-        className={this.props.className}
-      >
-        <div className="header">
-          <h2>JPEG Renamer - Details
-          </h2>
-          <span>Complete the fields below to view and download JPEGs</span>
-        </div>
-        <form>
-          <div className={'formInputs'}>
-            <StyledValidatingInput
-              label={'Operation Name'}
-              placeholder={'e.g. Op Jumpshot'}
-              listener={this.props.slidesActions!.setAndUpdateOpName}
-              errorMessage={slidesStore!.errorMessages[0]}
-              id={'opInput'}
-              validator={slidesStore!.isValidOpName}
-              value={slidesStore!.opName}
-            />
-            <StyledValidatingInput
-              label={'Callsign'}
-              placeholder={'Callsign'}
-              listener={this.props.slidesActions!.setAndUpdateAsset}
-              errorMessage={
-                slidesStore!.differentAsset ? slidesStore!.errorMessages[2] : slidesStore!.errorMessages[1]
-              }
-              id={'assetInput'}
-              validator={slidesStore!.isValidAsset}
-              value={slidesStore!.asset}
-            />
-            <div className={'classification-and-releasability'}>
+      <form>
+        <div className={'formInputs'}>
+          <StyledValidatingInput
+            label={'Operation Name'}
+            placeholder={'e.g. Op Jumpshot'}
+            listener={this.props.slidesActions!.setAndUpdateOpName}
+            errorMessage={slidesStore!.errorMessages[0]}
+            id={'opInput'}
+            validator={slidesStore!.isValidOpName}
+            value={slidesStore!.opName}
+          />
+          <StyledValidatingInput
+            label={'Callsign'}
+            placeholder={'Callsign'}
+            listener={this.props.slidesActions!.setAndUpdateAsset}
+            errorMessage={
+              slidesStore!.differentAsset ? slidesStore!.errorMessages[2] : slidesStore!.errorMessages[1]
+            }
+            id={'assetInput'}
+            validator={slidesStore!.isValidAsset}
+            value={slidesStore!.asset}
+          />
+          <div className={'classification-and-releasability'}>
               <span
                 className={'classification'}
                 style={this.props.slidesStore!.isValidReleasability ? goodCSS : badClassificationCSS}
               >
                 SECRET//
               </span>
-              {this.renderReleasabilityInput()}
-            </div>
+            {this.renderReleasabilityInput()}
           </div>
-        </form>
+        </div>
+      </form>
+    );
+  }
+
+  private displayHeader() {
+    return (
+      <div className="header">
+        <h2>JPEG Renamer - Details
+        </h2>
+        <span>Complete the fields below to view and download JPEGs</span>
       </div>
+    );
+  }
+
+  private displayDeletePDF() {
+    return (
+      <StyledDeletePDF
+        className={'deletePDF'}
+        fileName={this.props.fileName}
+      />
     );
   }
 }
@@ -118,7 +141,16 @@ export const StyledFormContainer = inject(
 (styled(FormContainer)`
   color: #fff;
   padding-bottom: 64px;
-  margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  
+  .formWithHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
   
   .controlUnit:nth-of-type(4) {
     padding-top: 0;
@@ -149,10 +181,6 @@ export const StyledFormContainer = inject(
   left: 320px;
   }
   
-  #folderIcon {
-    margin-bottom: 25px;
-  }
-  
   span {
     font-size: 16px;
     color: #D8E5FF;
@@ -167,13 +195,6 @@ export const StyledFormContainer = inject(
   
   h2 {
     font-size: 24px;
-  }
-  
-  .filename {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 390px;
-    overflow: hidden;
   }
   
   .clickable {
@@ -208,19 +229,6 @@ export const StyledFormContainer = inject(
   
   .helpMessage {
     color: rgb(216, 229, 255);
-  }
-  
-  #pdfFileName {
-    text-overflow: ellipsis;
-    width: 390px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  
-  .helpMenuIcon {
-    margin-left: 10px;
-    padding-bottom: 1px;
-    cursor: pointer;
   }
   
   #offlineReleaseLabel {

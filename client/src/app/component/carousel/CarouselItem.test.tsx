@@ -6,7 +6,7 @@ import { StyledValidatingInput } from '../input/ValidatingInput';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { StyledDatePicker } from '../date/DatePicker';
 import Mock = jest.Mock;
-import { StyledSlideName } from '../slides/SlideTitle';
+import { StyledSlideTitle } from '../slides/SlideTitle';
 import * as moment from 'moment';
 
 describe('CarouselItem', () => {
@@ -78,7 +78,7 @@ describe('CarouselItem', () => {
   });
 
   it('should display the image name', () => {
-    expect(subject.find(StyledSlideName).exists()).toBeTruthy();
+    expect(subject.find(StyledSlideTitle).exists()).toBeTruthy();
   });
 
   it('should display the current slide number out of the total slide count', () => {

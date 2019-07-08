@@ -16,13 +16,6 @@
         </linearGradient>
     </defs>
     <g fill="none" fill-rule="evenodd" transform="translate(-1524 -673)">
-        <path fill="url(#a)" d="M0 0h1650v925H0z"/>
-        <g transform="translate(727 597)">
-            <use fill="#000" filter="url(#b)" xlink:href="#c"/>
-            <use fill="#191E2A" xlink:href="#c"/>
-        </g>
-        <path fill="url(#d)" d="M673 0h188v169H673z" opacity=".521" transform="translate(727 597)"/>
-        <rect width="117" height="44" x="1436" y="660" fill="#151524" rx="4"/>
         <g fill="#00818C" fill-rule="nonzero">
             <path d="M1526 673h12v2h-12zM1526 690h12v2h-12zM1537.143 676h-10.286v2.117l4.075 4.383-4.075 4.383V689h10.286v-2.117l-4.075-4.383 4.075-4.383z"/>
         </g>

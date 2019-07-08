@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlideModel } from '../slides/models/SlideModel';
+import * as classNames from 'classnames';
+import { styled } from '../../../themes/default';
 
 const ArrowIcon = require('../../../icon/DatePickerArrow.svg');
 
@@ -14,7 +15,7 @@ interface Props {
 export class DatePicker extends React.Component<Props> {
   render() {
     return (
-      <div className={this.props.className + ' datePicker'}>
+      <div className={classNames('datePicker', this.props.className)}>
         <label>Date</label>
         <div className={'dateBox'}>
           <div className={'selectedDate'}>
@@ -46,10 +47,15 @@ export class DatePicker extends React.Component<Props> {
 
 export const StyledDatePicker = inject()(styled(DatePicker)`
   width: 88px;
-  font-size: 16px;
+  font-size: ${(props) => props.theme.fontSize};
+  font-family: ${(props) => props.theme.labelFontFamily};
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   
   .dateBox {
-    height: 38px;
+    box-sizing: border-box;
+    height: ${(props) => props.theme.inputHeight};
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -75,7 +81,7 @@ export const StyledDatePicker = inject()(styled(DatePicker)`
   
   label {
     color: #fff;
-    margin-bottom: 8px;
+    margin-bottom: ${(props) => props.theme.labelMarginBottom};
   }
   
   .upArrow, .downArrow {

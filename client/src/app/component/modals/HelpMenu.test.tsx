@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { HelpMenu } from './HelpMenu';
+import Mock = jest.Mock;
 
 describe('HelpMenu', () => {
   let subject: ShallowWrapper;
   let slidesStore: any;
+  let exitSpy: Mock;
 
   beforeEach(() => {
+    exitSpy = jest.fn();
 
     slidesStore = {
       setHelp: jest.fn()
@@ -14,6 +17,7 @@ describe('HelpMenu', () => {
 
     subject = shallow(
       <HelpMenu
+        exit={exitSpy}
         slidesStore={slidesStore}
       />
     );
@@ -35,6 +39,6 @@ describe('HelpMenu', () => {
 
   it('should close the modal when the x is clicked', () => {
     subject.find('.closeHelp').simulate('click');
-    expect(slidesStore.help).toBeFalsy();
+    expect(exitSpy).toHaveBeenCalled();
   });
 });

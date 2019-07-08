@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { CarouselActions } from './CarouselActions';
 import { StyledCarouselItem } from './CarouselItem';
 import { SlideModel } from '../slides/models/SlideModel';
@@ -11,6 +10,7 @@ import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { DropdownOption, StyledDropdown } from '../dropdown/Dropdown';
 import { StyledStaticMessageDropdown } from '../dropdown/StaticMessageDropdown';
+import { styled } from '../../../themes/default';
 
 const exitIconPath = require('../../../icon/ExpandedCloseIcon.svg');
 const arrowIcon = require('../../../icon/ArrowIcon.svg');

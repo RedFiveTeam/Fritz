@@ -6,9 +6,9 @@ export class UploadStore {
   @observable private _processing: boolean = false;
   @observable private _hash: string = '';
   @observable private _conversionStatus: boolean = false;
-  @observable private _progress: number;
-  @observable private _total: number;
-  @observable private _percentConverted: number;
+  @observable private _progress: number = 0;
+  @observable private _total: number = 1;
+  @observable private _percentConverted: number = 0;
   @observable private _placeholder: boolean = true;
   @observable private _uploading: boolean = false;
 
@@ -59,7 +59,11 @@ export class UploadStore {
 
   @computed
   get PercentConverted() {
+    if (this.total === 0) {
+      return 0;
+    }
     this._percentConverted = Math.ceil((this.progress / this.total) * 100);
+    console.log('percent ', this._percentConverted);
     return this._percentConverted;
   }
 

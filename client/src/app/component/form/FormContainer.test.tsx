@@ -4,6 +4,7 @@ import { FormContainer } from './FormContainer';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
 import { SlidesStore } from '../slides/store/SlidesStore';
+import { StyledDeletePDF } from './DeletePDF';
 
 describe('FormContainer', () => {
   let subject: ShallowWrapper;
@@ -40,6 +41,7 @@ describe('FormContainer', () => {
         slidesActions={slidesActions}
         slidesStore={slidesStore}
         uploadActions={uploadActions}
+        fileName={'fileName'}
       />);
   });
 
@@ -59,5 +61,9 @@ describe('FormContainer', () => {
     subject.instance().forceUpdate();
     expect(subject.find('#releasabilityInput').exists()).toBeFalsy();
     expect(subject.find('#releasabilityDropdown').exists()).toBeTruthy();
+  });
+
+  it('should display the delete PDF button', () => {
+    expect(subject.find(StyledDeletePDF).exists()).toBeTruthy();
   });
 });

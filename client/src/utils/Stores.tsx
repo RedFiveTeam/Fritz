@@ -31,5 +31,5 @@ export const stores = {
   classificationStore,
   unicornStore,
   carouselStore,
-  statisticStore
+  statisticStore,
 };

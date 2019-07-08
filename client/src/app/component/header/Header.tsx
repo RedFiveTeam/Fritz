@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { StyledClassificationBanner } from '../classification/ClassificationBanner';
 import { ClassificationStore } from '../classification/store/ClassificationStore';
 import { ClassificationActions } from '../classification/ClassificationActions';
 import { StyledUnicornContainer } from './UnicornContainer';
+import { styled } from '../../../themes/default';
 
 const Logo = require('../../../icon/FritzLogo.svg');
 
@@ -48,8 +48,8 @@ export class Header extends React.Component<Props> {
               </div>
             </div>
           </nav>
+          <StyledUnicornContainer/>
         </div>
-        <StyledUnicornContainer/>
       </div>
     );
   }
@@ -57,28 +57,21 @@ export class Header extends React.Component<Props> {
 
 export const StyledHeader = inject('classificationStore', 'classificationActions')
 (styled(Header)`
-  position: fixed;
-  top: 15px;
+  display: flex;
+  flex: 0 1 80px;
   background: #2B303C;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   
   a {
     color: #FFF;
   }
   
-  .parentClassificationBanner {
-    text-align: center;
-    width: 101%;
-    top: 0;
-    z-index: 1000;
-    position: fixed;
-    height: 16px;
-    font-weight: bold;
-    font-size: 11px;
+  .parentNavBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
-
 `);

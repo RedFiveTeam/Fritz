@@ -1,90 +1,164 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
-import { StyledAppBody } from '../component/body/AppBody';
 import { StyledToast } from '../../utils/Toast';
-import { StyledFooter } from '../component/footer/Footer';
 import { StyledDeleteModal } from '../component/modals/DeleteModal';
 import { UnicornStore } from '../component/unicorn/store/UnicornStore';
-import { StyledSelectMissionModal } from '../component/modals/SelectMissionModal';
 import { SlidesStore } from '../component/slides/store/SlidesStore';
 import { StyledHelpMenu } from '../component/modals/HelpMenu';
 import { SlidesActions } from '../component/slides/actions/SlidesActions';
 import { UnicornActions } from '../component/unicorn/actions/UnicornActions';
-import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
-import { UploadStore } from '../component/form/upload/UploadStore';
-import { StyledUnicornOfflineModal } from '../component/modals/UnicornOfflineModal';
-import { CarouselStore } from '../component/carousel/CarouselStore';
+import * as classNames from 'classnames';
+import { StyledUploadContainer } from '../component/form/upload/container/UploadContainer';
+import { HomePageDisplay, HomePageStore } from './HomePageStore';
 import { StyledCarousel } from '../component/carousel/Carousel';
+import { StyledSelectMissionModal } from '../component/modals/SelectMissionModal';
+import { StyledFormAndSlideCards } from '../component/body/FormAndSlideCards';
+import { StyledFooter } from '../component/footer/Footer';
+import { StyledUnicornOfflineModal } from '../component/modals/UnicornOfflineModal';
+import { StyledLoadingScreen } from '../component/slides/container/LoadingScreen';
+import { StyledUnicornUploadModal } from '../component/modals/UnicornUploadModal';
+import { styled } from '../../themes/default';
 
 interface Props {
-  className?: string;
+  homePageStore: HomePageStore;
   unicornStore?: UnicornStore;
   slidesStore?: SlidesStore;
   slidesActions?: SlidesActions;
   unicornActions?: UnicornActions;
-  uploadStore?: UploadStore;
-  carouselStore?: CarouselStore;
+  className?: string;
 }
 
 @observer
 export class HomePage extends React.Component<Props> {
-
   render() {
     return (
-      <div
-        className={this.props.className}
-      >
+      <div className={classNames('homePage', this.props.className)}>
         <StyledToast/>
         <StyledDeleteModal/>
-        {
-          this.props.carouselStore!.isVisible &&
-            <StyledCarousel
-              slides={this.props.slidesStore!.undeletedSlides}
-            />
-        }
-        {
-          this.props.unicornStore!.offlineModal &&
-          <StyledUnicornOfflineModal/>
-        }
-        {
-          !this.props.unicornStore!.activeMission && !this.props.unicornStore!.offline &&
-          <StyledSelectMissionModal/>
-        }
-        {
-          this.props.slidesStore!.help &&
-          <StyledHelpMenu/>
-        }
-        {
-          (this.props.uploadStore!.uploading || this.props.uploadStore!.processing) ?
-            <StyledLoadingScreen/>
-            :
-            <div
-              className="mainBody"
-            >
-              <StyledAppBody/>
-              <StyledFooter
-                downloader={this.props.slidesActions!.trackRenameAndDownload}
-                uploader={this.props.unicornActions!.uploadToUnicorn}
-                hideButtons={this.props.unicornStore!.isUploading}
-              />
-            </div>
-        }
+        {this.conditionallyRenderHomePage()}
+      </div>
+    );
+  }
+
+  private conditionallyRenderHomePage() {
+    switch (this.props.homePageStore.displayState) {
+      case HomePageDisplay.HELP:
+        return (this.helpMenuInFrontOfUploader());
+      case HomePageDisplay.UNICORN_OFFLINE_MODAL:
+        return (<StyledUnicornOfflineModal/>);
+      case HomePageDisplay.SELECT_MISSION:
+        return (this.selectMissionWithUploadContainer());
+      case HomePageDisplay.READY_TO_UPLOAD_TO_FRITZ:
+        return (this.uploadContainerOnly());
+      case HomePageDisplay.FRITZ_UPLOADING_OR_PROCESSING:
+        return (<StyledLoadingScreen className={'loadingScreen'}/>);
+      case HomePageDisplay.READY_FOR_SLIDE_VIEWING_AND_EDITING:
+        return (this.displayViewAndEditSlidePage());
+      case HomePageDisplay.CAROUSEL:
+        return (this.carouselWithFormAndSlideCards());
+      case HomePageDisplay.CONFIRM_UPLOAD_TO_UNICORN:
+        return (this.unicornUploadConfirmationModal());
+      default:
+        return;
+    }
+  }
+
+  private unicornUploadConfirmationModal() {
+    return (
+      <>
+        {this.displayViewAndEditSlidePage()}
+        <StyledUnicornUploadModal/>
+      </>
+    );
+  }
+
+  private helpMenuInFrontOfUploader() {
+    return (
+      <>
+        <StyledHelpMenu
+          exit={() => {
+            this.props.homePageStore.toggleHelpMenu();
+          }}
+        />
+        {this.uploadContainerOnly()}
+      </>
+    );
+  }
+
+  private uploadContainerOnly() {
+    return (
+      <StyledUploadContainer
+        className={'uploadContainer'}
+        help={() => {
+          this.props.homePageStore.toggleHelpMenu();
+        }}
+      />
+    );
+  }
+
+  private selectMissionWithUploadContainer() {
+    return (
+      <>
+        <StyledUploadContainer
+          className={'uploadContainer'}
+          help={() => {
+            this.props.homePageStore.toggleHelpMenu();
+          }}
+        />
+        <StyledSelectMissionModal/>
+      </>
+    );
+  }
+
+  private carouselWithFormAndSlideCards() {
+    return (
+      <>
+        <StyledCarousel
+          slides={this.props.slidesStore!.undeletedSlides}
+        />
+        <StyledFormAndSlideCards/>
+      </>
+    );
+  }
+
+  private displayViewAndEditSlidePage() {
+    return (
+      <div className={'mainBody'}>
+        <StyledFormAndSlideCards/>
+        <StyledFooter
+          className={'footer'}
+          downloader={this.props.slidesActions!.trackRenameAndDownload}
+          uploader={this.props.unicornActions!.uploadToUnicorn}
+          hideButtons={this.props.unicornStore!.isUploading}
+        />
       </div>
     );
   }
 }
 
 export const StyledHomePage = inject(
-  'unicornStore',
   'slidesStore',
+  'unicornStore',
   'slidesActions',
   'unicornActions',
-  'uploadStore',
-  'carouselStore'
 )(styled(HomePage)`
-  height: auto;
-  min-height: 1060px;
+  display: flex;
   overflow-y: hidden;
-  position: relative;
+  height: inherit;
+  width: 100%;
+  
+  .mainBody {
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .uploadContainer {
+    margin: 44px 8px 8px 8px;
+  }
+  
+  .loadingScreen {
+    margin: 48px;
+  }
 `);

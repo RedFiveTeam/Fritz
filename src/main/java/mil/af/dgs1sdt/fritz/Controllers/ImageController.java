@@ -21,7 +21,7 @@ public class ImageController {
   public void getImage(
     @CookieValue("id") String id,
     @PathVariable String imageId, HttpServletResponse response
-  ) throws FileNotFoundException, IOException {
+  ) throws IOException {
     File img = new File("/tmp/complete/" + id + "/" + imageId.replace(".jpg", "") + ".jpg");
 
     InputStream is = new FileInputStream(img);

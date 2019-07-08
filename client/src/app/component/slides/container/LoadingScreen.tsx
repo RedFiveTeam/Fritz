@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
 import { StyledProgressBar } from '../../progressBar/ProgressBar';
+import { styled } from '../../../../themes/default';
+import * as classNames from 'classnames';
 
 interface Props {
   className?: string;
@@ -13,13 +14,11 @@ const FritzLoadingLogo = require('../../../../icon/LoadingLogo.svg');
 export class LoadingScreen extends React.Component<Props> {
   render() {
     return (
-      <div
-        className={this.props.className}
-      >
-        <div className="loadingMessage">
+      <div className={classNames('loadingScreen', this.props.className)}>
+        <div className={'loadingMessage'}>
           <span>One moment, Fritz is uploading and converting your mission storyboard...</span>
         </div>
-        <div className="loadingImage">
+        <div className={'loadingImage'}>
           <img src={FritzLoadingLogo}/>
         </div>
         <StyledProgressBar/>
@@ -29,33 +28,33 @@ export class LoadingScreen extends React.Component<Props> {
 }
 
 export const StyledLoadingScreen = styled(LoadingScreen)`
-#progressBar {
-  background-image: linear-gradient(to left, #15deec, #00818c);
-}
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-evenly;
+  
+  #progressBar {
+    background-image: linear-gradient(to left, #15deec, #00818c);
+  }
 
-.loadingMessage {
-  position: relative;
-  width: 1650px;
-  text-align: center;
-  margin: auto;
-  margin-top: 58px;
-}
+  .loadingMessage {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 300;
+    font-family: ${(props) => props.theme.labelFontFamily};
+    color: ${(props) => props.theme.fontColor};
+    font-stretch: normal;
+    letter-spacing: normal;
+  }
 
-.loadingImage {
-  width: 370px;
-  position: relative;
-  margin: auto;
-  margin-top: 68px;
-}
-
-img {
-  width: 369px;
-  height: 479px;
-}
-
-span {
-  font-size: 40px;
-  font-weight: 300;
-  color: #fff;
-}
+  .loadingImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  img {
+    height: 75%;
+  }
 `;

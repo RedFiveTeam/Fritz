@@ -3,7 +3,7 @@ import { UnicornRepository } from '../repositories/UnicornRepository';
 import { Repositories } from '../../../../utils/Repositories';
 import { Stores } from '../../../../utils/Stores';
 import { action } from 'mobx';
-import { SlideModel } from '../../slides/models/SlideModel';
+import { SlideModel, SlideUploadStatus } from '../../slides/models/SlideModel';
 import { UnicornUploadModel } from '../model/UnicornUploadModel';
 import { SlidesStore } from '../../slides/store/SlidesStore';
 import { MetricActions } from '../../metrics/actions/MetricActions';
@@ -86,23 +86,21 @@ export class UnicornActions {
   }
 
   async buildUploadModel(slide: SlideModel) {
-    slide.setUploading(true);
-    slide.setFailed(false);
+    slide.setUploadStatus(SlideUploadStatus.IN_PROGRESS);
     for (let i = 0; i < 3; i++) {
       let status: UnicornUploadStatusModel = await this.unicornRepository.upload(
         this.setUnicornModel(slide)
       );
       if (status.successfulUpload) {
+        slide.setUploadStatus(SlideUploadStatus.SUCCEEDED);
         this.increaseCurrentUploadCount();
-        slide.setUploading(false);
         this.metricActions.createMetric(MetricType.UNICORN_UPLOAD_SUCCESS);
         this.metricActions.createMetric(this.slidesStore.opName + ' / ' + slide.calloutTime + ' | ' + slide.activity);
         break;
       }
       if (i === 2 && !status.successfulUpload) {
-        slide.setFailed(true);
+        slide.setUploadStatus(SlideUploadStatus.FAILED);
         this.metricActions!.createMetric(MetricType.UNICORN_UPLOAD_FAILURE);
-        slide.setUploading(null);
       }
     }
     this.isUploadFinished();
@@ -143,11 +141,11 @@ export class UnicornActions {
   };
 
   filterSlides(slides: SlideModel[]): SlideModel[] {
-    return slides.filter((s: SlideModel) => {
-      if (s.deleted) {
+    return slides.filter((slide: SlideModel) => {
+      if (slide.deleted) {
         this.metricActions!.createMetric('Delete JPG');
       }
-      return s.targetEventId !== '' && s.deleted !== true && s.uploading !== false;
+      return (slide.isReadyForUpload());
     });
   }
 

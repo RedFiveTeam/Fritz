@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { SlidesStore } from '../slides/store/SlidesStore';
-import { badCallsignCSS, goodCSS } from '../../../themes/default';
+import { badCallsignCSS, goodCSS, styled } from '../../../themes/default';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 
 const refreshIcon = require('../../../icon/RefreshIcon.svg');

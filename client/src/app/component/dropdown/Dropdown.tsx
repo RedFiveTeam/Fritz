@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
 import * as classNames from 'classnames';
+import { styled } from '../../../themes/default';
 
 interface Props {
   options: DropdownOption[];
@@ -78,13 +78,11 @@ export class Dropdown extends React.Component<Props> {
 }
 
 export const StyledDropdown = styled(Dropdown)`
-  font-family: HelveticaNeue;
-  height: 100%;
-  width: 100%;
+  font-family: ${(props) => props.theme.labelFontFamily};
+  height: 44px;
 
   .dropdown {
-    height: 100%;
-    width: 100%;
+    height: inherit;
     background-color: #151524;
     border-radius: 4px;
     cursor: pointer;
@@ -93,11 +91,11 @@ export const StyledDropdown = styled(Dropdown)`
   button {
     cursor: pointer;
     height: 100%;
+    width:  100%;
     background-color: rgba(0, 0, 0, 0) !important;
     outline: none;
     border: none;
     color: #fff;
-    width: 100%;
     font-size: 20px;
     font-weight: bold;
     padding: 0 12px;
@@ -169,17 +167,17 @@ export const StyledDropdown = styled(Dropdown)`
     transition: background-color 0.5s ease;
     height: 36px;
     color: #fff;
-   
-   
+
+
     :hover, :active, :focus-within {
       background-color: #2b303c;
     }
-    
+
     .dropdown-item {
       font-size: 20px;
       letter-spacing: 0.7px;
       font-weight: 300;
-    
+
       :hover, :active, :focus {
         font-weight: bold;
         color: #fff;

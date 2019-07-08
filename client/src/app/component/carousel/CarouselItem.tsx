@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlideModel } from '../slides/models/SlideModel';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { SlidesStore } from '../slides/store/SlidesStore';
@@ -8,7 +7,8 @@ import { CarouselActions } from './CarouselActions';
 import { StyledDatePicker } from '../date/DatePicker';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { CarouselStore } from './CarouselStore';
-import { StyledSlideName } from '../slides/SlideTitle';
+import { StyledSlideTitle } from '../slides/SlideTitle';
+import { styled } from '../../../themes/default';
 
 const DeleteIcon = require('../../../icon/DeleteIcon.svg');
 
@@ -75,7 +75,7 @@ export class CarouselItem extends React.Component<Props> {
             {this.props.count}
           </div>
           <div className={'slideTitleAndTrash'}>
-            <StyledSlideName
+            <StyledSlideTitle
               slide={this.props.slide}
               opName={this.props.slidesStore!.opName}
               asset={this.props.slidesStore!.asset}

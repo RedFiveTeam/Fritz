@@ -1,6 +1,6 @@
 import { Stores } from '../../../../utils/Stores';
 import { UploadStore } from '../../form/upload/UploadStore';
-import { SlideModel } from '../models/SlideModel';
+import { SlideModel, SlideUploadStatus } from '../models/SlideModel';
 import * as FileSaver from 'file-saver';
 import { MetricActions } from '../../metrics/actions/MetricActions';
 import { action } from 'mobx';
@@ -169,10 +169,10 @@ export class SlidesActions {
 
   getAssignedCallouts() {
     let count: number = 0;
+
     for (let i = 0; i < this.slidesStore.slides.length; i++) {
-      if (this.slidesStore.slides[i].targetEventId !== '' &&
-        !this.slidesStore.slides[i].deleted &&
-        this.slidesStore.slides[i].uploading !== false) {
+      let slide = this.slidesStore.slides[i];
+      if (slide.isReadyForUpload()) {
         count++;
       }
     }
@@ -200,7 +200,7 @@ export class SlidesActions {
   }
 
   compareCallsigns() {
-    if (this.slidesStore.asset !== undefined && this.unicornStore.offline === false) {
+    if (this.slidesStore.asset !== undefined && !this.unicornStore.offline) {
       if (this.slidesStore.asset === '') {
         this.slidesStore.setDifferentAsset(false);
       } else if (this.slidesStore.asset !== '') {
@@ -210,6 +210,7 @@ export class SlidesActions {
     }
   }
 
+  @action.bound
   updateMission(mission: MissionModel) {
     this.unicornStore!.setActiveMission(mission);
     if (this.unicornStore!.activeMission) {
@@ -219,10 +220,10 @@ export class SlidesActions {
 
   @action.bound
   resetSlides() {
-    this.slidesStore.slides.map((s: SlideModel) => {
-      s.setCalloutTime('Select');
-      s.setTargetEventId('');
-      s.setUploading(null);
+    this.slidesStore.slides.map((slide: SlideModel) => {
+      slide.setCalloutTime('Select');
+      slide.setTargetEventId('');
+      slide.setUploadStatus(SlideUploadStatus.NOT_STARTED);
     });
   }
 }

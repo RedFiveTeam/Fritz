@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { StyledMission } from '../unicorn/Mission/Mission';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { StyledUnicornMissionLoading } from '../average/loading/UnicornMissionLoading';
 import { DropdownOption, StyledDropdown } from '../dropdown/Dropdown';
+import { styled } from '../../../themes/default';
 
 interface Props {
   className?: string;

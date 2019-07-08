@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
+import { styled } from '../../../themes/default';
 
 interface Props {
-  className?: string;
   classification?: string;
+  className?: string;
 }
 
 @observer
@@ -45,14 +45,14 @@ export class ClassificationBanner extends React.Component<Props> {
         className={this.props.className}
         style={this.renderCss()}
       >
-        {
-          this.props.classification
-        }
+        {this.props.classification}
       </div>
     );
   }
 }
 
 export const StyledClassificationBanner = styled(ClassificationBanner)`
-
+  text-align: center;
+  font-weight: bold;
+  font-size: 11px;
 `;

@@ -21,7 +21,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
     tm.setHash("1234");
     tm.setCompletedSlides(0);
     tm.setTotalSlides(10);
-    trackingStore.addToList(tm);
+    TrackingStore.addToList(tm);
 
     given()
       .port(port)

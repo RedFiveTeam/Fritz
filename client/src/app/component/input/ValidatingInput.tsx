@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
-import { badInputCSS, badLabelCSS, goodCSS } from '../../../themes/default';
+import { badInputCSS, badLabelCSS, goodCSS, styled } from '../../../themes/default';
 import { observable } from 'mobx';
 import * as classNames from 'classnames';
 
@@ -106,7 +105,7 @@ export const
   display: flex;
   flex-direction: column;
   align-items: start;
-  font-family: "Helvetica Neue";
+  font-family: ${(props) => props.theme.labelFontFamily};
   
   label {
     color: #fff;
@@ -118,6 +117,7 @@ export const
   }
   
   input {
+    box-sizing: border-box;
     padding-left: 16px;
     width: 100%;
     color: #eaf3ff;

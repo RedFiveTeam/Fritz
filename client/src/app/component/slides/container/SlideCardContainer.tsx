@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { SlidesStore } from '../store/SlidesStore';
-import styled from 'styled-components';
 import { StyledSlideCard } from '../slideCard/SlideCard';
 import { StyledUndoDeleteContainer } from '../../UndoDelete/UndoDeleteContainer';
 import { CarouselActions } from '../../carousel/CarouselActions';
+import * as classNames from 'classnames';
+import { styled } from '../../../../themes/default';
 
 interface Props {
   carouselActions?: CarouselActions;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 @observer
-export class SlidesContainer extends React.Component<Props> {
+export class SlideCardContainer extends React.Component<Props> {
   count: number = 0;
 
   componentWillUpdate() {
@@ -22,9 +23,7 @@ export class SlidesContainer extends React.Component<Props> {
 
   render() {
     return (
-      <div
-        className={this.props.className}
-      >
+      <div className={classNames('slideCardContainer', this.props.className)}>
         {
           this.props.slidesStore!.slides
             .map((slide, idx) => {
@@ -32,7 +31,7 @@ export class SlidesContainer extends React.Component<Props> {
                 this.count++;
               }
               return (
-                <div className="slideCardContainer" key={idx}>
+                <div className={'slideCardOrDeletedSlide'} key={idx}>
                   {
                     !slide.deleted &&
                     <StyledSlideCard
@@ -59,14 +58,39 @@ export class SlidesContainer extends React.Component<Props> {
   }
 }
 
-export const StyledSlidesContainer = inject(
+// noinspection CssInvalidPropertyValue
+export const StyledSlideCardContainer = inject(
   'slidesStore', 'carouselActions'
-)(styled(SlidesContainer)`
-  max-width: 860px;
-  color: white;
-  margin-left: 46px;
-  margin-right: 40px;
-  white-space: nowrap;
+)(styled(SlideCardContainer)`
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  .slideCardOrDeletedSlide {
+    margin-right: 28px;
+  }
+  
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    display: none; 
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme.color.slate}; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${(props) => props.theme.color.slate}; 
+  }
 `);

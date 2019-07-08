@@ -1,7 +1,7 @@
 import { UnicornActions } from './UnicornActions';
 import { UnicornRepository } from '../repositories/UnicornRepository';
 import { StubUnicornRepository } from '../repositories/StubUnicornRepository';
-import { SlideModel } from '../../slides/models/SlideModel';
+import { SlideModel, SlideUploadStatus } from '../../slides/models/SlideModel';
 import { UnicornStore } from '../store/UnicornStore';
 import { MissionModel } from '../model/MissionModel';
 import { SlidesStore } from '../../slides/store/SlidesStore';
@@ -206,7 +206,7 @@ describe('UnicornActions', () => {
     expect(metricRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({_action: 'Image Uploaded to Unicorn'})
     );
-    expect(slide.failed).toBeFalsy();
+    expect(slide.uploadStatus).toBe(SlideUploadStatus.SUCCEEDED);
 
     unicornRepository.upload = jest.fn(() => {
       return Promise.resolve(
@@ -217,7 +217,7 @@ describe('UnicornActions', () => {
     await subject.buildUploadModel(slide);
     expect(unicornRepository.upload).toHaveBeenCalledTimes(3);
     expect(isUploadFinishedSpy).toHaveBeenCalled();
-    expect(slide.failed).toBeTruthy();
+    expect(slide.uploadStatus).toBe(SlideUploadStatus.FAILED);
   });
 
   it('should start without any validation until upload button clicks then validateInput on change', async () => {
@@ -250,12 +250,12 @@ describe('UnicornActions', () => {
 
   it('should render a modal', () => {
     subject.renderUploadModal();
-    expect(unicornStore.isModalDisplayed).toBeTruthy();
+    expect(unicornStore.pendingUpload).toBeTruthy();
   });
 
   it('should upload to unicorn on modal confirmation', async () => {
     unicornStore.setPendingUpload(true);
-    expect(unicornStore.isModalDisplayed).toBeTruthy();
+    expect(unicornStore.pendingUpload).toBeTruthy();
     subject.metricActions.trackMetric = jest.fn();
     subject.metricActions.updateMetric = jest.fn();
     subject.metricActions.createMetric = jest.fn();
@@ -266,7 +266,7 @@ describe('UnicornActions', () => {
     expect(subject.metricActions.trackMetric).toHaveBeenCalledWith('UploadToUnicorn');
     expect(subject.metricActions.createMetric).toHaveBeenCalled();
     expect(subject.metricActions.updateMetric).toHaveBeenCalledWith('Renaming');
-    expect(unicornStore.isModalDisplayed).toBeFalsy();
+    expect(unicornStore.pendingUpload).toBeFalsy();
     expect(unicornStore.isUploading).toBeFalsy();
     expect(unicornStore.uploadComplete).toBeTruthy();
     expect(addToQueueSpy).toHaveBeenCalledTimes(2);
@@ -284,7 +284,7 @@ describe('UnicornActions', () => {
 
   it('should close the Upload Modal and reset all pending upload states', () => {
     subject.closeUploadModal();
-    expect(unicornStore.isModalDisplayed).toBeFalsy();
+    expect(unicornStore.pendingUpload).toBeFalsy();
     expect(unicornStore.uploadComplete).toBeFalsy();
     expect(unicornStore.unassignedCallouts).toBeFalsy();
     expect(slidesStore.assignedCalloutCount).toBe(0);

@@ -3,13 +3,17 @@ import { ReactWrapper, mount } from 'enzyme';
 import { UploadContainer } from './UploadContainer';
 import { UploadModel } from '../UploadModel';
 import { UploadStore } from '../UploadStore';
+import Mock = jest.Mock;
 
 describe('UploadContainer', () => {
   let subject: ReactWrapper;
   let uploadActions: any;
   let uploadStore: any;
+  let helpSpy: Mock;
 
   beforeEach(() => {
+    helpSpy = jest.fn();
+
     uploadActions = {
       upload: () => {
         return new UploadModel('chucknorris.pdf');
@@ -18,6 +22,7 @@ describe('UploadContainer', () => {
     uploadStore = new UploadStore();
     subject = mount(
       <UploadContainer
+        help={helpSpy}
         uploadActions={uploadActions}
         uploadStore={uploadStore}
       />
@@ -25,25 +30,11 @@ describe('UploadContainer', () => {
   });
 
   it('should contain an upload box and button', () => {
-    expect(subject.find('#uploadButton').exists()).toBeTruthy();
+    expect(subject.find('#browseButton').exists()).toBeTruthy();
   });
 
-  it('should change the display after file uploaded', () => {
-    const file = new File(['(⌐□_□)'], 'chucknorris.pdf', {type: 'application/pdf'});
-    subject.find('#uploadButton').simulate(
-      'change',
-      {
-        preventDefault: () => {
-          return;
-        },
-        dataTransfer: {files: [file]}
-      });
-    uploadStore.setUploaded(true);
-    uploadStore.setFileName(file.name);
-    subject.update();
-    expect(subject.find('#uploadButton').exists()).toBeFalsy();
-    expect(subject.find('#pdfIcon').exists()).toBeTruthy();
-    expect(subject.find('#pdfName').text()).toBe(file.name);
+  it('should trigger given function on help click', () => {
+    subject.find('.helpIcon').simulate('click');
+    expect(helpSpy).toHaveBeenCalled();
   });
-
 });

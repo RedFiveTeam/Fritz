@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { UnicornStore } from '../store/UnicornStore';
 import { SlidesStore } from '../../slides/store/SlidesStore';
 import { UnicornActions } from '../actions/UnicornActions';
+import { styled } from '../../../../themes/default';
 
 interface Props {
   className?: string;

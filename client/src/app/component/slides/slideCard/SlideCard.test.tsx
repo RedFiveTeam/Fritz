@@ -2,18 +2,19 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { SlideCard } from './SlideCard';
 import { Provider } from 'mobx-react';
-import { StyledCalloutDropdown } from '../../unicorn/Callout/CalloutDropdown';
+import { StyledCalloutContainer } from '../../unicorn/Callout/CalloutContainer';
 import { CalloutModel } from '../../unicorn/model/CalloutModel';
 import { SlideModel } from '../models/SlideModel';
-import Mock = jest.Mock;
-import { StyledValidatingInput } from '../../input/ValidatingInput';
-import { StyledSlideName } from '../SlideTitle';
 import * as moment from 'moment';
+import { StyledSlideTitleAndInputs } from './SlideTitleAndInputs';
+import Mock = jest.Mock;
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../../../../themes/default';
 
 describe('SlideCard', () => {
   let subject: ReactWrapper;
   let slideNumber: any;
-  let slideModel: SlideModel;
+  let slide: SlideModel;
   let slidesActions: any;
   let slidesStore: any;
   let uploadStore: any;
@@ -27,29 +28,32 @@ describe('SlideCard', () => {
       <Provider
         unicornStore={unicornStore}
         slidesStore={slidesStore}
+        uploadStore={uploadStore}
         unicornActions={unicornActions}
         slidesActions={slidesActions}
-        uploadStore={uploadStore}
       >
-        <SlideCard
-          uploadStore={uploadStore}
-          slideNumber={slideNumber}
-          slide={slideModel}
-          slidesActions={slidesActions}
-          slidesStore={slidesStore}
-          metricActions={metricActions}
-          unicornStore={unicornStore}
-          thumbnailClick={thumbnailClickSpy}
-          first={true}
-        />
-      </Provider>);
+        <ThemeProvider theme={theme}>
+          <SlideCard
+            uploadStore={uploadStore}
+            slideNumber={slideNumber}
+            slide={slide}
+            slidesActions={slidesActions}
+            slidesStore={slidesStore}
+            metricActions={metricActions}
+            unicornStore={unicornStore}
+            thumbnailClick={thumbnailClickSpy}
+            first={true}
+          />
+        </ThemeProvider>
+      </Provider>
+    );
   };
 
   beforeEach(() => {
     thumbnailClickSpy = jest.fn();
 
-    slideModel = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
-    slideModel.setDate(moment('2019-06-14'));
+    slide = new SlideModel('', 'NewTestName', '1234', 'NewActivity');
+    slide.setDate(moment('2019-06-14'));
     uploadStore = {
       hash: 'ljndslkm'
     };
@@ -97,16 +101,18 @@ describe('SlideCard', () => {
         unicornActions={unicornActions}
         slidesActions={slidesActions}
       >
-        <SlideCard
-          uploadStore={uploadStore}
-          slideNumber={slideNumber}
-          slide={slideModel}
-          slidesActions={slidesActions}
-          slidesStore={slidesStore}
-          metricActions={metricActions}
-          unicornStore={unicornStore}
-          thumbnailClick={thumbnailClickSpy}
-        />
+        <ThemeProvider theme={theme}>
+          <SlideCard
+            uploadStore={uploadStore}
+            slideNumber={slideNumber}
+            slide={slide}
+            slidesActions={slidesActions}
+            slidesStore={slidesStore}
+            metricActions={metricActions}
+            unicornStore={unicornStore}
+            thumbnailClick={thumbnailClickSpy}
+          />
+        </ThemeProvider>
       </Provider>
     );
   });
@@ -115,21 +121,9 @@ describe('SlideCard', () => {
     expect(subject.find('img')).toBeTruthy();
   });
 
-  it('should render a title for each slide', () => {
-    expect(subject.find(StyledSlideName).exists()).toBeTruthy();
-  });
+  it('should render a title and inputs for each slide', () => {
+    expect(subject.find(StyledSlideTitleAndInputs).exists()).toBeTruthy();
 
-  it('should have an activity input', () => {
-    subject.find('.activityInput').find('input').at(0).simulate('change', {target: {value: 'test Activity'}});
-    expect(slidesActions.setAndUpdateActivity).toHaveBeenCalled();
-  });
-
-  it('should render an input for the time', () => {
-    expect(subject.find(StyledValidatingInput).exists()).toBeTruthy();
-  });
-
-  it('should render a counter for each thumbnail', () => {
-    expect(subject.find('.slideCounter').text()).toBe('3 of 5');
   });
 
   it('should render a delete icon only while fritz is not uploading to unicorn', () => {
@@ -143,17 +137,20 @@ describe('SlideCard', () => {
         slidesActions={slidesActions}
         uploadStore={uploadStore}
       >
-        <SlideCard
-          uploadStore={uploadStore}
-          slideNumber={slideNumber}
-          slide={slideModel}
-          slidesActions={slidesActions}
-          slidesStore={slidesStore}
-          metricActions={metricActions}
-          unicornStore={unicornStore}
-          thumbnailClick={thumbnailClickSpy}
-        />
-      </Provider>);
+        <ThemeProvider theme={theme}>
+          <SlideCard
+            uploadStore={uploadStore}
+            slideNumber={slideNumber}
+            slide={slide}
+            slidesActions={slidesActions}
+            slidesStore={slidesStore}
+            metricActions={metricActions}
+            unicornStore={unicornStore}
+            thumbnailClick={thumbnailClickSpy}
+          />
+        </ThemeProvider>
+      </Provider>
+    );
     expect(subject.find('.deleteIcon').exists()).toBeFalsy();
   });
 
@@ -163,57 +160,45 @@ describe('SlideCard', () => {
   });
 
   it('should contain a callout component', () => {
-    expect(subject.find(StyledCalloutDropdown).exists()).toBeTruthy();
-  });
-
-  it('should display the uploading style when Fritz is uploading to unicorn', () => {
-    expect(subject.find('.whileUploading').exists()).toBeFalsy();
-    slideModel.setUploading(true);
-    subject.update();
-    expect(subject.find('.whileUploading').exists()).toBeTruthy();
-  });
-
-  it('should display the carousel on thumbnail click', () => {
-    subject.find('.calloutImage').simulate('click');
-    expect(thumbnailClickSpy).toHaveBeenCalled();
+    expect(subject.find(StyledCalloutContainer).exists()).toBeTruthy();
   });
 
   it('should focus on the time box when it is the first slide card and empty or invalid', () => {
-    slideModel.setTime('');
+    slide.setTime('');
     mountFirst();
     let timeInput = subject.find('input').at(0).instance();
     expect(timeInput).toBe(document.activeElement);
 
-    slideModel.setTime('aaa');
+    slide.setTime('aaa');
     mountFirst();
     timeInput = subject.find('input').at(0).instance();
     expect(timeInput).toBe(document.activeElement);
 
-    slideModel.setTime('1234');
+    slide.setTime('1234');
     mountFirst();
     timeInput = subject.find('input').at(0).instance();
     expect(timeInput).not.toBe(document.activeElement);
   });
 
   it('should focus on the time box when it is the first slide card and empty or invalid', () => {
-    slideModel.setTime('');
+    slide.setTime('');
     mountFirst();
     let timeInput = subject.find('input').at(0).instance();
     expect(timeInput).toBe(document.activeElement);
 
-    slideModel.setTime('aaa');
+    slide.setTime('aaa');
     mountFirst();
     timeInput = subject.find('input').at(0).instance();
     expect(timeInput).toBe(document.activeElement);
 
-    slideModel.setTime('1234');
+    slide.setTime('1234');
     mountFirst();
     timeInput = subject.find('input').at(0).instance();
     expect(timeInput).not.toBe(document.activeElement);
   });
 
   it('should focus on the first activity box if the time box is full', () => {
-    slideModel.setTime('1234');
+    slide.setTime('1234');
     mountFirst();
     let activityInput = subject.find('input').at(1).instance();
     expect(activityInput).toBe(document.activeElement);

@@ -10,7 +10,6 @@ export class SlidesStore {
   @observable private _slides: SlideModel[] = [];
   @observable private _activity: string | null;
   @observable private _time: string | null;
-  @observable private _help: boolean = false;
   @observable private _releasability: string = '';
   @observable private _assignedCalloutCount: number;
   @observable private _differentAsset: boolean = false;
@@ -68,11 +67,6 @@ export class SlidesStore {
   @computed
   get classification(): string | null {
     return this._classification;
-  }
-
-  @computed
-  get help(): boolean {
-    return this._help;
   }
 
   @computed
@@ -225,11 +219,6 @@ export class SlidesStore {
   @action.bound
   setSlides(value: SlideModel[]) {
     this._slides = value;
-  }
-
-  @action.bound
-  setHelp(value: boolean) {
-    this._help = value;
   }
 
   validate(): boolean {

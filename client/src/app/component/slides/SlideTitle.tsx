@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlideModel } from './models/SlideModel';
+import { styled } from '../../../themes/default';
 
 interface Props {
   slide: SlideModel;
@@ -71,12 +71,13 @@ export class SlideTitle extends React.Component<Props> {
   }
 }
 
-export const StyledSlideName = styled(SlideTitle)`
+export const StyledSlideTitle = styled(SlideTitle)`
   width: 430px;
+  font-family: ${(props) => props.theme.fontFamily};
   font-size: 14px;
-  position: relative;
   font-weight: bold;
   white-space: pre-wrap;
+  color: ${(props) => props.theme.fontColor}
   
   .blue-text-time {
     color: #15DEEC;

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { SlidesContainer } from './SlidesContainer';
+import { SlideCardContainer } from './SlideCardContainer';
 import { SlidesStore } from '../store/SlidesStore';
 import { SlideModel } from '../models/SlideModel';
 import { StyledSlideCard } from '../slideCard/SlideCard';
 import { StyledUndoDeleteContainer } from '../../UndoDelete/UndoDeleteContainer';
 
-describe('SlidesContainer', () => {
+describe('SlideCardContainer', () => {
   let subject: ShallowWrapper;
   let slidesStore = new SlidesStore();
   let slideModel1 = new SlideModel('oldName1', 'newName1');
@@ -23,7 +23,7 @@ describe('SlidesContainer', () => {
     };
 
     subject = shallow(
-      <SlidesContainer
+      <SlideCardContainer
         slidesStore={slidesStore}
         carouselActions={carouselActions}
       />

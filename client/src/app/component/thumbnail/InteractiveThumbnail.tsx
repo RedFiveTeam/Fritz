@@ -85,7 +85,7 @@ export const StyledInteractiveThumbnail = styled(InteractiveThumbnail)`
       font-family: ${(props) => props.theme.labelFontFamily};
       font-size: 14px;
       font-weight: 500;
-      color: ${(props) => props.theme.fontColor};
+      color: ${(props) => props.theme.color.default};
       border-top-left-radius: 4px;
     }
     
@@ -118,7 +118,7 @@ export const StyledInteractiveThumbnail = styled(InteractiveThumbnail)`
         justify-content: center;
         font-weight: 600;
         font-size: 14px;
-        color: ${(props) => props.theme.fontColor};
+        color: ${(props) => props.theme.color.default};
       }
     }
   }

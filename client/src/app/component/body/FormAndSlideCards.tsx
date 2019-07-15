@@ -59,11 +59,27 @@ export const StyledFormAndSlideCards = inject('uploadStore', 'unicornStore')(sty
   align-items: start;
   height: inherit;
   overflow: hidden;
+  
+  @media screen and (max-width: 1350px) {
+    .slideForm {
+      display: none;
+    }
+    
+    .dividingLine {
+      display: none;
+    }
+    
+    .slideCards {
+      margin: auto;
+    }
+  }
     
   .slideForm {
     height: inherit;
-    margin-top: 24px;
-    min-width: 688px;
+    min-width: 448px;
+    max-width: 688px;
+    padding: 16px;
+    flex: 1;
   }
 
   .dividingLine {
@@ -82,5 +98,8 @@ export const StyledFormAndSlideCards = inject('uploadStore', 'unicornStore')(sty
   .slideCards {
     padding-top: 16px;
     height: 100%;
+    max-width: 1160px;
+    min-width: 960px;
+    flex: 1;
   }
 `);

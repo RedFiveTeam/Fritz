@@ -8,6 +8,8 @@ import { StyledDatePicker } from '../date/DatePicker';
 import Mock = jest.Mock;
 import { StyledSlideTitle } from '../slides/SlideTitle';
 import * as moment from 'moment';
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../../../themes/default';
 
 describe('CarouselItem', () => {
   let subject: ReactWrapper;
@@ -21,14 +23,18 @@ describe('CarouselItem', () => {
 
   let mountFirst = () => {
     subject = mount(
-      <CarouselItem
-        active={true}
-        slide={slide}
-        changeTime={changeTimeSpy}
-        changeActivity={changeActivitySpy}
-        slidesStore={slidesStore}
-        carouselActions={carouselActions}
-      />
+      <ThemeProvider
+        theme={theme}
+      >
+        <CarouselItem
+          active={true}
+          slide={slide}
+          changeTime={changeTimeSpy}
+          changeActivity={changeActivitySpy}
+          slidesStore={slidesStore}
+          carouselActions={carouselActions}
+        />
+      </ThemeProvider>
     );
   };
 
@@ -49,15 +55,19 @@ describe('CarouselItem', () => {
     };
 
     subject = mount(
-      <CarouselItem
-        slide={slide}
-        changeTime={changeTimeSpy}
-        changeActivity={changeActivitySpy}
-        slidesStore={slidesStore}
-        carouselActions={carouselActions}
-        slidesActions={slidesActions}
-        carouselStore={carouselStore}
-      />
+      <ThemeProvider
+        theme={theme}
+      >
+        <CarouselItem
+          slide={slide}
+          changeTime={changeTimeSpy}
+          changeActivity={changeActivitySpy}
+          slidesStore={slidesStore}
+          carouselActions={carouselActions}
+          slidesActions={slidesActions}
+          carouselStore={carouselStore}
+        />
+      </ThemeProvider>
     );
   });
 

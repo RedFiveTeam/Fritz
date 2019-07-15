@@ -36,41 +36,44 @@ export class SlideTitleAndInputs extends React.Component<Props> {
     return (
       <div className={classNames('titleAndInputs', this.props.className)}>
         <StyledSlideTitle
+          className={'slideTitle'}
           slide={slide}
           opName={opName}
           asset={asset}
           releasability={releasability}
         />
         <div className={'slideInputs'}>
-          <StyledDatePicker
-            slide={slide}
-          />
-          <StyledValidatingInput
-            label={'Time'}
-            className={'timeInput'}
-            placeholder={'e.g. 0830'}
-            listener={(e: any) => {
-              timeListener(slide, e);
-            }}
-            id={'timeInput'}
-            validator={slide.isValidTime}
-            value={slide.time}
-            errorMessage={'Invalid time'}
-            onlyValidateOnExit={true}
-            reference={timeRef}
-          />
-          <StyledValidatingInput
-            className={'activityInput'}
-            placeholder={'e.g. OV'}
-            listener={(e: any) => {
-              activityListener(slide, e);
-            }}
-            id={'activityInput'}
-            validator={true}
-            value={slide.activity}
-            reference={activityRef}
-            label={'Activity'}
-          />
+          <div className={'inputAligner'}>
+            <StyledDatePicker
+              slide={slide}
+            />
+            <StyledValidatingInput
+              label={'Time'}
+              className={'timeInput'}
+              placeholder={'e.g. 0830'}
+              listener={(e: any) => {
+                timeListener(slide, e);
+              }}
+              id={'timeInput'}
+              validator={slide.isValidTime}
+              value={slide.time}
+              errorMessage={'Invalid time'}
+              onlyValidateOnExit={true}
+              reference={timeRef}
+            />
+            <StyledValidatingInput
+              className={'activityInput'}
+              placeholder={'e.g. OV'}
+              listener={(e: any) => {
+                activityListener(slide, e);
+              }}
+              id={'activityInput'}
+              validator={true}
+              value={slide.activity}
+              reference={activityRef}
+              label={'Activity'}
+            />
+          </div>
         </div>
       </div>
     );
@@ -80,16 +83,23 @@ export class SlideTitleAndInputs extends React.Component<Props> {
 export const StyledSlideTitleAndInputs = styled(SlideTitleAndInputs)`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 500px;
-  padding: 14px;
-    
+  justify-content: space-between;
+  flex: 1;
+  padding: 14px 14px 0 14px;
+      
   .slideInputs {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    margin-top: 15px;
+    align-items: flex-end;
+    padding-bottom: 8px;
+    flex: 1;
+    
+    .inputAligner {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+    }
   }
 
   .slideTitle {

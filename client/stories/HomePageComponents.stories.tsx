@@ -9,8 +9,9 @@ import { StyledLoadingScreen } from "../src/app/component/slides/container/Loadi
 import { StyledProgressBar } from "../src/app/component/progressBar/ProgressBar";
 import { StyledFormContainer } from "../src/app/component/form/FormContainer";
 import { StyledDeletePDF } from "../src/app/component/form/DeletePDF";
-import { resetStoresAndActions, slidesStore, uploadStore, wrapper } from './index.stories';
+import { resetStoresAndActions, slidesStore, unicornStore, uploadStore, wrapper } from './index.stories';
 import { Provider } from 'mobx-react';
+import { CalloutModel } from '../src/app/component/unicorn/model/CalloutModel';
 
 export function HomePageComponentsStory() {
   storiesOf('Home Page Components', module)
@@ -39,9 +40,17 @@ export function HomePageComponentsStory() {
     })
 
     .add('Slide Cards', () => {
+      resetStoresAndActions();
 
-      let slideNotStarted = new SlideModel('', '', '', '', false, '', '', moment());
+      unicornStore.setCallouts([
+        new CalloutModel('', '', '', '', '', '1234', moment())
+      ]);
+
+      let slideNotStarted = new SlideModel('', '', '', 'long activity to change the wrapping of the title', false, '', '', moment());
       slideNotStarted.setUploadStatus(SlideUploadStatus.NOT_STARTED);
+
+      let slideDeleted = new SlideModel('', '', '', 'long activity to change the wrapping of the title', true, '', '', moment());
+      slideDeleted.setUploadStatus(SlideUploadStatus.NOT_STARTED);
 
       let slidePending = new SlideModel('', '', '', '', false, '', '', moment());
       slidePending.setUploadStatus(SlideUploadStatus.PENDING);
@@ -50,7 +59,7 @@ export function HomePageComponentsStory() {
 
       let slideInProgress = new SlideModel('', '', '', '', false, '', '', moment());
       slideInProgress.setUploadStatus(SlideUploadStatus.IN_PROGRESS);
-      slideInProgress.setNewName('IM_PRETENDING_IM_A_SLIDE_NAME');
+      slideInProgress.setNewName('IM_PRETENDING_IM_A_SLIDE_NAME_THATS_OBNOXIOUSLY_LONG_SO_STINKIN_LONG_THAT_IT_GOES_OFF_THE_PAGE');
 
       let slideFailed = new SlideModel('', '', '', '', false, '', '', moment());
       slideFailed.setUploadStatus(SlideUploadStatus.FAILED);
@@ -63,6 +72,7 @@ export function HomePageComponentsStory() {
       slidesStore.setSlides(
         [
           slideNotStarted,
+          slideDeleted,
           slidePending,
           slideInProgress,
           slideFailed,

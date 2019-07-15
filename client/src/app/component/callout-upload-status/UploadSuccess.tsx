@@ -32,14 +32,11 @@ export const StyledUploadSuccess = styled(UploadSuccess)`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  flex: 1;
   font-family: ${(props) => props.theme.labelFontFamily};
   
-  img {
-    margin-bottom: 16px;
-  }
-  
   .message {
-    color: ${(props) => props.theme.fontColor};
+    color: ${(props) => props.theme.color.default};
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.4px;

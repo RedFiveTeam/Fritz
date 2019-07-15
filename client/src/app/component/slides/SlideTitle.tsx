@@ -72,12 +72,11 @@ export class SlideTitle extends React.Component<Props> {
 }
 
 export const StyledSlideTitle = styled(SlideTitle)`
-  width: 430px;
   font-family: ${(props) => props.theme.fontFamily};
   font-size: 14px;
   font-weight: bold;
   white-space: pre-wrap;
-  color: ${(props) => props.theme.fontColor}
+  color: ${(props) => props.theme.color.default}
   
   .blue-text-time {
     color: #15DEEC;

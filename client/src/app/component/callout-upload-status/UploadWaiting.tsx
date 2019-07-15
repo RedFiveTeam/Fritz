@@ -39,6 +39,7 @@ export const StyledUploadWaiting = styled(UploadWaiting)`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  flex: 1;
   font-family: ${(props) => props.theme.labelFontFamily};
   
   .pseudoDropdown {
@@ -53,7 +54,6 @@ export const StyledUploadWaiting = styled(UploadWaiting)`
     font-weight: bold;
     letter-spacing: 0.71px;
     border-radius: 4px;
-    margin-bottom: 34px;
     
     .waitingIcon {
       margin-left: 10px;

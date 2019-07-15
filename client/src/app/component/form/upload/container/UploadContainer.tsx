@@ -190,7 +190,7 @@ export const StyledUploadContainer = inject(
         font-size: 32px;
         font-weight: bold;
         text-align: center;
-        color: ${(props) => props.theme.fontColor};
+        color: ${(props) => props.theme.color.default};
       }
       
       .helpIcon {
@@ -256,7 +256,7 @@ export const StyledUploadContainer = inject(
         height: 38px;
         border-radius: 4px;
         border: solid 1px ${(props) => props.theme.color.lightningBlue};
-        color: ${(props) => props.theme.fontColor};
+        color: ${(props) => props.theme.color.default};
         background-color: rgba(0, 0, 0, 0);
         transition: background-color 250ms;
         cursor: pointer;

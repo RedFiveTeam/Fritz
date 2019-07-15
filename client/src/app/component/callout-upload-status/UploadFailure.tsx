@@ -43,6 +43,7 @@ export const StyledUploadFailure = styled(UploadFailure)`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  flex: 1;
   font-family: ${(props) => props.theme.labelFontFamily};
   
   .pseudoDropdown {
@@ -57,7 +58,6 @@ export const StyledUploadFailure = styled(UploadFailure)`
     font-weight: bold;
     letter-spacing: 0.71px;
     border-radius: 4px;
-    margin-bottom: 34px;
     
     .failedIcon {
       margin-left: 10px;
@@ -66,7 +66,7 @@ export const StyledUploadFailure = styled(UploadFailure)`
   
   .message {
     font-size: 14px;
-    color: ${(props) => props.theme.fontColor};
+    color: ${(props) => props.theme.color.default};
     letter-spacing: 0.4px;
     
     .retry {

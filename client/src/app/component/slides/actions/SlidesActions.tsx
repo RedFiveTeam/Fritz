@@ -221,7 +221,7 @@ export class SlidesActions {
   @action.bound
   resetSlides() {
     this.slidesStore.slides.map((slide: SlideModel) => {
-      slide.setCalloutTime('Select');
+      slide.setCalloutTime('');
       slide.setTargetEventId('');
       slide.setUploadStatus(SlideUploadStatus.NOT_STARTED);
     });

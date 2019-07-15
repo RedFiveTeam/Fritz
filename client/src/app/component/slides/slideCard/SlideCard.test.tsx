@@ -126,34 +126,6 @@ describe('SlideCard', () => {
 
   });
 
-  it('should render a delete icon only while fritz is not uploading to unicorn', () => {
-    expect(subject.find('.deleteIcon').exists()).toBeTruthy();
-    unicornStore.uploadsInProgress = true;
-    subject = mount(
-      <Provider
-        unicornStore={unicornStore}
-        slidesStore={slidesStore}
-        unicornActions={unicornActions}
-        slidesActions={slidesActions}
-        uploadStore={uploadStore}
-      >
-        <ThemeProvider theme={theme}>
-          <SlideCard
-            uploadStore={uploadStore}
-            slideNumber={slideNumber}
-            slide={slide}
-            slidesActions={slidesActions}
-            slidesStore={slidesStore}
-            metricActions={metricActions}
-            unicornStore={unicornStore}
-            thumbnailClick={thumbnailClickSpy}
-          />
-        </ThemeProvider>
-      </Provider>
-    );
-    expect(subject.find('.deleteIcon').exists()).toBeFalsy();
-  });
-
   it('should flag slide as deleted when the delete icon is clicked and have an undo button', () => {
     expect(subject.find('.deleteIcon').simulate('click'));
     expect(slidesActions.deleteSlide).toHaveBeenCalled();

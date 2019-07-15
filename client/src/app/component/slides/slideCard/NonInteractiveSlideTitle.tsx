@@ -25,14 +25,14 @@ export class NonInteractiveSlideTitle extends React.Component<Props> {
 }
 
 export const StyledNonInteractiveSlideTitle = styled(NonInteractiveSlideTitle)`
-  width: 500px;
+  flex: 1;  
   white-space: pre-wrap;
   font-family: ${(props) => props.theme.labelFontFamily};
   display: flex;
   flex-direction: column;
   align-items: start;
-  justify-content: center;
-  padding: 14px;
+  justify-content: start;
+  padding: 48px 14px 14px 14px;
   
   .slideLabel {
     color: ${(props) => props.theme.color.blueGrey};
@@ -46,5 +46,6 @@ export const StyledNonInteractiveSlideTitle = styled(NonInteractiveSlideTitle)`
     font-size: 16px;
     font-weight: 500;
     letter-spacing: 0.57px;
+    word-break: break-word;
   };
 `;

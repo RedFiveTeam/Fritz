@@ -47,6 +47,7 @@ export class SlideCardContainer extends React.Component<Props> {
                     slide.deleted &&
                     <StyledUndoDeleteContainer
                       slideModel={slide}
+                      className={'undoDelete'}
                     />
                   }
                 </div>
@@ -58,7 +59,6 @@ export class SlideCardContainer extends React.Component<Props> {
   }
 }
 
-// noinspection CssInvalidPropertyValue
 export const StyledSlideCardContainer = inject(
   'slidesStore', 'carouselActions'
 )(styled(SlideCardContainer)`
@@ -71,12 +71,16 @@ export const StyledSlideCardContainer = inject(
   overflow-x: hidden;
   
   .slideCardOrDeletedSlide {
-    margin-right: 28px;
+    margin-bottom: 8px;
+  }
+  
+  .undoDelete {
+    margin-right: 34px;
   }
   
   /* width */
   ::-webkit-scrollbar {
-    width: 8;
+    width: 8px;
   }
   
   /* Track */

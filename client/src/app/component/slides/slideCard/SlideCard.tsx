@@ -90,10 +90,12 @@ export class SlideCard extends React.Component<Props> {
     let {slide} = this.props;
 
     if (this.props.first) {
-      if (!slide.isValidTime) {
-        this.timeBox.current.focus();
-      } else {
-        this.activityBox.current.focus();
+      if (slide.uploadStatus !== SlideUploadStatus.SUCCEEDED) {
+        if (!slide.isValidTime) {
+          this.timeBox.current.focus();
+        } else {
+          this.activityBox.current.focus();
+        }
       }
     }
   }
@@ -164,9 +166,7 @@ export class SlideCard extends React.Component<Props> {
     return (
       <div className={'delete'}>
         {
-          !this.props.unicornStore!.uploadsInProgress
-          && slide.uploadStatus !== SlideUploadStatus.IN_PROGRESS
-          && slide.uploadStatus !== SlideUploadStatus.PENDING
+          this.shouldDisplayTrashCan(slide)
           &&
           <img
             className={'deleteIcon'}
@@ -177,6 +177,13 @@ export class SlideCard extends React.Component<Props> {
           />
         }
       </div>
+    );
+  }
+
+  private shouldDisplayTrashCan(slide: SlideModel) {
+    return (
+      slide.uploadStatus === SlideUploadStatus.NOT_STARTED
+      || slide.uploadStatus === SlideUploadStatus.FAILED
     );
   }
 }
@@ -193,27 +200,32 @@ export const StyledSlideCard = inject(
   
   .slideContent {
     display: flex;
+    flex: 1;
     flex-direction: row;
     height: 168px;
-    margin-bottom: 6px;
-    background-color: #191E2A;
+    background-color: ${(props) => props.theme.color.blackTea};
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    border-radius: 2px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
   }
   
   .separatingLine {
     border: .5px solid rgba(108, 127, 156, 0.5);
     margin: 10px 0;
     width: .5px;
-    position: relative;
   }
   
-  .deleteIcon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-top: 12px;
+  .delete {
+    display: flex;
+    width: 34px;
+    
+    .deleteIcon {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      margin-left: 10px;
+      margin-top: 12px;
+    }
   }
   
 `);

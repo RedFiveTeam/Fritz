@@ -50,8 +50,8 @@ export const StyledDeletePDF = styled(DeletePDF)`
     display: flex;
     justify-content: space-between; 
     margin-top: 36px;  
-    border-top: 1px solid ${(props) => props.theme.fontColor};
-    border-bottom: 1px solid ${(props) => props.theme.fontColor};
+    border-top: 1px solid ${(props) => props.theme.color.default};
+    border-bottom: 1px solid ${(props) => props.theme.color.default};
   }
   
   #pdfFileName {
@@ -60,10 +60,14 @@ export const StyledDeletePDF = styled(DeletePDF)`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: ${(props) => props.theme.fontColor};
+    color: ${(props) => props.theme.color.default};
     text-align: center;
     padding-left: 24px;
     padding-right: 24px;
+  }
+  
+  #deletePP {
+    cursor: pointer;
   }
 
 `;

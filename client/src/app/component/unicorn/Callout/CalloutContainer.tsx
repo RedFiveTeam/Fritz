@@ -62,6 +62,7 @@ export class CalloutContainer extends React.Component<Props> {
   private displayDropdownWithoutCallouts() {
     return (
       <StyledStaticMessageDropdown
+        className={'staticMessageDropdown'}
         label={'Select'}
         message={'There are currently no callouts associated with this mission.'}
       />
@@ -71,6 +72,7 @@ export class CalloutContainer extends React.Component<Props> {
   private displayDropdownForOfflineMode() {
     return (
       <StyledStaticMessageDropdown
+        className={'staticMessageDropdown'}
         label={'Offline'}
         message={'Refresh UNICORN and select a mission to view a list of callouts.'}
       />
@@ -79,7 +81,9 @@ export class CalloutContainer extends React.Component<Props> {
 
   private displayUploadInProgress() {
     return (
-      <StyledUploadInProgress/>
+      <StyledUploadInProgress
+        className={'uploadInProgress'}
+      />
     );
   }
 
@@ -109,6 +113,7 @@ export class CalloutContainer extends React.Component<Props> {
   private displayUploadFailure() {
     return (
       <StyledUploadFailure
+        className={'uploadFailure'}
         calloutTime={this.props.slide.calloutTime}
         retry={
           async () => {
@@ -123,6 +128,7 @@ export class CalloutContainer extends React.Component<Props> {
   private displayCompletedUpload() {
     return (
       <StyledUploadSuccess
+        className={'uploadSuccess'}
         calloutTime={this.props.slide.calloutTime}
       />
     );
@@ -131,6 +137,7 @@ export class CalloutContainer extends React.Component<Props> {
   private displayUploadWaiting() {
     return (
       <StyledUploadWaiting
+        className={'uploadWaiting'}
         calloutTime={this.props.slide.calloutTime}
       />
     );
@@ -145,14 +152,16 @@ export const StyledCalloutContainer = inject(
 )(styled(CalloutContainer)`
   width: 188px;
   height: 168px;
-  background-image: linear-gradient(to right, #191e2a, #364054);
+  background-image: linear-gradient(to right, ${(props) => props.theme.color.blackTea}, #364054);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   box-sizing: border-box;
-  
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+    
   .title {
     display: flex;
     align-items: center;
@@ -166,6 +175,24 @@ export const StyledCalloutContainer = inject(
       margin-top: 3px;
       margin-left: 8px;
     }
+  }
+  
+  .staticMessageDropdown, 
+  .calloutDropdown {
+    margin-top: 32px;
+    display: flex;
+    flex: 1;
+    align-items: start !important;
+  } 
+  
+  .uploadWaiting, 
+  .uploadFailure {
+    margin-top: 32px;
+  }
+  
+  .uploadInProgress,
+  .uploadSuccess {
+    margin-top: 24px;
   }
   
   .bootstrap-dropdown {

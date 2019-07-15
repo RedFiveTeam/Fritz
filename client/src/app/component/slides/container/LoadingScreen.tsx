@@ -43,7 +43,7 @@ export const StyledLoadingScreen = styled(LoadingScreen)`
     font-size: 40px;
     font-weight: 300;
     font-family: ${(props) => props.theme.labelFontFamily};
-    color: ${(props) => props.theme.fontColor};
+    color: ${(props) => props.theme.color.default};
     font-stretch: normal;
     letter-spacing: normal;
   }

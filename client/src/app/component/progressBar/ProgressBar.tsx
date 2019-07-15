@@ -60,7 +60,7 @@ export const StyledProgressBar = inject('uploadStore')(styled(ProgressBar)`
   height: 19px;
 
   #status {
-    color: ${(props) => props.theme.fontColor};
+    color: ${(props) => props.theme.color.default};
     width: 100%;
   }
 `);

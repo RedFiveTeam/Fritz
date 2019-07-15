@@ -10,6 +10,7 @@ import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
 import { badClassificationCSS, badReleasabilityCSS, goodCSS, styled } from '../../../themes/default';
 import { DropdownOption } from '../dropdown/Dropdown';
 import { StyledDeletePDF } from './DeletePDF';
+import * as classNames from 'classnames';
 
 interface Props {
   fileName: string;
@@ -26,9 +27,7 @@ export class FormContainer extends React.Component<Props> {
   render() {
 
     return (
-      <div
-        className={this.props.className}
-      >
+      <div className={classNames('formContainer', this.props.className)}>
         {this.displayFormWithHeader()}
         {this.displayDeletePDF()}
       </div>
@@ -79,7 +78,6 @@ export class FormContainer extends React.Component<Props> {
   private displayForm() {
     let {slidesStore} = this.props;
     return (
-      <form>
         <div className={'formInputs'}>
           <StyledValidatingInput
             label={'Operation Name'}
@@ -111,7 +109,6 @@ export class FormContainer extends React.Component<Props> {
             {this.renderReleasabilityInput()}
           </div>
         </div>
-      </form>
     );
   }
 
@@ -144,12 +141,15 @@ export const StyledFormContainer = inject(
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  height: inherit;
+  width: 100%;
   
   .formWithHeader {
     display: flex;
     flex-direction: column;
     align-items: start;
+    width: 100%;
   }
   
   .controlUnit:nth-of-type(4) {
@@ -159,28 +159,13 @@ export const StyledFormContainer = inject(
   }
   
   .formInputs {
-    width: 600px;
+    width: inherit;
     > * {
+    max-width: 580px;
       margin-bottom: 32px;
     }
   }
-  
-  .splitControl {
-  width: 280px;
-  display: inline-block;
-  position: relative;
-  padding-top: 30px;
-  }
-  
-  .sC1 {
-  position: absolute;
-  }
-  
-  .sC2 {
-  position: relative;
-  left: 320px;
-  }
-  
+
   span {
     font-size: 16px;
     color: #D8E5FF;
@@ -229,6 +214,10 @@ export const StyledFormContainer = inject(
   
   .helpMessage {
     color: rgb(216, 229, 255);
+  }
+  
+  .deletePDF {
+    margin-top: 44px;
   }
   
   #offlineReleaseLabel {

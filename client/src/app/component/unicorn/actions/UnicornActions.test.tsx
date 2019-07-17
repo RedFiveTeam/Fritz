@@ -13,6 +13,7 @@ import { UnicornUploadStatusModel } from '../model/UnicornUploadStatusModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
 import { Toast } from '../../../../utils/Toast';
 import * as moment from 'moment';
+import { HomePageDisplay, HomePageStore } from '../../../page/HomePageStore';
 
 describe('UnicornActions', () => {
   let subject: UnicornActions;
@@ -23,8 +24,10 @@ describe('UnicornActions', () => {
   let slides: SlideModel[];
   let uploadStore: UploadStore;
   let metricRepository: MetricRepository;
+  let homePageStore: HomePageStore;
 
   beforeEach(() => {
+    homePageStore = new HomePageStore({} as any, {} as any, {} as any);
     unicornStore = new UnicornStore();
     uploadStore = new UploadStore();
     unicornStore.setActiveMission(new MissionModel('1', '', '', '', '', '', ''));
@@ -45,7 +48,7 @@ describe('UnicornActions', () => {
     unicornRepository = new StubUnicornRepository();
 
     subject = new UnicornActions(
-      {unicornRepository, metricRepository} as any, {unicornStore, slidesStore, uploadStore} as any
+      {unicornRepository, metricRepository} as any, {unicornStore, slidesStore, uploadStore, homePageStore} as any
     );
 
     subject.metricActions.updateMetric = jest.fn();
@@ -309,5 +312,11 @@ describe('UnicornActions', () => {
     subject.cancelUpload();
     expect(toastSpy).toHaveBeenCalledWith(5000, 'deleteToast', 'Upload Cancelled');
     expect(unicornStore.uploadQueue).toEqual([]);
+  });
+
+  it('should close the mission modal and set Fritz to offline mode', () => {
+    subject.closeMissionModal();
+    expect(unicornStore.offline).toBeTruthy();
+    expect(homePageStore.displayState).toBe(HomePageDisplay.READY_TO_UPLOAD_TO_FRITZ);
   });
 });

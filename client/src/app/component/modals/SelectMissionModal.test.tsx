@@ -1,18 +1,30 @@
 import * as React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { SelectMissionModal } from './SelectMissionModal';
 import { MissionModel } from '../unicorn/model/MissionModel';
 import { StyledMission } from '../unicorn/Mission/Mission';
 import { StyledUnicornMissionLoading } from '../average/loading/UnicornMissionLoading';
+import { Provider } from 'mobx-react';
 
 describe('SelectMissionModal', () => {
-  let subject: ShallowWrapper;
+  let subject: any;
   let unicornStore: any;
   let unicornActions: any;
+  let map: any;
 
   beforeEach(() => {
+
+    map = {};
+
+    document.addEventListener = jest.fn(
+      (event, cb) => {
+        map[event] = cb;
+      }
+    );
+
     unicornActions = {
-      initializeStores: jest.fn()
+      initializeStores: jest.fn(),
+      closeMissionModal: jest.fn()
     };
 
     unicornStore = {
@@ -24,14 +36,23 @@ describe('SelectMissionModal', () => {
       selectedSite: 'DGS 1',
       setLoading: jest.fn(),
       loading: jest.fn(),
-      setMissions: () => { unicornStore.missions = []; }
+      setMissions: () => {
+        unicornStore.missions = [];
+      }
     };
 
-    subject = shallow(
-      <SelectMissionModal
+    subject = mount(
+      <Provider
         unicornActions={unicornActions}
         unicornStore={unicornStore}
-      />
+        uploadActions={{} as any}
+        slidesActions={{} as any}
+      >
+        <SelectMissionModal
+          unicornActions={unicornActions}
+          unicornStore={unicornStore}
+        />
+      </Provider>
     );
   });
 
@@ -53,5 +74,15 @@ describe('SelectMissionModal', () => {
       />
     );
     expect(subject.find(StyledUnicornMissionLoading).exists()).toBeTruthy();
+  });
+
+  it('should call a function when clicked outside the modal', () => {
+    map.keydown({keyCode: 27});
+    expect(unicornActions.closeMissionModal).toHaveBeenCalled();
+  });
+
+  it('should call a fucntion when clicked outside', () => {
+    map.click({target: document.body});
+    expect(unicornActions.closeMissionModal).toHaveBeenCalled();
   });
 });

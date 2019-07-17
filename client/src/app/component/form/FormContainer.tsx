@@ -47,6 +47,7 @@ export class FormContainer extends React.Component<Props> {
           value={slidesStore!.releasability}
           errorMessage={'The releasability field must be chosen'}
           badStyle={badReleasabilityCSS}
+          className={'offlineRelInput'}
         />
       );
     }
@@ -100,12 +101,14 @@ export class FormContainer extends React.Component<Props> {
             value={slidesStore!.asset}
           />
           <div className={'classification-and-releasability'}>
+            <div>
               <span
                 className={'classification'}
                 style={this.props.slidesStore!.isValidReleasability ? goodCSS : badClassificationCSS}
               >
                 SECRET//
               </span>
+            </div>
             {this.renderReleasabilityInput()}
           </div>
         </div>
@@ -239,7 +242,7 @@ export const StyledFormContainer = inject(
   }
   
   #releasabilityInput {
-    width: 496px;
+    width: 476px;
     position: relative;
     border-width: 1px 1px 1px 0;
     border-radius: 0 4px 4px 0;
@@ -317,4 +320,12 @@ export const StyledFormContainer = inject(
     opacity: 0.4;
     font-weight: normal;
   }
+  
+  .offlineRelInput {
+    position: relative;
+    
+    .errorMessage {
+      position: absolute;
+      top: 72px;
+    }
 `);

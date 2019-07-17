@@ -30,16 +30,36 @@ const sites = [
 
 @observer
 export class SelectMissionModal extends React.Component<Props> {
+  myRef: any;
+
+  constructor(props: any) {
+    super(props);
+    this.myRef = React.createRef();
+  }
+
   async componentDidMount() {
+    document.addEventListener('keydown', this.handleClickOutside);
+    document.addEventListener('click', this.handleClickOutside);
     await this.props.unicornActions!.initializeStores();
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleClickOutside);
+    document.removeEventListener('click', this.handleClickOutside);
+  }
+
+  handleClickOutside = (e: any) => {
+    if (!this.myRef.current.contains(e.target)) {
+      this.props.unicornActions!.closeMissionModal();
+    }
+  };
 
   render() {
     return (
       <div
         className={this.props.className}
       >
-        <div className="modal">
+        <div className="modal" ref={this.myRef}>
           <div className="title">
             <span>Select a Mission from UNICORN</span>
             <div className={'site-selector'}>

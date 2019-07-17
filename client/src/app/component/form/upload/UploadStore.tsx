@@ -63,7 +63,6 @@ export class UploadStore {
       return 0;
     }
     this._percentConverted = Math.ceil((this.progress / this.total) * 100);
-    console.log('percent ', this._percentConverted);
     return this._percentConverted;
   }
 

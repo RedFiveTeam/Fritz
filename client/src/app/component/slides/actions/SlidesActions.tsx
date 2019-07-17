@@ -28,9 +28,6 @@ export class SlidesActions {
   @action.bound
   setAndUpdateActivity(slide: SlideModel, activity: any) {
     activity = activity.target.value.toUpperCase();
-    if (activity === '') {
-      activity = 'ACTY';
-    }
     this.slidesStore.setActivity(slide, activity);
     this.updateNewNames();
   }

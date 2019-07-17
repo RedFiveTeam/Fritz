@@ -13,7 +13,7 @@ export enum SlideUploadStatus {
 export class SlideModel {
   @observable private _oldName: string;
   @observable private _time: string = 'TTTT';
-  @observable private _activity: string = 'ACTY';
+  @observable private _activity: string = '';
   @observable private _newName: string = '';
   @observable private _deleted: boolean = false;
   @observable private _targetEventId: string = '';

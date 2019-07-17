@@ -14,6 +14,7 @@ import { StatisticActions } from '../../metrics/actions/StatisticActions';
 import { StatisticModel } from '../../metrics/StatisticModel';
 import { CalloutModel } from '../model/CalloutModel';
 import * as moment from 'moment';
+import { HomePageDisplay, HomePageStore } from '../../../page/HomePageStore';
 
 export class UnicornActions {
   public metricActions: MetricActions;
@@ -21,11 +22,13 @@ export class UnicornActions {
   slidesForUpload: SlideModel[];
   private unicornStore: UnicornStore;
   private slidesStore: SlidesStore;
+  private homePageStore: HomePageStore;
   private readonly unicornRepository: UnicornRepository;
 
   constructor(repositories: Partial<Repositories>, stores: Partial<Stores>) {
     this.unicornStore = stores.unicornStore!;
     this.slidesStore = stores.slidesStore!;
+    this.homePageStore = stores.homePageStore!;
     this.unicornRepository = repositories.unicornRepository!;
     this.metricActions = new MetricActions(repositories, stores);
     this.statisticActions = new StatisticActions(repositories, stores);
@@ -251,5 +254,11 @@ export class UnicornActions {
     Toast.create(5000, 'deleteToast', 'Upload Cancelled');
     this.unicornStore!.setUploadsInProgress(false);
     this.unicornStore!.setUploadQueue([]);
+  }
+
+  @action.bound
+  closeMissionModal() {
+    this.unicornStore!.setOffline(true);
+    this.homePageStore!.setDisplayState(HomePageDisplay.READY_TO_UPLOAD_TO_FRITZ);
   }
 }

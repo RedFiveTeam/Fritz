@@ -11,7 +11,7 @@ export enum HomePageDisplay {
   FRITZ_UPLOADING_OR_PROCESSING,
   READY_FOR_SLIDE_VIEWING_AND_EDITING,
   CAROUSEL,
-  CONFIRM_UPLOAD_TO_UNICORN,
+  CONFIRM_UPLOAD_TO_UNICORN
 }
 
 export class HomePageStore {
@@ -110,7 +110,7 @@ export class HomePageStore {
 
   private hasNotSelectedMission() {
     return (
-      this.unicornStore.activeMission === null
+      this.unicornStore.activeMission === null && !this.unicornStore.offline
       && !this.isUploadingOrProcessing()
     );
   }

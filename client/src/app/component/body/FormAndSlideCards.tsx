@@ -77,7 +77,7 @@ export const StyledFormAndSlideCards = inject('uploadStore', 'unicornStore')(sty
   .slideForm {
     height: inherit;
     min-width: 448px;
-    max-width: 688px;
+    max-width: 600px;
     padding: 16px;
     flex: 1;
   }

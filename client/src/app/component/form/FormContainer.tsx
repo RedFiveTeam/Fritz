@@ -242,7 +242,7 @@ export const StyledFormContainer = inject(
   }
   
   #releasabilityInput {
-    width: 476px;
+    width: 463px;
     position: relative;
     border-width: 1px 1px 1px 0;
     border-radius: 0 4px 4px 0;
@@ -327,5 +327,9 @@ export const StyledFormContainer = inject(
     .errorMessage {
       position: absolute;
       top: 72px;
+    }
+    
+    .spacerWithoutErrorMessage {
+      display: none;
     }
 `);

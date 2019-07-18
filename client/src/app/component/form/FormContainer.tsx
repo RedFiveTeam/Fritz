@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
@@ -8,10 +7,13 @@ import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { UploadActions } from './upload/actions/UploadActions';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
-import { badClassificationCSS, badReleasabilityCSS, goodCSS } from '../../../themes/default';
+import { badClassificationCSS, badReleasabilityCSS, goodCSS, styled } from '../../../themes/default';
 import { DropdownOption } from '../dropdown/Dropdown';
+import { StyledDeletePDF } from './DeletePDF';
+import * as classNames from 'classnames';
 
 interface Props {
+  fileName: string;
   className?: string;
   slidesActions?: SlidesActions;
   slidesStore?: SlidesStore;
@@ -22,12 +24,14 @@ interface Props {
 
 @observer
 export class FormContainer extends React.Component<Props> {
+  render() {
 
-  static changeReleasabilityColor() {
-    let dropdownText = (document.querySelector('.form-group') as HTMLElement).querySelector('.default') as HTMLElement;
-    if (dropdownText) {
-      dropdownText.style.opacity = '1';
-    }
+    return (
+      <div className={classNames('formContainer', this.props.className)}>
+        {this.displayFormWithHeader()}
+        {this.displayDeletePDF()}
+      </div>
+    );
   }
 
   renderReleasabilityInput() {
@@ -43,6 +47,7 @@ export class FormContainer extends React.Component<Props> {
           value={slidesStore!.releasability}
           errorMessage={'The releasability field must be chosen'}
           badStyle={badReleasabilityCSS}
+          className={'offlineRelInput'}
         />
       );
     }
@@ -56,69 +61,76 @@ export class FormContainer extends React.Component<Props> {
         id="releasabilityDropdown"
         callback={(option: DropdownOption) => {
           this.props.slidesActions!.setAndUpdateReleasability(option.display);
-          FormContainer.changeReleasabilityColor();
         }}
         errorMessage={'The releasability field must be chosen'}
       />
     );
   }
 
-  render() {
-    let {slidesStore} = this.props;
-
+  private displayFormWithHeader() {
     return (
-      <div
-        className={this.props.className}
-      >
-        <div className="header">
-          <h2>JPEG Renamer - Details
-          </h2>
-          <span>Complete the fields below to view and download JPEGs</span>
-        </div>
-        <form>
-          <div className="form-group">
-            <StyledValidatingInput
-              label={'Date'}
-              placeholder={'Select Date'}
-              listener={this.props.slidesActions!.setDateFromInput}
-              errorMessage={slidesStore!.errorMessages[0]}
-              id={'dateInput'}
-              validator={slidesStore!.isValidDate}
-              type={'date'}
-              value={slidesStore!.fullDate ? slidesStore!.fullDate : 'mm/dd/yyyy'}
-            />
-            <StyledValidatingInput
-              label={'Operation Name'}
-              placeholder={'e.g. Op Jumpshot'}
-              listener={this.props.slidesActions!.setAndUpdateOpName}
-              errorMessage={slidesStore!.errorMessages[1]}
-              id={'opInput'}
-              validator={slidesStore!.isValidOpName}
-              value={slidesStore!.opName}
-            />
-            <StyledValidatingInput
-              label={'Callsign'}
-              placeholder={'Callsign'}
-              listener={this.props.slidesActions!.setAndUpdateAsset}
-              errorMessage={
-                slidesStore!.differentAsset ? slidesStore!.errorMessages[3] : slidesStore!.errorMessages[2]
-              }
-              id={'assetInput'}
-              validator={slidesStore!.isValidAsset}
-              value={slidesStore!.asset}
-            />
-            <div className={'classification-and-releasability'}>
+      <div className={'formWithHeader'}>
+        {this.displayHeader()}
+        {this.displayForm()}
+      </div>
+    );
+  }
+
+  private displayForm() {
+    let {slidesStore} = this.props;
+    return (
+        <div className={'formInputs'}>
+          <StyledValidatingInput
+            label={'Operation Name'}
+            placeholder={'e.g. Op Jumpshot'}
+            listener={this.props.slidesActions!.setAndUpdateOpName}
+            errorMessage={slidesStore!.errorMessages[0]}
+            id={'opInput'}
+            validator={slidesStore!.isValidOpName}
+            value={slidesStore!.opName}
+          />
+          <StyledValidatingInput
+            label={'Callsign'}
+            placeholder={'Callsign'}
+            listener={this.props.slidesActions!.setAndUpdateAsset}
+            errorMessage={
+              slidesStore!.differentAsset ? slidesStore!.errorMessages[2] : slidesStore!.errorMessages[1]
+            }
+            id={'assetInput'}
+            validator={slidesStore!.isValidAsset}
+            value={slidesStore!.asset}
+          />
+          <div className={'classification-and-releasability'}>
+            <div>
               <span
                 className={'classification'}
                 style={this.props.slidesStore!.isValidReleasability ? goodCSS : badClassificationCSS}
               >
                 SECRET//
               </span>
-              {this.renderReleasabilityInput()}
             </div>
+            {this.renderReleasabilityInput()}
           </div>
-        </form>
+        </div>
+    );
+  }
+
+  private displayHeader() {
+    return (
+      <div className="header">
+        <h2>JPEG Renamer - Details
+        </h2>
+        <span>Complete the fields below to view and download JPEGs</span>
       </div>
+    );
+  }
+
+  private displayDeletePDF() {
+    return (
+      <StyledDeletePDF
+        className={'deletePDF'}
+        fileName={this.props.fileName}
+      />
     );
   }
 }
@@ -128,15 +140,19 @@ export const StyledFormContainer = inject(
 )
 (styled(FormContainer)`
   color: #fff;
-  margin-top: 20px;
-  margin-left: 50px;
+  padding-bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: inherit;
+  width: 100%;
   
-  .controlUnit {
-  padding-top: 30px;
-  }
-  
-  .controlUnit:nth-child(1) {
-  padding-top: 0px;
+  .formWithHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
   }
   
   .controlUnit:nth-of-type(4) {
@@ -145,39 +161,17 @@ export const StyledFormContainer = inject(
     position: relative;
   }
   
-  .form-group {
-  width: 600px;
+  .formInputs {
+    width: inherit;
+    > * {
+    max-width: 580px;
+      margin-bottom: 32px;
+    }
   }
-  
-  
-  .splitControl {
-  width: 280px;
-  display: inline-block;
-  position: relative;
-  padding-top: 30px;
-  }
-  
-  .sC1 {
-  position: absolute;
-  }
-  
-  .sC2 {
-  position: relative;
-  left: 320px;
-  }
-  
-  #folderIcon {
-    margin-bottom: 25px;
-  }
-  
+
   span {
     font-size: 16px;
     color: #D8E5FF;
-  }
-  
-  form {
-    position: relative;
-    bottom: 2px;
   }
   
   .leftText {
@@ -191,13 +185,6 @@ export const StyledFormContainer = inject(
     font-size: 24px;
   }
   
-  .filename {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 390px;
-    overflow: hidden;
-  }
-  
   .clickable {
       cursor: pointer;
   }
@@ -206,19 +193,15 @@ export const StyledFormContainer = inject(
     margin-bottom: 25px;
   }
   
-  .errorText {
-    position: absolute;
-    color: #e46373; 
-  }
-  
   .offlineRerrorText {
     position: absolute;
     color: #e46373; 
     left: 300px;
   }
+  
   .header {
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: 32px;
   }
   
   .header > span {
@@ -236,17 +219,8 @@ export const StyledFormContainer = inject(
     color: rgb(216, 229, 255);
   }
   
-  #pdfFileName {
-    text-overflow: ellipsis;
-    width: 390px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  
-  .helpMenuIcon {
-    margin-left: 10px;
-    padding-bottom: 1px;
-    cursor: pointer;
+  .deletePDF {
+    margin-top: 44px;
   }
   
   #offlineReleaseLabel {
@@ -268,7 +242,7 @@ export const StyledFormContainer = inject(
   }
   
   #releasabilityInput {
-    width: 496px;
+    width: 463px;
     position: relative;
     border-width: 1px 1px 1px 0;
     border-radius: 0 4px 4px 0;
@@ -346,4 +320,16 @@ export const StyledFormContainer = inject(
     opacity: 0.4;
     font-weight: normal;
   }
+  
+  .offlineRelInput {
+    position: relative;
+    
+    .errorMessage {
+      position: absolute;
+      top: 72px;
+    }
+    
+    .spacerWithoutErrorMessage {
+      display: none;
+    }
 `);

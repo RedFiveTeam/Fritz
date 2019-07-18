@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlideModel } from '../slides/models/SlideModel';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { SlidesStore } from '../slides/store/SlidesStore';
@@ -8,6 +7,8 @@ import { CarouselActions } from './CarouselActions';
 import { StyledDatePicker } from '../date/DatePicker';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { CarouselStore } from './CarouselStore';
+import { StyledSlideTitle } from '../slides/SlideTitle';
+import { styled } from '../../../themes/default';
 
 const DeleteIcon = require('../../../icon/DeleteIcon.svg');
 
@@ -57,40 +58,6 @@ export class CarouselItem extends React.Component<Props> {
     );
   }
 
-  getSlideName = (s: SlideModel, idx: number) => {
-    return (
-      <div key={idx} className="slide">
-        {
-          s.dateEdited ?
-            s.day :
-            this.props.slidesStore!.day
-        }
-        {
-          s.time === 'TTTT' ? <span><span className="text-info font-italic">TTTT</span>Z</span> :
-            !s.isValidTime ? <span className="text-info font-italic">TTTTZ</span> : <span>{s.time}Z</span>}
-        {
-          s.dateEdited ?
-            s.month!.toUpperCase() :
-            this.props.slidesStore!.month
-        }
-        {
-          this.props.slidesStore!.year
-        }
-        {
-          ('_' + (this.props.slidesStore!.opName || 'TGT_NAME') + '_').toUpperCase().split(' ').join('_')
-        }
-        {
-          s.activity === 'ACTY' ? <span className="text-info font-italic">ACTY</span> : <span>
-            {s.activity.split(' ').join('_')}
-          </span>}
-        {('_' + (this.props.slidesStore!.asset || 'ASSET') + '_' +
-          (this.props.slidesStore!.releasability || 'RELEASABILITY'))
-          .split(' ').join('_').toUpperCase()
-        }
-      </div>
-    );
-  };
-
   render() {
     return (
       <div className={this.props.className}>
@@ -107,8 +74,13 @@ export class CarouselItem extends React.Component<Props> {
           <div className={'slideCount'}>
             {this.props.count}
           </div>
-          <div className={'slideTitle'}>
-            {this.getSlideName(this.props.slide, 0)}
+          <div className={'slideTitleAndTrash'}>
+            <StyledSlideTitle
+              slide={this.props.slide}
+              opName={this.props.slidesStore!.opName}
+              asset={this.props.slidesStore!.asset}
+              releasability={this.props.slidesStore!.releasability}
+            />
             <div>
               <img
                 className={'delete'}
@@ -120,66 +92,80 @@ export class CarouselItem extends React.Component<Props> {
               />
             </div>
           </div>
-        </div>
-        <div className={'carouselInputs'}>
-          <StyledDatePicker
-            slide={this.props.slide}
-          />
-          <StyledValidatingInput
-            placeholder={'e.g. 0830'}
-            listener={(e: any) => {
-              this.props.changeTime(this.props.slide, e);
-            }}
-            id={'time-input'}
-            validator={this.props.slide.isValidTime}
-            value={this.props.slide.time}
-            errorMessage={'Invalid time'}
-            onlyValidateOnExit={true}
-            tabIndex={this.props.tabIndex}
-            reference={this.carouselTimeBox}
-            keyDown={(e: any) => {
-              if (e.keyCode === 9 && e.shiftKey) {
-                e.preventDefault();
-                this.props.carouselActions!.previous();
-              }
-            }}
-          />
-          <StyledValidatingInput
-            placeholder={'Activity'}
-            listener={(e: any) => {
-              this.props.changeActivity(this.props.slide, e);
-            }}
-            value={this.props.slide.activity === 'ACTY' ? '' : this.props.slide.activity}
-            id={'activityInput'}
-            validator={true}
-            tabIndex={this.props.tabIndex! + 1}
-            reference={this.carouselActivityBox}
-            keyDown={(e: any) => {
-              if (e.keyCode === 9) {
-                e.preventDefault();
-                this.props.carouselActions!.next();
-              }
-            }}
-          />
+          <div className={'carouselInputs'}>
+            <StyledDatePicker
+              slide={this.props.slide}
+            />
+            <StyledValidatingInput
+              className={'validatingTimeInput'}
+              placeholder={'e.g. 0830'}
+              listener={(e: any) => {
+                this.props.changeTime(this.props.slide, e);
+              }}
+              id={'time-input'}
+              validator={this.props.slide.isValidTime}
+              value={this.props.slide.time}
+              errorMessage={'Invalid time'}
+              onlyValidateOnExit={true}
+              tabIndex={this.props.tabIndex}
+              reference={this.carouselTimeBox}
+              keyDown={(e: any) => {
+                if (e.keyCode === 9 && e.shiftKey) {
+                  e.preventDefault();
+                  this.props.carouselActions!.previous();
+                }
+              }}
+            />
+            <StyledValidatingInput
+              placeholder={'Activity'}
+              listener={(e: any) => {
+                this.props.changeActivity(this.props.slide, e);
+              }}
+              value={this.props.slide.activity === 'ACTY' ? '' : this.props.slide.activity}
+              id={'activityInput'}
+              validator={true}
+              tabIndex={this.props.tabIndex! + 1}
+              reference={this.carouselActivityBox}
+              keyDown={(e: any) => {
+                if (e.keyCode === 9) {
+                  e.preventDefault();
+                  this.props.carouselActions!.next();
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
     );
   }
+
 }
 
 export const StyledCarouselItem = inject('slidesStore', 'carouselActions', 'carouselStore', 'slidesActions')
 (styled(CarouselItem)`
 
+  .datePicker {
+    position: relative;
+  }
+
   .imgContainer {
     position: relative;
     width: 1280px;
+    height: 720px;
     margin: auto;
   }
   
   .slideInfo {
-    position: relative;
-    bottom: 50px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1280px;
+    margin: auto;
+    
+    > * {
+      margin-top: 16px;
+    }
   }
 
   .expandedImage {
@@ -189,19 +175,8 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions', 'caro
     position: relative;
   }
   
-  input {
-    width: 100%;
-    color: #fff;
-    background-color:rgba(0, 0, 0, 0);
-    border-radius: 4px;
-    border: 1px solid #ced4da;
-    padding-left: 9px;
-  }
-  
-  input:focus {
-    background-color:rgba(0, 0, 0, 0);
-    color: #fff;
-    border: #15deec solid 1px;
+  .validatingInput {
+    width: 176px;
   }
   
   label {
@@ -232,32 +207,23 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions', 'caro
     }
   }
   
-  .activityInput {
-    width: 193px;
-    height: 38px;
-    top: 32px;
-    position: relative;
-  }
-  
-  .activityLabel {
-    position: relative;
-    left: 54px;
-  }
-  
-  .slideTitle {
-    color: #FFF;
-    font-size: 22px;
-    display: inline-block;
+  .slideTitleAndTrash {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     
-    > div {
+    .slideTitle {
+      color: #FFF;
+      font-size: 22px;
+      font-weight: normal;
       display: inline-block;
-      
-      > img {
-        display: inline-block;
-        margin-left: 16px;
-        margin-bottom: 4px;
+      width: unset;
+      margin-right: 18px;
+    }
+    
+    > div > img {
         cursor: pointer;
-      }
     }
   }
   
@@ -266,20 +232,12 @@ export const StyledCarouselItem = inject('slidesStore', 'carouselActions', 'caro
     color: #FFF;
   }
   
-  #time-input {
-    width: 193px;
-  }
-  
   .carouselInputs {
-    position: relative;
-    display: inline-flex;
-    bottom: 50px;
-    left: 36%;
+    display: flex;
   }
   
-  .datePicker {
-    top: 24px;
-    right: 16px;
+  .validatingTimeInput {
+    margin: 0 24px;
   }
   
   .datePicker > label {

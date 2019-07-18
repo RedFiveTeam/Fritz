@@ -3,7 +3,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import { StyledMetricsTable } from './MetricsTable';
 import { MetricStore } from '../MetricStore';
 import { MetricModel } from '../MetricModel';
-import moment = require('moment');
+import * as moment from 'moment';
 
 describe('MetricsTable', () => {
   let subject: ReactWrapper;

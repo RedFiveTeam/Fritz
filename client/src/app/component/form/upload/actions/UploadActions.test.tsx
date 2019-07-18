@@ -8,6 +8,9 @@ import { SlidesStore } from '../../../slides/store/SlidesStore';
 import { MetricRepository } from '../../../metrics/repository/MetricRepository';
 import { StubMetricRepository } from '../../../metrics/repository/StubMetricRepository';
 import { ReleasabilityModel } from '../../../unicorn/model/ReleasabilityModel';
+import { SlideModel } from '../../../slides/models/SlideModel';
+import { dateWithMinutePrecision, setupEmptySlides } from '../../../../../utils/TestHelper';
+import * as moment from 'moment';
 
 describe('UploadActions', () => {
   let subject: UploadActions;
@@ -17,6 +20,19 @@ describe('UploadActions', () => {
   let slidesStore: SlidesStore;
   let unicornStore: any;
   let metricActions: any;
+
+  function setupNewUploadActions() {
+    uploadStore = new UploadStore();
+    slidesStore = new SlidesStore();
+    subject = new UploadActions(
+      {uploadRepository, metricRepository} as any, {uploadStore, slidesStore, unicornStore} as any
+    );
+    subject.uploadProcessingComplete = jest.fn();
+    subject.setOpInput = jest.fn();
+    subject.setCallsignInput = jest.fn();
+    subject.setReleasabilityInput = jest.fn();
+    subject.metricActions = metricActions;
+  }
 
   beforeEach(() => {
 
@@ -61,17 +77,7 @@ describe('UploadActions', () => {
       ));
     });
 
-    uploadStore = new UploadStore();
-    slidesStore = new SlidesStore();
-    subject = new UploadActions(
-      {uploadRepository, metricRepository} as any, {uploadStore, slidesStore, unicornStore} as any
-    );
-    subject.uploadProcessingComplete = jest.fn();
-    subject.setDateInput = jest.fn();
-    subject.setOpInput = jest.fn();
-    subject.setCallsignInput = jest.fn();
-    subject.setReleasabilityInput = jest.fn();
-    subject.metricActions = metricActions;
+    setupNewUploadActions();
   });
 
   it('should set uploaded, processing and conversionStatus to true, and placeholder to false when upload is called',
@@ -100,9 +106,33 @@ describe('UploadActions', () => {
     expect(slidesStore.slides[0].time).toBe('1525');
   });
 
-  it('should update the date when a status model is returned', async () => {
+  it('should set date on all slides if status has a date', async () => {
+    setupEmptySlides(slidesStore);
     await subject.checkStatus();
-    expect(subject.setDateInput).toHaveBeenCalledWith('05MAR19');
+    slidesStore.slides.map((slide: SlideModel) => {
+      expect(slide.date).toEqual(moment('2019-03-05'));
+    });
+  });
+
+  it('should set todays date on all slides if status has no date', async () => {
+    setupEmptySlides(slidesStore);
+    uploadRepository.status = jest.fn(() => {
+        return Promise.resolve(new StatusModel(
+          'complete',
+          ['slide1.jpg', 'slide2.jpg', 'slide3.jpg'],
+          ['1525', '', ''],
+          0,
+          3,
+          '',
+          'OP MATT',
+          'MATT 81',
+          'FOUO'
+        ));
+      });
+    await subject.checkStatus();
+    slidesStore.slides.map((slide: SlideModel) => {
+      expect(dateWithMinutePrecision(slide.date)).toEqual((dateWithMinutePrecision(moment())));
+    });
   });
 
   it('should update the op when a status model with an operation is returned', async () => {

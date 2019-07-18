@@ -1,5 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { SlideModel } from '../models/SlideModel';
+import * as moment from 'moment';
 
 export class SlidesStore {
   @observable private _files: string[] = [];
@@ -9,21 +10,14 @@ export class SlidesStore {
   @observable private _slides: SlideModel[] = [];
   @observable private _activity: string | null;
   @observable private _time: string | null;
-  @observable private _month: string | null = 'MON';
-  @observable private _year: string | null = 'YY';
-  @observable private _day: string | null = 'DD';
-  @observable private _help: boolean = false;
   @observable private _releasability: string = '';
-  @observable private _fullDate: string;
   @observable private _assignedCalloutCount: number;
   @observable private _differentAsset: boolean = false;
-  @observable private _isValidDate: boolean = true;
   @observable private _isValidOpName: boolean = true;
   @observable private _isValidAsset: boolean = true;
   @observable private _isValidReleasability: boolean = false;
   @observable private _hasInitiallyValidated: boolean = false;
   @observable private _errorMessages: string[] = [
-    'The date field must not be empty',
     'The op name field must not be empty',
     'The callsign field must not be empty',
     'The callsign does not match selected mission'
@@ -38,21 +32,6 @@ export class SlidesStore {
   @computed
   get assignedCalloutCount(): number {
     return this._assignedCalloutCount;
-  }
-
-  @computed
-  get month(): string | null {
-    return this._month;
-  }
-
-  @computed
-  get year(): string | null {
-    return this._year;
-  }
-
-  @computed
-  get day(): string | null {
-    return this._day;
   }
 
   @computed
@@ -91,23 +70,8 @@ export class SlidesStore {
   }
 
   @computed
-  get help(): boolean {
-    return this._help;
-  }
-
-  @computed
   get releasability(): string {
     return this._releasability;
-  }
-
-  @computed
-  get fullDate(): string {
-    return this._fullDate;
-  }
-
-  @computed
-  get isValidDate() {
-    return this._isValidDate;
   }
 
   @computed
@@ -125,35 +89,6 @@ export class SlidesStore {
     return this._isValidReleasability;
   }
 
-  nameFormat(slide: SlideModel): string {
-    return ((
-      (slide.day || 'DD') +
-      (this._time || 'TTTT') + 'Z' +
-      (slide.month || 'MON') +
-      (this._year || 'YY') + '_' +
-      (this._opName || 'TGT_NAME') + '_' +
-      (this._activity || '_ACTY_') + '_' +
-      (this._asset || 'ASSET') + '_' +
-      (this._releasability || 'RELEASABILITY'))
-      .split(' ').join('_')
-      .toUpperCase());
-  }
-
-  @computed
-  get formInputNameFormat(): string {
-    return ((
-      (this._day || 'DD') +
-      (this._time || 'TTTT') + 'Z' +
-      (this._month || 'MON') +
-      (this._year || 'YY') + '_' +
-      (this._opName || 'TGT_NAME') + '_' +
-      (this._activity || '_ACTY_') + '_' +
-      (this._asset || 'ASSET') + '_' +
-      (this._releasability || 'RELEASABILITY'))
-      .split(' ').join('_')
-      .toUpperCase());
-  }
-
   @computed
   get differentAsset(): boolean {
     return this._differentAsset;
@@ -162,6 +97,40 @@ export class SlidesStore {
   @computed
   get hasInitiallyValidated(): boolean {
     return this._hasInitiallyValidated;
+  }
+  @computed
+  get undeletedSlides(): SlideModel[] {
+    return this._slides.filter((s: SlideModel) => {
+      return !s.deleted;
+    });
+  }
+
+  nameFormat(slide: SlideModel): string {
+    let valueOrPlaceholder = (
+      value: string | null,
+      placeholder: string
+    ): string => {
+      return (value || placeholder).split(' ').join('_');
+    };
+
+    let datetime = () => {
+      return [
+        (slide.dayWithLeadingZero),
+        (slide.time || 'TTTT') + 'Z',
+        (slide.monthThreeLetter),
+        (slide.yearTwoDigit)
+      ].join('');
+    };
+
+    return [
+      datetime(),
+      valueOrPlaceholder(this._opName, 'TGT_NAME'),
+      valueOrPlaceholder(slide.activity, 'ACTY'),
+      valueOrPlaceholder(this._asset, 'ASSET'),
+      valueOrPlaceholder(this._releasability, 'RELEASABILITY'),
+    ]
+      .join('_')
+      .toUpperCase();
   }
 
   @action.bound
@@ -181,29 +150,6 @@ export class SlidesStore {
       }
     });
     return militaryDate;
-  }
-
-  @action.bound
-  setFullDate(value: string) {
-    if (this.isMilitaryDateFormat(value)) {
-      value = this.parseMilitaryDate(value);
-    }
-
-    let month = value.substr(5, 2);
-    let displayMonth = this.months[parseInt(month, 10) - 1];
-    let year = value.substr(2, 2);
-    let day = value.substr(8, 2);
-
-    if (month === '' || year === '' || day === '') {
-      displayMonth = 'MON';
-      year = 'YY';
-      day = 'DD';
-    }
-
-    this.setMonth(displayMonth);
-    this.setYear(year);
-    this.setDay(day);
-    this._fullDate = value;
   }
 
   parseMilitaryDate(date: string): string {
@@ -275,29 +221,8 @@ export class SlidesStore {
     this._slides = value;
   }
 
-  @action.bound
-  setMonth(value: string | null) {
-    this._month = value;
-  }
-
-  @action.bound
-  setYear(value: string | null) {
-    this._year = value;
-  }
-
-  @action.bound
-  setDay(value: string | null) {
-    this._day = value;
-  }
-
-  @action.bound
-  setHelp(value: boolean) {
-    this._help = value;
-  }
-
   validate(): boolean {
     if (this.hasInitiallyValidated) {
-      this.validateDate();
       this.validateOpName();
       this.validateAsset();
       this.validateReleasability();
@@ -306,48 +231,28 @@ export class SlidesStore {
     return this.areAllFieldsValid();
   }
 
-  isValidDay(): boolean {
-    return (this.isValidDateInput(this._day, 'DD'));
+  setAllSlidesDates(dateString: string) {
+    this._slides.map((slide: SlideModel) => {
+      slide.setDate(moment(this.deriveDateFromString(dateString)));
+    });
   }
 
-  isValidMonth(): boolean {
-    return (this.isValidDateInput(this._month, 'MON'));
-  }
-
-  isValidYear(): boolean {
-    return (this.isValidDateInput(this._year, 'YY'));
-  }
-
-  isValidDateInput(
-    input: string | undefined | null,
-    template: string
-  ): boolean {
-    return (
-      input !== null &&
-      input !== undefined &&
-      input !== template &&
-      input.length === template.length
-    );
+  private deriveDateFromString(value: string) {
+    if (this.isMilitaryDateFormat(value)) {
+      value = this.parseMilitaryDate(value);
+    }
+    return value;
   }
 
   private areAllFieldsValid(): boolean {
     if (this.hasInitiallyValidated) {
       return (
-        this.isValidDate &&
         this.isValidOpName &&
         this.isValidAsset &&
         this.isValidReleasability
       );
     }
     return false;
-  }
-
-  private validateDate() {
-    this._isValidDate = (
-      this.isValidDay() &&
-      this.isValidMonth() &&
-      this.isValidYear()
-    );
   }
 
   private validateOpName() {
@@ -374,12 +279,5 @@ export class SlidesStore {
 
   private validateDifferentAsset() {
     return this._differentAsset;
-  }
-
-  @computed
-  get undeletedSlides(): SlideModel[] {
-    return this._slides.filter((s: SlideModel) => {
-      return !s.deleted;
-    });
   }
 }

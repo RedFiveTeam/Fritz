@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { MetricStore } from '../MetricStore';
 import { MetricActions } from '../actions/MetricActions';
 import * as moment from 'moment';
+import { styled } from '../../../../themes/default';
 
 interface Props {
   className?: string;

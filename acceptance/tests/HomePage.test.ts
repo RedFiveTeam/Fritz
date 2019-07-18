@@ -5,44 +5,68 @@ let assert = require('assert');
 Feature('Home Page');
 
 Scenario('should allow you to edit the activity and time of a image and view image in expanded view', (I) => {
-  I.amOnPage('/');
-  I.waitForText('TEST11', 10);
-  I.click('.testId');
-  I.waitForText('Mission: TEST11', 10);
-  I.attachFile('#uploadButton', 'data/AcceptanceMission.pdf');
-  I.wait(5);
-  I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY', 10);
-  I.fillField('.slideCard > .card > .row > .col-md-8 > div > .slidesInputs > .activityInputField > input', 'activity test');
-  I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
-  I.clearField('.slideCard > .card > .row > .col-md-8 > div > .slidesInputs > div:nth-of-type(2) > input');
-  I.fillField('.slideCard > .card > .row > .col-md-8 > div > .slidesInputs > div:nth-of-type(2) > input', '1234');
-  I.waitForText('291234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
-  I.click('.slideCard > .card > .row > .col-md-8 > div > .slidesInputs > div:first-of-type > .buttons > .upArrow');
-  I.waitForText('301234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
-  I.click('.slideCard:first-of-type > .card > .row > .col-md-4 > img');
-  I.waitForText('301234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
-  I.fillField('.currentSlide > div > .carouselInputs > div:nth-of-type(3) > input', 'new activity test');
-  I.fillField('.currentSlide > div > .carouselInputs > div:nth-of-type(2) > input', '1234');
-  I.waitForText('301234ZAPR19_OP_LEPRECHAUN_PHASE_8_NEW_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY', 10);
-  I.click('.exitIcon');
-  I.waitForText('JPEG Renamer - Details', 10);
+  navigateHomeAndUploadPDF(I);
+
+  I.fillField('#activityInput', 'activity test');
+  assert(
+    I.grabTextFrom('.slideTitle'),
+    '291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY'
+  );
+
+  I.fillField('#timeInput', '1234');
+  assert(
+    I.grabTextFrom('.slideTitle'),
+    '291234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY'
+  );
+  I.click('.upArrow');
+  assert(
+    I.grabTextFrom('.slideTitle'),
+    '301234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY'
+  );
 });
 
-Scenario('should allow you to upload a file and display the jpgs', (I) => {
-  I.amOnPage('/');
-  I.waitForText('TEST11', 10);
-  I.click('.testId');
-  I.waitForText('Mission: TEST11', 10);
-  I.click('#downloadButton');
-  I.waitForText('You must upload a PDF', 10);
-  I.attachFile('#uploadButton', 'data/blank.txt');
+Scenario('should edit slide information in the carousel', (I) => {
+  navigateHomeAndUploadPDF(I);
+
+  I.waitForText('UNICORN Callout', 10);
+  I.click('.thumbnailClickOverlay');
+  assert(
+    I.grabTextFrom('.currentSlide > .slideTitle'),
+    '301234ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY'
+  );
+
+  clearActivityInput(I);
+  I.fillField('#activityInput', 'carousel activity test');
+
+  clearTimeInput(I);
+  I.fillField('#timeInput', '0123');
+
+  assert(
+    I.grabTextFrom('.currentSlide > .slideTitle'),
+    '300123ZAPR19_OP_LEPRECHAUN_PHASE_8_CAROUSEL_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY'
+  );
+  I.click('.exitIcon');
+  assert(
+    I.grabTextFrom('.slideTitle'),
+    '300123ZAPR19_OP_LEPRECHAUN_PHASE_8_CAROUSEL_ACTIVITY_TEST_STEPHEN_13_RELEASABILITY'
+  );
+  assert(I.grabTextFrom('.header > h2'), 'JPEG Renamer - Details');
+});
+
+Scenario('should restrict uploads to PDFs and delete uploads', (I) => {
+  navigateHomeAndSelectMission(I);
+
+  I.attachFile('#browseInput', 'data/blank.txt');
   I.waitForText('File must be a PDF', 10);
-  I.attachFile('#uploadButton', 'data/AcceptanceMission.pdf');
-  I.waitForText('ACCEPTANCEMISSION.PDF', 10);
-  assert(I.grabValueFrom('#dateInput'), '04/29/2019');
-  assert(I.grabValueFrom('#opInput'), 'OP LEPRECHAUN PHASE 8');
-  assert(I.grabValueFrom('#assetInput'), 'STEPHEN 13');
-  I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY', 10);
+  I.attachFile('#browseInput', 'data/AcceptanceMission.pdf');
+  assert(
+    I.grabTextFrom('#pdfFileName'), 'AcceptanceMission.pdf');
+
+  assert(
+    I.grabTextFrom('.slideTitle'),
+    '291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY'
+  );
+  I.waitForText('UNICORN Callout', 10);
   I.click('#deletePP');
   I.waitForText('Are you sure you want to delete the PDF', 10);
   I.click('.btn-primary');
@@ -51,19 +75,11 @@ Scenario('should allow you to upload a file and display the jpgs', (I) => {
 });
 
 Scenario('should validateInput fields before download', (I) => {
-  I.amOnPage('/');
-  I.waitForText('TEST11', 10);
-  I.click('.testId');
-  I.waitForText('Mission: TEST11', 10);
-  I.attachFile('#uploadButton', 'data/AcceptanceMission.pdf');
-  I.waitForText('ACCEPTANCEMISSION.PDF', 10);
+  navigateHomeAndUploadPDF(I);
 
-  I.waitForText('291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY', 10);
-  I.waitForText('The callsign does not match selected mission', 5);
-  I.waitForText('The releasability field must be chosen', 5);
+  assert(I.grabTextFrom('.validatingInput:nth-of-type(2) > .errorMessage'), 'The callsign does not match selected mission');
+  assert(I.grabTextFrom('.controlUnit > .errorMessage'), 'The releasability field must be chosen');
 
-  I.fillField('#dateInput', '05/21/2019');
-  I.pressKey('Backspace');
   I.fillField('#opInput', 'd');
   I.pressKey('Backspace');
   I.fillField('#assetInput', 'TEST11');
@@ -71,36 +87,65 @@ Scenario('should validateInput fields before download', (I) => {
 
   I.fillField('#assetInput', 'a');
   I.pressKey('Backspace');
-  I.dontSee('The date field must not be empty');
   I.dontSee('The op name field must not be empty');
   I.dontSee('The callsign field must not be empty');
 
   I.click('#downloadButton');
-  I.waitForText('The date field must not be empty', 5);
-  I.waitForText('The op name field must not be empty', 5);
-  I.waitForText('The callsign field must not be empty', 5);
-  I.waitForText('The releasability field must be chosen', 5);
-
-  I.fillField('#dateInput', '05/14/2019');
-  I.dontSee('The date field must not be empty');
-  I.waitForText('The op name field must not be empty', 5);
-  I.waitForText('The callsign field must not be empty', 5);
-  I.waitForText('The releasability field must be chosen', 5);
+  assert(I.grabTextFrom('.validatingInput:first-of-type > .errorMessage'), 'The op name field must not be empty');
+  assert(I.grabTextFrom('.validatingInput:nth-of-type(2) > .errorMessage'), 'The callsign field must not be empty');
+  assert(I.grabTextFrom('.controlUnit > .errorMessage'), 'The releasability field must be chosen');
 
   I.fillField('#opInput', 'op test');
-  I.dontSee('The op name field must not be empty');
-  I.waitForText('The callsign field must not be empty', 5);
-  I.waitForText('The releasability field must be chosen', 5);
+  assert(I.grabTextFrom('.validatingInput:first-of-type > .errorMessage'), 'The op name field must not be empty');
+  assert(I.grabTextFrom('.validatingInput:nth-of-type(2) > .errorMessage'), 'The callsign field must not be empty');
+  assert(I.grabTextFrom('.controlUnit > .errorMessage'), 'The releasability field must be chosen');
 
   I.fillField('#assetInput', 'asset');
   I.dontSee('The callsign field must not be empty');
-  I.waitForText('The callsign does not match selected mission', 5);
-  I.waitForText('The releasability field must be chosen', 5);
+  assert(I.grabTextFrom('.validatingInput:nth-of-type(2) > .errorMessage'), 'The callsign does not match selected mission');
+  assert(I.grabTextFrom('.controlUnit > .errorMessage'), 'The releasability field must be chosen');
 
   I.fillField('#assetInput', 'TEST11');
   I.dontSee('The callsign does not match selected mission');
-  I.waitForText('The releasability field must be chosen', 5);
+  assert(I.grabTextFrom('.controlUnit > .errorMessage'), 'The releasability field must be chosen');
 
   I.click('FOUO');
   I.dontSee('The releasability field must be chosen');
 });
+
+// @ts-ignore
+function navigateHomeAndSelectMission(I) {
+  I.amOnPage('/');
+  I.waitForText('TEST11', 10);
+  I.click('.testId');
+  I.waitForText('Mission: TEST11', 10);
+}
+
+// @ts-ignore
+function navigateHomeAndUploadPDF(I) {
+  navigateHomeAndSelectMission(I);
+  I.attachFile('#browseInput', 'data/AcceptanceMission.pdf');
+  assert(
+  I.grabTextFrom('#pdfFileName'), 'AcceptanceMission.pdf');
+  assert(
+    I.grabTextFrom('.slideTitle'),
+    '291235ZAPR19_OP_LEPRECHAUN_PHASE_8_ACTY_STEPHEN_13_RELEASABILITY'
+  );
+  I.wait(1);
+}
+
+// @ts-ignore
+function clearActivityInput(I) {
+  I.fillField('#activityInput', '');
+  for (let i = 0; i < 'activity test'.length; i++) {
+    I.pressKey('Backspace')
+  }
+}
+
+// @ts-ignore
+function clearTimeInput(I) {
+  I.fillField('#timeInput', '');
+  for (let i = 0; i < '1234'.length; i++) {
+    I.pressKey('Backspace')
+  }
+}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlidesStore } from '../slides/store/SlidesStore';
+import { styled } from '../../../themes/default';
 
 const helpStep1 = require('../../../icon/HelpStep1.svg');
 const helpStep2 = require('../../../icon/HelpStep2.svg');
@@ -9,6 +9,7 @@ const RightArrow = require('../../../icon/RightArrow.svg');
 const ExitHelpMenu = require('../../../icon/ExitHelpMenu.svg');
 
 interface Props {
+  exit: () => void;
   className?: string;
   slidesStore?: SlidesStore;
 }
@@ -31,7 +32,7 @@ export class HelpMenu extends React.Component<Props> {
             className="closeHelp"
             src={ExitHelpMenu}
             onClick={() => {
-              this.props.slidesStore!.setHelp(false);
+              this.props.exit();
             }}
           />
           <div className="imageInstructions">

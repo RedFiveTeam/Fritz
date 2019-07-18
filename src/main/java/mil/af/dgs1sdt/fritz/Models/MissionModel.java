@@ -1,7 +1,9 @@
 package mil.af.dgs1sdt.fritz.Models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@AllArgsConstructor
 @Data
 public class MissionModel {
   private String id;

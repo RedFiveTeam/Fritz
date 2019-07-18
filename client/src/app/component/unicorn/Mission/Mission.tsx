@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { UnicornStore } from '../store/UnicornStore';
 import { MissionModel } from '../model/MissionModel';
 import { UnicornActions } from '../actions/UnicornActions';
 import { UploadActions } from '../../form/upload/actions/UploadActions';
 import { SlidesActions } from '../../slides/actions/SlidesActions';
+import { styled } from '../../../../themes/default';
 
 interface Props {
   className?: string;

@@ -13,7 +13,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,10 +48,9 @@ public class Conversion {
         stripper.setEndPage(page + 1);
         String text = stripper.getText(document);
         if (page == 0) {
-          String datePattern = "\\d{2} [A-z]{3} \\d{2}";
-          Matcher dateMatcher = Pattern.compile(datePattern).matcher(text);
-          if (dateMatcher.find()) {
-            tracking.setDate(dateMatcher.group().replaceAll(" ", ""));
+          String date = this.getDateFromText(text);
+          if (date != "") {
+            tracking.setDate(date);
           }
           String opPattern = "OP NAME: .*";
           Matcher opMatcher = Pattern.compile(opPattern).matcher(text);
@@ -88,6 +90,22 @@ public class Conversion {
     } catch (IOException e) {
       System.err.println("Exception while trying to create pdf document - " + e);
     }
+  }
+
+  public String getDateFromText(String text) {
+    String datePattern = "\\d{2} [A-z]{3} \\d{2}";
+    Matcher dateMatcher = Pattern.compile(datePattern).matcher(text);
+    if (dateMatcher.find()) {
+      return dateMatcher.group().replaceAll(" ", "");
+    }
+    return "";
+  }
+
+  public long convertDateStringToUnix(String date) throws Exception {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMMyy");
+    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    Date newDate = simpleDateFormat.parse(date);
+    return newDate.getTime() / 1000L;
   }
 }
 

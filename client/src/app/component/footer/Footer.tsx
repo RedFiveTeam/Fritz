@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { StyledActionButton } from '../button/ActionButton';
 import { StyledUnicornUploadProgress } from '../unicorn/components/UnicornUploadProgress';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { styled } from '../../../themes/default';
 
 interface Props {
   downloader: () => {};
@@ -53,12 +53,8 @@ export class Footer extends React.Component<Props> {
 }
 
 export const StyledFooter = inject('unicornStore')(styled(Footer)`
-  position: fixed;
   background: #1E232B;
-  bottom: 0;
-  right: 0;
   box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.5);
-  width: 100%;
   z-index: 3;
   height: 64px;
 

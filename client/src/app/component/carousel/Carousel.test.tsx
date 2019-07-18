@@ -15,9 +15,10 @@ describe('Carousel', () => {
   let unicornStore: UnicornStore;
   let carouselStore: CarouselStore;
   let slides: SlideModel[];
-  let slide2 = new SlideModel('', '', '', '', false, '', '');
+  let slide2: SlideModel;
 
   beforeEach(() => {
+    slide2 = new SlideModel();
     slides = [
       new SlideModel('', '', '', '', false, '', ''),
       slide2,
@@ -81,7 +82,7 @@ describe('Carousel', () => {
 
   it('should display a carousel item for the current index', () => {
     expect(subject.find(StyledCarouselItem).at(1).exists()).toBeTruthy();
-    expect(subject.find(StyledCarouselItem).at(1).prop('slide')).toEqual(slide2);
+    expect(subject.find(StyledCarouselItem).at(1).prop('slide')).toBe(slides[0]);
   });
 
   it('should move to the next carousel item', () => {

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { UploadStore } from '../form/upload/UploadStore';
+import { styled } from '../../../themes/default';
 
 interface Props {
-  className?: string;
   uploadStore?: UploadStore;
+  className?: string;
 }
 
 @observer
@@ -56,14 +56,11 @@ export class ProgressBar extends React.Component<Props> {
 }
 
 export const StyledProgressBar = inject('uploadStore')(styled(ProgressBar)`
-width: 1216px;
-height: 19px;
-position: relative;
-margin: auto;
-margin-top: 86px;
+  width: 75%;
+  height: 19px;
 
- #status {
-  color: #FFF;
-  width: 100%;
+  #status {
+    color: ${(props) => props.theme.color.default};
+    width: 100%;
   }
 `);

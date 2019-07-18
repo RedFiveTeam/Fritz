@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { SlidesActions } from '../slides/actions/SlidesActions';
 import { SlideModel } from '../slides/models/SlideModel';
 import { UnicornActions } from '../unicorn/actions/UnicornActions';
 import { MetricActions } from '../metrics/actions/MetricActions';
+import { styled } from '../../../themes/default';
 
 const unicorn = require('../../../icon/UnicornIcon.svg');
 const image = require('../../../icon/ImageIcon.svg');
@@ -122,19 +122,19 @@ export const StyledUnicornUploadModal = inject(
   'unicornActions',
   'metricActions')
 (styled(UnicornUploadModal)`
-            background: rgba(0, 0, 0, 0.5);
-            top: 0px;
-            left: 0px;
-            bottom: 0px;
-            right: 0px;
-            position: fixed;
-            z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  position: fixed;
+  z-index: 100;
 
 
-          span {
-          position: relative;
-          left: 5px;
-        }
+  span {
+    position: relative;
+    left: 5px;
+  }
 
           #checkIcon {
           position: relative;

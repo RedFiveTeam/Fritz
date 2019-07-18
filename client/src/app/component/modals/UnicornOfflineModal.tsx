@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { UnicornStore } from '../unicorn/store/UnicornStore';
+import { styled } from '../../../themes/default';
 
 interface Props {
   className?: string;

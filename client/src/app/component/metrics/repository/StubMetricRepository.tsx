@@ -1,6 +1,6 @@
 import { MetricRepository } from './MetricRepository';
 import { MetricModel, MetricType } from '../MetricModel';
-import moment = require('moment');
+import * as moment from 'moment';
 
 export class StubMetricRepository implements MetricRepository {
 

@@ -20,7 +20,8 @@ export class CalloutSerializer implements Serializer<CalloutModel> {
       item.releasability,
       item.activity,
       item.eventId,
-      item.activity.match(/\d{4}Z/)
+      item.activity.match(/\d{4}Z/),
+      item.tot
     );
   }
 }

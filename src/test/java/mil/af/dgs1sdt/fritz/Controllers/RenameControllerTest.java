@@ -39,6 +39,7 @@ public class RenameControllerTest extends BaseIntegrationTest {
     dir.mkdir();
 
     Thread.sleep(5000);
+//    while dir does not exist, sleep
 
     given()
       .port(port)
@@ -50,7 +51,14 @@ public class RenameControllerTest extends BaseIntegrationTest {
       .then()
       .statusCode(200);
 
-    assert (new File("/tmp/complete/219b24ae5d31dad0b8d57774b606c4ca/").listFiles()[0].toString().contains(
-      "14TTTTZMAR19_TEST_ACTY_TEST_TEST"));
+    assert (
+      new File("/tmp/complete/219b24ae5d31dad0b8d57774b606c4ca/")
+        .listFiles()[0]
+        .toString()
+        .contains
+          (
+            "14TTTTZMAR19_TEST_ACTY_TEST_TEST"
+          )
+    );
   }
 }

@@ -4,6 +4,7 @@ import { FormContainer } from './FormContainer';
 import { StyledValidatingInput } from '../input/ValidatingInput';
 import { StyledValidatingDropdown } from '../dropdown/ValidatingDropdown';
 import { SlidesStore } from '../slides/store/SlidesStore';
+import { StyledDeletePDF } from './DeletePDF';
 
 describe('FormContainer', () => {
   let subject: ShallowWrapper;
@@ -25,7 +26,6 @@ describe('FormContainer', () => {
     };
 
     slidesActions = {
-      setDateFromInput: jest.fn(),
       setAndUpdateOpName: jest.fn(),
       setAndUpdateAsset: jest.fn(),
       setAndUpdateReleasability: jest.fn(),
@@ -41,19 +41,14 @@ describe('FormContainer', () => {
         slidesActions={slidesActions}
         slidesStore={slidesStore}
         uploadActions={uploadActions}
+        fileName={'fileName'}
       />);
   });
 
-  it('should display a date after store change', () => {
-    expect(subject.find(StyledValidatingInput).at(0).props().value).toBe('mm/dd/yyyy');
-    slidesStore.setFullDate('2000-02-02');
-    expect(subject.find(StyledValidatingInput).at(0).props().value).toBe('2000-02-02');
-  });
-
-  it('should contain fields for Date, Op Name, Callsign, Classification, and Releasability', () => {
+  it('should contain fields for Op Name, Callsign, Classification, and Releasability', () => {
     unicornStore.offline = false;
     subject.instance().forceUpdate();
-    expect(subject.find(StyledValidatingInput).length).toBe(3);
+    expect(subject.find(StyledValidatingInput).length).toBe(2);
     expect(subject.find('.classification').exists()).toBeTruthy();
     expect(subject.find(StyledValidatingDropdown).length).toBe(1);
   });
@@ -66,5 +61,9 @@ describe('FormContainer', () => {
     subject.instance().forceUpdate();
     expect(subject.find('#releasabilityInput').exists()).toBeFalsy();
     expect(subject.find('#releasabilityDropdown').exists()).toBeTruthy();
+  });
+
+  it('should display the delete PDF button', () => {
+    expect(subject.find(StyledDeletePDF).exists()).toBeTruthy();
   });
 });

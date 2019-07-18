@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
 import { SlideModel } from '../slides/models/SlideModel';
+import { styled } from '../../../themes/default';
+import * as classNames from 'classnames';
 
 interface Props {
-  className?: string;
   slideModel: SlideModel;
+  className?: string;
 }
 
 @observer
@@ -13,13 +14,13 @@ export class UndoDeleteContainer extends React.Component<Props> {
   render() {
     return (
       <div
-        className={this.props.className}
+        className={classNames('undoDeleteContainer', this.props.className)}
       >
-        <div className="deleteTitle">
+        <div className={'deleteTitle'}>
           JPEG Deleted
         </div>
         <button
-          className="undoButton"
+          className={'undoButton'}
           onClick={() => this.props.slideModel.setDeleted(false)}
         >
           Undo
@@ -30,16 +31,15 @@ export class UndoDeleteContainer extends React.Component<Props> {
 }
 
 export const StyledUndoDeleteContainer = styled(UndoDeleteContainer)`
-background: #191E2A;
-border-radius: .25rem;
-border: 1px solid rgba(0,0,0,.125);
-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-height: 50px;
-font-size: 16px;
-line-height: 46px;
-display: inline-block;
-width: 100%;
-margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background: ${(props) => props.theme.color.blackTea};
+  border-radius: 2px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  height: 50px;
+  font-size: 16px;
 
   button {
     float: right;
@@ -56,8 +56,8 @@ margin-bottom: 1rem;
   }
   
   .deleteTitle {
-    position: relative;
-    left: 10px;
+    color: ${(props) => props.theme.color.default};
+    color: ${(props) => props.theme.labelFontFamily};
     display: inline-block;
   }
 

@@ -3,16 +3,15 @@ import { MissionModel } from '../model/MissionModel';
 import { UnicornRepository } from '../repositories/UnicornRepository';
 import { CalloutModel } from '../model/CalloutModel';
 import { ReleasabilityModel } from '../model/ReleasabilityModel';
-import { SlideModel } from '../../slides/models/SlideModel';
+import { SlideModel, SlideUploadStatus } from '../../slides/models/SlideModel';
 import { DropdownOption } from '../../dropdown/Dropdown';
-import Fuse = require('fuse.js');
+import * as Fuse from 'fuse.js';
 
 const fmvPlatforms = ['pred', 'predator', 'reaper', 'mc-12'];
 
 export class UnicornStore {
-
   @observable private _missions: MissionModel[] = [];
-  @observable private _activeMission: MissionModel | null;
+  @observable private _activeMission: MissionModel | null = null;
   @observable private _selectedSite: string = 'DGS 1';
   @observable private _callouts: CalloutModel[] = [];
   @observable private _releasabilities: ReleasabilityModel[] = [];
@@ -31,30 +30,6 @@ export class UnicornStore {
   @observable private _offlineModal: boolean = false;
   @observable private _isRefreshing: boolean = false;
   @observable private _pendingReleasability: string | null = null;
-
-  async hydrate(unicornRepository: UnicornRepository) {
-    let code = await unicornRepository.getStatus();
-    if (code === 200) {
-      this.setOffline(false);
-      this.setLoading(true);
-      if (navigator.userAgent.toLowerCase().indexOf('electron') !== -1) {
-        this._missions.push(new MissionModel(
-          'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
-        );
-        this._releasabilities.push(new ReleasabilityModel('', 'FOUO', 0));
-      } else {
-        this._releasabilities = (await unicornRepository.getReleasabilities());
-        this._missions = (await unicornRepository.getMissions())
-          .filter((m) => {
-            return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
-          });
-        this.setLoading(false);
-      }
-    } else {
-      this.setOffline(true);
-      this.setOfflineModal(true);
-    }
-  }
 
   @computed
   get pendingReleasability(): string | null {
@@ -79,11 +54,6 @@ export class UnicornStore {
   @computed
   get loading(): boolean {
     return this._loading;
-  }
-
-  @computed
-  get isModalDisplayed() {
-    return (this._pendingUpload);
   }
 
   @computed
@@ -199,9 +169,30 @@ export class UnicornStore {
           return (c.time && c.time.toString().length > 0);
         })
         .map((c: CalloutModel) => {
-          return {id: c.eventId, display: c.time};
+          return {id: c.eventId, display: c.time ? `${c.time}Z` : ''};
         })
       : [];
+  }
+
+  async hydrate(unicornRepository: UnicornRepository) {
+    let code = await unicornRepository.getStatus();
+    if (code === 200) {
+      this.setOffline(false);
+      this.setLoading(true);
+      if (this.isLaunchedInTestEnvironment()) {
+        this.produceFakeTestData();
+      } else {
+        this._releasabilities = (await unicornRepository.getReleasabilities());
+        this._missions = (await unicornRepository.getMissions())
+          .filter((m) => {
+            return fmvPlatforms.indexOf(m.platform.toLowerCase()) > -1;
+          });
+        this.setLoading(false);
+      }
+    } else {
+      this.setOffline(true);
+      this.setOfflineModal(true);
+    }
   }
 
   @action.bound
@@ -230,8 +221,8 @@ export class UnicornStore {
   }
 
   @action.bound
-  setActiveMission(value: MissionModel | null) {
-    this._activeMission = value;
+  setActiveMission(mission: MissionModel | null) {
+    this._activeMission = mission;
   }
 
   @action.bound
@@ -240,8 +231,8 @@ export class UnicornStore {
   }
 
   @action.bound
-  setCallouts(value: CalloutModel[]) {
-    this._callouts = value;
+  setCallouts(callouts: CalloutModel[]) {
+    this._callouts = callouts;
   }
 
   @action.bound
@@ -296,6 +287,7 @@ export class UnicornStore {
   }
 
   addToUploadQueue(slide: SlideModel) {
+    slide.setUploadStatus(SlideUploadStatus.PENDING);
     this._uploadQueue.push(slide);
   }
 
@@ -312,5 +304,16 @@ export class UnicornStore {
   @action.bound
   setUploadQueue(value: SlideModel[]) {
     this._uploadQueue = value;
+  }
+
+  private produceFakeTestData() {
+    this._missions.push(new MissionModel(
+      'testId', 'starttime', 'TEST11', 'fake mission', 'OPEN', 'DGS 1', 'Pred')
+    );
+    this._releasabilities.push(new ReleasabilityModel('', 'FOUO', 0));
+  }
+
+  private isLaunchedInTestEnvironment() {
+    return navigator.userAgent.toLowerCase().indexOf('electron') !== -1;
   }
 }

@@ -5,15 +5,14 @@ import { UploadActions } from '../actions/UploadActions';
 import { UploadStore } from '../UploadStore';
 import { Toast } from '../../../../../utils/Toast';
 import { SlidesStore } from '../../../slides/store/SlidesStore';
-import styled from 'styled-components';
+import * as classNames from 'classnames';
+import { styled } from '../../../../../themes/default';
 
-const pdfIcon = require('../../../../../icon/PDFIcon.svg');
-const paperclipIcon = require('../../../../../icon/PaperclipIcon.svg');
-const resetUploadIcon = require('../../../../../icon/ResetUploadIcon.svg');
 const adobe = require('../../../../../icon/Adobe.svg');
 const helpMenuIcon = require('../../../../../icon/HelpMenu.svg');
 
 interface Props {
+  help: () => void;
   className?: string;
   uploadActions?: UploadActions;
   uploadStore?: UploadStore;
@@ -22,6 +21,7 @@ interface Props {
 
 @observer
 export class UploadContainer extends React.Component<Props> {
+  browseInputRef: any;
 
   noBorder: CSSProperties = {
     border: 'none'
@@ -29,12 +29,25 @@ export class UploadContainer extends React.Component<Props> {
 
   goodCSS: CSSProperties = {};
 
+  constructor(props: Props) {
+    super(props);
+    this.browseInputRef = React.createRef();
+  }
+
+  render() {
+    return (
+      <>
+        {this.displayUploadRequest()}
+      </>
+    );
+  }
+
   doUpload = async (e: any) => {
     e.preventDefault();
     let formData = new FormData();
     e.persist();
     if (e.type === 'change') {
-      const element = document.querySelector('#uploadButton')! as HTMLInputElement;
+      const element = document.querySelector('#browseInput')! as HTMLInputElement;
       if (element != null && element.files) {
         formData.append('file', element.files[0]);
       }
@@ -45,7 +58,7 @@ export class UploadContainer extends React.Component<Props> {
     if (file) {
       let fileName = file.name;
       if (fileName.toLowerCase().endsWith('ppt')) {
-        (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
+        (document.querySelector('#browseInput') as HTMLInputElement).value = '';
         Toast.create(
           5000,
           'errorToast',
@@ -61,7 +74,7 @@ export class UploadContainer extends React.Component<Props> {
           ele2.style.display = 'none';
         }
       } else if (!fileName.toLowerCase().endsWith('ppt')) {
-        (document.querySelector('#uploadButton') as HTMLInputElement).value = '';
+        (document.querySelector('#browseInput') as HTMLInputElement).value = '';
         Toast.create(
           5000,
           'errorToast',
@@ -74,7 +87,7 @@ export class UploadContainer extends React.Component<Props> {
   displayUploadRequest() {
     return (
       <div
-        className="bigUploadBox"
+        className={classNames('uploadContainer', this.props.className)}
         onDragEnter={(e: any) => {
           let evt = e as Event;
           evt.preventDefault();
@@ -85,198 +98,177 @@ export class UploadContainer extends React.Component<Props> {
         }}
         onDrop={this.doUpload}
       >
-        <div>
-          <div className="bigConverterTitle">
-          <span>
-            Upload a PDF
+        <div className={'informationBox'}>
+          <div className={'titleBox'}>
+              <span className={'title'}>
+                Upload a PDF
+              </span>
             <img
+              className={'helpIcon'}
               onClick={() => {
-                this.props.slidesStore!.setHelp(true);
+                this.props.help();
               }}
-              className="bigHelpMenuIcon"
               src={helpMenuIcon}
             />
-          </span>
-            <span>Upload a mission storyboard as a .pdf file to view, rename, and upload images</span>
           </div>
-          <label
-            id="uploadLabel"
-            htmlFor="uploadButton"
-            className="bigPdfUploadButton"
+          <span className={'subTitle'}>
+            Upload a mission storyboard as a .pdf file to view, rename, and upload images
+          </span>
+        </div>
+        <div
+          className={'clickOrDragBox'}
+          onClick={this.browseViaInput()}
+        >
+          <img
+            className={'adobeIcon'}
+            src={adobe}
+          />
+          <div
+            className={'instructionBox'}
           >
-            <img
-              id="bigAdobe"
-              src={adobe}
-            />
-            <div
-              id="bigClickable"
-            >
               <span
-                id="bigDragMessage"
+                className={'instructionMessage'}
               >
                 Drag and drop Mission Storyboard saved as PDF
               </span>
-              <span className="bigDragMessage2"> or </span>
-              <label htmlFor="uploadButton" className="bigBrowseBtn">Browse</label>
-              <input
-                name="uploadButton"
-                id="uploadButton"
-                className="uploadButton"
-                type="file"
-                onChange={this.doUpload}
-              />
-            </div>
-          </label>
-        </div>
-      </div>
-    );
-  }
-
-  displayUploadedInfo() {
-    return (
-      <div className="row align-items-center text-center" id="uploadCompleteContainer">
-        <div className="col-8 mx-auto" id="pdfIcon">
-          <img src={pdfIcon}/>
-        </div>
-        <div className="p-2 text-uppercase w-100 col-9 mx-auto border-top border-bottom" id="pdfName">
-          <img className="float-left" src={paperclipIcon}/>
-          <div id="pdfFileName" className="float-left pl-2">
-            {this.props.uploadStore!.fileName}
+            <span className={'instructionMessageSpacer'}> or </span>
+            <input
+              name={'browseInput'}
+              id={'browseInput'}
+              className={'browseInput'}
+              type={'file'}
+              onChange={this.doUpload}
+              ref={this.browseInputRef}
+            />
+            <button
+              className={'browseButton'}
+              id={'browseButton'}
+              onClick={this.browseViaInput()}
+            >
+              Browse
+            </button>
           </div>
-          <img
-            id="deletePP"
-            className="float-right pt-1 clickable"
-            data-toggle="modal"
-            data-target="#deleteModal"
-            src={resetUploadIcon}
-          />
         </div>
       </div>
     );
   }
 
-  render() {
-    return (
-      <div
-        className={this.props.className + ' uploadContainer'}
-        style={this.props.uploadStore!.uploaded ? this.noBorder : this.goodCSS}
-      >
-        <div
-          className="container h-100 text-white"
-        >
-          {
-            !this.props.uploadStore!.uploaded &&
-            this.displayUploadRequest()
-          }
-          {
-            this.props.uploadStore!.uploaded &&
-            this.displayUploadedInfo()
-          }
-        </div>
-      </div>
-    );
+  private browseViaInput() {
+    return () => {
+      this.browseInputRef.current.click();
+    };
   }
 }
 
-export const StyledUploadContainer = inject('uploadActions', 'uploadStore', 'slidesStore')(styled(UploadContainer)`
-  #pdfFileName {
-    width: 392px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .bigUploadBox {
-    width: 1028px;
-    position: absolute;
-    left: 50%;
-    top: 32px;
-    transform: translate(-50%, 0%);
-  }
-  
-  .bigConverterTitle {
-    height: 73px;
-    font-size: 32px;
-    font-weight: bold;
-    text-align: center;
-    position: relative;
+export const StyledUploadContainer = inject(
+  'uploadActions',
+  'uploadStore',
+  'slidesStore'
+)(styled(UploadContainer)`
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  overflow-y: hidden;
+  align-items: center;
+  width: inherit;
+  min-width: 688px;
+  min-height: 624px;
+
+  .informationBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 40px;
-    
-    span:nth-of-type(1) {
-      display: block;
+  
+    .titleBox {
+      display: flex;
+      align-items: center;
+      font-family: ${(props) => props.theme.labelFontFamily};
+      letter-spacing: normal;
+      
+      .title {
+        font-size: 32px;
+        font-weight: bold;
+        text-align: center;
+        color: ${(props) => props.theme.color.default};
+      }
+      
+      .helpIcon {
+        margin-left: 8px;
+        cursor: pointer;
+      }
     }
     
-    span:nth-of-type(2) {
-      position: relative;
-      bottom: 16px;
+    .subTitle {
+      margin-top: 8px;
       font-size: 20px;
       font-weight: 300;
-      color: #88a6d6;
+      color: ${(props) => props.theme.color.lightGreyBlue};
     }
   }
   
-  .bigHelpMenuIcon {
-    position: relative;
-    margin-left: 8px;
-    bottom: 2px;
-    cursor: pointer;
-  }
-  
-  .bigPdfUploadButton {
-    width: 1000px;
+  .clickOrDragBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: inherit;
+    max-width: 1000px;
     height: 566px;
-    border: 1px dashed #d4d6db;
-  }
-  
-  #bigAdobe {
-    position: relative;
-    left: 361px;
-    top: 43px;
-    margin-bottom: 68px;
-  }
-  
-  #bigClickable {
-    text-align: center;
+    border: 2px dashed ${(props) => props.theme.color.silver};
+    cursor: pointer;
     
-     span {
-      display: block;
-     }
-  }
-  
-  #bigDragMessage {
-    font-size: 24px;
-    color: #d4d6db;
-    margin-bottom: 32px;
-  }
-  
-  .bigDragMessage2 {
-    font-weight: 300;
-    font-size: 18px;
-    color: #d4d6db;
-    margin-bottom: 32px;
-  }
-  
-  .bigBrowseBtn {
-    outline: none;
-    width: 157px;
-    height: 38px;
-    border-radius: 4px;
-    border: solid 1px #00818C;
-    color: #FFF;
-    background-color: rgba(0, 0, 0, 0);
-    transition: background-color 250ms;
-    cursor: pointer;
-    font-size: 16px;
-    overflow-wrap: normal;
-    line-height: 34px;
-    vertical-align: middle;
-
-    :hover {
-      background-color: #00818C;
+    .adobeIcon {
+      margin-top: 44px;
     }
-  }
-  
-  #uploadLabel {
-    cursor: pointer;
+    
+    .browseInput {
+      display: none;
+    }
+    
+    .instructionBox {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      flex: 1;
+      margin-bottom: 64px;
+      margin-top: 48px;
+      font-family: ${(props) => props.theme.labelFontFamily};
+      color: ${(props) => props.theme.color.silver};
+      
+      .instructionMessage {
+        font-size: 24px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        letter-spacing: normal;
+      }
+      
+      .instructionMessageSpacer {
+        font-weight: 300;
+        font-size: 18px;
+      }
+      
+      .browseButton {
+        outline: none;
+        width: 157px;
+        height: 38px;
+        border-radius: 4px;
+        border: solid 1px ${(props) => props.theme.color.lightningBlue};
+        color: ${(props) => props.theme.color.default};
+        background-color: rgba(0, 0, 0, 0);
+        transition: background-color 250ms;
+        cursor: pointer;
+        font-size: 16px;
+        overflow-wrap: normal;
+        line-height: 34px;
+        vertical-align: middle;
+    
+        :hover {
+          background-color: ${props => props.theme.color.teal};
+        }
+      }
+    }
   }
 `);

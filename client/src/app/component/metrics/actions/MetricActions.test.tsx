@@ -3,7 +3,7 @@ import { MetricRepository } from '../repository/MetricRepository';
 import { StubMetricRepository } from '../repository/StubMetricRepository';
 import { MetricStore } from '../MetricStore';
 import { MetricModel } from '../MetricModel';
-import moment = require('moment');
+import * as moment from 'moment';
 
 describe('MetricActions', () => {
   let subject: MetricActions;

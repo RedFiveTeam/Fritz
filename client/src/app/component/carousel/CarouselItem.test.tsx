@@ -6,6 +6,10 @@ import { StyledValidatingInput } from '../input/ValidatingInput';
 import { SlidesStore } from '../slides/store/SlidesStore';
 import { StyledDatePicker } from '../date/DatePicker';
 import Mock = jest.Mock;
+import { StyledSlideTitle } from '../slides/SlideTitle';
+import * as moment from 'moment';
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../../../themes/default';
 
 describe('CarouselItem', () => {
   let subject: ReactWrapper;
@@ -19,25 +23,28 @@ describe('CarouselItem', () => {
 
   let mountFirst = () => {
     subject = mount(
-      <CarouselItem
-        active={true}
-        slide={slide}
-        changeTime={changeTimeSpy}
-        changeActivity={changeActivitySpy}
-        slidesStore={slidesStore}
-        carouselActions={carouselActions}
-      />
+      <ThemeProvider
+        theme={theme}
+      >
+        <CarouselItem
+          active={true}
+          slide={slide}
+          changeTime={changeTimeSpy}
+          changeActivity={changeActivitySpy}
+          slidesStore={slidesStore}
+          carouselActions={carouselActions}
+        />
+      </ThemeProvider>
     );
   };
 
   beforeEach(() => {
-    slide = new SlideModel('imagePath', 'test Slide', '1234', 'TESTACTY', false, '', '');
+    slide = new SlideModel('imagePath', 'test Slide', '1234', 'TESTACTY', false, '', '', moment('2019-04-05'));
     slide.setHash('hash');
     changeTimeSpy = jest.fn();
     changeActivitySpy = jest.fn();
 
     slidesStore = new SlidesStore();
-    slide.setDate(new Date(Date.now()));
 
     slidesActions = {
       deleteSlide: jest.fn()
@@ -48,15 +55,19 @@ describe('CarouselItem', () => {
     };
 
     subject = mount(
-      <CarouselItem
-        slide={slide}
-        changeTime={changeTimeSpy}
-        changeActivity={changeActivitySpy}
-        slidesStore={slidesStore}
-        carouselActions={carouselActions}
-        slidesActions={slidesActions}
-        carouselStore={carouselStore}
-      />
+      <ThemeProvider
+        theme={theme}
+      >
+        <CarouselItem
+          slide={slide}
+          changeTime={changeTimeSpy}
+          changeActivity={changeActivitySpy}
+          slidesStore={slidesStore}
+          carouselActions={carouselActions}
+          slidesActions={slidesActions}
+          carouselStore={carouselStore}
+        />
+      </ThemeProvider>
     );
   });
 
@@ -77,7 +88,7 @@ describe('CarouselItem', () => {
   });
 
   it('should display the image name', () => {
-    expect(subject.find('.slideTitle').text()).toBe('DD1234ZMONYY_TGT_NAME_TESTACTY_ASSET_RELEASABILITY');
+    expect(subject.find(StyledSlideTitle).exists()).toBeTruthy();
   });
 
   it('should display the current slide number out of the total slide count', () => {

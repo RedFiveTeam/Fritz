@@ -26,8 +26,11 @@ public class RenameController {
   public static final String URI = "/api/rename";
 
   @PostMapping(produces = "application/zip")
-  public void renameAndZip(@CookieValue("id") String id, @RequestBody List<RenameModel> json,
-                           HttpServletResponse res) throws IOException {
+  public void renameAndZip(
+    @CookieValue("id") String id,
+    @RequestBody List<RenameModel> json,
+    HttpServletResponse res
+  ) throws IOException {
 
     List<File> files = new ArrayList<>();
 
@@ -35,8 +38,7 @@ public class RenameController {
       File originalFile;
       if (model.getOldName().endsWith(".jpg")) {
         originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName());
-      }
-      else {
+      } else {
         originalFile = new File("/tmp/complete/" + id + "/" + model.getOldName() + ".jpg");
       }
       File newFile = new File("/tmp/complete/" + id + "/" + model.getNewName() + ".jpg");

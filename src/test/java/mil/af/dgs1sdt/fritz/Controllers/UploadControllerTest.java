@@ -21,7 +21,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
     tm.setHash("1234");
     tm.setCompletedSlides(0);
     tm.setTotalSlides(10);
-    trackingStore.addToList(tm);
+    TrackingStore.addToList(tm);
 
     given()
       .port(port)
@@ -54,11 +54,11 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void uploadFileTest() throws Exception {
     given()
       .port(port)
-      .multiPart(new File("./PDFExample.pdf"))
+      .multiPart(new File("./PDFExampleForUnixDate.pdf"))
       .when()
       .post(UploadController.URI)
       .then()
       .statusCode(200)
-      .body("file", equalTo("PDFExample.pdf"));
+      .body("file", equalTo("PDFExampleForUnixDate.pdf"));
   }
 }

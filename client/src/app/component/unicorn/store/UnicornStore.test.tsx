@@ -6,23 +6,17 @@ import { ReleasabilityModel } from '../model/ReleasabilityModel';
 describe('UnicornStore', () => {
   let subject = new UnicornStore();
 
-  it('should return a modal status based on upload and confirmation', () => {
-    expect(subject.isModalDisplayed).toBeFalsy();
-    subject.setPendingUpload(true);
-    expect(subject.isModalDisplayed).toBeTruthy();
-  });
-
   it('should return only useable callouts (i.e., not blank)', () => {
     subject.setCallouts([
-      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', 'time1'),
-      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', 'time2'),
-      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', ''),
-      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', '')
+      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', '1234', null),
+      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', '2345', null),
+      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', '', null),
+      new CalloutModel('n1', 'c1', 'r1', 'a1', 'eventId1', '', null)
     ]);
     expect(subject.calloutOptions).toEqual(
       [
-        new DropdownOption('eventId1', 'time1'),
-        new DropdownOption('eventId1', 'time2'),
+        new DropdownOption('eventId1', '1234Z'),
+        new DropdownOption('eventId1', '2345Z'),
       ]
     );
   });

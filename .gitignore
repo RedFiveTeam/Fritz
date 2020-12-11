@@ -1,6 +1,7 @@
 /target/
 /tmp/
 /acceptance/output/
+/acceptance/node_modules/
 /client/build/
 /src/main/resources/static/
 !.mvn/wrapper/maven-wrapper.jar
@@ -16,6 +17,9 @@ tmp/acceptance.log
 .settings
 .springBeans
 .sts4-cache
+
+### VSCode History ###
+.history 
 
 ### IntelliJ IDEA ###
 .idea

@@ -1,7 +1,7 @@
 /target/
 /tmp/
 /acceptance/output/
-/acceptance/node_modules/
+#/acceptance/node_modules/
 /client/build/
 /src/main/resources/static/
 !.mvn/wrapper/maven-wrapper.jar
